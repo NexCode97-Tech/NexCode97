@@ -523,7 +523,6 @@
   const W = canvas.width, H = canvas.height;
 
   const PIXEL_PHASE_MS = 2000, ASSEMBLE_MS = 4500;
-  const DRIFT_MS = 3000, REFORM_MS = 3000, HOLD_MS = 2500;
   const START_TIME = performance.now();
 
   function nodeColor(t) {
@@ -534,74 +533,40 @@
     };
   }
 
-  function buildShape(n) {
-    const pts = [], cx = W/2, cy = H/2 - 20;
-
-    function addSeg(seg, count) {
-      for(let i=0;i<count;i++){
-        const t=count===1?0.5:i/(count-1);
-        const pos=t*(seg.length-1), idx=Math.min(Math.floor(pos),seg.length-2), f=pos-idx;
-        const a=seg[idx],b=seg[idx+1];
-        pts.push({x:a.x+(b.x-a.x)*f, y:a.y+(b.y-a.y)*f});
-      }
-    }
-
-    // Contorno hemisferio izquierdo
-    addSeg([{x:cx-5,y:cy-100},{x:cx-50,y:cy-108},{x:cx-95,y:cy-92},{x:cx-128,y:cy-55},{x:cx-138,y:cy-5},{x:cx-125,y:cy+45},{x:cx-90,y:cy+80},{x:cx-45,y:cy+92},{x:cx-5,y:cy+88}], 9);
-    // Contorno hemisferio derecho (espejo)
-    addSeg([{x:cx+5,y:cy-100},{x:cx+50,y:cy-108},{x:cx+95,y:cy-92},{x:cx+128,y:cy-55},{x:cx+138,y:cy-5},{x:cx+125,y:cy+45},{x:cx+90,y:cy+80},{x:cx+45,y:cy+92},{x:cx+5,y:cy+88}], 9);
-    // Surco central
-    addSeg([{x:cx,y:cy-100},{x:cx,y:cy+88}], 4);
-    // Pliegues izquierdo
-    addSeg([{x:cx-25,y:cy-75},{x:cx-75,y:cy-52},{x:cx-105,y:cy-15}], 4);
-    addSeg([{x:cx-18,y:cy-30},{x:cx-68,y:cy-10},{x:cx-112,y:cy+25}], 4);
-    addSeg([{x:cx-18,y:cy+25},{x:cx-62,y:cy+50},{x:cx-88,y:cy+70}], 4);
-    // Pliegues derecho
-    addSeg([{x:cx+25,y:cy-75},{x:cx+75,y:cy-52},{x:cx+105,y:cy-15}], 4);
-    addSeg([{x:cx+18,y:cy-30},{x:cx+68,y:cy-10},{x:cx+112,y:cy+25}], 4);
-    addSeg([{x:cx+18,y:cy+25},{x:cx+62,y:cy+50},{x:cx+88,y:cy+70}], 4);
-
-    while(pts.length<n) pts.push({x:cx+(Math.random()-.5)*220,y:cy+(Math.random()-.5)*180});
-    return pts.slice(0,n);
-  }
-
-  const TOTAL = 42, shapePts = buildShape(TOTAL), nodes = [];
+  const TOTAL = 55, nodes = [];
   for(let i=0;i<TOTAL;i++){
     const tx=40+Math.random()*(W-80), ty=40+Math.random()*(H-80);
     const sx=Math.random()*W, sy=Math.random()*H;
     const t=i/TOTAL, c=nodeColor(t);
     const r=Math.random()<.15?5+Math.random()*2:2+Math.random()*2;
-    nodes.push({sx,sy,tx,ty,fx:shapePts[i].x,fy:shapePts[i].y,x:sx,y:sy,r,c,
-      vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.5,driftX:tx,driftY:ty});
+    nodes.push({sx,sy,tx,ty,x:sx,y:sy,r,c,vx:(Math.random()-.5)*.5,vy:(Math.random()-.5)*.5});
   }
 
-  function easeIn(x){return x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;}
   function easeOut(x){return 1-Math.pow(1-x,3);}
 
-  let phase='pixels', phaseStart=START_TIME;
+  let assembled = false;
 
   function draw(now){
     requestAnimationFrame(draw);
-    const pe=now-phaseStart;
+    const elapsed = now - START_TIME;
     ctx.clearRect(0,0,W,H);
 
-    if(phase==='pixels'&&now-START_TIME>PIXEL_PHASE_MS){phase='assemble';phaseStart=now;}
-    else if(phase==='assemble'&&pe>ASSEMBLE_MS){nodes.forEach(n=>{n.driftX=n.x;n.driftY=n.y;});phase='drift';phaseStart=now;}
-    else if(phase==='drift'&&pe>DRIFT_MS){nodes.forEach(n=>{n.driftX=n.x;n.driftY=n.y;});phase='reform';phaseStart=now;}
-    else if(phase==='reform'&&pe>REFORM_MS){phase='hold';phaseStart=now;}
-    else if(phase==='hold'&&pe>HOLD_MS){nodes.forEach(n=>{n.driftX=n.x;n.driftY=n.y;});phase='drift';phaseStart=now;}
+    const assembleP = Math.min(Math.max((elapsed-PIXEL_PHASE_MS)/ASSEMBLE_MS,0),1);
+    const ga = easeOut(assembleP);
+
+    if(!assembled && assembleP>=1) assembled=true;
 
     nodes.forEach(n=>{
-      if(phase==='pixels'){}
-      else if(phase==='assemble'){const p=easeOut(Math.min(pe/ASSEMBLE_MS,1));n.x=n.sx+(n.tx-n.sx)*p;n.y=n.sy+(n.ty-n.sy)*p;}
-      else if(phase==='drift'){n.x+=n.vx;n.y+=n.vy;if(n.x<20||n.x>W-20)n.vx*=-1;if(n.y<20||n.y>H-20)n.vy*=-1;n.driftX=n.x;n.driftY=n.y;}
-      else if(phase==='reform'){const p=easeIn(Math.min(pe/REFORM_MS,1));n.x=n.driftX+(n.fx-n.driftX)*p;n.y=n.driftY+(n.fy-n.driftY)*p;}
-      else if(phase==='hold'){n.x=n.fx;n.y=n.fy;}
+      if(elapsed < PIXEL_PHASE_MS) return;
+      if(!assembled){
+        n.x = n.sx + (n.tx - n.sx) * easeOut(assembleP);
+        n.y = n.sy + (n.ty - n.sy) * easeOut(assembleP);
+      } else {
+        n.x += n.vx; n.y += n.vy;
+        if(n.x<20||n.x>W-20) n.vx*=-1;
+        if(n.y<20||n.y>H-20) n.vy*=-1;
+      }
     });
-
-    let ga=1;
-    if(phase==='pixels'){ga=0;}
-    else if(phase==='assemble'){ga=Math.min(pe/ASSEMBLE_MS*1.5,1);}
 
     if(phase==='pixels'){
       nodes.forEach(n=>{

@@ -570,14 +570,6 @@
       else{n.x+=n.vx;n.y+=n.vy;if(n.x<20||n.x>W-20)n.vx*=-1;if(n.y<20||n.y>H-20)n.vy*=-1;}
     });
 
-    if(phase==='pixels'){
-      nodes.forEach(n=>{
-        ctx.beginPath();ctx.arc(n.sx,n.sy,1.5,0,Math.PI*2);
-        ctx.fillStyle=`rgba(${n.c.r},${n.c.g},${n.c.b},${.3+.7*Math.random()})`;ctx.fill();
-      });
-      return;
-    }
-
     for(let i=0;i<nodes.length;i++)for(let j=i+1;j<nodes.length;j++){
       const a=nodes[i],b=nodes[j],dx=a.x-b.x,dy=a.y-b.y,d=Math.sqrt(dx*dx+dy*dy);
       if(d<100){const al=ga*(1-d/100)*.4,g=ctx.createLinearGradient(a.x,a.y,b.x,b.y);

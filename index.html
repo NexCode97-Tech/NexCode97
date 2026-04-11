@@ -277,12 +277,22 @@
   .delay-4 { transition-delay: 0.4s; }
 
   /* RESPONSIVE */
+  /* TABLET */
+  @media (max-width: 1024px) and (min-width: 769px) {
+    #hero { gap: 30px; padding: 140px clamp(20px,5vw,60px) 80px; align-items: flex-start; }
+    .hero-canvas-wrap { width: 340px; height: 340px; margin-top: -30px; }
+    #heroCanvas { width: 340px; height: 340px; }
+    .hero-buttons { flex-wrap: nowrap; }
+  }
+
+  /* MOBILE */
   @media (max-width: 768px) {
-    #hero { grid-template-columns: 1fr; padding: 120px 20px 80px; gap: 40px; }
+    #hero { grid-template-columns: 1fr; padding: 100px 20px 60px; gap: 20px; }
     .hero-visual { order: -1; }
-    .hero-logo-wrap { width: 180px; height: 180px; }
-    .hero-stats { flex-wrap: wrap; gap: 12px; }
-    .hero-stat { border: none; padding: 0; }
+    .hero-canvas-wrap { width: 220px; height: 220px; margin: 0 auto; }
+    #heroCanvas { width: 220px; height: 220px; }
+    .hero-buttons { flex-wrap: nowrap; gap: 10px; }
+    .hero-buttons .btn-lg { padding: 12px 20px; font-size: 0.9rem; }
     .nav-links { display: none; }
     footer { flex-direction: column; text-align: center; }
   }
@@ -319,11 +329,6 @@
       <div class="hero-buttons fade-in delay-3">
         <a href="#portfolio" class="btn btn-primary btn-lg">Ver portafolio</a>
         <a href="#contact" class="btn btn-outline btn-lg">Contactar</a>
-      </div>
-      <div class="hero-stats fade-in delay-4">
-        <div class="hero-stat"><strong>3+</strong><span>Proyectos entregados</span></div>
-        <div class="hero-stat"><strong>7</strong><span>Servicios</span></div>
-        <div class="hero-stat"><strong>$0</strong><span>Mensualidades</span></div>
       </div>
     </div>
     <div class="hero-visual fade-in delay-2">
@@ -525,10 +530,10 @@
   }
 
   function buildShape(n) {
-    const pts = [], cx = W/2, cy = H/2;
-    const leftTip  = {x:cx-100,y:cy}, leftTop  = {x:cx-60,y:cy-48}, leftBot  = {x:cx-60,y:cy+48};
-    const slashBot = {x:cx-15, y:cy+56}, slashTop = {x:cx+15,y:cy-56};
-    const rightTip = {x:cx+100,y:cy}, rightTop = {x:cx+60,y:cy-48}, rightBot = {x:cx+60,y:cy+48};
+    const pts = [], cx = W/2, cy = H/2 - 40;
+    const leftTip  = {x:cx-145,y:cy}, leftTop  = {x:cx-88,y:cy-70}, leftBot  = {x:cx-88,y:cy+70};
+    const slashBot = {x:cx-22, y:cy+82}, slashTop = {x:cx+22,y:cy-82};
+    const rightTip = {x:cx+145,y:cy}, rightTop = {x:cx+88,y:cy-70}, rightBot = {x:cx+88,y:cy+70};
     const segs = [[leftTop,leftTip,8],[leftTip,leftBot,8],[slashBot,slashTop,10],[rightTop,rightTip,8],[rightTip,rightBot,8]];
     segs.forEach(([a,b,c])=>{
       for(let i=0;i<c;i++){

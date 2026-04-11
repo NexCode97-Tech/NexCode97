@@ -288,7 +288,9 @@
   /* MOBILE */
   @media (max-width: 768px) {
     #hero { grid-template-columns: 1fr; padding: 100px 20px 60px; gap: 16px; }
-    .hero-visual { display: none; }
+    .hero-visual { display: flex; justify-content: center; }
+    .hero-canvas-wrap { width: 260px; height: 260px; }
+    #heroCanvas { width: 260px; height: 260px; }
     .hero-buttons { flex-wrap: wrap; gap: 10px; }
     .hero-buttons .btn-lg { padding: 12px 18px; font-size: 0.875rem; }
     .nav-links { display: none; }

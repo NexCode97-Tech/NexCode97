@@ -180,7 +180,7 @@
     display: flex;
     gap: 0;
     justify-content: center;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
   }
 
   .hero-stat {
@@ -266,14 +266,26 @@
     transform: translateY(-2px);
   }
 
+  .pain-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+  }
+
   .pain-icon {
-    font-size: 1.75rem;
-    margin-bottom: 12px;
-    display: block;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+  }
+
+  .pain-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: #fff;
   }
 
   .pain-text {
-    font-size: 0.9rem;
+    font-size: 0.875rem;
     color: var(--text-muted);
     line-height: 1.5;
   }
@@ -824,23 +836,23 @@
   </div>
   <div class="pain-grid">
     <div class="pain-card fade-in fade-in-delay-1">
-      <span class="pain-icon">📦</span>
+      <div class="pain-header"><span class="pain-icon">📦</span><span class="pain-title">Pedidos desorganizados</span></div>
       <p class="pain-text">Pedidos perdidos o confusos entre el equipo</p>
     </div>
     <div class="pain-card fade-in fade-in-delay-2">
-      <span class="pain-icon">🏭</span>
+      <div class="pain-header"><span class="pain-icon">🏭</span><span class="pain-title">Producción sin control</span></div>
       <p class="pain-text">No sabes en qué etapa de producción va cada orden</p>
     </div>
     <div class="pain-card fade-in fade-in-delay-3">
-      <span class="pain-icon">💬</span>
+      <div class="pain-header"><span class="pain-icon">💬</span><span class="pain-title">Comunicación fallida</span></div>
       <p class="pain-text">Errores por mala comunicación interna</p>
     </div>
     <div class="pain-card fade-in fade-in-delay-4">
-      <span class="pain-icon">💰</span>
+      <div class="pain-header"><span class="pain-icon">💰</span><span class="pain-title">Finanzas inciertas</span></div>
       <p class="pain-text">No sabes cuánto has vendido ni cuánto te deben</p>
     </div>
     <div class="pain-card fade-in">
-      <span class="pain-icon">🔧</span>
+      <div class="pain-header"><span class="pain-icon">🔧</span><span class="pain-title">Herramientas dispersas</span></div>
       <p class="pain-text">Gastas en múltiples herramientas que no se conectan</p>
     </div>
   </div>

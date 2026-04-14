@@ -786,10 +786,14 @@
   .lightbox-inner iframe { width: 100%; aspect-ratio: 16/9; border-radius: 10px; }
   .lightbox-inner.vertical iframe { aspect-ratio: 9/16; max-width: 400px; margin: 0 auto; display: block; }
   .lightbox-close {
-    position: absolute; top: -40px; right: 0;
-    background: none; border: none; color: #fff;
-    font-size: 1.8rem; cursor: pointer; line-height: 1;
+    position: fixed; top: 20px; right: 24px;
+    background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);
+    color: #fff; font-size: 1.4rem; cursor: pointer;
+    width: 42px; height: 42px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000; transition: background 0.2s;
   }
+  .lightbox-close:hover { background: rgba(255,255,255,0.3); }
 
   /* FADE IN ANIMATION */
   .fade-in {

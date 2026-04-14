@@ -784,7 +784,8 @@
   .lightbox.active { display: flex; }
   .lightbox-inner { position: relative; width: 90vw; max-width: 900px; }
   .lightbox-inner iframe { width: 100%; aspect-ratio: 16/9; border-radius: 10px; }
-  .lightbox-inner.vertical iframe { aspect-ratio: 9/16; max-width: 400px; margin: 0 auto; display: block; }
+  .lightbox-inner.vertical { width: auto; }
+  .lightbox-inner.vertical iframe { aspect-ratio: 9/16; width: min(280px, 80vw); height: auto; display: block; border-radius: 10px; }
   .lightbox-close {
     position: fixed; top: 20px; right: 24px;
     background: rgba(255,255,255,0.15); border: 1px solid rgba(255,255,255,0.3);

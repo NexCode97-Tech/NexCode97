@@ -561,6 +561,11 @@
   const canvas = document.getElementById('heroCanvas');
   if (!canvas) return;
   const ctx = canvas.getContext('2d');
+  // Reducir buffer en móvil/tablet para mejorar rendimiento
+  const isMobile = window.innerWidth <= 768;
+  const isTablet = window.innerWidth <= 1024 && window.innerWidth > 768;
+  if (isMobile) { canvas.width = 260; canvas.height = 260; }
+  else if (isTablet) { canvas.width = 340; canvas.height = 340; }
   const W = canvas.width, H = canvas.height;
 
   const PIXEL_PHASE_MS = 2000, ASSEMBLE_MS = 4500;

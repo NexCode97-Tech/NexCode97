@@ -73,7 +73,7 @@ Archivos en `C:/Users/socia/OneDrive/Desktop/Claude/NexCode97/`:
 ## Portafolio de Proyectos
 
 ### APP NTRL
-- **Tipo:** Sistema de gestión completo (antes llamado ERP, ahora "sistema de gestión")
+- **Tipo:** Sistema de gestión completo
 - **Cliente:** Empresa de ropa deportiva (Natural)
 - **Estado:** En producción ✅
 - **Tecnología:** React + Node.js + PostgreSQL | Vercel + Render + Cloudinary (tier gratuito)
@@ -85,7 +85,18 @@ Archivos en `C:/Users/socia/OneDrive/Desktop/Claude/NexCode97/`:
 - Vendedor (4 módulos): Pedidos, Clientes, Catálogo, Finanzas
 - Trabajador (3 módulos): Mis Tareas, Suministros, Mensajes
 
-**Páginas web creadas:** Natural (`app-ntrl`) y GuevaraSport — landing pages independientes.
+### VeloClub
+- **Tipo:** Plataforma SaaS de gestión para clubs de ciclismo
+- **Cliente:** VeloClub (propio)
+- **Estado:** En desarrollo ✓
+- **Tecnología:** Next.js 15 + Express.js + PostgreSQL + Prisma + Clerk Auth + Cloudinary
+- **Modelo:** SaaS — suscripción mensual por club
+- **Funcionalidades:** Gestión de miembros, cuotas mensuales, pagos automáticos, competencias, resultados, reportes financieros
+- **URL:** https://veloclub-plum.vercel.app/
+
+### Páginas web completadas
+- **Natural Ropa Deportiva** — Sitio corporativo con catálogo
+- **Guevara Sport** — Sitio corporativo con catálogo
 
 ---
 
@@ -151,12 +162,19 @@ NexCode97/
 
 ---
 
+## Historial de Cambios (continuación)
+
+### 2026-05-04
+- ✅ Agregado VeloClub al portafolio — SaaS de gestión para clubs de ciclismo
+- ✅ Actualizado HISTORIAL.md con información de VeloClub
+
+---
+
 ## Pendientes
 
-- [ ] Construir `index.html` del sitio principal NexCode97
-- [ ] Integrar logo real en todos los archivos HTML
 - [ ] Grabar videos de APP NTRL (PC + tablet + móvil) y subirlos a YouTube
 - [ ] Refinar flyer de historia Instagram
-- [ ] Publicar sitio en Vercel
+- [ ] Publicar sitio en Vercel (actualizar dirección)
 - [ ] Crear cuenta de Instagram @nexcode97
-- [ ] Definir precio y modelo comercial para ofrecer a clientes
+- [ ] Landing page dedicada para VeloClub
+- [ ] Definir precio y plan de monetización para VeloClub (SaaS)

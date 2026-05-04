@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>VeloClub — Gestión integral para clubs de ciclismo</title>
+<link rel="icon" type="image/png" href="../assets/favicon.png"/>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg-deep: #07080f;
+    --bg-card: #0d0f1e;
+    --bg-card2: #11132a;
+    --accent: #7c3aed;
+    --accent-light: #a78bfa;
+    --accent2: #06b6d4;
+    --accent2-light: #22d3ee;
+    --text: #f1f5f9;
+    --text-muted: #64748b;
+    --border: #1a1d35;
+    --radius: 12px;
+    --font: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg-deep);
+    color: var(--text);
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  .section-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--border), transparent);
+  }
+
+  /* NAVBAR */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(7,8,15,0.92);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    height: 64px;
+  }
+  .nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    height: 100%;
+    padding: 0 clamp(20px, 5vw, 60px);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+  }
+
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 20px;
+    border-radius: 8px;
+    font-family: var(--font);
+    font-size: 0.875rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.2s ease;
+    border: none;
+  }
+  .btn-primary {
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    color: #fff;
+  }
+  .btn-primary:hover {
+    opacity: 0.88;
+    transform: translateY(-1px);
+    box-shadow: 0 6px 24px rgba(124,58,237,0.35);
+  }
+  .btn-outline {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-outline:hover {
+    border-color: var(--accent-light);
+    color: var(--accent-light);
+    transform: translateY(-1px);
+  }
+  .btn-lg { padding: 14px 28px; font-size: 1rem; border-radius: 10px; }
+  .btn-wa { background: #25d366; color: #fff; font-weight: 700; }
+  .btn-wa:hover { background: #1ebe5a; transform: translateY(-2px); box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
+  .btn-email {
+    background: var(--bg-card);
+    color: var(--text);
+    border: 1px solid var(--border);
+  }
+  .btn-email:hover {
+    border-color: var(--accent-light);
+    color: var(--accent-light);
+    transform: translateY(-2px);
+  }
+
+  /* HERO */
+  .badge-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(124,58,237,0.12);
+    border: 1px solid rgba(124,58,237,0.3);
+    color: var(--accent-light);
+    font-size: 0.8rem;
+    font-weight: 600;
+    padding: 6px 14px;
+    border-radius: 999px;
+    margin-bottom: 28px;
+    letter-spacing: 0.02em;
+  }
+
+  .hero-h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 800;
+    line-height: 1.15;
+    letter-spacing: -0.03em;
+    margin-bottom: 20px;
+    background: linear-gradient(135deg, #fff 0%, var(--accent-light) 50%, var(--accent2-light) 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+  }
+
+  .hero-sub {
+    font-size: 1.125rem;
+    color: var(--text-muted);
+    max-width: 560px;
+    margin: 0 auto 36px;
+    line-height: 1.7;
+  }
+
+  .hero-buttons {
+    display: flex;
+    gap: 12px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 40px;
+  }
+
+  .hero-stats {
+    display: flex;
+    gap: 0;
+    justify-content: center;
+    flex-wrap: nowrap;
+  }
+
+  .hero-stat {
+    padding: 6px 20px;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    font-weight: 500;
+  }
+
+  .hero-stat:not(:last-child) { border-right: 1px solid var(--border); }
+  .hero-stat strong { color: var(--text); font-weight: 700; }
+
+  /* SECTIONS */
+  section {
+    padding: 80px 24px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    background: linear-gradient(90deg, var(--accent-light), var(--accent2-light));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 12px;
+  }
+
+  .section-title {
+    font-size: clamp(1.5rem, 3vw, 2.25rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    margin-bottom: 12px;
+    color: #fff;
+  }
+
+  .section-sub {
+    font-size: 1rem;
+    color: var(--text-muted);
+    margin-bottom: 48px;
+    max-width: 520px;
+  }
+
+  /* PAIN POINTS */
+  .pain-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 16px;
+  }
+
+  .pain-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 24px 20px;
+    transition: all 0.25s ease;
+  }
+
+  .pain-card:hover {
+    border-color: rgba(124,58,237,0.4);
+    box-shadow: 0 0 20px rgba(124,58,237,0.1);
+    transform: translateY(-2px);
+  }
+
+  .pain-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
+  .pain-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .pain-title { font-size: 0.95rem; font-weight: 700; color: #fff; }
+  .pain-text { font-size: 0.875rem; color: var(--text-muted); line-height: 1.5; }
+
+  /* VALUE PROPS */
+  .value-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 20px;
+  }
+
+  .value-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 32px 28px;
+    transition: all 0.25s ease;
+  }
+
+  .value-card:hover {
+    border-color: rgba(124,58,237,0.5);
+    box-shadow: 0 0 28px rgba(124,58,237,0.14), 0 8px 32px rgba(0,0,0,0.3);
+    transform: translateY(-4px);
+  }
+
+  .value-icon { font-size: 2rem; margin-bottom: 16px; display: block; }
+  .value-title { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 10px; }
+  .value-desc { font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; }
+
+  /* MODULES */
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 14px;
+  }
+
+  .module-card {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 20px 18px;
+    transition: all 0.22s ease;
+  }
+
+  .module-card:hover {
+    border-color: rgba(6,182,212,0.4);
+    box-shadow: 0 0 20px rgba(6,182,212,0.1);
+    transform: translateY(-2px);
+  }
+
+  .module-icon { font-size: 1.5rem; margin-bottom: 10px; display: block; }
+  .module-name { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
+  .module-desc { font-size: 0.775rem; color: var(--text-muted); line-height: 1.5; }
+
+  /* BENEFITS */
+  .benefits-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 14px;
+  }
+
+  .benefit-item {
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+    transition: all 0.22s ease;
+  }
+
+  .benefit-item:hover {
+    border-color: rgba(124,58,237,0.3);
+    box-shadow: 0 0 16px rgba(124,58,237,0.08);
+  }
+
+  .benefit-check { color: var(--accent-light); font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+  .benefit-text { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
+
+  /* DEMO PLACEHOLDER */
+  .demo-placeholder {
+    background: var(--bg-card);
+    border: 1px dashed var(--border);
+    border-radius: 16px;
+    padding: 60px 40px;
+    text-align: center;
+    margin-top: 48px;
+  }
+  .demo-icon { font-size: 3rem; margin-bottom: 16px; }
+  .demo-title { font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
+  .demo-sub { font-size: 0.875rem; color: var(--text-muted); }
+
+  /* TECH STACK */
+  .tech-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 32px;
+  }
+  .tech-tag {
+    background: var(--bg-card2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 8px 16px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: all 0.2s;
+  }
+  .tech-tag:hover { border-color: var(--accent-light); color: var(--accent-light); }
+
+  /* CTA */
+  .cta-buttons {
+    display: flex;
+    gap: 14px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+
+  .cta-footer-note { font-size: 0.8rem; color: var(--text-muted); }
+
+  /* FOOTER */
+  footer {
+    border-top: 1px solid var(--border);
+    padding: 28px 24px;
+    text-align: center;
+    color: var(--text-muted);
+    font-size: 0.85rem;
+  }
+
+  /* FADE IN */
+  .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .fade-in.visible { opacity: 1; transform: translateY(0); }
+  .fade-in-delay-1 { transition-delay: 0.1s; }
+  .fade-in-delay-2 { transition-delay: 0.2s; }
+  .fade-in-delay-3 { transition-delay: 0.3s; }
+  .fade-in-delay-4 { transition-delay: 0.4s; }
+
+  @media (max-width: 640px) {
+    section { padding: 60px 16px; }
+    .hero-stats { flex-wrap: wrap; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+
+<!-- NAVBAR -->
+<nav>
+  <div class="nav-inner">
+    <a href="../" style="display:flex;align-items:center;text-decoration:none;">
+      <img src="../assets/letrero-header.png" alt="NexCode97" style="height:26px;width:auto;"/>
+    </a>
+    <a href="#cta" class="btn btn-primary">Contactar ahora</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section style="padding-top:100px;padding-bottom:80px;text-align:center;max-width:800px;margin:0 auto;">
+  <div class="badge-pill fade-in">🚴 SaaS para clubs de ciclismo</div>
+  <h1 class="hero-h1 fade-in fade-in-delay-1">El sistema que pone orden<br>en tu club de ciclismo</h1>
+  <p class="hero-sub fade-in fade-in-delay-2">VeloClub es una plataforma SaaS completa — miembros, cuotas, pagos automáticos, competencias, resultados y reportes financieros en un solo lugar con interfaz mobile-first.</p>
+  <div class="hero-buttons fade-in fade-in-delay-3">
+    <a href="#modules" class="btn btn-primary btn-lg">Ver funcionalidades</a>
+    <a href="#cta" class="btn btn-outline btn-lg">Contactar ahora</a>
+  </div>
+  <div class="hero-stats fade-in fade-in-delay-4">
+    <div class="hero-stat"><strong>6 módulos</strong> principales</div>
+    <div class="hero-stat"><strong>Mobile-first</strong></div>
+    <div class="hero-stat"><strong>SaaS</strong> en la nube</div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- PAIN POINTS -->
+<section id="pain">
+  <div class="fade-in">
+    <div class="section-label">Problemas comunes</div>
+    <h2 class="section-title">¿Le suena alguna de estas situaciones?</h2>
+  </div>
+  <div class="pain-grid">
+    <div class="pain-card fade-in fade-in-delay-1">
+      <div class="pain-header"><span class="pain-icon">📋</span><span class="pain-title">Miembros en Excel</span></div>
+      <p class="pain-text">Lista de socios desorganizada en hojas de cálculo difíciles de mantener</p>
+    </div>
+    <div class="pain-card fade-in fade-in-delay-2">
+      <div class="pain-header"><span class="pain-icon">💸</span><span class="pain-title">Cuotas sin control</span></div>
+      <p class="pain-text">No sabes quién pagó, quién debe, ni cuánto recaudaste este mes</p>
+    </div>
+    <div class="pain-card fade-in fade-in-delay-3">
+      <div class="pain-header"><span class="pain-icon">🔔</span><span class="pain-title">Cobros manuales</span></div>
+      <p class="pain-text">Persigues a cada miembro manualmente para recordarles el pago</p>
+    </div>
+    <div class="pain-card fade-in fade-in-delay-4">
+      <div class="pain-header"><span class="pain-icon">🏆</span><span class="pain-title">Competencias sin registro</span></div>
+      <p class="pain-text">Resultados guardados en chats o papeles, sin historial claro</p>
+    </div>
+    <div class="pain-card fade-in">
+      <div class="pain-header"><span class="pain-icon">📊</span><span class="pain-title">Sin reportes financieros</span></div>
+      <p class="pain-text">No tienes claridad sobre los ingresos y gastos del club</p>
+    </div>
+    <div class="pain-card fade-in fade-in-delay-1">
+      <div class="pain-header"><span class="pain-icon">📱</span><span class="pain-title">Sin app para socios</span></div>
+      <p class="pain-text">Los miembros no tienen forma fácil de ver su estado o resultados</p>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- VALUE PROPS -->
+<section id="value">
+  <div class="fade-in">
+    <div class="section-label">Por qué VeloClub</div>
+    <h2 class="section-title">Un solo sistema. Todo tu club.</h2>
+  </div>
+  <div class="value-grid">
+    <div class="value-card fade-in fade-in-delay-1">
+      <span class="value-icon">⚡</span>
+      <div class="value-title">Pagos automáticos</div>
+      <p class="value-desc">Las cuotas se cobran solas. Recordatorios automáticos y registro de pagos sin intervención manual.</p>
+    </div>
+    <div class="value-card fade-in fade-in-delay-2">
+      <span class="value-icon">📱</span>
+      <div class="value-title">Mobile-first</div>
+      <p class="value-desc">Diseñado para usarse desde el celular. Perfecta para ciclistas que revisan todo desde la bici.</p>
+    </div>
+    <div class="value-card fade-in fade-in-delay-3">
+      <span class="value-icon">🏆</span>
+      <div class="value-title">Gestión de competencias</div>
+      <p class="value-desc">Registra eventos, inscripciones y resultados. Todo el historial del club en un solo lugar.</p>
+    </div>
+    <div class="value-card fade-in fade-in-delay-4">
+      <span class="value-icon">📊</span>
+      <div class="value-title">Reportes en tiempo real</div>
+      <p class="value-desc">Finanzas, miembros activos e inactivos, recaudación mensual — siempre actualizado.</p>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- MODULES -->
+<section id="modules">
+  <div class="fade-in">
+    <div class="section-label">Funcionalidades</div>
+    <h2 class="section-title">Todo lo que necesita tu club</h2>
+    <p class="section-sub">Módulos diseñados específicamente para clubs de ciclismo.</p>
+  </div>
+  <div class="modules-grid">
+    <div class="module-card fade-in fade-in-delay-1">
+      <span class="module-icon">👥</span>
+      <div class="module-name">Miembros</div>
+      <p class="module-desc">Registro completo de socios, categorías, estado activo/inactivo y datos de contacto</p>
+    </div>
+    <div class="module-card fade-in fade-in-delay-2">
+      <span class="module-icon">💳</span>
+      <div class="module-name">Cuotas mensuales</div>
+      <p class="module-desc">Control de pagos por miembro, estado de mora y historial de recaudación</p>
+    </div>
+    <div class="module-card fade-in fade-in-delay-3">
+      <span class="module-icon">⚡</span>
+      <div class="module-name">Pagos automáticos</div>
+      <p class="module-desc">Cobros automáticos, recordatorios y notificaciones sin intervención manual</p>
+    </div>
+    <div class="module-card fade-in fade-in-delay-4">
+      <span class="module-icon">🏆</span>
+      <div class="module-name">Competencias</div>
+      <p class="module-desc">Creación de eventos, inscripciones, categorías y gestión de participantes</p>
+    </div>
+    <div class="module-card fade-in">
+      <span class="module-icon">🥇</span>
+      <div class="module-name">Resultados</div>
+      <p class="module-desc">Registro de posiciones, tiempos y clasificaciones por competencia</p>
+    </div>
+    <div class="module-card fade-in fade-in-delay-1">
+      <span class="module-icon">📊</span>
+      <div class="module-name">Reportes financieros</div>
+      <p class="module-desc">Ingresos, egresos, recaudación mensual y resumen financiero del club</p>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- DEMO -->
+<section id="demo" style="text-align:center;">
+  <div class="fade-in">
+    <div class="section-label" style="text-align:center;">Demo</div>
+    <h2 class="section-title" style="text-align:center;">Míralo en acción</h2>
+    <p class="section-sub" style="text-align:center;max-width:400px;margin-left:auto;margin-right:auto;">VeloClub está en desarrollo activo.</p>
+  </div>
+  <div class="demo-placeholder fade-in fade-in-delay-1">
+    <div class="demo-icon">🚴</div>
+    <div class="demo-title">Demo en construcción</div>
+    <div class="demo-sub">El sistema está en desarrollo. Contáctanos para una demo en vivo.</div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- BENEFITS -->
+<section id="benefits">
+  <div class="fade-in">
+    <div class="section-label">Resultados</div>
+    <h2 class="section-title">Lo que cambia cuando usas VeloClub</h2>
+  </div>
+  <div class="benefits-grid">
+    <div class="benefit-item fade-in fade-in-delay-1">
+      <span class="benefit-check">✓</span>
+      <span class="benefit-text">Cero persecución manual de pagos — el sistema cobra solo</span>
+    </div>
+    <div class="benefit-item fade-in fade-in-delay-2">
+      <span class="benefit-check">✓</span>
+      <span class="benefit-text">Sabes exactamente quién está al día y quién en mora</span>
+    </div>
+    <div class="benefit-item fade-in fade-in-delay-3">
+      <span class="benefit-check">✓</span>
+      <span class="benefit-text">Historial completo de competencias y resultados</span>
+    </div>
+    <div class="benefit-item fade-in fade-in-delay-4">
+      <span class="benefit-check">✓</span>
+      <span class="benefit-text">Reportes financieros listos sin hacer cuentas manualmente</span>
+    </div>
+    <div class="benefit-item fade-in">
+      <span class="benefit-check">✓</span>
+      <span class="benefit-text">Acceso desde el celular — para directivos y miembros</span>
+    </div>
+    <div class="benefit-item fade-in fade-in-delay-1">
+      <span class="benefit-check">✓</span>
+      <span class="benefit-text">Club profesional con herramientas de nivel enterprise</span>
+    </div>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- TECH STACK -->
+<section id="tech">
+  <div class="fade-in">
+    <div class="section-label">Tecnología</div>
+    <h2 class="section-title">Construido con las mejores herramientas</h2>
+    <p class="section-sub">Stack moderno, seguro y escalable para crecer con tu club.</p>
+  </div>
+  <div class="tech-row fade-in fade-in-delay-1">
+    <span class="tech-tag">Next.js 15</span>
+    <span class="tech-tag">Express.js</span>
+    <span class="tech-tag">PostgreSQL</span>
+    <span class="tech-tag">Prisma</span>
+    <span class="tech-tag">Clerk Auth</span>
+    <span class="tech-tag">Cloudinary</span>
+  </div>
+</section>
+
+<div class="section-divider"></div>
+
+<!-- FINAL CTA -->
+<section id="cta" style="text-align:center;padding:100px 24px;max-width:700px;margin:0 auto;">
+  <div class="fade-in">
+    <div class="section-label" style="text-align:center;">¿Hablamos?</div>
+    <h2 class="section-title" style="text-align:center;max-width:none;">¿Listo para modernizar tu club?</h2>
+    <p class="section-sub" style="text-align:center;max-width:480px;margin-left:auto;margin-right:auto;">Escríbenos y te mostramos cómo VeloClub se adapta a tu club de ciclismo.</p>
+  </div>
+  <div class="cta-buttons fade-in fade-in-delay-1">
+    <a href="https://wa.me/573164134212" target="_blank" class="btn btn-wa btn-lg">💬 Escribir por WhatsApp</a>
+    <a href="mailto:nexcode97@gmail.com" class="btn btn-email btn-lg">✉️ Enviar correo</a>
+  </div>
+  <p class="cta-footer-note fade-in fade-in-delay-2">Desarrollado por NexCode97</p>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  VeloClub &copy; 2025 &bull; Desarrollado por <a href="../" style="color:inherit;text-decoration:none;">NexCode97</a>
+</footer>
+
+<script>
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach(entry => {
+      if (entry.isIntersecting) entry.target.classList.add('visible');
+    });
+  }, { threshold: 0.12 });
+
+  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+
+  document.querySelectorAll('section:first-of-type .fade-in, nav ~ section .fade-in').forEach(el => {
+    if (el.closest('section')?.style.paddingTop === '100px') el.classList.add('visible');
+  });
+</script>
+</body>
+</html>

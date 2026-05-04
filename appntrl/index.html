@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -274,9 +275,14 @@
   }
 
   .pain-icon {
-    font-size: 1.5rem;
     flex-shrink: 0;
+    display: flex;
+    align-items: center;
   }
+  .pain-icon i { width: 22px; height: 22px; stroke: var(--accent-light); }
+  .value-icon i { width: 32px; height: 32px; stroke: var(--accent-light); }
+  .module-icon i { width: 24px; height: 24px; stroke: var(--accent-light); }
+  .benefit-check i { width: 18px; height: 18px; stroke: #22c55e; }
 
   .pain-title {
     font-size: 0.95rem;
@@ -837,9 +843,14 @@
 <!-- NAVBAR -->
 <nav>
   <div class="nav-inner">
-    <a href="../" style="display:flex;align-items:center;text-decoration:none;">
-      <img src="../assets/letrero-header.png" alt="NexCode97" style="height:26px;width:auto;"/>
-    </a>
+    <div style="display:flex;align-items:center;gap:20px;">
+      <a href="../" style="display:flex;align-items:center;gap:6px;color:var(--text-muted);text-decoration:none;font-size:0.85rem;font-weight:600;transition:color 0.2s;" onmouseover="this.style.color='#f1f5f9'" onmouseout="this.style.color=''">
+        <i data-lucide="arrow-left" style="width:16px;height:16px;stroke:currentColor;"></i> Volver
+      </a>
+      <a href="../" style="display:flex;align-items:center;text-decoration:none;">
+        <img src="../assets/letrero-header.png" alt="NexCode97" style="height:26px;width:auto;"/>
+      </a>
+    </div>
     <a href="#cta" class="btn btn-primary">Contactar ahora</a>
   </div>
 </nav>
@@ -870,35 +881,35 @@
   </div>
   <div class="pain-grid">
     <div class="pain-card fade-in fade-in-delay-1">
-      <div class="pain-header"><span class="pain-icon">📦</span><span class="pain-title">Pedidos desorganizados</span></div>
+      <div class="pain-header"><span class="pain-icon"><i data-lucide="package"></i></span><span class="pain-title">Pedidos desorganizados</span></div>
       <p class="pain-text">Pedidos perdidos o confusos entre el equipo</p>
     </div>
     <div class="pain-card fade-in fade-in-delay-2">
-      <div class="pain-header"><span class="pain-icon">🏭</span><span class="pain-title">Producción sin control</span></div>
+      <div class="pain-header"><span class="pain-icon"><i data-lucide="factory"></i></span><span class="pain-title">Producción sin control</span></div>
       <p class="pain-text">No sabes en qué etapa de producción va cada orden</p>
     </div>
     <div class="pain-card fade-in fade-in-delay-3">
-      <div class="pain-header"><span class="pain-icon">💬</span><span class="pain-title">Comunicación fallida</span></div>
+      <div class="pain-header"><span class="pain-icon"><i data-lucide="message-circle"></i></span><span class="pain-title">Comunicación fallida</span></div>
       <p class="pain-text">Errores por mala comunicación interna</p>
     </div>
     <div class="pain-card fade-in fade-in-delay-4">
-      <div class="pain-header"><span class="pain-icon">💰</span><span class="pain-title">Finanzas inciertas</span></div>
+      <div class="pain-header"><span class="pain-icon"><i data-lucide="dollar-sign"></i></span><span class="pain-title">Finanzas inciertas</span></div>
       <p class="pain-text">No sabes cuánto has vendido ni cuánto te deben</p>
     </div>
     <div class="pain-card fade-in">
-      <div class="pain-header"><span class="pain-icon">🔧</span><span class="pain-title">Herramientas dispersas</span></div>
+      <div class="pain-header"><span class="pain-icon"><i data-lucide="wrench"></i></span><span class="pain-title">Herramientas dispersas</span></div>
       <p class="pain-text">Gastas en múltiples herramientas que no se conectan</p>
     </div>
     <div class="pain-card fade-in fade-in-delay-1">
-      <div class="pain-header"><span class="pain-icon">📄</span><span class="pain-title">Cotizaciones manuales</span></div>
+      <div class="pain-header"><span class="pain-icon"><i data-lucide="file-text"></i></span><span class="pain-title">Cotizaciones manuales</span></div>
       <p class="pain-text">Pierdes tiempo haciendo cotizaciones a mano en Excel o WhatsApp</p>
     </div>
     <div class="pain-card fade-in fade-in-delay-2">
-      <div class="pain-header"><span class="pain-icon">🧾</span><span class="pain-title">Sin facturación interna</span></div>
+      <div class="pain-header"><span class="pain-icon"><i data-lucide="receipt"></i></span><span class="pain-title">Sin facturación interna</span></div>
       <p class="pain-text">No tienes registro claro de facturas entre áreas o clientes internos</p>
     </div>
     <div class="pain-card fade-in fade-in-delay-3">
-      <div class="pain-header"><span class="pain-icon">🔁</span><span class="pain-title">Procesos repetitivos</span></div>
+      <div class="pain-header"><span class="pain-icon"><i data-lucide="refresh-cw"></i></span><span class="pain-title">Procesos repetitivos</span></div>
       <p class="pain-text">Tu equipo hace manualmente tareas que podrían ejecutarse solas</p>
     </div>
   </div>
@@ -914,22 +925,22 @@
   </div>
   <div class="value-grid">
     <div class="value-card fade-in fade-in-delay-1">
-      <span class="value-icon">💳</span>
+      <span class="value-icon"><i data-lucide="credit-card"></i></span>
       <div class="value-title">Pago único</div>
       <p class="value-desc">Sin costos de servidor mensuales. Un solo pago y listo.</p>
     </div>
     <div class="value-card fade-in fade-in-delay-2">
-      <span class="value-icon">👥</span>
+      <span class="value-icon"><i data-lucide="users"></i></span>
       <div class="value-title">3 roles de usuario</div>
       <p class="value-desc">Administrador, Vendedor y Trabajador. Cada quien ve solo lo que necesita.</p>
     </div>
     <div class="value-card fade-in fade-in-delay-3">
-      <span class="value-icon">📊</span>
+      <span class="value-icon"><i data-lucide="bar-chart-2"></i></span>
       <div class="value-title">Información en tiempo real</div>
       <p class="value-desc">Sin confusión, sin errores, sin datos perdidos.</p>
     </div>
     <div class="value-card fade-in fade-in-delay-4">
-      <span class="value-icon">🎯</span>
+      <span class="value-icon"><i data-lucide="target"></i></span>
       <div class="value-title">Control total</div>
       <p class="value-desc">Desde que entra el pedido hasta que sale el producto.</p>
     </div>
@@ -999,62 +1010,62 @@
   <div id="tab-admin" class="tab-panel active">
     <div class="modules-grid">
       <div class="module-card fade-in">
-        <span class="module-icon">📊</span>
+        <span class="module-icon"><i data-lucide="bar-chart-2"></i></span>
         <div class="module-name">Dashboard</div>
         <p class="module-desc">Analíticas, gráficas de ingresos, resumen del negocio</p>
       </div>
       <div class="module-card fade-in fade-in-delay-1">
-        <span class="module-icon">📦</span>
+        <span class="module-icon"><i data-lucide="package"></i></span>
         <div class="module-name">Pedidos</div>
         <p class="module-desc">Crear, editar, cambiar estado, historial de auditoría</p>
       </div>
       <div class="module-card fade-in fade-in-delay-2">
-        <span class="module-icon">👥</span>
+        <span class="module-icon"><i data-lucide="users"></i></span>
         <div class="module-name">Clientes</div>
         <p class="module-desc">Gestión de clientes (empresa o persona natural)</p>
       </div>
       <div class="module-card fade-in fade-in-delay-3">
-        <span class="module-icon">🏷️</span>
+        <span class="module-icon"><i data-lucide="tag"></i></span>
         <div class="module-name">Catálogo</div>
         <p class="module-desc">Todo el portafolio de productos organizado y listo para usar en pedidos y cotizaciones</p>
       </div>
       <div class="module-card fade-in fade-in-delay-4">
-        <span class="module-icon">🏭</span>
+        <span class="module-icon"><i data-lucide="factory"></i></span>
         <div class="module-name">Producción</div>
         <p class="module-desc">Seguimiento de 6 etapas de fabricación</p>
       </div>
       <div class="module-card fade-in">
-        <span class="module-icon">💰</span>
+        <span class="module-icon"><i data-lucide="dollar-sign"></i></span>
         <div class="module-name">Finanzas</div>
         <p class="module-desc">Registrar abonos, ver estados de pago y generar facturas internas</p>
       </div>
       <div class="module-card fade-in fade-in-delay-1">
-        <span class="module-icon">📋</span>
+        <span class="module-icon"><i data-lucide="clipboard"></i></span>
         <div class="module-name">Cotizaciones</div>
         <p class="module-desc">Crear y gestionar cotizaciones para clientes</p>
       </div>
       <div class="module-card fade-in fade-in-delay-2">
-        <span class="module-icon">🔧</span>
+        <span class="module-icon"><i data-lucide="wrench"></i></span>
         <div class="module-name">Suministros</div>
         <p class="module-desc">Solicitudes de insumos y gestión</p>
       </div>
       <div class="module-card fade-in fade-in-delay-2">
-        <span class="module-icon">🚚</span>
+        <span class="module-icon"><i data-lucide="truck"></i></span>
         <div class="module-name">Proveedores</div>
         <p class="module-desc">Registro con ubicación geográfica</p>
       </div>
       <div class="module-card fade-in fade-in-delay-3">
-        <span class="module-icon">👤</span>
+        <span class="module-icon"><i data-lucide="user"></i></span>
         <div class="module-name">Usuarios</div>
         <p class="module-desc">Gestión de cuentas y roles</p>
       </div>
       <div class="module-card fade-in fade-in-delay-4">
-        <span class="module-icon">💬</span>
+        <span class="module-icon"><i data-lucide="message-circle"></i></span>
         <div class="module-name">Mensajes</div>
         <p class="module-desc">Chat interno con reacciones y archivos</p>
       </div>
       <div class="module-card fade-in">
-        <span class="module-icon">📄</span>
+        <span class="module-icon"><i data-lucide="file-text"></i></span>
         <div class="module-name">Reportes</div>
         <p class="module-desc">Exportación en PDF y Excel</p>
       </div>
@@ -1065,27 +1076,27 @@
   <div id="tab-vendedor" class="tab-panel">
     <div class="modules-grid" style="grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));">
       <div class="module-card">
-        <span class="module-icon">📦</span>
+        <span class="module-icon"><i data-lucide="package"></i></span>
         <div class="module-name">Pedidos</div>
         <p class="module-desc">Crear y gestionar pedidos de clientes</p>
       </div>
       <div class="module-card">
-        <span class="module-icon">👥</span>
+        <span class="module-icon"><i data-lucide="users"></i></span>
         <div class="module-name">Clientes</div>
         <p class="module-desc">Consultar y registrar clientes</p>
       </div>
       <div class="module-card">
-        <span class="module-icon">🏷️</span>
+        <span class="module-icon"><i data-lucide="tag"></i></span>
         <div class="module-name">Catálogo</div>
         <p class="module-desc">Ver productos y precios disponibles</p>
       </div>
       <div class="module-card">
-        <span class="module-icon">💰</span>
+        <span class="module-icon"><i data-lucide="dollar-sign"></i></span>
         <div class="module-name">Finanzas</div>
         <p class="module-desc">Registrar abonos, ver estados de pago y generar facturas internas</p>
       </div>
       <div class="module-card">
-        <span class="module-icon">📋</span>
+        <span class="module-icon"><i data-lucide="clipboard"></i></span>
         <div class="module-name">Cotizaciones</div>
         <p class="module-desc">Crear y enviar cotizaciones a clientes</p>
       </div>
@@ -1096,17 +1107,17 @@
   <div id="tab-trabajador" class="tab-panel">
     <div class="modules-grid" style="grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));">
       <div class="module-card">
-        <span class="module-icon">✅</span>
+        <span class="module-icon"><i data-lucide="check-square"></i></span>
         <div class="module-name">Mis Tareas</div>
         <p class="module-desc">Ver y actualizar el estado de las órdenes asignadas</p>
       </div>
       <div class="module-card">
-        <span class="module-icon">🔧</span>
+        <span class="module-icon"><i data-lucide="wrench"></i></span>
         <div class="module-name">Suministros</div>
         <p class="module-desc">Solicitar insumos necesarios para producción</p>
       </div>
       <div class="module-card">
-        <span class="module-icon">💬</span>
+        <span class="module-icon"><i data-lucide="message-circle"></i></span>
         <div class="module-name">Mensajes</div>
         <p class="module-desc">Comunicarse con el equipo en tiempo real</p>
       </div>
@@ -1211,6 +1222,8 @@
   document.querySelectorAll('#hero .fade-in').forEach(el => {
     el.classList.add('visible');
   });
+
+  lucide.createIcons();
 
   // Lightbox
   function openLightbox(src, orientation) {

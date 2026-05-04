@@ -8,6 +8,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
 <style>
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -226,7 +227,10 @@
   }
 
   .pain-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .pain-icon { font-size: 1.5rem; flex-shrink: 0; }
+  .pain-icon { flex-shrink: 0; display: flex; align-items: center; }
+  .pain-icon i { width: 22px; height: 22px; stroke: var(--accent-light); }
+  .value-icon i { width: 32px; height: 32px; stroke: var(--accent-light); }
+  .module-icon i { width: 24px; height: 24px; stroke: var(--accent2-light); }
   .pain-title { font-size: 0.95rem; font-weight: 700; color: #fff; }
   .pain-text { font-size: 0.875rem; color: var(--text-muted); line-height: 1.5; }
 
@@ -377,9 +381,14 @@
 <!-- NAVBAR -->
 <nav>
   <div class="nav-inner">
-    <a href="../" style="display:flex;align-items:center;text-decoration:none;">
-      <img src="../assets/letrero-header.png" alt="NexCode97" style="height:26px;width:auto;"/>
-    </a>
+    <div style="display:flex;align-items:center;gap:20px;">
+      <a href="../" style="display:flex;align-items:center;gap:6px;color:var(--text-muted);text-decoration:none;font-size:0.85rem;font-weight:600;transition:color 0.2s;" onmouseover="this.style.color='#f1f5f9'" onmouseout="this.style.color=''">
+        <i data-lucide="arrow-left" style="width:16px;height:16px;stroke:currentColor;"></i> Volver
+      </a>
+      <a href="../" style="display:flex;align-items:center;text-decoration:none;">
+        <img src="../assets/letrero-header.png" alt="NexCode97" style="height:26px;width:auto;"/>
+      </a>
+    </div>
     <a href="#cta" class="btn btn-primary">Contactar ahora</a>
   </div>
 </nav>
@@ -410,27 +419,27 @@
   </div>
   <div class="pain-grid">
     <div class="pain-card fade-in fade-in-delay-1">
-      <div class="pain-header"><span class="pain-icon">📋</span><span class="pain-title">Miembros en Excel</span></div>
+      <div class="pain-header"><span class="pain-icon"><i data-lucide="clipboard-list"></i></span><span class="pain-title">Miembros en Excel</span></div>
       <p class="pain-text">Lista de socios desorganizada en hojas de cálculo difíciles de mantener</p>
     </div>
     <div class="pain-card fade-in fade-in-delay-2">
-      <div class="pain-header"><span class="pain-icon">💸</span><span class="pain-title">Cuotas sin control</span></div>
+      <div class="pain-header"><span class="pain-icon"><i data-lucide="banknote"></i></span><span class="pain-title">Cuotas sin control</span></div>
       <p class="pain-text">No sabes quién pagó, quién debe, ni cuánto recaudaste este mes</p>
     </div>
     <div class="pain-card fade-in fade-in-delay-3">
-      <div class="pain-header"><span class="pain-icon">🔔</span><span class="pain-title">Cobros manuales</span></div>
+      <div class="pain-header"><span class="pain-icon"><i data-lucide="bell"></i></span><span class="pain-title">Cobros manuales</span></div>
       <p class="pain-text">Persigues a cada miembro manualmente para recordarles el pago</p>
     </div>
     <div class="pain-card fade-in fade-in-delay-4">
-      <div class="pain-header"><span class="pain-icon">🏆</span><span class="pain-title">Competencias sin registro</span></div>
+      <div class="pain-header"><span class="pain-icon"><i data-lucide="trophy"></i></span><span class="pain-title">Competencias sin registro</span></div>
       <p class="pain-text">Resultados guardados en chats o papeles, sin historial claro</p>
     </div>
     <div class="pain-card fade-in">
-      <div class="pain-header"><span class="pain-icon">📊</span><span class="pain-title">Sin reportes financieros</span></div>
+      <div class="pain-header"><span class="pain-icon"><i data-lucide="bar-chart-2"></i></span><span class="pain-title">Sin reportes financieros</span></div>
       <p class="pain-text">No tienes claridad sobre los ingresos y gastos del club</p>
     </div>
     <div class="pain-card fade-in fade-in-delay-1">
-      <div class="pain-header"><span class="pain-icon">📱</span><span class="pain-title">Sin app para socios</span></div>
+      <div class="pain-header"><span class="pain-icon"><i data-lucide="smartphone"></i></span><span class="pain-title">Sin app para socios</span></div>
       <p class="pain-text">Los miembros no tienen forma fácil de ver su estado o resultados</p>
     </div>
   </div>
@@ -446,22 +455,22 @@
   </div>
   <div class="value-grid">
     <div class="value-card fade-in fade-in-delay-1">
-      <span class="value-icon">⚡</span>
+      <span class="value-icon"><i data-lucide="zap"></i></span>
       <div class="value-title">Pagos automáticos</div>
       <p class="value-desc">Las cuotas se cobran solas. Recordatorios automáticos y registro de pagos sin intervención manual.</p>
     </div>
     <div class="value-card fade-in fade-in-delay-2">
-      <span class="value-icon">📱</span>
+      <span class="value-icon"><i data-lucide="smartphone"></i></span>
       <div class="value-title">Mobile-first</div>
-      <p class="value-desc">Diseñado para usarse desde el celular. Perfecta para ciclistas que revisan todo desde la bici.</p>
+      <p class="value-desc">Diseñado para usarse desde el celular. Perfecto para patinadores que revisan todo desde el móvil.</p>
     </div>
     <div class="value-card fade-in fade-in-delay-3">
-      <span class="value-icon">🏆</span>
+      <span class="value-icon"><i data-lucide="trophy"></i></span>
       <div class="value-title">Gestión de competencias</div>
       <p class="value-desc">Registra eventos, inscripciones y resultados. Todo el historial del club en un solo lugar.</p>
     </div>
     <div class="value-card fade-in fade-in-delay-4">
-      <span class="value-icon">📊</span>
+      <span class="value-icon"><i data-lucide="bar-chart-2"></i></span>
       <div class="value-title">Reportes en tiempo real</div>
       <p class="value-desc">Finanzas, miembros activos e inactivos, recaudación mensual — siempre actualizado.</p>
     </div>
@@ -479,32 +488,32 @@
   </div>
   <div class="modules-grid">
     <div class="module-card fade-in fade-in-delay-1">
-      <span class="module-icon">👥</span>
+      <span class="module-icon"><i data-lucide="users"></i></span>
       <div class="module-name">Miembros</div>
       <p class="module-desc">Registro completo de socios, categorías, estado activo/inactivo y datos de contacto</p>
     </div>
     <div class="module-card fade-in fade-in-delay-2">
-      <span class="module-icon">💳</span>
+      <span class="module-icon"><i data-lucide="credit-card"></i></span>
       <div class="module-name">Cuotas mensuales</div>
       <p class="module-desc">Control de pagos por miembro, estado de mora y historial de recaudación</p>
     </div>
     <div class="module-card fade-in fade-in-delay-3">
-      <span class="module-icon">⚡</span>
+      <span class="module-icon"><i data-lucide="zap"></i></span>
       <div class="module-name">Pagos automáticos</div>
       <p class="module-desc">Cobros automáticos, recordatorios y notificaciones sin intervención manual</p>
     </div>
     <div class="module-card fade-in fade-in-delay-4">
-      <span class="module-icon">🏆</span>
+      <span class="module-icon"><i data-lucide="trophy"></i></span>
       <div class="module-name">Competencias</div>
       <p class="module-desc">Creación de eventos, inscripciones, categorías y gestión de participantes</p>
     </div>
     <div class="module-card fade-in">
-      <span class="module-icon">🥇</span>
+      <span class="module-icon"><i data-lucide="award"></i></span>
       <div class="module-name">Resultados</div>
       <p class="module-desc">Registro de posiciones, tiempos y clasificaciones por competencia</p>
     </div>
     <div class="module-card fade-in fade-in-delay-1">
-      <span class="module-icon">📊</span>
+      <span class="module-icon"><i data-lucide="bar-chart-2"></i></span>
       <div class="module-name">Reportes financieros</div>
       <p class="module-desc">Ingresos, egresos, recaudación mensual y resumen financiero del club</p>
     </div>
@@ -592,6 +601,7 @@
   }, { threshold: 0.12 });
 
   document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
+  lucide.createIcons();
 
   document.querySelectorAll('section:first-of-type .fade-in, nav ~ section .fade-in').forEach(el => {
     if (el.closest('section')?.style.paddingTop === '100px') el.classList.add('visible');

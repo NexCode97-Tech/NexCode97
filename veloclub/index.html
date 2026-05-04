@@ -208,7 +208,7 @@
   /* PAIN POINTS */
   .pain-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 16px;
   }
 
@@ -237,7 +237,7 @@
   /* VALUE PROPS */
   .value-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 20px;
   }
 
@@ -262,7 +262,7 @@
   /* MODULES */
   .modules-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 14px;
   }
 
@@ -287,7 +287,7 @@
   /* BENEFITS */
   .benefits-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     gap: 14px;
   }
 
@@ -308,6 +308,7 @@
   }
 
   .benefit-check { color: var(--accent-light); font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
+  .benefit-check i { width: 18px; height: 18px; stroke: var(--accent-light); flex-shrink: 0; }
   .benefit-text { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
 
   /* DEMO PLACEHOLDER */
@@ -648,27 +649,27 @@
   </div>
   <div class="benefits-grid">
     <div class="benefit-item fade-in fade-in-delay-1">
-      <span class="benefit-check">✓</span>
+      <span class="benefit-check"><i data-lucide="check-circle-2"></i></span>
       <span class="benefit-text">Cero persecución manual de pagos — el sistema cobra solo</span>
     </div>
     <div class="benefit-item fade-in fade-in-delay-2">
-      <span class="benefit-check">✓</span>
+      <span class="benefit-check"><i data-lucide="check-circle-2"></i></span>
       <span class="benefit-text">Sabes exactamente quién está al día y quién en mora</span>
     </div>
     <div class="benefit-item fade-in fade-in-delay-3">
-      <span class="benefit-check">✓</span>
+      <span class="benefit-check"><i data-lucide="check-circle-2"></i></span>
       <span class="benefit-text">Historial completo de competencias y resultados</span>
     </div>
     <div class="benefit-item fade-in fade-in-delay-4">
-      <span class="benefit-check">✓</span>
+      <span class="benefit-check"><i data-lucide="check-circle-2"></i></span>
       <span class="benefit-text">Reportes financieros listos sin hacer cuentas manualmente</span>
     </div>
     <div class="benefit-item fade-in">
-      <span class="benefit-check">✓</span>
+      <span class="benefit-check"><i data-lucide="check-circle-2"></i></span>
       <span class="benefit-text">Acceso desde el celular — para directivos y miembros</span>
     </div>
     <div class="benefit-item fade-in fade-in-delay-1">
-      <span class="benefit-check">✓</span>
+      <span class="benefit-check"><i data-lucide="check-circle-2"></i></span>
       <span class="benefit-text">Club profesional con herramientas de nivel enterprise</span>
     </div>
   </div>

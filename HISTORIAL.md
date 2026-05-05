@@ -86,12 +86,13 @@ Archivos en `C:/Users/socia/OneDrive/Desktop/Claude/NexCode97/`:
 - Trabajador (3 módulos): Mis Tareas, Suministros, Mensajes
 
 ### VeloClub
-- **Tipo:** Plataforma SaaS de gestión para clubs de ciclismo
+- **Tipo:** Plataforma SaaS de gestión para clubs de patinaje
 - **Cliente:** VeloClub (propio)
-- **Estado:** En desarrollo ✓
+- **Estado:** Funcionando ✅
 - **Tecnología:** Next.js 15 + Express.js + PostgreSQL + Prisma + Clerk Auth + Cloudinary
-- **Modelo:** SaaS — suscripción mensual por club
+- **Modelo:** SaaS, suscripción mensual por club
 - **Funcionalidades:** Gestión de miembros, cuotas mensuales, pagos automáticos, competencias, resultados, reportes financieros
+- **Roles:** Administrador, Entrenador, Deportista
 - **URL:** https://veloclub-plum.vercel.app/
 
 ### Páginas web completadas
@@ -165,16 +166,22 @@ NexCode97/
 ## Historial de Cambios (continuación)
 
 ### 2026-05-04
-- ✅ Agregado VeloClub al portafolio — SaaS de gestión para clubs de ciclismo
-- ✅ Actualizado HISTORIAL.md con información de VeloClub
+- ✅ Agregado VeloClub al portafolio (clubs de patinaje, no ciclismo)
+- ✅ Sitio principal `index.html` construido y publicado en nex-code97.vercel.app
+- ✅ Landing page `appntrl/index.html` con demo en video (PC, tablet, móvil), módulos por rol, íconos SVG
+- ✅ Landing page `veloclub/index.html` con sección de roles (Admin, Entrenador, Deportista)
+- ✅ Portafolio separado en dos secciones: Sistemas & Apps / Páginas web
+- ✅ Grids de 2 columnas en todas las secciones de las tres páginas
+- ✅ Botones hero en misma fila en móvil
+- ✅ Emojis reemplazados por SVGs (Lucide + Heroicons inline)
+- ✅ Guiones eliminados de todas las descripciones
+- ✅ Videos de APP NTRL grabados (PC + tablet + móvil) y subidos a YouTube
+- ✅ Flyer de historia Instagram refinado y exportado
+- ✅ Cuenta de Instagram @nexcode97 creada
 
 ---
 
 ## Pendientes
 
-- [ ] Grabar videos de APP NTRL (PC + tablet + móvil) y subirlos a YouTube
-- [ ] Refinar flyer de historia Instagram
-- [ ] Publicar sitio en Vercel (actualizar dirección)
-- [ ] Crear cuenta de Instagram @nexcode97
-- [ ] Landing page dedicada para VeloClub
+- [ ] Actualizar dominio a nexcode97.com en Vercel (actualmente nex-code97.vercel.app)
 - [ ] Definir precio y plan de monetización para VeloClub (SaaS)

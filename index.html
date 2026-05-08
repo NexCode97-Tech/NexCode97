@@ -236,7 +236,7 @@ section{position:relative;z-index:2;}
 .pf-visual{display:flex;align-items:center;justify-content:center;background:var(--bg2);border-right:1px solid var(--border);position:relative;overflow:hidden;padding:36px;}
 .pf-vis-grid{position:absolute;inset:0;background-image:radial-gradient(rgba(124,58,237,.06) 1px,transparent 1px);background-size:22px 22px;}
 .pf-vis-glow{position:absolute;inset:0;background:radial-gradient(ellipse at center,rgba(124,58,237,.12),transparent 70%);}
-.pf-vis-logo{width:96px;height:96px;border-radius:20px;object-fit:cover;position:relative;z-index:1;border:1px solid rgba(255,255,255,.1);box-shadow:0 16px 48px rgba(0,0,0,.5);}
+.pf-vis-logo{width:68px;height:68px;border-radius:16px;object-fit:cover;position:relative;z-index:1;border:1px solid rgba(255,255,255,.1);box-shadow:0 16px 48px rgba(0,0,0,.5);}
 .pf-live{position:absolute;bottom:14px;left:50%;transform:translateX(-50%);font-family:var(--mono);font-size:.55rem;font-weight:600;letter-spacing:.12em;text-transform:uppercase;color:#4ade80;background:rgba(74,222,128,.08);border:1px solid rgba(74,222,128,.2);padding:3px 10px;border-radius:99px;white-space:nowrap;}
 .pf-info{padding:32px 28px;display:flex;flex-direction:column;justify-content:space-between;gap:16px;}
 .pf-tags{display:flex;gap:6px;flex-wrap:wrap;}
@@ -251,7 +251,10 @@ section{position:relative;z-index:2;}
 .pf-arrow{width:30px;height:30px;border-radius:7px;border:1px solid var(--bv);display:flex;align-items:center;justify-content:center;color:var(--vl);font-size:.8rem;opacity:0;transform:translate(-6px,6px);transition:all .25s;}
 
 /* Small grid */
-.pf-sm-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:16px;}
+.pf-sm-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px;margin-top:16px;}
+.pf-group-label{font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t3);margin:40px 0 16px;display:flex;align-items:center;gap:10px;}
+.pf-group-label::before{content:'';display:block;width:16px;height:1px;background:var(--t3);}
+.pf-group-label::after{content:'';flex:1;height:1px;background:var(--border);}
 .pf-sm{border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;text-decoration:none;color:inherit;background:var(--bg1);transition:border-color .25s,transform .25s;}
 .pf-sm:hover{border-color:var(--bc);transform:translateY(-2px);}
 .pf-sm:hover .pf-arrow{opacity:1;transform:translate(0,0);}
@@ -324,6 +327,7 @@ footer{border-top:1px solid var(--border);padding:28px clamp(20px,5vw,56px);disp
   .pf-lg{grid-template-columns:1fr;}
   .pf-visual{min-height:160px;border-right:none;border-bottom:1px solid var(--border);}
   .pf-sm-grid{grid-template-columns:1fr 1fr;}
+  .pf-group-label{margin:28px 0 12px;}
   .why-grid{grid-template-columns:1fr;}
   footer{flex-direction:column;text-align:center;}
 }
@@ -628,6 +632,7 @@ footer{border-top:1px solid var(--border);padding:28px clamp(20px,5vw,56px);disp
       </div>
     </div>
 
+    <div class="pf-group-label reveal">Aplicaciones</div>
     <div class="pf-stack">
       <a href="appntrl/" class="pf-lg reveal d1">
         <div class="pf-visual">
@@ -676,6 +681,7 @@ footer{border-top:1px solid var(--border);padding:28px clamp(20px,5vw,56px);disp
       </a>
     </div>
 
+    <div class="pf-group-label reveal">Páginas web</div>
     <div class="pf-sm-grid">
       <a href="https://www.naturalropadeportiva.com.co" target="_blank" class="pf-sm reveal d1">
         <div class="pf-sm-head" style="background:linear-gradient(135deg,#050f02,#0e2a05);">

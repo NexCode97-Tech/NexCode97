@@ -168,7 +168,7 @@ section{position:relative;z-index:2;}
 
 /* ── MODULES GRID ─────────────────────────────── */
 .modules-section{padding:80px 0;}
-.modules-grid-6{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.modules-grid-6{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
 .module-card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--rl);padding:22px 20px;transition:border-color .25s,background .25s;}
 .module-card:hover{border-color:var(--bv);background:rgba(124,58,237,.04);}
 .module-icon{width:36px;height:36px;border-radius:9px;background:rgba(124,58,237,.1);border:1px solid var(--bv);display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
@@ -191,7 +191,7 @@ section{position:relative;z-index:2;}
 .tab-btn.active{background:var(--grad);color:#fff;font-weight:700;}
 .tab-panel{display:none;}
 .tab-panel.active{display:block;}
-.roles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.roles-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
 .role-card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--rl);padding:22px 20px;transition:border-color .25s;}
 .role-card:hover{border-color:var(--bv);}
 
@@ -231,8 +231,8 @@ footer{border-top:1px solid var(--border);padding:28px clamp(20px,5vw,56px);disp
 @media(max-width:960px){
   .pain-grid{grid-template-columns:repeat(3,1fr);}
   .value-grid{grid-template-columns:repeat(3,1fr);}
-  .modules-grid-6{grid-template-columns:repeat(2,1fr);}
-  .roles-grid{grid-template-columns:repeat(2,1fr);}
+  .modules-grid-6{grid-template-columns:repeat(3,1fr);}
+  .roles-grid{grid-template-columns:repeat(3,1fr);}
   .mega-svc-grid{grid-template-columns:repeat(2,1fr);}
 }
 @media(max-width:768px){
@@ -244,13 +244,15 @@ footer{border-top:1px solid var(--border);padding:28px clamp(20px,5vw,56px);disp
   .stat{flex:1;padding:14px 16px;text-align:center;}
   .pain-grid{grid-template-columns:repeat(2,1fr);}
   .value-grid{grid-template-columns:repeat(2,1fr);}
+  .modules-grid-6{grid-template-columns:repeat(2,1fr);}
+  .roles-grid{grid-template-columns:repeat(2,1fr);}
   .benefits-grid{grid-template-columns:1fr;}
   footer{flex-direction:column;text-align:center;}
 }
 @media(max-width:560px){
   .pain-grid{grid-template-columns:repeat(2,1fr);}
-  .modules-grid-6{grid-template-columns:1fr;}
-  .roles-grid{grid-template-columns:1fr;}
+  .modules-grid-6{grid-template-columns:repeat(2,1fr);}
+  .roles-grid{grid-template-columns:repeat(2,1fr);}
 }
 @media(max-width:480px){
   .wa-float{bottom:18px;right:18px;width:48px;height:48px;}
@@ -416,7 +418,7 @@ footer{border-top:1px solid var(--border);padding:28px clamp(20px,5vw,56px);disp
     <div class="hero-badge reveal">
       <span class="pill"><span class="pill-dot"></span>SaaS para clubs de patinaje</span>
     </div>
-    <h1 class="hero-h1 reveal d1">El sistema que pone orden<br>en tu <span class="grad-text">club de patinaje.</span></h1>
+    <h1 class="hero-h1 reveal d1">El sistema que pone orden en tu <span class="grad-text">club de patinaje.</span></h1>
     <p class="hero-sub reveal d2">VeloClub es una plataforma SaaS completa — miembros, cuotas, pagos automáticos, competencias, resultados y reportes financieros en un solo lugar con interfaz mobile-first.</p>
     <div class="hero-actions reveal d3">
       <a href="#modules" class="btn btn-grad btn-lg">Ver funcionalidades</a>

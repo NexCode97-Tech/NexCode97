@@ -7,7 +7,7 @@ Tagline: "Cada negocio merece su propio sistema."
 - WhatsApp: +57 316 413 4212
 - Email: nexcode97@gmail.com
 - Instagram: @nexcode97 ✅ (cuenta creada 2026-05-04)
-- Web: nexcode97.com (actualmente en nex-code97.vercel.app)
+- Web: nexcode97.com ✅ (dominio propio activo desde 2026-05-07)
 
 ## Colores Corporativos
 - Fondo: `#0a0a14`
@@ -49,7 +49,7 @@ Roles: Administrador, Entrenador, Deportista
 - Guevara Sport — sitio corporativo con catálogo (guevarasport.com)
 
 ## Pendientes
-- [ ] Actualizar dominio a nexcode97.com en Vercel (actualmente nex-code97.vercel.app)
+- [x] Actualizar dominio a nexcode97.com en Vercel ✅ 2026-05-07
 - [ ] Definir precio y plan de monetización para VeloClub (SaaS)
 
 ## Archivos de referencia

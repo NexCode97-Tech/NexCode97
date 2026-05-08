@@ -688,7 +688,7 @@ footer{border-top:1px solid var(--border);padding:28px clamp(20px,5vw,56px);disp
   <div class="lightbox-inner" id="lightbox-inner">
     <button class="lightbox-close" onclick="closeLightbox()">✕</button>
     <iframe id="lightbox-iframe" src="" frameborder="0" allowfullscreen allow="autoplay" style="display:none;"></iframe>
-    <video id="lightbox-video" controls style="display:none;width:100%;border-radius:10px;"></video>
+    <video id="lightbox-video" controls style="display:none;height:min(85vh,700px);width:auto;max-width:100%;border-radius:10px;display:block;margin:0 auto;"></video>
   </div>
 </div>
 
@@ -795,6 +795,7 @@ function openVideoLightbox(src){
   vid.style.display='block';
   vid.src=src;
   vid.play();
+  inner.style.width='auto';
   inner.className='lightbox-inner';
   lb.classList.add('active');
 }

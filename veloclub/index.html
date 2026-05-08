@@ -1,725 +1,621 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
-<title>VeloClub — Gestión integral para clubs de patinaje</title>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>VeloClub — Gestión integral para clubs de patinaje · NexCode97</title>
 <link rel="icon" type="image/png" href="../assets/favicon.png"/>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;0,9..40,800&display=swap" rel="stylesheet">
-<script src="https://unpkg.com/lucide@latest/dist/umd/lucide.min.js"></script>
+<meta name="description" content="VeloClub es una plataforma SaaS completa para clubs de patinaje: miembros, cuotas, pagos automáticos, competencias, resultados y reportes financieros."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ── TOKENS ────────────────────────────────────────── */
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+:root{
+  --bg:#09090e;--bg1:#0e0e16;--bg2:#13131e;
+  --v:#7c3aed;--vl:#a78bfa;--vd:#4c1d95;
+  --c:#06b6d4;--cl:#22d3ee;
+  --grad:linear-gradient(135deg,#7c3aed,#06b6d4);
+  --text:#eeeef5;--t2:#888ca4;--t3:#3d3f52;
+  --border:rgba(255,255,255,0.07);--bv:rgba(124,58,237,0.25);--bc:rgba(6,182,212,0.2);
+  --card:rgba(255,255,255,0.03);
+  --sans:'Plus Jakarta Sans',-apple-system,sans-serif;
+  --mono:'JetBrains Mono',monospace;
+  --r:12px;--rl:20px;
+}
+html{scroll-behavior:smooth;}
+body{font-family:var(--sans);background:var(--bg);color:var(--text);overflow-x:hidden;line-height:1.6;-webkit-font-smoothing:antialiased;}
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--bg);}
+::-webkit-scrollbar-thumb{background:var(--vd);border-radius:2px;}
 
-  :root {
-    --bg-deep: #07080f;
-    --bg-card: #0d0f1e;
-    --bg-card2: #11132a;
-    --accent: #7c3aed;
-    --accent-light: #a78bfa;
-    --accent2: #06b6d4;
-    --accent2-light: #22d3ee;
-    --text: #f1f5f9;
-    --text-muted: #64748b;
-    --border: #1a1d35;
-    --radius: 12px;
-    --font: 'DM Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  }
+/* ── UTILS ─────────────────────────────────────────── */
+.container{max-width:1080px;margin:0 auto;padding:0 clamp(20px,5vw,56px);}
+.grad-text{background:var(--grad);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;}
+.pill{display:inline-flex;align-items:center;gap:6px;font-size:.72rem;font-weight:600;letter-spacing:.04em;padding:5px 14px;border-radius:999px;border:1px solid var(--bv);background:rgba(124,58,237,.08);color:var(--vl);}
+.pill-dot{width:6px;height:6px;border-radius:50%;background:var(--vl);display:inline-block;}
+.btn{display:inline-flex;align-items:center;gap:7px;font-family:var(--sans);font-size:.875rem;font-weight:600;text-decoration:none;padding:11px 24px;border-radius:var(--r);border:none;cursor:pointer;transition:all .2s ease;white-space:nowrap;}
+.btn-grad{background:var(--grad);color:#fff;box-shadow:0 0 0 1px rgba(124,58,237,.4),0 4px 20px rgba(124,58,237,.25);}
+.btn-grad:hover{opacity:.88;transform:translateY(-1px);box-shadow:0 0 0 1px rgba(124,58,237,.6),0 8px 30px rgba(124,58,237,.35);}
+.btn-ghost{background:var(--card);color:var(--t2);border:1px solid var(--border);}
+.btn-ghost:hover{border-color:var(--bv);color:var(--vl);background:rgba(124,58,237,.06);transform:translateY(-1px);}
+.btn-wa{background:#128C7E;color:#fff;box-shadow:0 4px 20px rgba(18,140,126,.2);}
+.btn-wa:hover{background:#0e7a6e;transform:translateY(-1px);box-shadow:0 8px 30px rgba(18,140,126,.3);}
+.btn-lg{padding:14px 30px;font-size:.95rem;border-radius:14px;}
+.divider{height:1px;background:linear-gradient(90deg,transparent,var(--bv) 30%,var(--bc) 70%,transparent);}
 
-  html { scroll-behavior: smooth; }
+/* ── ORB BACKGROUNDS ─────────────────────────────── */
+.orb{position:fixed;border-radius:50%;filter:blur(120px);pointer-events:none;z-index:0;}
+.orb-1{width:700px;height:700px;background:rgba(124,58,237,.18);top:-200px;left:-150px;}
+.orb-2{width:600px;height:600px;background:rgba(6,182,212,.12);bottom:-200px;right:-150px;}
+.orb-3{width:500px;height:500px;background:rgba(124,58,237,.09);top:50%;left:60%;transform:translate(-50%,-50%);}
+.dot-grid{position:fixed;inset:0;z-index:0;pointer-events:none;
+  background-image:radial-gradient(rgba(255,255,255,.04) 1px,transparent 1px);
+  background-size:32px 32px;}
 
-  body {
-    font-family: var(--font);
-    background: var(--bg-deep);
-    color: var(--text);
-    line-height: 1.6;
-    overflow-x: hidden;
-  }
+/* ── NAVBAR ──────────────────────────────────────── */
+nav{position:fixed;top:0;left:0;right:0;z-index:300;height:66px;
+  background:rgba(9,9,14,.8);backdrop-filter:blur(24px) saturate(180%);
+  -webkit-backdrop-filter:blur(24px) saturate(180%);
+  border-bottom:1px solid var(--border);transition:border-color .3s;}
+nav.scrolled{border-bottom-color:var(--bv);}
+.nav-inner{max-width:1080px;margin:0 auto;height:100%;padding:0 clamp(20px,5vw,56px);
+  display:flex;align-items:center;justify-content:space-between;gap:24px;}
+.nav-logo{display:flex;align-items:center;text-decoration:none;flex-shrink:0;}
+.nav-logo img{height:22px;width:auto;opacity:.9;}
+.nav-menu{display:flex;align-items:center;gap:4px;list-style:none;}
+.nav-item{position:static;}
+.nav-trigger{display:flex;align-items:center;gap:5px;font-family:var(--sans);font-size:.85rem;font-weight:500;color:var(--t2);background:none;border:none;cursor:pointer;padding:8px 12px;border-radius:8px;transition:all .2s;white-space:nowrap;}
+.nav-trigger svg{width:14px;height:14px;stroke:currentColor;transition:transform .2s;flex-shrink:0;}
+.nav-trigger:hover,.nav-item.open .nav-trigger{color:var(--text);background:rgba(255,255,255,.04);}
+.nav-item.open .nav-trigger svg{transform:rotate(180deg);}
+.nav-link{font-family:var(--sans);font-size:.85rem;font-weight:500;color:var(--t2);text-decoration:none;padding:8px 12px;border-radius:8px;display:block;transition:all .2s;}
+.nav-link:hover{color:var(--text);background:rgba(255,255,255,.04);}
 
-  .section-divider {
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--border), transparent);
-  }
+/* ── MEGA PANEL ────────────────────────────────── */
+.mega-panel{position:fixed;top:66px;left:0;right:0;z-index:200;
+  background:rgba(9,9,14,.96);backdrop-filter:blur(28px);
+  border-bottom:1px solid var(--border);
+  opacity:0;visibility:hidden;transform:translateY(-8px);
+  transition:opacity .2s ease,transform .2s ease,visibility .2s;}
+.nav-item.open .mega-panel{opacity:1;visibility:visible;transform:translateY(0);}
+.mega-inner{max-width:1080px;margin:0 auto;padding:32px clamp(20px,5vw,56px) 36px;display:grid;gap:32px;}
+.mega-services .mega-inner{grid-template-columns:240px 1fr;}
+.mega-portfolio .mega-inner{grid-template-columns:240px 1fr;}
+.mega-sidebar-label{font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--vl);margin-bottom:10px;}
+.mega-sidebar h3{font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:8px;letter-spacing:-.02em;}
+.mega-sidebar p{font-size:.82rem;color:var(--t2);line-height:1.65;margin-bottom:18px;}
+.mega-sidebar a{font-size:.82rem;font-weight:600;color:var(--vl);text-decoration:none;display:inline-flex;align-items:center;gap:5px;transition:gap .2s;}
+.mega-sidebar a:hover{gap:9px;}
+.mega-svc-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;}
+.mega-svc-item{display:flex;align-items:flex-start;gap:10px;padding:12px;border-radius:10px;text-decoration:none;color:inherit;transition:background .2s;}
+.mega-svc-item:hover{background:rgba(124,58,237,.07);}
+.mega-svc-icon{width:32px;height:32px;border-radius:8px;background:rgba(124,58,237,.12);border:1px solid var(--bv);display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.mega-svc-icon svg{width:16px;height:16px;stroke:var(--vl);stroke-width:1.75;fill:none;color:var(--vl);display:block;}
+.mega-svc-name{font-size:.8rem;font-weight:600;color:var(--text);line-height:1.3;margin-bottom:2px;}
+.mega-svc-desc{font-size:.72rem;color:var(--t2);line-height:1.4;}
+.mega-proj-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;}
+.mega-proj-card{border:1px solid var(--border);border-radius:12px;overflow:hidden;text-decoration:none;color:inherit;transition:border-color .2s;}
+.mega-proj-card:hover{border-color:var(--bv);}
+.mega-proj-header{height:90px;display:flex;align-items:center;justify-content:center;background:var(--bg2);position:relative;}
+.mega-proj-header img{width:52px;height:52px;border-radius:10px;object-fit:cover;}
+.mega-proj-body{padding:10px 12px;}
+.mega-proj-name{font-size:.78rem;font-weight:700;color:var(--text);margin-bottom:3px;}
+.mega-proj-type{font-size:.68rem;color:var(--t2);}
+.mega-backdrop{position:fixed;inset:0;z-index:199;display:none;}
+.mega-backdrop.active{display:block;}
 
-  /* NAVBAR */
-  nav {
-    position: sticky;
-    top: 0;
-    z-index: 100;
-    background: rgba(7,8,15,0.92);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border-bottom: 1px solid var(--border);
-    height: 64px;
-  }
-  .nav-inner {
-    max-width: 1100px;
-    margin: 0 auto;
-    height: 100%;
-    padding: 0 clamp(20px, 5vw, 60px);
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-  }
+/* ── MOBILE HAMBURGER ────────────────────────── */
+.ham-btn{display:none;flex-direction:column;gap:5px;background:none;border:none;cursor:pointer;padding:8px;border-radius:8px;}
+.ham-btn span{display:block;width:22px;height:2px;background:var(--t2);border-radius:2px;transition:all .3s;}
+.ham-btn.open span:nth-child(1){transform:translateY(7px) rotate(45deg);}
+.ham-btn.open span:nth-child(2){opacity:0;}
+.ham-btn.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg);}
+.mobile-drawer{display:none;position:fixed;top:66px;left:0;right:0;bottom:0;z-index:250;
+  background:rgba(9,9,14,.98);backdrop-filter:blur(24px);overflow-y:auto;padding:20px clamp(20px,5vw,56px);}
+.mobile-drawer.open{display:block;}
+.mob-section-label{font-size:.62rem;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--vl);padding:14px 0 8px;}
+.mob-link{display:block;font-size:.95rem;font-weight:500;color:var(--t2);text-decoration:none;padding:10px 0;border-bottom:1px solid var(--border);}
+.mob-link:hover{color:var(--text);}
+.mob-svc-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px;padding:8px 0;}
+.mob-svc-item{display:flex;align-items:center;gap:8px;padding:10px;border-radius:10px;text-decoration:none;color:var(--t2);background:var(--card);border:1px solid var(--border);font-size:.78rem;font-weight:500;}
+.mob-cta{margin-top:20px;}
 
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    padding: 10px 20px;
-    border-radius: 8px;
-    font-family: var(--font);
-    font-size: 0.875rem;
-    font-weight: 600;
-    cursor: pointer;
-    text-decoration: none;
-    transition: all 0.2s ease;
-    border: none;
-  }
-  .btn-primary {
-    background: linear-gradient(135deg, var(--accent), var(--accent2));
-    color: #fff;
-  }
-  .btn-primary:hover {
-    opacity: 0.88;
-    transform: translateY(-1px);
-    box-shadow: 0 6px 24px rgba(124,58,237,0.35);
-  }
-  .btn-outline {
-    background: transparent;
-    color: var(--text);
-    border: 1px solid var(--border);
-  }
-  .btn-outline:hover {
-    border-color: var(--accent-light);
-    color: var(--accent-light);
-    transform: translateY(-1px);
-  }
-  .btn-lg { padding: 14px 28px; font-size: 1rem; border-radius: 10px; }
-  .btn-wa { background: #25d366; color: #fff; font-weight: 700; }
-  .btn-wa:hover { background: #1ebe5a; transform: translateY(-2px); box-shadow: 0 4px 20px rgba(37,211,102,0.4); }
-  .btn-email {
-    background: var(--bg-card);
-    color: var(--text);
-    border: 1px solid var(--border);
-  }
-  .btn-email:hover {
-    border-color: var(--accent-light);
-    color: var(--accent-light);
-    transform: translateY(-2px);
-  }
+/* ── SECTION COMMONS ─────────────────────────── */
+section{position:relative;z-index:2;}
+.s-label{font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--cl);margin-bottom:14px;display:flex;align-items:center;gap:8px;}
+.s-label::before{content:'';display:block;width:16px;height:2px;background:var(--grad);border-radius:2px;}
+.s-title{font-size:clamp(1.7rem,3vw,2.5rem);font-weight:800;letter-spacing:-.04em;color:#fff;margin-bottom:14px;}
+.s-sub{font-size:.95rem;color:var(--t2);max-width:480px;line-height:1.75;font-weight:400;}
 
-  /* HERO */
-  .badge-pill {
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    background: rgba(124,58,237,0.12);
-    border: 1px solid rgba(124,58,237,0.3);
-    color: var(--accent-light);
-    font-size: 0.8rem;
-    font-weight: 600;
-    padding: 6px 14px;
-    border-radius: 999px;
-    margin-bottom: 28px;
-    letter-spacing: 0.02em;
-  }
+/* ── HERO ─────────────────────────────────────── */
+#hero{min-height:92dvh;display:flex;align-items:center;padding:120px clamp(20px,5vw,56px) 80px;max-width:1080px;margin:0 auto;}
+.hero-badge{margin-bottom:28px;}
+.hero-h1{font-size:clamp(2.4rem,5vw,4rem);font-weight:800;line-height:1.07;letter-spacing:-.04em;color:#fff;margin-bottom:20px;}
+.hero-sub{font-size:clamp(.95rem,1.8vw,1.05rem);color:var(--t2);line-height:1.8;max-width:560px;margin-bottom:40px;}
+.hero-actions{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:56px;}
+.hero-stats{display:flex;gap:0;border:1px solid var(--border);border-radius:var(--r);overflow:hidden;width:fit-content;}
+.stat{padding:16px 24px;border-right:1px solid var(--border);}
+.stat:last-child{border-right:none;}
+.stat-val{font-size:1.5rem;font-weight:800;letter-spacing:-.04em;line-height:1;margin-bottom:4px;}
+.stat-label{font-size:.7rem;font-weight:500;color:var(--t2);}
 
-  .hero-h1 {
-    font-size: clamp(2rem, 5vw, 3.5rem);
-    font-weight: 800;
-    line-height: 1.15;
-    letter-spacing: -0.03em;
-    margin-bottom: 20px;
-    background: linear-gradient(135deg, #fff 0%, var(--accent-light) 50%, var(--accent2-light) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-  }
+/* ── PAIN / VALUE ─────────────────────────────── */
+.pain-section{padding:80px 0;}
+.pain-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:48px;}
+.pain-card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--rl);padding:22px 20px;transition:border-color .25s,background .25s;}
+.pain-card:hover{border-color:var(--bv);background:rgba(124,58,237,.04);}
+.pain-icon{width:36px;height:36px;border-radius:9px;background:rgba(124,58,237,.1);border:1px solid var(--bv);display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.pain-icon svg{width:17px;height:17px;stroke:var(--vl);stroke-width:1.75;fill:none;}
+.pain-title{font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:7px;}
+.pain-text{font-size:.76rem;color:var(--t2);line-height:1.6;}
 
-  .hero-sub {
-    font-size: 1.125rem;
-    color: var(--text-muted);
-    max-width: 560px;
-    margin: 0 auto 36px;
-    line-height: 1.7;
-  }
+.value-section{padding:80px 0;}
+.value-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:48px;}
+.value-card{background:var(--card);border:1px solid var(--border);border-radius:var(--rl);padding:28px 22px;transition:border-color .25s;}
+.value-card:hover{border-color:var(--bv);}
+.value-icon{width:42px;height:42px;border-radius:10px;background:rgba(6,182,212,.1);border:1px solid var(--bc);display:flex;align-items:center;justify-content:center;margin-bottom:16px;}
+.value-icon svg{width:20px;height:20px;stroke:var(--cl);stroke-width:1.75;fill:none;}
+.value-title{font-size:.9rem;font-weight:700;color:#fff;margin-bottom:8px;}
+.value-desc{font-size:.78rem;color:var(--t2);line-height:1.65;}
 
-  .hero-buttons {
-    display: flex;
-    gap: 12px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 40px;
-  }
+/* ── MODULES GRID ─────────────────────────────── */
+.modules-section{padding:80px 0;}
+.modules-grid-6{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.module-card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--rl);padding:22px 20px;transition:border-color .25s,background .25s;}
+.module-card:hover{border-color:var(--bv);background:rgba(124,58,237,.04);}
+.module-icon{width:36px;height:36px;border-radius:9px;background:rgba(124,58,237,.1);border:1px solid var(--bv);display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
+.module-icon svg{width:17px;height:17px;stroke:var(--vl);stroke-width:1.75;fill:none;}
+.module-name{font-size:.85rem;font-weight:700;color:var(--text);margin-bottom:6px;}
+.module-desc{font-size:.75rem;color:var(--t2);line-height:1.6;}
 
-  .hero-stats {
-    display: flex;
-    gap: 0;
-    justify-content: center;
-    flex-wrap: nowrap;
-  }
+/* ── DEMO PLACEHOLDER ─────────────────────────── */
+.demo-section{padding:80px 0;}
+.demo-placeholder{background:var(--bg1);border:1px dashed var(--border);border-radius:var(--rl);padding:60px 40px;text-align:center;margin-top:48px;}
+.demo-icon{font-size:3rem;margin-bottom:16px;}
+.demo-title{font-size:1.1rem;font-weight:700;color:var(--text);margin-bottom:8px;}
+.demo-sub{font-size:.875rem;color:var(--t2);}
 
-  .hero-stat {
-    padding: 6px 20px;
-    font-size: 0.875rem;
-    color: var(--text-muted);
-    font-weight: 500;
-  }
+/* ── ROLES TABS ─────────────────────────────── */
+.roles-section{padding:80px 0;}
+.tabs-bar{display:flex;gap:4px;background:var(--bg1);border:1px solid var(--border);border-radius:10px;padding:4px;margin-bottom:32px;flex-wrap:wrap;}
+.tab-btn{flex:1;min-width:120px;padding:10px 16px;border-radius:7px;border:none;background:transparent;color:var(--t2);font-family:var(--sans);font-size:.875rem;font-weight:600;cursor:pointer;transition:all .2s;}
+.tab-btn:hover{color:var(--text);background:rgba(124,58,237,.08);}
+.tab-btn.active{background:var(--grad);color:#fff;font-weight:700;}
+.tab-panel{display:none;}
+.tab-panel.active{display:block;}
+.roles-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;}
+.role-card{background:var(--bg1);border:1px solid var(--border);border-radius:var(--rl);padding:22px 20px;transition:border-color .25s;}
+.role-card:hover{border-color:var(--bv);}
 
-  .hero-stat:not(:last-child) { border-right: 1px solid var(--border); }
-  .hero-stat strong { color: var(--text); font-weight: 700; }
+/* ── BENEFITS ─────────────────────────────────── */
+.benefits-section{padding:80px 0;}
+.benefits-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-top:48px;}
+.benefit-item{display:flex;align-items:flex-start;gap:12px;background:var(--card);border:1px solid var(--border);border-radius:var(--r);padding:18px 20px;transition:border-color .2s;}
+.benefit-item:hover{border-color:var(--bv);}
+.benefit-check{width:20px;height:20px;border-radius:50%;background:rgba(6,182,212,.12);border:1px solid var(--bc);display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-top:1px;}
+.benefit-check svg{width:11px;height:11px;stroke:var(--cl);stroke-width:2.5;fill:none;}
+.benefit-text{font-size:.85rem;color:var(--t2);line-height:1.6;}
 
-  /* SECTIONS */
-  section {
-    padding: 80px 24px;
-    max-width: 1100px;
-    margin: 0 auto;
-  }
+/* ── CTA ─────────────────────────────────────── */
+.cta-section{padding:100px 0;}
+.cta-box{background:var(--bg1);border:1px solid var(--border);border-radius:24px;padding:clamp(40px,6vw,72px);text-align:center;position:relative;overflow:hidden;}
+.cta-box::before{content:'';position:absolute;top:-100px;left:50%;transform:translateX(-50%);width:600px;height:600px;background:radial-gradient(ellipse,rgba(124,58,237,.12),transparent 65%);pointer-events:none;}
+.cta-btns{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:32px;}
+.cta-note{font-size:.78rem;color:var(--t3);margin-top:16px;}
 
-  .section-label {
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    background: linear-gradient(90deg, var(--accent-light), var(--accent2-light));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    margin-bottom: 12px;
-  }
+/* ── FOOTER ──────────────────────────────────── */
+footer{border-top:1px solid var(--border);padding:28px clamp(20px,5vw,56px);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:16px;position:relative;z-index:2;}
+.footer-copy{font-size:.72rem;color:var(--t3);}
 
-  .section-title {
-    font-size: clamp(1.5rem, 3vw, 2.25rem);
-    font-weight: 800;
-    letter-spacing: -0.02em;
-    margin-bottom: 12px;
-    color: #fff;
-  }
+/* ── REVEAL ───────────────────────────────────── */
+.reveal{opacity:0;transform:translateY(24px);transition:opacity .65s ease,transform .65s ease;}
+.reveal.vis{opacity:1;transform:translateY(0);}
+.d1{transition-delay:.08s;}.d2{transition-delay:.16s;}.d3{transition-delay:.24s;}.d4{transition-delay:.32s;}
 
-  .section-sub {
-    font-size: 1rem;
-    color: var(--text-muted);
-    margin-bottom: 48px;
-    max-width: 520px;
-  }
+/* cursor glow */
+#cglow{position:fixed;width:320px;height:320px;border-radius:50%;background:radial-gradient(circle,rgba(124,58,237,.055),transparent 70%);pointer-events:none;z-index:1;transform:translate(-50%,-50%);transition:opacity .3s;}
 
-  /* PAIN POINTS */
-  .pain-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 16px;
-  }
+/* ── WHATSAPP FLOAT ──────────────────────────── */
+.wa-float{position:fixed;bottom:28px;right:28px;z-index:400;width:54px;height:54px;border-radius:50%;background:#25d366;color:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 24px rgba(37,211,102,.4);transition:transform .2s ease,box-shadow .2s ease;text-decoration:none;}
+.wa-float:hover{transform:scale(1.1) translateY(-2px);box-shadow:0 8px 32px rgba(37,211,102,.55);}
 
-  .pain-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 24px 20px;
-    transition: all 0.25s ease;
-  }
-
-  .pain-card:hover {
-    border-color: rgba(124,58,237,0.4);
-    box-shadow: 0 0 20px rgba(124,58,237,0.1);
-    transform: translateY(-2px);
-  }
-
-  .pain-header { display: flex; align-items: center; gap: 10px; margin-bottom: 10px; }
-  .pain-icon { flex-shrink: 0; display: flex; align-items: center; }
-  .pain-icon i { width: 22px; height: 22px; stroke: var(--accent-light); }
-  .value-icon i { width: 32px; height: 32px; stroke: var(--accent-light); }
-  .module-icon i { width: 24px; height: 24px; stroke: var(--accent2-light); }
-  .pain-title { font-size: 0.95rem; font-weight: 700; color: #fff; }
-  .pain-text { font-size: 0.875rem; color: var(--text-muted); line-height: 1.5; }
-
-  /* VALUE PROPS */
-  .value-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 20px;
-  }
-
-  .value-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 32px 28px;
-    transition: all 0.25s ease;
-  }
-
-  .value-card:hover {
-    border-color: rgba(124,58,237,0.5);
-    box-shadow: 0 0 28px rgba(124,58,237,0.14), 0 8px 32px rgba(0,0,0,0.3);
-    transform: translateY(-4px);
-  }
-
-  .value-icon { font-size: 2rem; margin-bottom: 16px; display: block; }
-  .value-title { font-size: 1.1rem; font-weight: 700; color: #fff; margin-bottom: 10px; }
-  .value-desc { font-size: 0.875rem; color: var(--text-muted); line-height: 1.6; }
-
-  /* MODULES */
-  .modules-grid {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 14px;
-  }
-
-  .module-card {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 20px 18px;
-    transition: all 0.22s ease;
-  }
-
-  .module-card:hover {
-    border-color: rgba(6,182,212,0.4);
-    box-shadow: 0 0 20px rgba(6,182,212,0.1);
-    transform: translateY(-2px);
-  }
-
-  .module-icon { font-size: 1.5rem; margin-bottom: 10px; display: block; }
-  .module-name { font-size: 0.95rem; font-weight: 700; color: #fff; margin-bottom: 6px; }
-  .module-desc { font-size: 0.775rem; color: var(--text-muted); line-height: 1.5; }
-
-  /* BENEFITS */
-  .benefits-grid {
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 14px;
-  }
-
-  .benefit-item {
-    display: flex;
-    align-items: flex-start;
-    gap: 12px;
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: var(--radius);
-    padding: 18px 20px;
-    transition: all 0.22s ease;
-  }
-
-  .benefit-item:hover {
-    border-color: rgba(124,58,237,0.3);
-    box-shadow: 0 0 16px rgba(124,58,237,0.08);
-  }
-
-  .benefit-check { color: var(--accent-light); font-size: 1.1rem; flex-shrink: 0; margin-top: 1px; }
-  .benefit-check i { width: 18px; height: 18px; stroke: var(--accent-light); flex-shrink: 0; }
-  .benefit-text { font-size: 0.9rem; color: var(--text-muted); line-height: 1.5; }
-
-  /* DEMO PLACEHOLDER */
-  .demo-placeholder {
-    background: var(--bg-card);
-    border: 1px dashed var(--border);
-    border-radius: 16px;
-    padding: 60px 40px;
-    text-align: center;
-    margin-top: 48px;
-  }
-  .demo-icon { font-size: 3rem; margin-bottom: 16px; }
-  .demo-title { font-size: 1.1rem; font-weight: 700; color: var(--text); margin-bottom: 8px; }
-  .demo-sub { font-size: 0.875rem; color: var(--text-muted); }
-
-  /* TECH STACK */
-  .tech-row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 32px;
-  }
-  .tech-tag {
-    background: var(--bg-card2);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    padding: 8px 16px;
-    font-size: 0.8rem;
-    font-weight: 600;
-    color: var(--text-muted);
-    transition: all 0.2s;
-  }
-  .tech-tag:hover { border-color: var(--accent-light); color: var(--accent-light); }
-
-  /* CTA */
-  .cta-buttons {
-    display: flex;
-    gap: 14px;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-bottom: 24px;
-  }
-
-  .cta-footer-note { font-size: 0.8rem; color: var(--text-muted); }
-
-  /* FOOTER */
-  footer {
-    border-top: 1px solid var(--border);
-    padding: 28px 24px;
-    text-align: center;
-    color: var(--text-muted);
-    font-size: 0.85rem;
-  }
-
-  /* TABS */
-  .tabs-bar {
-    display: flex; gap: 4px;
-    background: var(--bg-card); border: 1px solid var(--border);
-    border-radius: 10px; padding: 4px; margin-bottom: 32px; flex-wrap: wrap;
-  }
-  .tab-btn {
-    flex: 1; min-width: 100px; padding: 10px 16px; border-radius: 7px;
-    border: none; background: transparent; color: var(--text-muted);
-    font-family: var(--font); font-size: 0.875rem; font-weight: 600;
-    cursor: pointer; transition: all 0.2s ease;
-  }
-  .tab-btn:hover { color: var(--text); background: rgba(124,58,237,0.08); }
-  .tab-btn.active { background: linear-gradient(135deg, var(--accent), var(--accent2)); color: #fff; font-weight: 700; }
-  .tab-panel { display: none; }
-  .tab-panel.active { display: block; }
-
-  /* FADE IN */
-  .fade-in { opacity: 0; transform: translateY(24px); transition: opacity 0.6s ease, transform 0.6s ease; }
-  .fade-in.visible { opacity: 1; transform: translateY(0); }
-  .fade-in-delay-1 { transition-delay: 0.1s; }
-  .fade-in-delay-2 { transition-delay: 0.2s; }
-  .fade-in-delay-3 { transition-delay: 0.3s; }
-  .fade-in-delay-4 { transition-delay: 0.4s; }
-
-  @media (max-width: 640px) {
-    section { padding: 60px 16px; }
-    .hero-stats { flex-wrap: wrap; justify-content: center; }
-    .hero-buttons { flex-wrap: nowrap; gap: 8px; }
-    .hero-buttons .btn-lg { padding: 12px 16px; font-size: 0.875rem; flex: 1; text-align: center; justify-content: center; }
-    .pain-text, .value-desc, .module-desc, .benefit-text { font-size: 0.78rem; }
-  }
+/* ── RESPONSIVE ──────────────────────────────── */
+@media(max-width:960px){
+  .pain-grid{grid-template-columns:repeat(2,1fr);}
+  .value-grid{grid-template-columns:repeat(2,1fr);}
+  .modules-grid-6{grid-template-columns:repeat(2,1fr);}
+  .roles-grid{grid-template-columns:repeat(2,1fr);}
+  .mega-svc-grid{grid-template-columns:repeat(2,1fr);}
+  .mega-proj-grid{grid-template-columns:repeat(2,1fr);}
+}
+@media(max-width:768px){
+  .nav-menu,.nav-cta-wrap{display:none;}
+  .ham-btn{display:flex;}
+  .hero-actions{flex-direction:column;}
+  .hero-actions .btn{justify-content:center;}
+  .hero-stats{width:100%;}
+  .stat{flex:1;padding:14px 16px;text-align:center;}
+  .value-grid{grid-template-columns:1fr 1fr;}
+  .benefits-grid{grid-template-columns:1fr;}
+  footer{flex-direction:column;text-align:center;}
+}
+@media(max-width:560px){
+  .pain-grid{grid-template-columns:1fr;}
+  .modules-grid-6{grid-template-columns:1fr;}
+  .roles-grid{grid-template-columns:1fr;}
+}
+@media(max-width:480px){
+  .wa-float{bottom:18px;right:18px;width:48px;height:48px;}
+}
 </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
-<nav>
+<!-- BG -->
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+<div class="dot-grid"></div>
+<div id="cglow"></div>
+<div class="mega-backdrop" id="megaBackdrop"></div>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav id="navbar">
   <div class="nav-inner">
-    <a href="../" style="display:flex;align-items:center;text-decoration:none;">
-      <img src="../assets/letrero-header.png" alt="NexCode97" style="height:26px;width:auto;"/>
+    <a href="../" class="nav-logo">
+      <img src="../assets/letrero-header.png" alt="NexCode97"/>
     </a>
-    <a href="#cta" class="btn btn-primary">Contactar ahora</a>
+    <ul class="nav-menu">
+      <li class="nav-item has-sub" id="navServices">
+        <button class="nav-trigger" aria-expanded="false">
+          Servicios
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="mega-panel mega-services" role="region">
+          <div class="mega-inner">
+            <div class="mega-sidebar">
+              <div class="mega-sidebar-label">Capacidades</div>
+              <h3>Lo que construimos</h3>
+              <p>Soluciones digitales a la medida para cualquier tipo de negocio.</p>
+              <a href="../#services">Ver todos los servicios →</a>
+            </div>
+            <div class="mega-svc-grid">
+              <a href="../#services" class="mega-svc-item"><div class="mega-svc-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M9 17.25v1.007a3 3 0 01-.879 2.122L7.5 21h9l-.621-.621A3 3 0 0115 18.257V17.25m6-12V15a2.25 2.25 0 01-2.25 2.25H5.25A2.25 2.25 0 013 15V5.25m18 0A2.25 2.25 0 0018.75 3H5.25A2.25 2.25 0 003 5.25m18 0H3"/></svg></div><div><div class="mega-svc-name">Apps web</div><div class="mega-svc-desc">Plataformas a la medida</div></div></a>
+              <a href="../#services" class="mega-svc-item"><div class="mega-svc-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18h3"/></svg></div><div><div class="mega-svc-name">Apps móviles</div><div class="mega-svc-desc">Android e iOS</div></div></a>
+              <a href="../#services" class="mega-svc-item"><div class="mega-svc-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M12 7.5h1.5m-1.5 3h1.5m-7.5 3h7.5m-7.5 3h7.5m3-9h3.375c.621 0 1.125.504 1.125 1.125V18a2.25 2.25 0 01-2.25 2.25M16.5 7.5V18a2.25 2.25 0 002.25 2.25M16.5 7.5V4.875c0-.621-.504-1.125-1.125-1.125H4.125C3.504 3.75 3 4.254 3 4.875V18a2.25 2.25 0 002.25 2.25h13.5M6 7.5h3v3H6v-3z"/></svg></div><div><div class="mega-svc-name">Páginas web</div><div class="mega-svc-desc">Corporativas y landings</div></div></a>
+              <a href="../#services" class="mega-svc-item"><div class="mega-svc-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 010-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><div><div class="mega-svc-name">Sistemas de gestión</div><div class="mega-svc-desc">Control total del negocio</div></div></a>
+              <a href="../#services" class="mega-svc-item"><div class="mega-svc-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M1 1h4l2.68 13.39a2 2 0 002 1.61h9.72a2 2 0 002-1.61L23 6H6"/><circle cx="10" cy="20.5" r="1.5" stroke="currentColor"/><circle cx="19" cy="20.5" r="1.5" stroke="currentColor"/></svg></div><div><div class="mega-svc-name">Tiendas en línea</div><div class="mega-svc-desc">E-commerce completo</div></div></a>
+              <a href="../#services" class="mega-svc-item"><div class="mega-svc-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M13.19 8.688a4.5 4.5 0 011.242 7.244l-4.5 4.5a4.5 4.5 0 01-6.364-6.364l1.757-1.757m13.35-.622l1.757-1.757a4.5 4.5 0 00-6.364-6.364l-4.5 4.5a4.5 4.5 0 001.242 7.244"/></svg></div><div><div class="mega-svc-name">Integraciones</div><div class="mega-svc-desc">Pagos, WhatsApp y más</div></div></a>
+              <a href="../#services" class="mega-svc-item"><div class="mega-svc-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg></div><div><div class="mega-svc-name">PWA</div><div class="mega-svc-desc">Apps sin tienda</div></div></a>
+              <a href="../#services" class="mega-svc-item"><div class="mega-svc-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904L9 18.75l-.813-2.846a4.5 4.5 0 00-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 003.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 003.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 00-3.09 3.09zM18.259 8.715L18 9.75l-.259-1.035a3.375 3.375 0 00-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 002.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 002.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 00-2.456 2.456z"/></svg></div><div><div class="mega-svc-name">Automatizaciones</div><div class="mega-svc-desc">Procesos sin intervención</div></div></a>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item has-sub" id="navPortfolio">
+        <button class="nav-trigger" aria-expanded="false">
+          Portafolio
+          <svg viewBox="0 0 24 24" fill="none" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+        <div class="mega-panel mega-portfolio" role="region">
+          <div class="mega-inner">
+            <div class="mega-sidebar">
+              <div class="mega-sidebar-label">Proyectos</div>
+              <h3>Trabajos reales</h3>
+              <p>En producción, usados por empresas reales todos los días.</p>
+              <a href="../#portfolio">Ver portafolio completo →</a>
+            </div>
+            <div class="mega-proj-grid">
+              <a href="../appntrl/" class="mega-proj-card"><div class="mega-proj-header"><img src="../assets/logo-natural.png" alt="NTRL"/></div><div class="mega-proj-body"><div class="mega-proj-name">NTRL — Gestión</div><div class="mega-proj-type">Sistema de gestión · PWA</div></div></a>
+              <a href="../veloclub/" class="mega-proj-card"><div class="mega-proj-header"><img src="../assets/VeloClub - Logo Full Mediano.jpg" alt="VeloClub"/></div><div class="mega-proj-body"><div class="mega-proj-name">VeloClub</div><div class="mega-proj-type">SaaS · PWA</div></div></a>
+              <a href="https://www.naturalropadeportiva.com.co" target="_blank" class="mega-proj-card"><div class="mega-proj-header"><img src="../assets/logo-natural.png" alt="Natural"/></div><div class="mega-proj-body"><div class="mega-proj-name">Natural Ropa Dep.</div><div class="mega-proj-type">Página web</div></div></a>
+              <a href="https://www.guevarasport.com" target="_blank" class="mega-proj-card"><div class="mega-proj-header"><img src="../assets/Logo oficial.png" alt="Guevara Sport"/></div><div class="mega-proj-body"><div class="mega-proj-name">Guevara Sport</div><div class="mega-proj-type">Página web</div></div></a>
+            </div>
+          </div>
+        </div>
+      </li>
+      <li class="nav-item"><a href="../#why" class="nav-link">Nosotros</a></li>
+    </ul>
+    <div class="nav-cta-wrap">
+      <a href="https://wa.me/573164134212" target="_blank" class="btn btn-grad">Contactar</a>
+    </div>
+    <button class="ham-btn" id="hamBtn" aria-label="Menú" aria-expanded="false">
+      <span></span><span></span><span></span>
+    </button>
   </div>
 </nav>
 
-<!-- HERO -->
-<section style="padding-top:100px;padding-bottom:80px;text-align:center;max-width:800px;margin:0 auto;">
-  <div class="badge-pill fade-in">🛼 SaaS para clubs de patinaje</div>
-  <h1 class="hero-h1 fade-in fade-in-delay-1">El sistema que pone orden<br>en tu club de patinaje</h1>
-  <p class="hero-sub fade-in fade-in-delay-2">VeloClub es una plataforma SaaS completa — miembros, cuotas, pagos automáticos, competencias, resultados y reportes financieros en un solo lugar con interfaz mobile-first.</p>
-  <div class="hero-buttons fade-in fade-in-delay-3">
-    <a href="#modules" class="btn btn-primary btn-lg">Ver funcionalidades</a>
-    <a href="#cta" class="btn btn-outline btn-lg">Contactar ahora</a>
+<!-- mobile drawer -->
+<div class="mobile-drawer" id="mobileDrawer" role="dialog" aria-label="Menú">
+  <div class="mob-section-label">Servicios</div>
+  <div class="mob-svc-grid">
+    <a href="../#services" class="mob-svc-item">Apps web</a>
+    <a href="../#services" class="mob-svc-item">Apps móviles</a>
+    <a href="../#services" class="mob-svc-item">Páginas web</a>
+    <a href="../#services" class="mob-svc-item">Gestión</a>
+    <a href="../#services" class="mob-svc-item">E-commerce</a>
+    <a href="../#services" class="mob-svc-item">PWA</a>
+    <a href="../#services" class="mob-svc-item">Integraciones</a>
+    <a href="../#services" class="mob-svc-item">Automatización</a>
   </div>
-  <div class="hero-stats fade-in fade-in-delay-4">
-    <div class="hero-stat"><strong>6 módulos</strong> principales</div>
-    <div class="hero-stat"><strong>Mobile-first</strong></div>
-    <div class="hero-stat"><strong>SaaS</strong> en la nube</div>
+  <div class="mob-section-label">Portafolio</div>
+  <a href="../appntrl/" class="mob-link">NTRL — Gestión Interna</a>
+  <a href="../veloclub/" class="mob-link">VeloClub</a>
+  <a href="https://www.naturalropadeportiva.com.co" class="mob-link">Natural Ropa Deportiva</a>
+  <a href="https://www.guevarasport.com" class="mob-link">Guevara Sport</a>
+  <div class="mob-section-label">Empresa</div>
+  <a href="../#why" class="mob-link">Nosotros</a>
+  <div class="mob-cta">
+    <a href="https://wa.me/573164134212" target="_blank" class="btn btn-grad btn-lg" style="width:100%;justify-content:center;">Contactar por WhatsApp</a>
   </div>
+</div>
+
+<!-- ═══ HERO ═══ -->
+<section style="position:relative;z-index:2;">
+<div id="hero">
+  <div>
+    <div class="hero-badge reveal">
+      <span class="pill"><span class="pill-dot"></span>🛼 SaaS para clubs de patinaje</span>
+    </div>
+    <h1 class="hero-h1 reveal d1">El sistema que pone orden<br>en tu <span class="grad-text">club de patinaje.</span></h1>
+    <p class="hero-sub reveal d2">VeloClub es una plataforma SaaS completa — miembros, cuotas, pagos automáticos, competencias, resultados y reportes financieros en un solo lugar con interfaz mobile-first.</p>
+    <div class="hero-actions reveal d3">
+      <a href="#modules" class="btn btn-grad btn-lg">Ver funcionalidades</a>
+      <a href="#cta" class="btn btn-ghost btn-lg">Contactar ahora</a>
+    </div>
+    <div class="hero-stats reveal d4">
+      <div class="stat"><div class="stat-val grad-text">6</div><div class="stat-label">Módulos principales</div></div>
+      <div class="stat"><div class="stat-val grad-text">3</div><div class="stat-label">Roles de acceso</div></div>
+      <div class="stat"><div class="stat-val grad-text">SaaS</div><div class="stat-label">En la nube</div></div>
+    </div>
+  </div>
+</div>
 </section>
 
-<div class="section-divider"></div>
+<div class="divider"></div>
 
-<!-- PAIN POINTS -->
-<section id="pain">
-  <div class="fade-in">
-    <div class="section-label">Problemas comunes</div>
-    <h2 class="section-title">¿Le suena alguna de estas situaciones?</h2>
-  </div>
+<!-- ═══ PAIN POINTS ═══ -->
+<section id="pain" class="pain-section">
+<div class="container">
+  <div class="reveal"><div class="s-label">Problemas comunes</div><h2 class="s-title">¿Le suena alguna de estas situaciones?</h2></div>
   <div class="pain-grid">
-    <div class="pain-card fade-in fade-in-delay-1">
-      <div class="pain-header"><span class="pain-icon"><i data-lucide="clipboard-list"></i></span><span class="pain-title">Miembros en Excel</span></div>
+    <div class="pain-card reveal d1">
+      <div class="pain-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M9 12h3.75M9 15h3.75M9 18h3.75m3 .75H18a2.25 2.25 0 002.25-2.25V6.108c0-1.135-.845-2.098-1.976-2.192a48.424 48.424 0 00-1.123-.08m-5.801 0c-.065.21-.1.433-.1.664 0 .414.336.75.75.75h4.5a.75.75 0 00.75-.75 2.25 2.25 0 00-.1-.664m-5.8 0A2.251 2.251 0 0113.5 2.25H15c1.012 0 1.867.668 2.15 1.586m-5.8 0c-.376.023-.75.05-1.124.08C9.095 4.01 8.25 4.973 8.25 6.108V8.25m0 0H4.875c-.621 0-1.125.504-1.125 1.125v11.25c0 .621.504 1.125 1.125 1.125h9.75c.621 0 1.125-.504 1.125-1.125V9.375c0-.621-.504-1.125-1.125-1.125H8.25zM6.75 12h.008v.008H6.75V12zm0 3h.008v.008H6.75V15zm0 3h.008v.008H6.75V18z"/></svg></div>
+      <div class="pain-title">Miembros en Excel</div>
       <p class="pain-text">Lista de socios desorganizada en hojas de cálculo difíciles de mantener</p>
     </div>
-    <div class="pain-card fade-in fade-in-delay-2">
-      <div class="pain-header"><span class="pain-icon"><i data-lucide="banknote"></i></span><span class="pain-title">Cuotas sin control</span></div>
+    <div class="pain-card reveal d2">
+      <div class="pain-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M2.25 18.75a60.07 60.07 0 0115.797 2.101c.727.198 1.453-.342 1.453-1.096V18.75M3.75 4.5v.75A.75.75 0 013 6h-.75m0 0v-.375c0-.621.504-1.125 1.125-1.125H20.25M2.25 6v9m18-10.5v.75c0 .414.336.75.75.75h.75m-1.5-1.5h.375c.621 0 1.125.504 1.125 1.125v9.75c0 .621-.504 1.125-1.125 1.125h-.375m1.5-1.5H21a.75.75 0 00-.75.75v.75m0 0H3.75m0 0h-.375a1.125 1.125 0 01-1.125-1.125V15m1.5 1.5v-.75A.75.75 0 003 15h-.75M15 10.5a3 3 0 11-6 0 3 3 0 016 0zm3 0h.008v.008H18V10.5zm-12 0h.008v.008H6V10.5z"/></svg></div>
+      <div class="pain-title">Cuotas sin control</div>
       <p class="pain-text">No sabes quién pagó, quién debe, ni cuánto recaudaste este mes</p>
     </div>
-    <div class="pain-card fade-in fade-in-delay-3">
-      <div class="pain-header"><span class="pain-icon"><i data-lucide="bell"></i></span><span class="pain-title">Cobros manuales</span></div>
+    <div class="pain-card reveal d3">
+      <div class="pain-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M14.857 17.082a23.848 23.848 0 005.454-1.31A8.967 8.967 0 0118 9.75v-.7V9A6 6 0 006 9v.75a8.967 8.967 0 01-2.312 6.022c1.733.64 3.56 1.085 5.455 1.31m5.714 0a24.255 24.255 0 01-5.714 0m5.714 0a3 3 0 11-5.714 0"/></svg></div>
+      <div class="pain-title">Cobros manuales</div>
       <p class="pain-text">Persigues a cada miembro manualmente para recordarles el pago</p>
     </div>
-    <div class="pain-card fade-in fade-in-delay-4">
-      <div class="pain-header"><span class="pain-icon"><i data-lucide="trophy"></i></span><span class="pain-title">Competencias sin registro</span></div>
+    <div class="pain-card reveal d4">
+      <div class="pain-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0"/></svg></div>
+      <div class="pain-title">Competencias sin registro</div>
       <p class="pain-text">Resultados guardados en chats o papeles, sin historial claro</p>
     </div>
-    <div class="pain-card fade-in">
-      <div class="pain-header"><span class="pain-icon"><i data-lucide="bar-chart-2"></i></span><span class="pain-title">Sin reportes financieros</span></div>
+    <div class="pain-card reveal">
+      <div class="pain-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg></div>
+      <div class="pain-title">Sin reportes financieros</div>
       <p class="pain-text">No tienes claridad sobre los ingresos y gastos del club</p>
     </div>
-    <div class="pain-card fade-in fade-in-delay-1">
-      <div class="pain-header"><span class="pain-icon"><i data-lucide="smartphone"></i></span><span class="pain-title">Sin app para socios</span></div>
+    <div class="pain-card reveal d1">
+      <div class="pain-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18h3"/></svg></div>
+      <div class="pain-title">Sin app para socios</div>
       <p class="pain-text">Los miembros no tienen forma fácil de ver su estado o resultados</p>
     </div>
   </div>
+</div>
 </section>
 
-<div class="section-divider"></div>
+<div class="divider"></div>
 
-<!-- VALUE PROPS -->
-<section id="value">
-  <div class="fade-in">
-    <div class="section-label">Por qué VeloClub</div>
-    <h2 class="section-title">Un solo sistema. Todo tu club.</h2>
-  </div>
+<!-- ═══ VALUE PROPS ═══ -->
+<section id="value" class="value-section">
+<div class="container">
+  <div class="reveal"><div class="s-label">Por qué VeloClub</div><h2 class="s-title">Un solo sistema. Todo tu club.</h2></div>
   <div class="value-grid">
-    <div class="value-card fade-in fade-in-delay-1">
-      <span class="value-icon"><i data-lucide="zap"></i></span>
+    <div class="value-card reveal d1">
+      <div class="value-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg></div>
       <div class="value-title">Pagos automáticos</div>
       <p class="value-desc">Las cuotas se cobran solas. Recordatorios automáticos y registro de pagos sin intervención manual.</p>
     </div>
-    <div class="value-card fade-in fade-in-delay-2">
-      <span class="value-icon"><i data-lucide="smartphone"></i></span>
+    <div class="value-card reveal d2">
+      <div class="value-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M10.5 1.5H8.25A2.25 2.25 0 006 3.75v16.5a2.25 2.25 0 002.25 2.25h7.5A2.25 2.25 0 0018 20.25V3.75a2.25 2.25 0 00-2.25-2.25H13.5m-3 0V3h3V1.5m-3 0h3m-3 18h3"/></svg></div>
       <div class="value-title">Mobile-first</div>
       <p class="value-desc">Diseñado para usarse desde el celular. Perfecto para patinadores que revisan todo desde el móvil.</p>
     </div>
-    <div class="value-card fade-in fade-in-delay-3">
-      <span class="value-icon"><i data-lucide="trophy"></i></span>
+    <div class="value-card reveal d3">
+      <div class="value-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0"/></svg></div>
       <div class="value-title">Gestión de competencias</div>
       <p class="value-desc">Registra eventos, inscripciones y resultados. Todo el historial del club en un solo lugar.</p>
     </div>
-    <div class="value-card fade-in fade-in-delay-4">
-      <span class="value-icon"><i data-lucide="bar-chart-2"></i></span>
+    <div class="value-card reveal d4">
+      <div class="value-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg></div>
       <div class="value-title">Reportes en tiempo real</div>
       <p class="value-desc">Finanzas, miembros activos e inactivos, recaudación mensual — siempre actualizado.</p>
     </div>
   </div>
+</div>
 </section>
 
-<div class="section-divider"></div>
+<div class="divider"></div>
 
-<!-- MODULES -->
-<section id="modules">
-  <div class="fade-in">
-    <div class="section-label">Funcionalidades</div>
-    <h2 class="section-title">Todo lo que necesita tu club</h2>
-    <p class="section-sub">Módulos diseñados específicamente para clubs de patinaje.</p>
+<!-- ═══ MODULES ═══ -->
+<section id="modules" class="modules-section">
+<div class="container">
+  <div class="reveal"><div class="s-label">Funcionalidades</div><h2 class="s-title">Todo lo que necesita tu club</h2><p class="s-sub">Módulos diseñados específicamente para clubs de patinaje.</p></div>
+  <div class="modules-grid-6" style="margin-top:48px;">
+    <div class="module-card reveal d1"><div class="module-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg></div><div class="module-name">Miembros</div><p class="module-desc">Registro completo de socios, categorías, estado activo/inactivo y datos de contacto</p></div>
+    <div class="module-card reveal d2"><div class="module-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/></svg></div><div class="module-name">Cuotas mensuales</div><p class="module-desc">Control de pagos por miembro, estado de mora y historial de recaudación</p></div>
+    <div class="module-card reveal d3"><div class="module-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M3.75 13.5l10.5-11.25L12 10.5h8.25L9.75 21.75 12 13.5H3.75z"/></svg></div><div class="module-name">Pagos automáticos</div><p class="module-desc">Cobros automáticos, recordatorios y notificaciones sin intervención manual</p></div>
+    <div class="module-card reveal d4"><div class="module-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0"/></svg></div><div class="module-name">Competencias</div><p class="module-desc">Creación de eventos, inscripciones, categorías y gestión de participantes</p></div>
+    <div class="module-card reveal"><div class="module-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg></div><div class="module-name">Resultados</div><p class="module-desc">Registro de posiciones, tiempos y clasificaciones por competencia</p></div>
+    <div class="module-card reveal d1"><div class="module-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg></div><div class="module-name">Reportes financieros</div><p class="module-desc">Ingresos, egresos, recaudación mensual y resumen financiero del club</p></div>
   </div>
-  <div class="modules-grid">
-    <div class="module-card fade-in fade-in-delay-1">
-      <span class="module-icon"><i data-lucide="users"></i></span>
-      <div class="module-name">Miembros</div>
-      <p class="module-desc">Registro completo de socios, categorías, estado activo/inactivo y datos de contacto</p>
-    </div>
-    <div class="module-card fade-in fade-in-delay-2">
-      <span class="module-icon"><i data-lucide="credit-card"></i></span>
-      <div class="module-name">Cuotas mensuales</div>
-      <p class="module-desc">Control de pagos por miembro, estado de mora y historial de recaudación</p>
-    </div>
-    <div class="module-card fade-in fade-in-delay-3">
-      <span class="module-icon"><i data-lucide="zap"></i></span>
-      <div class="module-name">Pagos automáticos</div>
-      <p class="module-desc">Cobros automáticos, recordatorios y notificaciones sin intervención manual</p>
-    </div>
-    <div class="module-card fade-in fade-in-delay-4">
-      <span class="module-icon"><i data-lucide="trophy"></i></span>
-      <div class="module-name">Competencias</div>
-      <p class="module-desc">Creación de eventos, inscripciones, categorías y gestión de participantes</p>
-    </div>
-    <div class="module-card fade-in">
-      <span class="module-icon"><i data-lucide="award"></i></span>
-      <div class="module-name">Resultados</div>
-      <p class="module-desc">Registro de posiciones, tiempos y clasificaciones por competencia</p>
-    </div>
-    <div class="module-card fade-in fade-in-delay-1">
-      <span class="module-icon"><i data-lucide="bar-chart-2"></i></span>
-      <div class="module-name">Reportes financieros</div>
-      <p class="module-desc">Ingresos, egresos, recaudación mensual y resumen financiero del club</p>
-    </div>
-  </div>
+</div>
 </section>
 
-<div class="section-divider"></div>
+<div class="divider"></div>
 
-<!-- DEMO -->
-<section id="demo" style="text-align:center;">
-  <div class="fade-in">
-    <div class="section-label" style="text-align:center;">Demo</div>
-    <h2 class="section-title" style="text-align:center;">Míralo en acción</h2>
-    <p class="section-sub" style="text-align:center;max-width:400px;margin-left:auto;margin-right:auto;">VeloClub está en desarrollo activo.</p>
-  </div>
-  <div class="demo-placeholder fade-in fade-in-delay-1">
+<!-- ═══ DEMO ═══ -->
+<section id="demo" class="demo-section">
+<div class="container" style="text-align:center;">
+  <div class="reveal"><div class="s-label" style="justify-content:center;">Demo</div><h2 class="s-title">Míralo en acción</h2><p class="s-sub" style="margin:0 auto;text-align:center;">VeloClub está en desarrollo activo.</p></div>
+  <div class="demo-placeholder reveal d1">
     <div class="demo-icon">🛼</div>
     <div class="demo-title">Demo en construcción</div>
     <div class="demo-sub">El sistema está en desarrollo. Contáctanos para una demo en vivo.</div>
   </div>
+</div>
 </section>
 
-<div class="section-divider"></div>
+<div class="divider"></div>
 
-<!-- ROLES -->
-<section id="roles">
-  <div class="fade-in">
-    <div class="section-label">Accesos</div>
-    <h2 class="section-title">Un rol para cada persona del club</h2>
-    <p class="section-sub">Cada usuario ve solo lo que necesita — sin información de más, sin accesos de menos.</p>
+<!-- ═══ ROLES TABS ═══ -->
+<section id="roles" class="roles-section">
+<div class="container">
+  <div class="reveal"><div class="s-label">Accesos</div><h2 class="s-title">Un rol para cada persona del club</h2><p class="s-sub">Cada usuario ve solo lo que necesita — sin información de más, sin accesos de menos.</p></div>
+  <div class="tabs-bar reveal" style="margin-top:40px;">
+    <button class="tab-btn active" onclick="switchTab('admin',event)">Administrador</button>
+    <button class="tab-btn" onclick="switchTab('entrenador',event)">Entrenador</button>
+    <button class="tab-btn" onclick="switchTab('deportista',event)">Deportista</button>
   </div>
-
-  <div class="tabs-bar fade-in">
-    <button class="tab-btn active" onclick="switchTab('admin')">Administrador</button>
-    <button class="tab-btn" onclick="switchTab('entrenador')">Entrenador</button>
-    <button class="tab-btn" onclick="switchTab('deportista')">Deportista</button>
-  </div>
-
   <!-- Admin -->
   <div id="tab-admin" class="tab-panel active">
-    <div class="modules-grid">
-      <div class="module-card fade-in">
-        <span class="module-icon"><i data-lucide="users"></i></span>
-        <div class="module-name">Miembros</div>
-        <p class="module-desc">Registra, edita y gestiona todos los socios del club</p>
-      </div>
-      <div class="module-card fade-in fade-in-delay-1">
-        <span class="module-icon"><i data-lucide="credit-card"></i></span>
-        <div class="module-name">Pagos y cuotas</div>
-        <p class="module-desc">Gestiona cuotas mensuales, historial de pagos y mora</p>
-      </div>
-      <div class="module-card fade-in fade-in-delay-2">
-        <span class="module-icon"><i data-lucide="bar-chart-2"></i></span>
-        <div class="module-name">Finanzas</div>
-        <p class="module-desc">Ingresos, egresos y reportes financieros del club</p>
-      </div>
-      <div class="module-card fade-in fade-in-delay-3">
-        <span class="module-icon"><i data-lucide="trophy"></i></span>
-        <div class="module-name">Competencias</div>
-        <p class="module-desc">Crea y administra eventos, inscripciones y categorías</p>
-      </div>
-      <div class="module-card fade-in fade-in-delay-4">
-        <span class="module-icon"><i data-lucide="award"></i></span>
-        <div class="module-name">Resultados</div>
-        <p class="module-desc">Registra posiciones y clasificaciones de cada competencia</p>
-      </div>
-      <div class="module-card fade-in">
-        <span class="module-icon"><i data-lucide="settings"></i></span>
-        <div class="module-name">Ajustes del club</div>
-        <p class="module-desc">Configura sedes, categorías, tarifas y parámetros generales</p>
-      </div>
+    <div class="roles-grid">
+      <div class="role-card"><div class="module-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg></div><div class="module-name">Miembros</div><p class="module-desc">Registra, edita y gestiona todos los socios del club</p></div>
+      <div class="role-card"><div class="module-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M2.25 8.25h19.5M2.25 9h19.5m-16.5 5.25h6m-6 2.25h3m-3.75 3h15a2.25 2.25 0 002.25-2.25V6.75A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25v10.5A2.25 2.25 0 004.5 19.5z"/></svg></div><div class="module-name">Pagos y cuotas</div><p class="module-desc">Gestiona cuotas mensuales, historial de pagos y mora</p></div>
+      <div class="role-card"><div class="module-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M3 13.125C3 12.504 3.504 12 4.125 12h2.25c.621 0 1.125.504 1.125 1.125v6.75C7.5 20.496 6.996 21 6.375 21h-2.25A1.125 1.125 0 013 19.875v-6.75zM9.75 8.625c0-.621.504-1.125 1.125-1.125h2.25c.621 0 1.125.504 1.125 1.125v11.25c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V8.625zM16.5 4.125c0-.621.504-1.125 1.125-1.125h2.25C20.496 3 21 3.504 21 4.125v15.75c0 .621-.504 1.125-1.125 1.125h-2.25a1.125 1.125 0 01-1.125-1.125V4.125z"/></svg></div><div class="module-name">Finanzas</div><p class="module-desc">Ingresos, egresos y reportes financieros del club</p></div>
+      <div class="role-card"><div class="module-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0"/></svg></div><div class="module-name">Competencias</div><p class="module-desc">Crea y administra eventos, inscripciones y categorías</p></div>
+      <div class="role-card"><div class="module-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg></div><div class="module-name">Resultados</div><p class="module-desc">Registra posiciones y clasificaciones de cada competencia</p></div>
+      <div class="role-card"><div class="module-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M9.594 3.94c.09-.542.56-.94 1.11-.94h2.593c.55 0 1.02.398 1.11.94l.213 1.281c.063.374.313.686.645.87.074.04.147.083.22.127.325.196.72.257 1.075.124l1.217-.456a1.125 1.125 0 011.37.49l1.296 2.247a1.125 1.125 0 01-.26 1.431l-1.003.827c-.293.241-.438.613-.43.992a7.723 7.723 0 010 .255c-.008.378.137.75.43.991l1.004.827c.424.35.534.955.26 1.43l-1.298 2.247a1.125 1.125 0 01-1.369.491l-1.217-.456c-.355-.133-.75-.072-1.076.124a6.47 6.47 0 01-.22.128c-.331.183-.581.495-.644.869l-.213 1.281c-.09.543-.56.94-1.11.94h-2.594c-.55 0-1.019-.398-1.11-.94l-.213-1.281c-.062-.374-.312-.686-.644-.87a6.52 6.52 0 01-.22-.127c-.325-.196-.72-.257-1.076-.124l-1.217.456a1.125 1.125 0 01-1.369-.49l-1.297-2.247a1.125 1.125 0 01.26-1.431l1.004-.827c.292-.24.437-.613.43-.991a6.932 6.932 0 010-.255c.007-.38-.138-.751-.43-.992l-1.004-.827a1.125 1.125 0 01-.26-1.43l1.297-2.247a1.125 1.125 0 011.37-.491l1.216.456c.356.133.751.072 1.076-.124.072-.044.146-.086.22-.128.332-.183.582-.495.644-.869l.214-1.28z"/><path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg></div><div class="module-name">Ajustes del club</div><p class="module-desc">Configura sedes, categorías, tarifas y parámetros generales</p></div>
     </div>
   </div>
-
   <!-- Entrenador -->
   <div id="tab-entrenador" class="tab-panel">
-    <div class="modules-grid">
-      <div class="module-card">
-        <span class="module-icon"><i data-lucide="users"></i></span>
-        <div class="module-name">Miembros</div>
-        <p class="module-desc">Ve y gestiona el listado de socios del club</p>
-      </div>
-      <div class="module-card">
-        <span class="module-icon"><i data-lucide="trophy"></i></span>
-        <div class="module-name">Competencias</div>
-        <p class="module-desc">Gestiona eventos, inscripciones y categorías de competencia</p>
-      </div>
-      <div class="module-card">
-        <span class="module-icon"><i data-lucide="award"></i></span>
-        <div class="module-name">Resultados</div>
-        <p class="module-desc">Registra y consulta posiciones y clasificaciones</p>
-      </div>
+    <div class="roles-grid">
+      <div class="role-card"><div class="module-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M15 19.128a9.38 9.38 0 002.625.372 9.337 9.337 0 004.121-.952 4.125 4.125 0 00-7.533-2.493M15 19.128v-.003c0-1.113-.285-2.16-.786-3.07M15 19.128v.106A12.318 12.318 0 018.624 21c-2.331 0-4.512-.645-6.374-1.766l-.001-.109a6.375 6.375 0 0111.964-3.07M12 6.375a3.375 3.375 0 11-6.75 0 3.375 3.375 0 016.75 0zm8.25 2.25a2.625 2.625 0 11-5.25 0 2.625 2.625 0 015.25 0z"/></svg></div><div class="module-name">Miembros</div><p class="module-desc">Ve y gestiona el listado de socios del club</p></div>
+      <div class="role-card"><div class="module-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0"/></svg></div><div class="module-name">Competencias</div><p class="module-desc">Gestiona eventos, inscripciones y categorías de competencia</p></div>
+      <div class="role-card"><div class="module-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg></div><div class="module-name">Resultados</div><p class="module-desc">Registra y consulta posiciones y clasificaciones</p></div>
     </div>
   </div>
-
   <!-- Deportista -->
   <div id="tab-deportista" class="tab-panel">
-    <div class="modules-grid">
-      <div class="module-card">
-        <span class="module-icon"><i data-lucide="trophy"></i></span>
-        <div class="module-name">Mis competencias</div>
-        <p class="module-desc">Ve las competencias en las que has participado</p>
-      </div>
-      <div class="module-card">
-        <span class="module-icon"><i data-lucide="award"></i></span>
-        <div class="module-name">Mis resultados</div>
-        <p class="module-desc">Consulta tus posiciones y clasificaciones personales</p>
-      </div>
+    <div class="roles-grid">
+      <div class="role-card"><div class="module-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M16.5 18.75h-9m9 0a3 3 0 013 3h-15a3 3 0 013-3m9 0v-3.375c0-.621-.503-1.125-1.125-1.125h-.871M7.5 18.75v-3.375c0-.621.504-1.125 1.125-1.125h.872m5.007 0H9.497m5.007 0a7.454 7.454 0 01-.982-3.172M9.497 14.25a7.454 7.454 0 00.981-3.172M5.25 4.236c-.982.143-1.954.317-2.916.52A6.003 6.003 0 007.73 9.728M5.25 4.236V4.5c0 2.108.966 3.99 2.48 5.228M5.25 4.236V2.721C7.456 2.41 9.71 2.25 12 2.25c2.291 0 4.545.16 6.75.47v1.516M7.73 9.728a6.726 6.726 0 002.748 1.35m8.272-6.842V4.5c0 2.108-.966 3.99-2.48 5.228m2.48-5.492a46.32 46.32 0 012.916.52 6.003 6.003 0 01-5.395 4.972m0 0a6.726 6.726 0 01-2.749 1.35m0 0a6.772 6.772 0 01-3.044 0"/></svg></div><div class="module-name">Mis competencias</div><p class="module-desc">Ve las competencias en las que has participado</p></div>
+      <div class="role-card"><div class="module-icon"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M11.48 3.499a.562.562 0 011.04 0l2.125 5.111a.563.563 0 00.475.345l5.518.442c.499.04.701.663.321.988l-4.204 3.602a.563.563 0 00-.182.557l1.285 5.385a.562.562 0 01-.84.61l-4.725-2.885a.563.563 0 00-.586 0L6.982 20.54a.562.562 0 01-.84-.61l1.285-5.386a.562.562 0 00-.182-.557l-4.204-3.602a.563.563 0 01.321-.988l5.518-.442a.563.563 0 00.475-.345L11.48 3.5z"/></svg></div><div class="module-name">Mis resultados</div><p class="module-desc">Consulta tus posiciones y clasificaciones personales</p></div>
     </div>
   </div>
+</div>
 </section>
 
-<div class="section-divider"></div>
+<div class="divider"></div>
 
-<!-- BENEFITS -->
-<section id="benefits">
-  <div class="fade-in">
-    <div class="section-label">Resultados</div>
-    <h2 class="section-title">Lo que cambia cuando usas VeloClub</h2>
-  </div>
+<!-- ═══ BENEFITS ═══ -->
+<section id="benefits" class="benefits-section">
+<div class="container">
+  <div class="reveal"><div class="s-label">Resultados</div><h2 class="s-title">Lo que cambia cuando usas VeloClub</h2></div>
   <div class="benefits-grid">
-    <div class="benefit-item fade-in fade-in-delay-1">
-      <span class="benefit-check"><i data-lucide="check-circle-2"></i></span>
-      <span class="benefit-text">Cero persecución manual de pagos — el sistema cobra solo</span>
-    </div>
-    <div class="benefit-item fade-in fade-in-delay-2">
-      <span class="benefit-check"><i data-lucide="check-circle-2"></i></span>
-      <span class="benefit-text">Sabes exactamente quién está al día y quién en mora</span>
-    </div>
-    <div class="benefit-item fade-in fade-in-delay-3">
-      <span class="benefit-check"><i data-lucide="check-circle-2"></i></span>
-      <span class="benefit-text">Historial completo de competencias y resultados</span>
-    </div>
-    <div class="benefit-item fade-in fade-in-delay-4">
-      <span class="benefit-check"><i data-lucide="check-circle-2"></i></span>
-      <span class="benefit-text">Reportes financieros listos sin hacer cuentas manualmente</span>
-    </div>
-    <div class="benefit-item fade-in">
-      <span class="benefit-check"><i data-lucide="check-circle-2"></i></span>
-      <span class="benefit-text">Acceso desde el celular — para directivos y miembros</span>
-    </div>
-    <div class="benefit-item fade-in fade-in-delay-1">
-      <span class="benefit-check"><i data-lucide="check-circle-2"></i></span>
-      <span class="benefit-text">Club profesional con herramientas de nivel enterprise</span>
-    </div>
+    <div class="benefit-item reveal d1"><div class="benefit-check"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></div><span class="benefit-text">Cero persecución manual de pagos — el sistema cobra solo</span></div>
+    <div class="benefit-item reveal d2"><div class="benefit-check"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></div><span class="benefit-text">Sabes exactamente quién está al día y quién en mora</span></div>
+    <div class="benefit-item reveal d3"><div class="benefit-check"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></div><span class="benefit-text">Historial completo de competencias y resultados</span></div>
+    <div class="benefit-item reveal d4"><div class="benefit-check"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></div><span class="benefit-text">Reportes financieros listos sin hacer cuentas manualmente</span></div>
+    <div class="benefit-item reveal"><div class="benefit-check"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></div><span class="benefit-text">Acceso desde el celular — para directivos y miembros</span></div>
+    <div class="benefit-item reveal d1"><div class="benefit-check"><svg viewBox="0 0 24 24" fill="none"><path stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" d="M4.5 12.75l6 6 9-13.5"/></svg></div><span class="benefit-text">Club profesional con herramientas de nivel enterprise</span></div>
   </div>
+</div>
 </section>
 
-<div class="section-divider"></div>
+<div class="divider"></div>
 
-<!-- FINAL CTA -->
-<section id="cta" style="text-align:center;padding:100px 24px;max-width:700px;margin:0 auto;">
-  <div class="fade-in">
-    <div class="section-label" style="text-align:center;">¿Hablamos?</div>
-    <h2 class="section-title" style="text-align:center;max-width:none;">¿Listo para modernizar tu club?</h2>
-    <p class="section-sub" style="text-align:center;max-width:480px;margin-left:auto;margin-right:auto;">Escríbenos y te mostramos cómo VeloClub se adapta a tu club de patinaje.</p>
+<!-- ═══ CTA ═══ -->
+<section id="cta" class="cta-section">
+<div class="container">
+  <div class="cta-box reveal">
+    <div class="s-label" style="justify-content:center;">¿Hablamos?</div>
+    <h2 class="s-title" style="max-width:none;text-align:center;">¿Listo para modernizar tu club?</h2>
+    <p class="s-sub" style="margin:0 auto;text-align:center;">Escríbenos y te mostramos cómo VeloClub se adapta a tu club de patinaje.</p>
+    <div class="cta-btns">
+      <a href="https://wa.me/573164134212" target="_blank" class="btn btn-wa btn-lg">💬 Escribir por WhatsApp</a>
+      <a href="mailto:nexcode97@gmail.com" class="btn btn-ghost btn-lg">✉️ Enviar correo</a>
+    </div>
+    <p class="cta-note">Desarrollado por NexCode97</p>
   </div>
-  <div class="cta-buttons fade-in fade-in-delay-1">
-    <a href="https://wa.me/573164134212" target="_blank" class="btn btn-wa btn-lg">💬 Escribir por WhatsApp</a>
-    <a href="mailto:nexcode97@gmail.com" class="btn btn-email btn-lg">✉️ Enviar correo</a>
-  </div>
-  <p class="cta-footer-note fade-in fade-in-delay-2">Desarrollado por NexCode97</p>
+</div>
 </section>
 
-<!-- FOOTER -->
+<!-- ═══ FOOTER ═══ -->
 <footer>
-  VeloClub &copy; 2025 &bull; Desarrollado por <a href="../" style="color:inherit;text-decoration:none;">NexCode97</a>
+  <a href="../" style="text-decoration:none;"><img src="../assets/letrero-header.png" alt="NexCode97" style="height:18px;opacity:.5;"/></a>
+  <span class="footer-copy">VeloClub &copy; 2025 &bull; Desarrollado por <a href="../" style="color:inherit;text-decoration:none;">NexCode97</a></span>
 </footer>
 
+<!-- WA Float -->
+<a href="https://wa.me/573164134212" target="_blank" class="wa-float" aria-label="WhatsApp">
+  <svg width="26" height="26" fill="currentColor" viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/></svg>
+</a>
+
 <script>
-  const observer = new IntersectionObserver((entries) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) entry.target.classList.add('visible');
-    });
-  }, { threshold: 0.12 });
+// ── Navbar scroll
+window.addEventListener('scroll',()=>{
+  document.getElementById('navbar').classList.toggle('scrolled',window.scrollY>20);
+});
 
-  document.querySelectorAll('.fade-in').forEach(el => observer.observe(el));
-
-  function switchTab(panel) {
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
-    document.getElementById('tab-' + panel).classList.add('active');
-    event.currentTarget.classList.add('active');
-  }
-
-  lucide.createIcons();
-
-  document.querySelectorAll('section:first-of-type .fade-in, nav ~ section .fade-in').forEach(el => {
-    if (el.closest('section')?.style.paddingTop === '100px') el.classList.add('visible');
+// ── Mega menu
+const items=document.querySelectorAll('.nav-item.has-sub');
+const backdrop=document.getElementById('megaBackdrop');
+items.forEach(item=>{
+  const btn=item.querySelector('.nav-trigger');
+  btn.addEventListener('click',e=>{
+    e.stopPropagation();
+    const isOpen=item.classList.contains('open');
+    items.forEach(i=>{i.classList.remove('open');i.querySelector('.nav-trigger').setAttribute('aria-expanded','false');});
+    backdrop.classList.remove('active');
+    if(!isOpen){item.classList.add('open');btn.setAttribute('aria-expanded','true');backdrop.classList.add('active');}
   });
+});
+document.addEventListener('click',()=>{
+  items.forEach(i=>{i.classList.remove('open');i.querySelector('.nav-trigger').setAttribute('aria-expanded','false');});
+  backdrop.classList.remove('active');
+});
+
+// ── Hamburger
+const hamBtn=document.getElementById('hamBtn');
+const drawer=document.getElementById('mobileDrawer');
+hamBtn.addEventListener('click',()=>{
+  const open=hamBtn.classList.toggle('open');
+  drawer.classList.toggle('open',open);
+  hamBtn.setAttribute('aria-expanded',open);
+});
+
+// ── Reveal
+const obs=new IntersectionObserver(entries=>{
+  entries.forEach(e=>{if(e.isIntersecting)e.target.classList.add('vis');});
+},{threshold:0.12});
+document.querySelectorAll('.reveal').forEach(el=>obs.observe(el));
+document.querySelectorAll('#hero .reveal').forEach(el=>el.classList.add('vis'));
+
+// ── Cursor glow
+const cg=document.getElementById('cglow');
+let cx=window.innerWidth/2,cy=window.innerHeight/2,tx=cx,ty=cy;
+document.addEventListener('mousemove',e=>{tx=e.clientX;ty=e.clientY;});
+(function loop(){cx+=(tx-cx)*.07;cy+=(ty-cy)*.07;cg.style.left=cx+'px';cg.style.top=cy+'px';requestAnimationFrame(loop);})();
+
+// ── Tabs
+function switchTab(panel,e){
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  document.querySelectorAll('.tab-panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById('tab-'+panel).classList.add('active');
+  (e?.currentTarget||event.currentTarget).classList.add('active');
+}
 </script>
 </body>
 </html>

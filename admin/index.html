@@ -712,6 +712,19 @@ function closeModal(id) { document.getElementById(id).classList.remove('open'); 
 // ── HELPERS ───────────────────────────────────────
 const fmt = n => n ? '$' + Number(n).toLocaleString('es-CO') : '$0';
 const fmtDate = d => d ? new Date(d + 'T00:00:00').toLocaleDateString('es-CO', {day:'2-digit',month:'short',year:'numeric'}) : '—';
+
+// XSS sanitizer — escapa todos los caracteres HTML peligrosos
+function s(str) {
+  if (str == null) return '';
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&#x27;')
+    .replace(/\//g, '&#x2F;');
+}
+
 function badgeEstado(estado) {
   const map = {
     'Nuevo':'nuevo','En conversación':'conversacion','Propuesta enviada':'propuesta',
@@ -719,7 +732,8 @@ function badgeEstado(estado) {
     'Entregado':'entregado','Mantenimiento':'mantenimiento',
     'Ingreso':'ingreso','Gasto':'gasto'
   };
-  return `<span class="badge badge-${map[estado]||'nuevo'}">${estado}</span>`;
+  const key = map[estado] || 'nuevo';
+  return `<span class="badge badge-${key}">${s(estado)}</span>`;
 }
 
 // ── DASHBOARD ─────────────────────────────────────
@@ -745,13 +759,13 @@ async function loadDashboard() {
   // Recent leads
   const lb = document.getElementById('dash-leads-body');
   lb.innerHTML = cachedLeads.slice(0,5).map(l=>`
-    <tr><td>${l.nombre}</td><td>${badgeEstado(l.estado)}</td><td>${l.fuente||'—'}</td></tr>
+    <tr><td>${s(l.nombre)}</td><td>${badgeEstado(l.estado)}</td><td>${s(l.fuente)||'—'}</td></tr>
   `).join('') || '<tr class="empty-row"><td colspan="3">Sin leads aún</td></tr>';
 
   // Recent proyectos
   const pb = document.getElementById('dash-proj-body');
   pb.innerHTML = cachedProyectos.slice(0,5).map(p=>`
-    <tr><td>${p.nombre}</td><td>${badgeEstado(p.estado)}</td><td>${p.cliente||'—'}</td></tr>
+    <tr><td>${s(p.nombre)}</td><td>${badgeEstado(p.estado)}</td><td>${s(p.cliente)||'—'}</td></tr>
   `).join('') || '<tr class="empty-row"><td colspan="3">Sin proyectos aún</td></tr>';
 }
 
@@ -772,27 +786,27 @@ function renderLeads() {
   tbody.innerHTML = list.length ? list.map(l=>`
     <tr>
       <td class="td-wrap">
-        <strong>${l.nombre}</strong>
-        ${l.empresa ? `<span class="sub">${l.empresa}</span>` : ''}
-        ${l.email ? `<span class="sub">${l.email}</span>` : ''}
+        <strong>${s(l.nombre)}</strong>
+        ${l.empresa ? `<span class="sub">${s(l.empresa)}</span>` : ''}
+        ${l.email ? `<span class="sub">${s(l.email)}</span>` : ''}
       </td>
       <td>
-        ${l.ciudad||l.departamento ? `${l.ciudad||''}${l.ciudad&&l.departamento?', ':''}${l.departamento||''}` : '—'}
+        ${l.ciudad||l.departamento ? `${s(l.ciudad||'')}${l.ciudad&&l.departamento?', ':''}${s(l.departamento||'')}` : '—'}
       </td>
       <td>${(() => {
         if (!l.telefono) return '—';
         const m = l.telefono.match(/^(\+\d+)\s*(.*)/);
-        if (!m) return l.telefono;
+        if (!m) return s(l.telefono);
         const c = COUNTRIES.find(x=>x.code===m[1]);
-        const flag = c ? `<img src="https://flagcdn.com/w20/${c.iso}.png" width="18" height="13" style="border-radius:2px;object-fit:cover;vertical-align:middle;margin-right:5px;"/>` : '';
-        return `${flag}<span style="vertical-align:middle;">${l.telefono}</span>`;
+        const flag = c ? `<img src="https://flagcdn.com/w20/${s(c.iso)}.png" width="18" height="13" style="border-radius:2px;object-fit:cover;vertical-align:middle;margin-right:5px;"/>` : '';
+        return `${flag}<span style="vertical-align:middle;">${s(l.telefono)}</span>`;
       })()}</td>
-      <td>${l.fuente||'—'}</td>
+      <td>${s(l.fuente)||'—'}</td>
       <td>${badgeEstado(l.estado)}</td>
       <td>${fmtDate(l.created_at?.split('T')[0])}</td>
       <td><div class="td-actions">
-        <button class="btn-edit" onclick="editLead('${l.id}')">Editar</button>
-        <button class="btn-del" onclick="deleteLead('${l.id}')">Borrar</button>
+        <button class="btn-edit" data-id="${s(l.id)}" data-action="edit-lead">Editar</button>
+        <button class="btn-del" data-id="${s(l.id)}" data-action="del-lead">Borrar</button>
       </div></td>
     </tr>`).join('')
   : '<tr class="empty-row"><td colspan="7">No hay leads con este filtro</td></tr>';
@@ -880,7 +894,7 @@ document.getElementById('btn-save-lead').addEventListener('click', async () => {
     const res = await sb.from('leads').insert(data);
     err = res.error;
   }
-  if (err) { alert('Error: ' + err.message); return; }
+  if (err) { alert('No se pudo guardar el lead. Intenta de nuevo.'); console.error(err); return; }
   closeModal('modal-lead');
   await loadLeads(); await loadDashboard();
 });
@@ -900,16 +914,16 @@ function renderProyectos() {
   const tbody = document.getElementById('proyectos-body');
   tbody.innerHTML = list.length ? list.map(p=>`
     <tr>
-      <td><strong>${p.nombre}</strong></td>
-      <td>${p.cliente||'—'}</td>
+      <td><strong>${s(p.nombre)}</strong></td>
+      <td>${s(p.cliente)||'—'}</td>
       <td>${badgeEstado(p.estado)}</td>
       <td>${fmt(p.precio)}</td>
       <td>${fmt(p.pagado)}</td>
       <td style="color:${(p.precio-p.pagado)>0?'var(--yellow)':'var(--green)'}">${fmt((p.precio||0)-(p.pagado||0))}</td>
       <td>${fmtDate(p.fecha_entrega)}</td>
       <td><div class="td-actions">
-        <button class="btn-edit" onclick="editProy('${p.id}')">Editar</button>
-        <button class="btn-del" onclick="deleteProy('${p.id}')">Borrar</button>
+        <button class="btn-edit" data-id="${s(p.id)}" data-action="edit-proy">Editar</button>
+        <button class="btn-del" data-id="${s(p.id)}" data-action="del-proy">Borrar</button>
       </div></td>
     </tr>`).join('')
   : '<tr class="empty-row"><td colspan="8">No hay proyectos con este filtro</td></tr>';
@@ -927,7 +941,7 @@ document.getElementById('proy-filters').addEventListener('click', e => {
 function populateProyClientes(selectedVal='') {
   const sel = document.getElementById('proy-cliente');
   sel.innerHTML = '<option value="">— Seleccionar lead —</option>' +
-    cachedLeads.map(l=>`<option value="${l.nombre}"${l.nombre===selectedVal?' selected':''}>${l.nombre}${l.empresa?' — '+l.empresa:''}</option>`).join('');
+    cachedLeads.map(l=>`<option value="${s(l.nombre)}"${l.nombre===selectedVal?' selected':''}>${s(l.nombre)}${l.empresa?' — '+s(l.empresa):''}</option>`).join('');
 }
 
 document.getElementById('btn-add-proyecto').addEventListener('click', () => {
@@ -995,7 +1009,7 @@ function populateProyectosSelect() {
   const sel = document.getElementById('fin-proyecto');
   const current = sel.value;
   sel.innerHTML = '<option value="">— Ninguno —</option>' +
-    cachedProyectos.map(p=>`<option value="${p.id}">${p.nombre}</option>`).join('');
+    cachedProyectos.map(p=>`<option value="${s(p.id)}">${s(p.nombre)}</option>`).join('');
   sel.value = current;
 }
 
@@ -1012,13 +1026,13 @@ function renderFinanzas() {
     const proy = cachedProyectos.find(p=>p.id===f.proyecto_id);
     return `<tr>
       <td>${badgeEstado(f.tipo)}</td>
-      <td>${f.descripcion||'—'}</td>
+      <td>${s(f.descripcion)||'—'}</td>
       <td style="color:${f.tipo==='Ingreso'?'var(--green)':'var(--red)'}"><strong>${f.tipo==='Ingreso'?'+':'-'}${fmt(f.monto)}</strong></td>
       <td>${fmtDate(f.fecha)}</td>
-      <td>${proy?proy.nombre:'—'}</td>
+      <td>${proy?s(proy.nombre):'—'}</td>
       <td><div class="td-actions">
-        <button class="btn-edit" onclick="editFin('${f.id}')">Editar</button>
-        <button class="btn-del" onclick="deleteFin('${f.id}')">Borrar</button>
+        <button class="btn-edit" data-id="${s(f.id)}" data-action="edit-fin">Editar</button>
+        <button class="btn-del" data-id="${s(f.id)}" data-action="del-fin">Borrar</button>
       </div></td>
     </tr>`;
   }).join('')
@@ -1033,6 +1047,19 @@ function renderFinanzas() {
   balEl.textContent = fmt(balance);
   balEl.style.color = balance >= 0 ? 'var(--cl)' : 'var(--red)';
 }
+
+// ── EVENT DELEGATION para botones de tablas (evita onclick inline) ───────────
+document.addEventListener('click', e => {
+  const btn = e.target.closest('[data-action]');
+  if (!btn) return;
+  const { action, id } = btn.dataset;
+  if (action === 'edit-lead') editLead(id);
+  else if (action === 'del-lead') deleteLead(id);
+  else if (action === 'edit-proy') editProy(id);
+  else if (action === 'del-proy') deleteProy(id);
+  else if (action === 'edit-fin') editFin(id);
+  else if (action === 'del-fin') deleteFin(id);
+});
 
 document.getElementById('fin-filters').addEventListener('click', e => {
   const btn = e.target.closest('.filter-btn');

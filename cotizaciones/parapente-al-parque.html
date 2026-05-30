@@ -1,0 +1,1037 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Cotización — Parapente al Parque · NexCode97</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Work+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+:root{
+  --sky:#0EA5E9;
+  --sky-d:#0284C7;
+  --sky-deep:#0C4A6E;
+  --sunset:#F97316;
+  --sunset-l:#FB923C;
+  --dark:#0F172A;
+  --dark2:#1E293B;
+  --slate:#475569;
+  --muted:#94A3B8;
+  --line:#E2E8F0;
+  --bg:#F8FAFC;
+  --white:#FFFFFF;
+  --sans:'Outfit',sans-serif;
+  --body:'Work Sans',sans-serif;
+}
+
+html{-webkit-print-color-adjust:exact;print-color-adjust:exact;}
+
+body{
+  font-family:var(--body);
+  background:var(--bg);
+  color:var(--dark);
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── PAGE LAYOUT ── */
+.page{
+  width:210mm;
+  min-height:297mm;
+  margin:0 auto;
+  background:var(--white);
+  position:relative;
+  overflow:hidden;
+}
+
+/* ── HEADER ── */
+.header{
+  background:var(--dark);
+  position:relative;
+  overflow:hidden;
+  padding:48px 52px 52px;
+}
+
+/* Sky gradient blob */
+.header::before{
+  content:'';
+  position:absolute;
+  top:-80px;right:-80px;
+  width:420px;height:420px;
+  background:radial-gradient(circle, rgba(14,165,233,0.35) 0%, transparent 70%);
+  border-radius:50%;
+}
+.header::after{
+  content:'';
+  position:absolute;
+  bottom:-60px;left:30%;
+  width:300px;height:300px;
+  background:radial-gradient(circle, rgba(249,115,22,0.2) 0%, transparent 70%);
+  border-radius:50%;
+}
+
+/* Mountain silhouette SVG background */
+.mountain-bg{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  opacity:0.12;
+}
+
+.header-inner{
+  position:relative;
+  z-index:2;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-start;
+}
+
+.brand{
+  display:flex;
+  flex-direction:column;
+  gap:6px;
+}
+
+.brand-name{
+  font-family:var(--sans);
+  font-size:28px;
+  font-weight:900;
+  color:var(--white);
+  letter-spacing:-0.04em;
+  line-height:1;
+}
+
+.brand-name span{
+  background:linear-gradient(135deg,var(--sky),var(--sunset));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.brand-tagline{
+  font-family:var(--body);
+  font-size:11px;
+  color:rgba(255,255,255,0.45);
+  letter-spacing:.08em;
+  text-transform:uppercase;
+  font-weight:500;
+}
+
+.brand-contact{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  text-align:right;
+}
+
+.brand-contact p{
+  font-family:var(--body);
+  font-size:11.5px;
+  color:rgba(255,255,255,0.6);
+  font-weight:400;
+}
+
+.brand-contact a{
+  color:var(--sky);
+  text-decoration:none;
+}
+
+/* Quote badge */
+.quote-hero{
+  position:relative;
+  z-index:2;
+  margin-top:48px;
+  display:flex;
+  justify-content:space-between;
+  align-items:flex-end;
+}
+
+.quote-title-block{}
+
+.quote-label{
+  font-family:var(--body);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--sky);
+  margin-bottom:8px;
+}
+
+.quote-title{
+  font-family:var(--sans);
+  font-size:52px;
+  font-weight:900;
+  color:var(--white);
+  letter-spacing:-0.04em;
+  line-height:.95;
+}
+
+.quote-title em{
+  font-style:normal;
+  color:var(--sunset-l);
+}
+
+.quote-meta{
+  display:flex;
+  flex-direction:column;
+  gap:10px;
+  text-align:right;
+}
+
+.meta-pill{
+  display:inline-flex;
+  align-items:center;
+  gap:8px;
+  background:rgba(255,255,255,0.07);
+  border:1px solid rgba(255,255,255,0.12);
+  border-radius:100px;
+  padding:6px 14px;
+  font-size:11px;
+  color:rgba(255,255,255,0.7);
+  font-weight:500;
+}
+
+.meta-pill strong{
+  color:var(--white);
+  font-weight:700;
+}
+
+/* ── DIVIDER BAR ── */
+.gradient-bar{
+  height:4px;
+  background:linear-gradient(90deg, var(--sky-deep), var(--sky), var(--sunset));
+}
+
+/* ── CLIENT SECTION ── */
+.section-client{
+  padding:36px 52px 32px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:32px;
+  border-bottom:1px solid var(--line);
+}
+
+.client-block{}
+.client-label{
+  font-size:9.5px;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--sky-d);
+  margin-bottom:12px;
+}
+
+.client-name{
+  font-family:var(--sans);
+  font-size:22px;
+  font-weight:800;
+  color:var(--dark);
+  letter-spacing:-0.02em;
+  line-height:1.1;
+  margin-bottom:4px;
+}
+
+.client-company{
+  font-size:13px;
+  color:var(--slate);
+  font-weight:500;
+}
+
+.validity-block{
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+  align-items:flex-end;
+}
+
+.validity-row{
+  display:flex;
+  flex-direction:column;
+  align-items:flex-end;
+  gap:2px;
+}
+
+.validity-label{
+  font-size:9.5px;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+
+.validity-val{
+  font-family:var(--sans);
+  font-size:14px;
+  font-weight:700;
+  color:var(--dark);
+}
+
+.validity-badge{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  background:#FFF7ED;
+  border:1px solid #FED7AA;
+  border-radius:100px;
+  padding:4px 12px;
+  font-size:10.5px;
+  font-weight:700;
+  color:#C2410C;
+}
+
+.validity-badge::before{
+  content:'';
+  width:6px;height:6px;
+  border-radius:50%;
+  background:#F97316;
+  display:inline-block;
+}
+
+/* ── INTRO TEXT ── */
+.section-intro{
+  padding:28px 52px;
+  border-bottom:1px solid var(--line);
+}
+
+.intro-text{
+  font-size:13.5px;
+  color:var(--slate);
+  line-height:1.75;
+  max-width:560px;
+}
+
+.intro-text strong{
+  color:var(--dark);
+  font-weight:700;
+}
+
+/* ── SERVICES TABLE ── */
+.section-services{
+  padding:32px 52px 0;
+}
+
+.section-heading{
+  font-family:var(--sans);
+  font-size:11px;
+  font-weight:700;
+  letter-spacing:.14em;
+  text-transform:uppercase;
+  color:var(--sky-d);
+  margin-bottom:20px;
+}
+
+.services-table{
+  width:100%;
+  border-collapse:collapse;
+  border-radius:12px;
+  overflow:hidden;
+  border:1px solid var(--line);
+}
+
+.services-table thead tr{
+  background:var(--dark);
+}
+
+.services-table thead th{
+  font-family:var(--sans);
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.55);
+  padding:12px 18px;
+  text-align:left;
+}
+
+.services-table thead th:last-child{
+  text-align:right;
+}
+
+.services-table tbody tr{
+  border-bottom:1px solid var(--line);
+  transition:background .15s;
+}
+
+.services-table tbody tr:last-child{
+  border-bottom:none;
+}
+
+.services-table tbody tr:nth-child(even){
+  background:#F8FAFC;
+}
+
+.td-num{
+  width:36px;
+  padding:14px 18px;
+  font-family:var(--sans);
+  font-size:11px;
+  font-weight:800;
+  color:var(--sky-d);
+  vertical-align:top;
+}
+
+.td-service{
+  padding:14px 18px 14px 0;
+  vertical-align:top;
+}
+
+.svc-name{
+  font-family:var(--sans);
+  font-size:13.5px;
+  font-weight:700;
+  color:var(--dark);
+  margin-bottom:3px;
+}
+
+.svc-desc{
+  font-size:11.5px;
+  color:var(--muted);
+  line-height:1.5;
+}
+
+.td-tag{
+  padding:14px 18px;
+  vertical-align:top;
+  white-space:nowrap;
+}
+
+.tag{
+  display:inline-block;
+  background:#EFF6FF;
+  border:1px solid #BFDBFE;
+  border-radius:100px;
+  padding:3px 10px;
+  font-size:10px;
+  font-weight:700;
+  color:#1D4ED8;
+  letter-spacing:.04em;
+}
+
+.td-price{
+  padding:14px 18px;
+  text-align:right;
+  vertical-align:top;
+  font-family:var(--sans);
+  font-size:13px;
+  font-weight:600;
+  color:var(--slate);
+  white-space:nowrap;
+}
+
+/* ── TOTAL ── */
+.section-total{
+  padding:24px 52px 32px;
+}
+
+.total-box{
+  background:var(--dark);
+  border-radius:16px;
+  padding:28px 32px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  position:relative;
+  overflow:hidden;
+}
+
+.total-box::before{
+  content:'';
+  position:absolute;
+  top:-40px;right:-40px;
+  width:200px;height:200px;
+  background:radial-gradient(circle, rgba(14,165,233,0.25) 0%, transparent 70%);
+  border-radius:50%;
+}
+
+.total-box::after{
+  content:'';
+  position:absolute;
+  bottom:-30px;left:20%;
+  width:150px;height:150px;
+  background:radial-gradient(circle, rgba(249,115,22,0.18) 0%, transparent 70%);
+  border-radius:50%;
+}
+
+.total-left{
+  position:relative;
+  z-index:1;
+}
+
+.total-label{
+  font-size:10px;
+  font-weight:700;
+  letter-spacing:.16em;
+  text-transform:uppercase;
+  color:rgba(255,255,255,0.45);
+  margin-bottom:6px;
+}
+
+.total-sublabel{
+  font-size:12px;
+  color:rgba(255,255,255,0.35);
+  font-weight:400;
+}
+
+.total-right{
+  position:relative;
+  z-index:1;
+  text-align:right;
+}
+
+.total-amount{
+  font-family:var(--sans);
+  font-size:46px;
+  font-weight:900;
+  letter-spacing:-0.04em;
+  line-height:1;
+  background:linear-gradient(135deg, var(--sky-l, #38BDF8), var(--sunset-l));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.total-currency{
+  font-size:12px;
+  color:rgba(255,255,255,0.4);
+  font-weight:500;
+  margin-top:4px;
+}
+
+/* ── DELIVERABLES ── */
+.section-deliverables{
+  padding:0 52px 32px;
+}
+
+.deliverables-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.deliv-item{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  padding:12px 16px;
+  background:var(--bg);
+  border:1px solid var(--line);
+  border-radius:10px;
+}
+
+.deliv-icon{
+  width:28px;height:28px;
+  border-radius:8px;
+  background:linear-gradient(135deg,var(--sky),var(--sky-d));
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+
+.deliv-icon svg{
+  width:14px;height:14px;
+  stroke:#fff;
+  fill:none;
+  stroke-width:2;
+  stroke-linecap:round;
+  stroke-linejoin:round;
+}
+
+.deliv-text{}
+.deliv-title{
+  font-family:var(--sans);
+  font-size:12px;
+  font-weight:700;
+  color:var(--dark);
+  line-height:1.2;
+}
+.deliv-sub{
+  font-size:10.5px;
+  color:var(--muted);
+  margin-top:1px;
+}
+
+/* ── TERMS ── */
+.section-terms{
+  padding:0 52px 32px;
+  border-top:1px solid var(--line);
+  margin-top:4px;
+  padding-top:28px;
+}
+
+.terms-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:24px;
+}
+
+.terms-block-title{
+  font-family:var(--sans);
+  font-size:11px;
+  font-weight:800;
+  letter-spacing:.1em;
+  text-transform:uppercase;
+  color:var(--dark);
+  margin-bottom:10px;
+  display:flex;
+  align-items:center;
+  gap:8px;
+}
+
+.terms-block-title::before{
+  content:'';
+  display:block;
+  width:14px;height:3px;
+  border-radius:2px;
+  background:linear-gradient(90deg,var(--sky),var(--sunset));
+}
+
+.terms-list{
+  list-style:none;
+  display:flex;
+  flex-direction:column;
+  gap:7px;
+}
+
+.terms-list li{
+  font-size:11.5px;
+  color:var(--slate);
+  line-height:1.5;
+  padding-left:14px;
+  position:relative;
+}
+
+.terms-list li::before{
+  content:'';
+  position:absolute;
+  left:0;top:7px;
+  width:5px;height:5px;
+  border-radius:50%;
+  background:var(--sky);
+}
+
+/* ── SIGNATURE ── */
+.section-sign{
+  padding:0 52px 40px;
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:32px;
+}
+
+.sign-block{
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.sign-label{
+  font-size:9.5px;
+  font-weight:700;
+  letter-spacing:.12em;
+  text-transform:uppercase;
+  color:var(--muted);
+  margin-bottom:40px;
+}
+
+.sign-line{
+  border-top:1.5px solid var(--dark);
+  padding-top:8px;
+}
+
+.sign-name{
+  font-family:var(--sans);
+  font-size:13px;
+  font-weight:700;
+  color:var(--dark);
+}
+
+.sign-role{
+  font-size:11px;
+  color:var(--muted);
+}
+
+/* ── FOOTER ── */
+.footer{
+  background:var(--dark);
+  padding:20px 52px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.footer-brand{
+  font-family:var(--sans);
+  font-size:13px;
+  font-weight:800;
+  letter-spacing:-0.02em;
+}
+
+.footer-brand span{
+  background:linear-gradient(135deg,var(--sky),var(--sunset));
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.footer-text{
+  font-size:10.5px;
+  color:rgba(255,255,255,0.35);
+}
+
+.footer-num{
+  font-size:10px;
+  color:rgba(255,255,255,0.3);
+  font-family:var(--sans);
+  font-weight:600;
+  letter-spacing:.1em;
+}
+
+/* ── PRINT ── */
+@media print{
+  body{background:white;}
+  .page{width:100%;margin:0;box-shadow:none;}
+  @page{margin:0;size:A4;}
+}
+
+/* ── SCREEN WRAPPER ── */
+@media screen{
+  body{padding:40px 20px;background:#E2E8F0;}
+  .page{box-shadow:0 25px 80px rgba(0,0,0,0.18);border-radius:4px;}
+  .print-btn{
+    display:block;
+    margin:0 auto 24px;
+    padding:10px 28px;
+    background:var(--dark);
+    color:#fff;
+    border:none;
+    border-radius:8px;
+    font-family:var(--sans);
+    font-size:14px;
+    font-weight:700;
+    cursor:pointer;
+    letter-spacing:.02em;
+  }
+  .print-btn:hover{background:var(--dark2);}
+}
+
+@media print{
+  .print-btn{display:none;}
+}
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="window.print()">Imprimir / Guardar PDF</button>
+
+<div class="page">
+
+  <!-- ══ HEADER ══ -->
+  <div class="header">
+    <!-- Mountain silhouette -->
+    <svg class="mountain-bg" viewBox="0 0 794 120" preserveAspectRatio="none" fill="white">
+      <path d="M0,120 L0,90 L60,45 L120,80 L200,20 L280,65 L360,10 L440,55 L520,25 L600,70 L680,35 L760,75 L794,50 L794,120 Z"/>
+    </svg>
+
+    <div class="header-inner">
+      <div class="brand">
+        <div class="brand-name">Nex<span>Code97</span></div>
+        <div class="brand-tagline">Cada negocio merece su propio sistema</div>
+      </div>
+      <div class="brand-contact">
+        <p>nexcode97@gmail.com</p>
+        <p><a>+57 300 635 9008</a></p>
+        <p>nex-code97.vercel.app</p>
+      </div>
+    </div>
+
+    <div class="quote-hero">
+      <div class="quote-title-block">
+        <div class="quote-label">Propuesta Comercial</div>
+        <div class="quote-title">Sitio Web<br/><em>Profesional</em></div>
+      </div>
+      <div class="quote-meta">
+        <div class="meta-pill"><strong>N°</strong> NC-2026-031</div>
+        <div class="meta-pill"><strong>Fecha</strong> 29 de mayo, 2026</div>
+        <div class="meta-pill"><strong>Válida hasta</strong> 13 de junio, 2026</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="gradient-bar"></div>
+
+  <!-- ══ CLIENT ══ -->
+  <div class="section-client">
+    <div class="client-block">
+      <div class="client-label">Preparada para</div>
+      <div class="client-name">Hotman Guevara</div>
+      <div class="client-company">Parapente al Parque</div>
+    </div>
+    <div class="validity-block">
+      <div class="validity-row">
+        <div class="validity-label">Vigencia</div>
+        <div class="validity-val">15 días calendario</div>
+      </div>
+      <div class="validity-badge">Válida hasta el 13 de junio de 2026</div>
+    </div>
+  </div>
+
+  <!-- ══ INTRO ══ -->
+  <div class="section-intro">
+    <p class="intro-text">
+      Estimado <strong>Hotman</strong>, con gusto presentamos esta propuesta para el desarrollo del sitio web de <strong>Parapente al Parque</strong>. Nuestro objetivo es construir una presencia digital que inspire confianza, genere reservas y transmita la emoción única de volar — convirtiendo cada visitante en un cliente potencial.
+    </p>
+  </div>
+
+  <!-- ══ SERVICES ══ -->
+  <div class="section-services">
+    <div class="section-heading">Servicios incluidos</div>
+    <table class="services-table">
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Servicio</th>
+          <th>Categoría</th>
+          <th>Incluido</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td class="td-num">01</td>
+          <td class="td-service">
+            <div class="svc-name">Diseño UI/UX personalizado</div>
+            <div class="svc-desc">Diseño visual completo adaptado a la identidad de Parapente al Parque. Wireframes, paleta de colores, tipografía y prototipo navegable.</div>
+          </td>
+          <td class="td-tag"><span class="tag">Diseño</span></td>
+          <td class="td-price">✓</td>
+        </tr>
+        <tr>
+          <td class="td-num">02</td>
+          <td class="td-service">
+            <div class="svc-name">Desarrollo web responsive</div>
+            <div class="svc-desc">Sitio 100% adaptado a celular, tablet y computador. Código limpio, rápido y optimizado para todos los navegadores modernos.</div>
+          </td>
+          <td class="td-tag"><span class="tag">Desarrollo</span></td>
+          <td class="td-price">✓</td>
+        </tr>
+        <tr>
+          <td class="td-num">03</td>
+          <td class="td-service">
+            <div class="svc-name">Galería multimedia de vuelos</div>
+            <div class="svc-desc">Galería profesional de fotos y videos con lightbox, carga optimizada y diseño que hace sentir la adrenalina del parapente.</div>
+          </td>
+          <td class="td-tag"><span class="tag">Multimedia</span></td>
+          <td class="td-price">✓</td>
+        </tr>
+        <tr>
+          <td class="td-num">04</td>
+          <td class="td-service">
+            <div class="svc-name">Formulario de reservas y contacto</div>
+            <div class="svc-desc">Sistema de reservas con notificación automática al correo y WhatsApp. Incluye selección de fecha, número de personas y servicio deseado.</div>
+          </td>
+          <td class="td-tag"><span class="tag">Funcional</span></td>
+          <td class="td-price">✓</td>
+        </tr>
+        <tr>
+          <td class="td-num">05</td>
+          <td class="td-service">
+            <div class="svc-name">Sección de servicios y tarifas</div>
+            <div class="svc-desc">Presentación clara de los paquetes disponibles (bautizos, tándems, cursos) con precios, duración y qué incluye cada experiencia.</div>
+          </td>
+          <td class="td-tag"><span class="tag">Contenido</span></td>
+          <td class="td-price">✓</td>
+        </tr>
+        <tr>
+          <td class="td-num">06</td>
+          <td class="td-service">
+            <div class="svc-name">Botón WhatsApp flotante</div>
+            <div class="svc-desc">Acceso directo a WhatsApp siempre visible en pantalla. Mensaje predeterminado para agilizar la conversión de visitante a cliente.</div>
+          </td>
+          <td class="td-tag"><span class="tag">Conversión</span></td>
+          <td class="td-price">✓</td>
+        </tr>
+        <tr>
+          <td class="td-num">07</td>
+          <td class="td-service">
+            <div class="svc-name">Ubicación y mapa interactivo</div>
+            <div class="svc-desc">Google Maps integrado con la ubicación exacta del punto de salida, indicaciones de cómo llegar y opción de abrir en GPS.</div>
+          </td>
+          <td class="td-tag"><span class="tag">Funcional</span></td>
+          <td class="td-price">✓</td>
+        </tr>
+        <tr>
+          <td class="td-num">08</td>
+          <td class="td-service">
+            <div class="svc-name">Optimización SEO básica</div>
+            <div class="svc-desc">Configuración de metadatos, Open Graph (vista en redes), palabras clave para parapente en Colombia y velocidad de carga optimizada.</div>
+          </td>
+          <td class="td-tag"><span class="tag">SEO</span></td>
+          <td class="td-price">✓</td>
+        </tr>
+        <tr>
+          <td class="td-num">09</td>
+          <td class="td-service">
+            <div class="svc-name">Dominio .com — 1 año</div>
+            <div class="svc-desc">Registro del dominio personalizado para Parapente al Parque por un año completo. Configuración DNS incluida.</div>
+          </td>
+          <td class="td-tag"><span class="tag">Dominio</span></td>
+          <td class="td-price">✓</td>
+        </tr>
+        <tr>
+          <td class="td-num">10</td>
+          <td class="td-service">
+            <div class="svc-name">Hosting + SSL — 1 año</div>
+            <div class="svc-desc">Alojamiento en servidor de alta velocidad con certificado de seguridad HTTPS incluido. El sitio siempre en línea y protegido.</div>
+          </td>
+          <td class="td-tag"><span class="tag">Hosting</span></td>
+          <td class="td-price">✓</td>
+        </tr>
+        <tr>
+          <td class="td-num">11</td>
+          <td class="td-service">
+            <div class="svc-name">Integración redes sociales</div>
+            <div class="svc-desc">Enlace a Instagram, Facebook, TikTok y YouTube. Feed de Instagram opcional. Botones de compartir en experiencias.</div>
+          </td>
+          <td class="td-tag"><span class="tag">Social</span></td>
+          <td class="td-price">✓</td>
+        </tr>
+        <tr>
+          <td class="td-num">12</td>
+          <td class="td-service">
+            <div class="svc-name">Capacitación y entrega</div>
+            <div class="svc-desc">Sesión de entrega del proyecto con explicación de cómo actualizar el contenido (fotos, textos, precios) sin necesidad de programar.</div>
+          </td>
+          <td class="td-tag"><span class="tag">Soporte</span></td>
+          <td class="td-price">✓</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- ══ TOTAL ══ -->
+  <div class="section-total">
+    <div class="total-box">
+      <div class="total-left">
+        <div class="total-label">Inversión total del proyecto</div>
+        <div class="total-sublabel">Pago único · Sin mensualidades · Sin costos ocultos</div>
+      </div>
+      <div class="total-right">
+        <div class="total-amount">$2.500.000</div>
+        <div class="total-currency">Pesos colombianos (COP)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ DELIVERABLES ══ -->
+  <div class="section-deliverables">
+    <div class="section-heading">Lo que recibes al finalizar</div>
+    <div class="deliverables-grid">
+      <div class="deliv-item">
+        <div class="deliv-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+        </div>
+        <div class="deliv-text">
+          <div class="deliv-title">Sitio web 100% funcional</div>
+          <div class="deliv-sub">Publicado y listo para recibir clientes</div>
+        </div>
+      </div>
+      <div class="deliv-item">
+        <div class="deliv-icon">
+          <svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg>
+        </div>
+        <div class="deliv-text">
+          <div class="deliv-title">Adaptado a todos los dispositivos</div>
+          <div class="deliv-sub">Celular, tablet y computador</div>
+        </div>
+      </div>
+      <div class="deliv-item">
+        <div class="deliv-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+        </div>
+        <div class="deliv-text">
+          <div class="deliv-title">Entrega en 15–20 días hábiles</div>
+          <div class="deliv-sub">Desde la aprobación y pago inicial</div>
+        </div>
+      </div>
+      <div class="deliv-item">
+        <div class="deliv-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
+        <div class="deliv-text">
+          <div class="deliv-title">30 días de soporte post-entrega</div>
+          <div class="deliv-sub">Ajustes y correcciones sin costo</div>
+        </div>
+      </div>
+      <div class="deliv-item">
+        <div class="deliv-icon">
+          <svg viewBox="0 0 24 24"><path d="M14.5 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V7.5L14.5 2z"/><polyline points="14 2 14 8 20 8"/></svg>
+        </div>
+        <div class="deliv-text">
+          <div class="deliv-title">Acceso completo al código fuente</div>
+          <div class="deliv-sub">El proyecto es 100% tuyo</div>
+        </div>
+      </div>
+      <div class="deliv-item">
+        <div class="deliv-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+        </div>
+        <div class="deliv-text">
+          <div class="deliv-title">Sesión de capacitación</div>
+          <div class="deliv-sub">Aprende a gestionar tu contenido</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TERMS ══ -->
+  <div class="section-terms">
+    <div class="terms-grid">
+      <div>
+        <div class="terms-block-title">Forma de pago</div>
+        <ul class="terms-list">
+          <li><strong>50% al inicio</strong> — $1.250.000 para arrancar el proyecto</li>
+          <li><strong>50% a la entrega</strong> — $1.250.000 al publicar el sitio</li>
+          <li>Transferencia bancaria o Nequi</li>
+          <li>Se entrega factura de cada pago</li>
+        </ul>
+      </div>
+      <div>
+        <div class="terms-block-title">Condiciones generales</div>
+        <ul class="terms-list">
+          <li>El cliente provee textos, fotos y logo en alta resolución</li>
+          <li>Hasta 2 rondas de revisión sin costo adicional</li>
+          <li>Cambios fuera del alcance se cotizan por separado</li>
+          <li>Esta cotización es válida por 15 días calendario</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ SIGNATURE ══ -->
+  <div class="section-sign">
+    <div class="sign-block">
+      <div class="sign-label">Firma del cliente — Aceptación</div>
+      <div class="sign-line">
+        <div class="sign-name">Hotman Guevara</div>
+        <div class="sign-role">Parapente al Parque</div>
+      </div>
+    </div>
+    <div class="sign-block">
+      <div class="sign-label">Firma NexCode97 — Proveedor</div>
+      <div class="sign-line">
+        <div class="sign-name">NexCode97</div>
+        <div class="sign-role">Desarrollo de Software a la Medida</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ FOOTER ══ -->
+  <div class="footer">
+    <div class="footer-brand">Nex<span>Code97</span></div>
+    <div class="footer-text">nexcode97@gmail.com · +57 300 635 9008 · nex-code97.vercel.app</div>
+    <div class="footer-num">NC-2026-031</div>
+  </div>
+
+</div>
+</body>
+</html>

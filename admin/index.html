@@ -277,21 +277,25 @@ table{width:100%;border-collapse:collapse;}
 th{
   font-size:.62rem;font-weight:700;letter-spacing:.1em;
   text-transform:uppercase;color:var(--t2);
-  padding:11px 20px;text-align:left;
+  padding:11px 16px;text-align:left;
   border-bottom:1px solid var(--border);
   background:rgba(0,0,0,.2);white-space:nowrap;
 }
 
 td{
-  font-size:.82rem;padding:12px 20px;
+  font-size:.83rem;padding:13px 16px;
   border-bottom:1px solid var(--border);
   color:var(--text);white-space:nowrap;
   transition:background 100ms ease-out;
+  vertical-align:middle;
 }
+
+/* Columna contacto — nombre siempre en 1 línea */
+td.td-contact{min-width:190px;}
+td.td-contact strong{display:block;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;}
 td.td-wrap{white-space:normal;max-width:200px;}
-td .sub{display:block;font-size:.69rem;color:var(--t2);margin-top:2px;}
+td .sub{display:block;font-size:.7rem;color:var(--t2);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:200px;}
 tr:last-child td{border-bottom:none;}
-/* Row hover: tinte púrpura visible */
 tr:hover td{background:rgba(124,58,237,.05);}
 
 .td-actions{display:flex;gap:6px;}
@@ -742,8 +746,8 @@ input[type="date"]{cursor:pointer;}
           <button class="filter-btn" data-filter="Cerrado">Cerrado</button>
           <button class="filter-btn" data-filter="Perdido">Perdido</button>
         </div>
-        <div style="padding:0 20px 12px;">
-          <select id="leads-filter-depto" class="form-select" style="height:34px;font-size:13px;padding:0 10px;width:220px;">
+        <div style="padding:0 22px 14px;">
+          <select id="leads-filter-depto" class="form-select" style="height:36px;font-size:.78rem;padding:0 10px;width:240px;border-radius:99px;">
             <option value="">Todos los departamentos</option>
             <option>Amazonas</option><option>Antioquia</option><option>Arauca</option>
             <option>Atlántico</option><option>Bolívar</option><option>Boyacá</option>
@@ -1526,7 +1530,7 @@ function renderLeads() {
   const tbody = document.getElementById('leads-body');
   tbody.innerHTML = list.length ? list.map(l=>`
     <tr class="clickable" onclick="editLead('${s(l.id)}')">
-      <td class="td-wrap">
+      <td class="td-contact">
         <strong>${s(l.nombre)}</strong>
         ${l.empresa ? `<span class="sub">${s(l.empresa)}</span>` : ''}
         ${l.email ? `<span class="sub">${s(l.email)}</span>` : ''}

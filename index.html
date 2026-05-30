@@ -197,16 +197,17 @@ section{position:relative;z-index:2;}
 .s-title{font-size:clamp(1.7rem,3vw,2.5rem);font-weight:800;letter-spacing:-.04em;color:#fff;margin-bottom:14px;}
 .s-sub{font-size:.95rem;color:var(--t2);max-width:480px;line-height:1.75;font-weight:400;}
 
-/* ── BRANDS STATIC ───────────────────────────── */
-#brands{padding:52px 0;}
-.brands-label{text-align:center;font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t2);margin-bottom:36px;}
-.brands-grid{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px 0;max-width:900px;margin:0 auto;padding:0 clamp(20px,5vw,56px);}
-.ticker-item{display:flex;align-items:center;gap:14px;padding:12px 40px;border-right:1px solid var(--border);}
-.ticker-item:last-child{border-right:none;}
-.ticker-item img{height:45px;width:auto;max-width:140px;object-fit:contain;filter:grayscale(1);opacity:0.5;transition:filter .25s,opacity .25s;}
-.ticker-item:hover img{filter:grayscale(0);opacity:1;}
-.ticker-item span{font-size:.85rem;font-weight:700;color:var(--t2);white-space:nowrap;transition:color .25s;}
-.ticker-item:hover span{color:var(--text);}
+/* ── BRANDS GRID ───────────────────────────── */
+#brands{padding:64px 0;}
+.brands-label{text-align:center;font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t2);margin-bottom:32px;}
+.brands-card{max-width:960px;margin:0 auto;padding:0 clamp(20px,5vw,56px);}
+.brands-grid{display:grid;grid-template-columns:repeat(4,1fr);border:1px solid var(--border);border-radius:var(--rl);overflow:hidden;}
+.brand-cell{display:flex;align-items:center;justify-content:center;padding:36px 28px;border-right:1px solid var(--border);border-bottom:1px solid var(--border);cursor:default;transition:background .2s;}
+.brand-cell:hover{background:rgba(255,255,255,0.04);}
+.brand-cell:nth-child(4n){border-right:none;}
+.brand-cell:nth-last-child(-n+4){border-bottom:none;}
+.brand-cell img{height:48px;width:auto;max-width:130px;object-fit:contain;filter:grayscale(1);opacity:0.45;transition:filter .3s ease,opacity .3s ease;}
+.brand-cell:hover img{filter:grayscale(0);opacity:1;}
 
 /* ── SERVICES ────────────────────────────────── */
 #services{padding:100px 0;}
@@ -561,26 +562,24 @@ footer{border-top:1px solid var(--border);padding:28px clamp(20px,5vw,56px);disp
 
 <div class="divider"></div>
 
-<!-- ═══ BRANDS STATIC ═══ -->
+<!-- ═══ BRANDS GRID ═══ -->
 <section id="brands">
   <p class="brands-label">Empresas que confían en NexCode97</p>
-  <div class="brands-grid">
-      <div class="ticker-item">
+  <div class="brands-card">
+    <div class="brands-grid">
+      <div class="brand-cell">
         <img src="assets/logo-ntrl.png" alt="Natural Ropa Deportiva"/>
-        <span>Natural Ropa Deportiva</span>
       </div>
-      <div class="ticker-item">
+      <div class="brand-cell">
         <img src="assets/logo-gvr.png" alt="Guevara Sport"/>
-        <span>Guevara Sport</span>
       </div>
-      <div class="ticker-item">
+      <div class="brand-cell">
         <img src="assets/VeloClub - Icono.png" alt="VeloClub"/>
-        <span>VeloClub</span>
       </div>
-      <div class="ticker-item">
+      <div class="brand-cell">
         <img src="assets/logo-grupo500.png" alt="Grupo 500"/>
-        <span>Grupo 500</span>
       </div>
+    </div>
   </div>
 </section>
 

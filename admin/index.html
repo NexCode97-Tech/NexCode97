@@ -9,6 +9,7 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
@@ -343,42 +344,63 @@ tr:hover td{background:rgba(124,58,237,.05);}
 .filter-btn.active{border-color:var(--bv);color:var(--vl);background:rgba(124,58,237,.09);}
 
 /* ════════════════════════════════
-   MODAL — backdrop blur real
+   DRAWER — panel lateral deslizante
+   Reemplaza modales. Más contexto, menos disruptivo.
 ════════════════════════════════ */
-.modal-overlay{
-  position:fixed;inset:0;
-  background:rgba(0,0,0,.7);
-  backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);
-  z-index:500;display:none;
-  align-items:center;justify-content:center;padding:20px;
+@keyframes drawerIn{from{transform:translateX(100%);}to{transform:translateX(0);}}
+@keyframes overlayIn{from{opacity:0;}to{opacity:1;}}
+
+.drawer-overlay{
+  position:fixed;inset:0;z-index:500;
+  display:none;
 }
-.modal-overlay.open{display:flex;animation:fadeIn 180ms ease-out both;}
-.modal{
+.drawer-overlay.open{display:block;}
+
+.drawer-bg{
+  position:absolute;inset:0;
+  background:rgba(0,0,0,.45);
+  backdrop-filter:blur(4px);-webkit-backdrop-filter:blur(4px);
+  animation:overlayIn 200ms ease-out both;
+  cursor:pointer;
+}
+
+.drawer{
+  position:absolute;top:0;right:0;bottom:0;
+  width:480px;max-width:92vw;
   background:var(--bg1);
-  border:1px solid rgba(124,58,237,.15);
-  border-radius:20px;width:100%;max-width:520px;
-  max-height:90vh;overflow-y:auto;
-  box-shadow:0 40px 100px rgba(0,0,0,.7),0 0 0 1px rgba(124,58,237,.08),0 0 40px rgba(124,58,237,.06);
-  animation:modalIn 220ms var(--ease) both;
+  border-left:1px solid rgba(124,58,237,.15);
+  display:flex;flex-direction:column;
+  box-shadow:-24px 0 80px rgba(0,0,0,.6);
+  animation:drawerIn 280ms var(--ease) both;
 }
-.modal-header{
+
+.drawer-header{
   display:flex;align-items:center;justify-content:space-between;
-  padding:22px 28px;border-bottom:1px solid var(--border);
+  padding:22px 28px;
+  border-bottom:1px solid var(--border);
+  flex-shrink:0;
 }
-.modal-title{font-size:.97rem;font-weight:800;letter-spacing:-.02em;}
-.modal-close{
+.drawer-title{font-size:1rem;font-weight:800;letter-spacing:-.02em;}
+.drawer-close{
   background:rgba(255,255,255,.06);border:1px solid var(--border);
   color:var(--t2);cursor:pointer;
   width:30px;height:30px;border-radius:8px;
   display:flex;align-items:center;justify-content:center;font-size:.88rem;
   transition:color 100ms ease-out,background 100ms ease-out;
+  flex-shrink:0;
 }
-.modal-close:hover{color:var(--text);background:rgba(255,255,255,.1);}
-.modal-body{padding:28px;}
-.modal-footer{
+.drawer-close:hover{color:var(--text);background:rgba(255,255,255,.1);}
+
+.drawer-body{flex:1;padding:28px;overflow-y:auto;}
+.drawer-footer{
   padding:18px 28px;border-top:1px solid var(--border);
-  display:flex;justify-content:flex-end;gap:8px;
+  display:flex;justify-content:flex-end;gap:8px;flex-shrink:0;
 }
+
+/* Compatibilidad — mantener clases modal como alias de drawer */
+.modal-overlay{display:none;}
+.modal-overlay.open{display:none !important;}
+
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:13px;}
 .form-select,.form-textarea{
   width:100%;background:rgba(255,255,255,.04);
@@ -407,6 +429,44 @@ tr:hover td{background:rgba(124,58,237,.05);}
 }
 .btn-save:hover{transform:translateY(-1px);box-shadow:0 7px 20px rgba(124,58,237,.42);}
 .btn-save:active{transform:scale(.97);}
+
+/* Filas clickeables */
+tbody tr.clickable{cursor:pointer;}
+tbody tr.clickable:hover td{background:rgba(124,58,237,.07);}
+
+/* Dashboard chart */
+.dash-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
+.chart-card{
+  background:var(--bg1);border:1px solid var(--border);
+  border-radius:14px;padding:20px;grid-column:1/-1;
+}
+.chart-title{font-size:.85rem;font-weight:700;margin-bottom:16px;letter-spacing:-.01em;}
+.chart-wrap{position:relative;height:180px;}
+
+/* Confirm delete — inline, no browser dialog */
+.confirm-del{
+  position:fixed;inset:0;z-index:600;
+  display:none;align-items:center;justify-content:center;
+  background:rgba(0,0,0,.6);backdrop-filter:blur(6px);
+}
+.confirm-del.open{display:flex;}
+.confirm-box{
+  background:var(--bg1);border:1px solid rgba(248,113,113,.2);
+  border-radius:16px;padding:28px 32px;max-width:360px;width:100%;
+  text-align:center;animation:modalIn 200ms var(--ease) both;
+}
+.confirm-box p{font-size:.9rem;color:var(--text);margin-bottom:6px;font-weight:600;}
+.confirm-box small{font-size:.78rem;color:var(--t2);}
+.confirm-actions{display:flex;gap:8px;justify-content:center;margin-top:20px;}
+.btn-confirm-del{
+  background:#dc2626;color:#fff;border:none;
+  border-radius:8px;padding:9px 20px;
+  font-family:var(--sans);font-size:.83rem;font-weight:700;cursor:pointer;
+  transition:transform 100ms ease-out;
+}
+.btn-confirm-del:hover{transform:translateY(-1px);}
+.btn-confirm-del:active{transform:scale(.97);}
+@keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(8px);}to{opacity:1;transform:none;}}
 
 /* ════════════════════════════════
    DASHBOARD
@@ -528,8 +588,10 @@ tr:hover td{background:rgba(124,58,237,.05);}
     <!-- DASHBOARD -->
     <div class="page active" id="page-dashboard">
       <div class="page-header">
-        <div class="page-title">Dashboard</div>
-        <div class="page-sub">Resumen general del negocio</div>
+        <div>
+          <div class="page-title">Dashboard</div>
+          <div class="page-sub">Resumen general del negocio</div>
+        </div>
       </div>
       <div class="stats-grid" id="dash-stats">
         <div class="stat-card stat-cyan"><div class="stat-label">Total Leads</div><div class="stat-val" id="ds-leads">—</div><div class="stat-hint">prospectos registrados</div></div>
@@ -537,6 +599,13 @@ tr:hover td{background:rgba(124,58,237,.05);}
         <div class="stat-card stat-green"><div class="stat-label">Ingresos totales</div><div class="stat-val" id="ds-ingresos">—</div><div class="stat-hint">acumulado</div></div>
         <div class="stat-card stat-yellow"><div class="stat-label">Por cobrar</div><div class="stat-val" id="ds-cobrar">—</div><div class="stat-hint">pendiente de pago</div></div>
       </div>
+
+      <!-- Gráfica de ingresos -->
+      <div class="chart-card" style="margin-bottom:16px;">
+        <div class="chart-title">Ingresos vs Gastos — últimos 6 meses</div>
+        <div class="chart-wrap"><canvas id="chart-ingresos"></canvas></div>
+      </div>
+
       <div class="dash-grid">
         <div class="recent-card">
           <div class="recent-head">Últimos leads</div>
@@ -545,7 +614,7 @@ tr:hover td{background:rgba(124,58,237,.05);}
         </div>
         <div class="recent-card">
           <div class="recent-head">Proyectos recientes</div>
-          <table><thead><tr><th>Proyecto</th><th>Estado</th><th>Cliente</th></tr></thead>
+          <table><thead><tr><th>Proyecto</th><th>Estado</th><th>Por cobrar</th></tr></thead>
           <tbody id="dash-proj-body"><tr class="empty-row"><td colspan="3">Cargando...</td></tr></tbody></table>
         </div>
       </div>
@@ -655,14 +724,15 @@ tr:hover td{background:rgba(124,58,237,.05);}
   </main>
 </div>
 
-<!-- ═══ MODAL LEAD ═══ -->
-<div class="modal-overlay" id="modal-lead">
-  <div class="modal">
-    <div class="modal-header">
-      <span class="modal-title" id="modal-lead-title">Nuevo lead</span>
-      <button class="modal-close" data-close="modal-lead">✕</button>
+<!-- ═══ DRAWER LEAD ═══ -->
+<div class="drawer-overlay" id="modal-lead">
+  <div class="drawer-bg" data-close="modal-lead"></div>
+  <div class="drawer">
+    <div class="drawer-header">
+      <span class="drawer-title" id="modal-lead-title">Nuevo lead</span>
+      <button class="drawer-close" data-close="modal-lead">✕</button>
     </div>
-    <div class="modal-body">
+    <div class="drawer-body">
       <input type="hidden" id="lead-id"/>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Nombre *</label><input type="text" id="lead-nombre" class="form-input" placeholder="Juan García"/></div>
@@ -728,21 +798,22 @@ tr:hover td{background:rgba(124,58,237,.05);}
       </div>
       <div class="form-group"><label class="form-label">Notas</label><textarea id="lead-notas" class="form-textarea" placeholder="Detalles del prospecto..."></textarea></div>
     </div>
-    <div class="modal-footer">
+    <div class="drawer-footer">
       <button class="btn-cancel" data-close="modal-lead">Cancelar</button>
       <button class="btn-save" id="btn-save-lead">Guardar</button>
     </div>
   </div>
 </div>
 
-<!-- ═══ MODAL PROYECTO ═══ -->
-<div class="modal-overlay" id="modal-proyecto">
-  <div class="modal">
-    <div class="modal-header">
-      <span class="modal-title" id="modal-proy-title">Nuevo proyecto</span>
-      <button class="modal-close" data-close="modal-proyecto">✕</button>
+<!-- ═══ DRAWER PROYECTO ═══ -->
+<div class="drawer-overlay" id="modal-proyecto">
+  <div class="drawer-bg" data-close="modal-proyecto"></div>
+  <div class="drawer">
+    <div class="drawer-header">
+      <span class="drawer-title" id="modal-proy-title">Nuevo proyecto</span>
+      <button class="drawer-close" data-close="modal-proyecto">✕</button>
     </div>
-    <div class="modal-body">
+    <div class="drawer-body">
       <input type="hidden" id="proy-id"/>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Nombre *</label><input type="text" id="proy-nombre" class="form-input" placeholder="App para cliente X"/></div>
@@ -790,21 +861,22 @@ tr:hover td{background:rgba(124,58,237,.05);}
       </div>
       <div class="form-group"><label class="form-label">Notas</label><textarea id="proy-notas" class="form-textarea" placeholder="Detalles del proyecto..."></textarea></div>
     </div>
-    <div class="modal-footer">
+    <div class="drawer-footer">
       <button class="btn-cancel" data-close="modal-proyecto">Cancelar</button>
       <button class="btn-save" id="btn-save-proy">Guardar</button>
     </div>
   </div>
 </div>
 
-<!-- ═══ MODAL FINANZA ═══ -->
-<div class="modal-overlay" id="modal-fin">
-  <div class="modal">
-    <div class="modal-header">
-      <span class="modal-title" id="modal-fin-title">Nuevo movimiento</span>
-      <button class="modal-close" data-close="modal-fin">✕</button>
+<!-- ═══ DRAWER FINANZA ═══ -->
+<div class="drawer-overlay" id="modal-fin">
+  <div class="drawer-bg" data-close="modal-fin"></div>
+  <div class="drawer">
+    <div class="drawer-header">
+      <span class="drawer-title" id="modal-fin-title">Nuevo movimiento</span>
+      <button class="drawer-close" data-close="modal-fin">✕</button>
     </div>
-    <div class="modal-body">
+    <div class="drawer-body">
       <input type="hidden" id="fin-id"/>
       <div class="form-row">
         <div class="form-group"><label class="form-label">Tipo *</label>
@@ -822,9 +894,21 @@ tr:hover td{background:rgba(124,58,237,.05);}
         </div>
       </div>
     </div>
-    <div class="modal-footer">
+    <div class="drawer-footer">
       <button class="btn-cancel" data-close="modal-fin">Cancelar</button>
       <button class="btn-save" id="btn-save-fin">Guardar</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══ CONFIRM DELETE ═══ -->
+<div class="confirm-del" id="confirm-del">
+  <div class="confirm-box">
+    <p id="confirm-del-msg">¿Eliminar este registro?</p>
+    <small>Esta acción no se puede deshacer.</small>
+    <div class="confirm-actions">
+      <button class="btn-cancel" id="confirm-del-cancel">Cancelar</button>
+      <button class="btn-confirm-del" id="confirm-del-ok">Sí, eliminar</button>
     </div>
   </div>
 </div>
@@ -1006,15 +1090,50 @@ document.querySelectorAll('.nav-btn[data-page]').forEach(btn => {
   });
 });
 
-// ── MODALS ────────────────────────────────────────
+// ── DRAWERS ───────────────────────────────────────
 document.querySelectorAll('[data-close]').forEach(btn => {
   btn.addEventListener('click', () => closeModal(btn.dataset.close));
 });
-document.querySelectorAll('.modal-overlay').forEach(m => {
-  m.addEventListener('click', e => { if (e.target === m) closeModal(m.id); });
+function openModal(id) {
+  const el = document.getElementById(id);
+  el.classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+function closeModal(id) {
+  const el = document.getElementById(id);
+  if (!el) return;
+  // Animar salida del drawer
+  const drawer = el.querySelector('.drawer');
+  if (drawer) {
+    drawer.style.animation = 'none';
+    drawer.style.transform = 'translateX(100%)';
+    drawer.style.transition = 'transform 220ms cubic-bezier(0.55,0,1,0.45)';
+    setTimeout(() => {
+      el.classList.remove('open');
+      drawer.style.transform = '';
+      drawer.style.transition = '';
+    }, 210);
+  } else {
+    el.classList.remove('open');
+  }
+  document.body.style.overflow = '';
+}
+
+// ── CONFIRM DELETE ────────────────────────────────
+let _pendingDeleteFn = null;
+function confirmDelete(msg, fn) {
+  _pendingDeleteFn = fn;
+  document.getElementById('confirm-del-msg').textContent = msg;
+  document.getElementById('confirm-del').classList.add('open');
+}
+document.getElementById('confirm-del-cancel').addEventListener('click', () => {
+  document.getElementById('confirm-del').classList.remove('open');
+  _pendingDeleteFn = null;
 });
-function openModal(id) { document.getElementById(id).classList.add('open'); }
-function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+document.getElementById('confirm-del-ok').addEventListener('click', async () => {
+  document.getElementById('confirm-del').classList.remove('open');
+  if (_pendingDeleteFn) { await _pendingDeleteFn(); _pendingDeleteFn = null; }
+});
 
 // ── HELPERS ───────────────────────────────────────
 const fmt = n => n ? '$' + Number(n).toLocaleString('es-CO') : '$0';
@@ -1066,14 +1185,84 @@ async function loadDashboard() {
   // Recent leads
   const lb = document.getElementById('dash-leads-body');
   lb.innerHTML = cachedLeads.slice(0,5).map(l=>`
-    <tr><td>${s(l.nombre)}</td><td>${badgeEstado(l.estado)}</td><td>${s(l.fuente)||'—'}</td></tr>
+    <tr class="clickable" onclick="editLead('${s(l.id)}')">
+      <td><strong>${s(l.nombre)}</strong>${l.empresa?`<span class="sub">${s(l.empresa)}</span>`:''}</td>
+      <td>${badgeEstado(l.estado)}</td>
+      <td>${s(l.fuente)||'—'}</td>
+    </tr>
   `).join('') || '<tr class="empty-row"><td colspan="3">Sin leads aún</td></tr>';
 
   // Recent proyectos
   const pb = document.getElementById('dash-proj-body');
   pb.innerHTML = cachedProyectos.slice(0,5).map(p=>`
-    <tr><td>${s(p.nombre)}</td><td>${badgeEstado(p.estado)}</td><td>${s(p.cliente)||'—'}</td></tr>
+    <tr class="clickable" onclick="editProy('${s(p.id)}')">
+      <td><strong>${s(p.nombre)}</strong>${p.cliente?`<span class="sub">${s(p.cliente)}</span>`:''}</td>
+      <td>${badgeEstado(p.estado)}</td>
+      <td style="color:${(p.precio-p.pagado)>0?'var(--yellow)':'var(--green)'};font-family:var(--mono);font-size:.8rem;">${fmt((p.precio||0)-(p.pagado||0))}</td>
+    </tr>
   `).join('') || '<tr class="empty-row"><td colspan="3">Sin proyectos aún</td></tr>';
+
+  // Gráfica ingresos vs gastos últimos 6 meses
+  renderChart();
+}
+
+let _chart = null;
+function renderChart() {
+  const ctx = document.getElementById('chart-ingresos');
+  if (!ctx) return;
+
+  // Construir meses
+  const meses = [];
+  const now = new Date();
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date(now.getFullYear(), now.getMonth() - i, 1);
+    meses.push({ label: d.toLocaleDateString('es-CO',{month:'short',year:'2-digit'}), year: d.getFullYear(), month: d.getMonth() });
+  }
+
+  const ingData = meses.map(m => cachedFinanzas
+    .filter(f => f.tipo==='Ingreso' && f.fecha && new Date(f.fecha).getFullYear()===m.year && new Date(f.fecha).getMonth()===m.month)
+    .reduce((s,f)=>s+(f.monto||0),0));
+
+  const gastData = meses.map(m => cachedFinanzas
+    .filter(f => f.tipo==='Gasto' && f.fecha && new Date(f.fecha).getFullYear()===m.year && new Date(f.fecha).getMonth()===m.month)
+    .reduce((s,f)=>s+(f.monto||0),0));
+
+  if (_chart) _chart.destroy();
+  _chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+      labels: meses.map(m=>m.label),
+      datasets: [
+        {
+          label: 'Ingresos',
+          data: ingData,
+          backgroundColor: 'rgba(74,222,128,.25)',
+          borderColor: '#4ade80',
+          borderWidth: 1.5,
+          borderRadius: 6,
+        },
+        {
+          label: 'Gastos',
+          data: gastData,
+          backgroundColor: 'rgba(248,113,113,.2)',
+          borderColor: '#f87171',
+          borderWidth: 1.5,
+          borderRadius: 6,
+        }
+      ]
+    },
+    options: {
+      responsive: true, maintainAspectRatio: false,
+      plugins: {
+        legend: { labels: { color: '#72768e', font: { family: 'Plus Jakarta Sans', size: 11 } } },
+        tooltip: { callbacks: { label: ctx => ' $' + ctx.parsed.y.toLocaleString('es-CO') } }
+      },
+      scales: {
+        x: { grid: { color: 'rgba(255,255,255,.04)' }, ticks: { color: '#72768e', font: { family: 'Plus Jakarta Sans', size: 11 } } },
+        y: { grid: { color: 'rgba(255,255,255,.04)' }, ticks: { color: '#72768e', font: { family: 'Plus Jakarta Sans', size: 11 }, callback: v => '$'+Number(v).toLocaleString('es-CO') } }
+      }
+    }
+  });
 }
 
 // ── LEADS ─────────────────────────────────────────
@@ -1091,7 +1280,7 @@ function renderLeads() {
   if (leadsFilterDepto) list = list.filter(l=>l.departamento===leadsFilterDepto);
   const tbody = document.getElementById('leads-body');
   tbody.innerHTML = list.length ? list.map(l=>`
-    <tr>
+    <tr class="clickable" onclick="editLead('${s(l.id)}')">
       <td class="td-wrap">
         <strong>${s(l.nombre)}</strong>
         ${l.empresa ? `<span class="sub">${s(l.empresa)}</span>` : ''}
@@ -1170,9 +1359,11 @@ function editLead(id) {
 }
 
 async function deleteLead(id) {
-  if (!confirm('¿Eliminar este lead?')) return;
-  await sb.from('leads').delete().eq('id', id);
-  await loadLeads(); await loadDashboard();
+  const l = cachedLeads.find(x=>x.id===id);
+  confirmDelete(`¿Eliminar el lead "${l?.nombre||'este registro'}"?`, async () => {
+    await sb.from('leads').delete().eq('id', id);
+    await loadLeads(); await loadDashboard();
+  });
 }
 
 document.getElementById('btn-save-lead').addEventListener('click', async () => {
@@ -1220,7 +1411,7 @@ function renderProyectos() {
   const list = proyFilter === 'todos' ? cachedProyectos : cachedProyectos.filter(p=>p.estado===proyFilter);
   const tbody = document.getElementById('proyectos-body');
   tbody.innerHTML = list.length ? list.map(p=>`
-    <tr>
+    <tr class="clickable" onclick="editProy('${s(p.id)}')">
       <td><strong>${s(p.nombre)}</strong></td>
       <td>${s(p.cliente)||'—'}</td>
       <td>${badgeEstado(p.estado)}</td>
@@ -1283,9 +1474,11 @@ function editProy(id) {
 }
 
 async function deleteProy(id) {
-  if (!confirm('¿Eliminar este proyecto?')) return;
-  await sb.from('proyectos').delete().eq('id', id);
-  await loadProyectos(); await loadDashboard();
+  const p = cachedProyectos.find(x=>x.id===id);
+  confirmDelete(`¿Eliminar el proyecto "${p?.nombre||'este registro'}"?`, async () => {
+    await sb.from('proyectos').delete().eq('id', id);
+    await loadProyectos(); await loadDashboard();
+  });
 }
 
 document.getElementById('btn-save-proy').addEventListener('click', async () => {

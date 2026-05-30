@@ -545,14 +545,20 @@ tbody tr.clickable:hover td{background:rgba(124,58,237,.07);}
 input[type="date"]{cursor:pointer;}
 
 /* ════════════════════════════════
-   TOM SELECT — override estilos
+   TOM SELECT — resetear completamente
 ════════════════════════════════ */
-.ts-wrapper{width:100% !important;}
+.ts-wrapper{width:100% !important;padding:0 !important;}
+.ts-wrapper *{box-sizing:border-box !important;}
+
+/* El wrapper exterior NO debe tener borde/fondo — lo pone el ts-control */
+.ts-wrapper.single .ts-control,
+.ts-wrapper.multi .ts-control,
 .ts-control{
+  width:100% !important;
   background:rgba(255,255,255,.04) !important;
   border:1px solid rgba(255,255,255,.07) !important;
   border-radius:9px !important;
-  padding:9px 13px !important;
+  padding:11px 13px !important;
   font-family:var(--sans) !important;
   font-size:.87rem !important;
   line-height:1.4 !important;
@@ -560,54 +566,91 @@ input[type="date"]{cursor:pointer;}
   box-shadow:none !important;
   min-height:unset !important;
   cursor:pointer !important;
+  display:flex !important;
+  align-items:center !important;
+  flex-wrap:nowrap !important;
+  gap:0 !important;
 }
-.ts-control .item{
-  font-size:.87rem !important;line-height:1.4 !important;
-  background:none !important;border:none !important;
-  padding:0 !important;margin:0 !important;
-  color:var(--text) !important;
-}
-.ts-control input{font-size:.87rem !important;line-height:1.4 !important;}
+
+/* Estado focus */
 .ts-wrapper.focus .ts-control{
   border-color:rgba(124,58,237,.5) !important;
   box-shadow:0 0 0 3px rgba(124,58,237,.1) !important;
+  outline:none !important;
 }
+
+/* El item seleccionado — sin caja, sin fondo */
+.ts-control .item{
+  background:none !important;
+  border:none !important;
+  border-radius:0 !important;
+  padding:0 !important;
+  margin:0 !important;
+  font-size:.87rem !important;
+  line-height:1.4 !important;
+  color:var(--text) !important;
+  display:inline !important;
+}
+
+/* Input de búsqueda dentro */
+.ts-control input{
+  color:var(--text) !important;
+  font-family:var(--sans) !important;
+  font-size:.87rem !important;
+  line-height:1.4 !important;
+  background:none !important;
+  border:none !important;
+  outline:none !important;
+  padding:0 !important;
+  margin:0 !important;
+  flex:1 !important;
+}
+.ts-control input::placeholder,.ts-wrapper .placeholder{
+  color:var(--t2) !important;
+  font-size:.87rem !important;
+}
+
+/* Flecha */
+.ts-wrapper.single .ts-control::after{
+  border-color:var(--t2) transparent transparent !important;
+  margin-left:auto !important;
+}
+
+/* Dropdown */
 .ts-dropdown{
   background:var(--bg2) !important;
   border:1px solid rgba(124,58,237,.15) !important;
   border-radius:10px !important;
-  box-shadow:0 16px 48px rgba(0,0,0,.5) !important;
+  box-shadow:0 16px 48px rgba(0,0,0,.55) !important;
   font-family:var(--sans) !important;
-  font-size:.85rem !important;
   margin-top:4px !important;
   overflow:hidden !important;
+  z-index:9999 !important;
 }
+.ts-dropdown .ts-dropdown-content{padding:4px !important;}
 .ts-dropdown .option{
   color:var(--text) !important;
-  padding:9px 14px !important;
+  padding:9px 12px !important;
   font-size:.85rem !important;
   line-height:1.4 !important;
   cursor:pointer !important;
+  border-radius:7px !important;
   transition:background 100ms ease-out !important;
 }
-.ts-dropdown .option:hover,.ts-dropdown .option.active{
+.ts-dropdown .option:hover,
+.ts-dropdown .option.active{
   background:rgba(124,58,237,.15) !important;
   color:#fff !important;
 }
 .ts-dropdown .option.selected{
-  background:rgba(124,58,237,.1) !important;
+  background:rgba(124,58,237,.08) !important;
   color:var(--vl) !important;
 }
 .ts-dropdown .optgroup-header{
-  font-size:.65rem !important;font-weight:700 !important;
+  font-size:.63rem !important;font-weight:700 !important;
   letter-spacing:.1em !important;text-transform:uppercase !important;
-  color:var(--t3) !important;padding:10px 14px 4px !important;
+  color:var(--t3) !important;padding:10px 12px 4px !important;
 }
-.ts-control input{color:var(--text) !important;font-family:var(--sans) !important;font-size:.87rem !important;}
-.ts-control input::placeholder{color:var(--t2) !important;font-size:.87rem !important;}
-.ts-wrapper .placeholder{color:var(--t2) !important;font-size:.87rem !important;}
-/* Ocultar la flecha nativa del select ya que Tom Select pone la suya */
-.ts-wrapper .ts-control::after{border-color:var(--t2) transparent transparent !important;}
 
 /* ════════════════════════════════
    A11Y

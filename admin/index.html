@@ -552,14 +552,17 @@ input[type="date"]{cursor:pointer;}
   background:rgba(255,255,255,.04) !important;
   border:1px solid rgba(255,255,255,.07) !important;
   border-radius:9px !important;
-  padding:10px 13px !important;
+  padding:9px 13px !important;
   font-family:var(--sans) !important;
   font-size:.87rem !important;
+  line-height:1.4 !important;
   color:var(--text) !important;
   box-shadow:none !important;
   min-height:unset !important;
   cursor:pointer !important;
 }
+.ts-control .item{font-size:.87rem !important;line-height:1.4 !important;}
+.ts-control input{font-size:.87rem !important;line-height:1.4 !important;}
 .ts-wrapper.focus .ts-control{
   border-color:rgba(124,58,237,.5) !important;
   box-shadow:0 0 0 3px rgba(124,58,237,.1) !important;
@@ -576,7 +579,9 @@ input[type="date"]{cursor:pointer;}
 }
 .ts-dropdown .option{
   color:var(--text) !important;
-  padding:10px 14px !important;
+  padding:9px 14px !important;
+  font-size:.85rem !important;
+  line-height:1.4 !important;
   cursor:pointer !important;
   transition:background 100ms ease-out !important;
 }
@@ -593,8 +598,9 @@ input[type="date"]{cursor:pointer;}
   letter-spacing:.1em !important;text-transform:uppercase !important;
   color:var(--t3) !important;padding:10px 14px 4px !important;
 }
-.ts-control input{color:var(--text) !important;font-family:var(--sans) !important;}
-.ts-control input::placeholder{color:var(--t2) !important;}
+.ts-control input{color:var(--text) !important;font-family:var(--sans) !important;font-size:.87rem !important;}
+.ts-control input::placeholder{color:var(--t2) !important;font-size:.87rem !important;}
+.ts-wrapper .placeholder{color:var(--t2) !important;font-size:.87rem !important;}
 /* Ocultar la flecha nativa del select ya que Tom Select pone la suya */
 .ts-wrapper .ts-control::after{border-color:var(--t2) transparent transparent !important;}
 

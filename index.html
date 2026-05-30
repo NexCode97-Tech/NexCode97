@@ -197,21 +197,16 @@ section{position:relative;z-index:2;}
 .s-title{font-size:clamp(1.7rem,3vw,2.5rem);font-weight:800;letter-spacing:-.04em;color:#fff;margin-bottom:14px;}
 .s-sub{font-size:.95rem;color:var(--t2);max-width:480px;line-height:1.75;font-weight:400;}
 
-/* ── BRANDS TICKER ───────────────────────────── */
-#brands{padding:52px 0;overflow:hidden;}
-.brands-label{text-align:center;font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t2);margin-bottom:32px;}
-.ticker-wrap{overflow:hidden;position:relative;}
-.ticker-wrap::before,.ticker-wrap::after{content:'';position:absolute;top:0;bottom:0;width:160px;z-index:2;pointer-events:none;}
-.ticker-wrap::before{left:0;background:linear-gradient(90deg,var(--bg) 0%,transparent 100%);}
-.ticker-wrap::after{right:0;background:linear-gradient(-90deg,var(--bg) 0%,transparent 100%);}
-.ticker-track{display:flex;align-items:center;width:max-content;animation:ticker 22s linear infinite;}
-.ticker-track:hover{animation-play-state:paused;}
-.ticker-item{display:flex;align-items:center;gap:14px;padding:12px 52px;border-right:1px solid var(--border);}
+/* ── BRANDS STATIC ───────────────────────────── */
+#brands{padding:52px 0;}
+.brands-label{text-align:center;font-size:.65rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--t2);margin-bottom:36px;}
+.brands-grid{display:flex;align-items:center;justify-content:center;flex-wrap:wrap;gap:8px 0;max-width:900px;margin:0 auto;padding:0 clamp(20px,5vw,56px);}
+.ticker-item{display:flex;align-items:center;gap:14px;padding:12px 40px;border-right:1px solid var(--border);}
+.ticker-item:last-child{border-right:none;}
 .ticker-item img{height:45px;width:auto;max-width:140px;object-fit:contain;filter:grayscale(1);opacity:0.5;transition:filter .25s,opacity .25s;}
 .ticker-item:hover img{filter:grayscale(0);opacity:1;}
 .ticker-item span{font-size:.85rem;font-weight:700;color:var(--t2);white-space:nowrap;transition:color .25s;}
 .ticker-item:hover span{color:var(--text);}
-@keyframes ticker{0%{transform:translateX(0);}100%{transform:translateX(-50%);}}
 
 /* ── SERVICES ────────────────────────────────── */
 #services{padding:100px 0;}
@@ -566,12 +561,10 @@ footer{border-top:1px solid var(--border);padding:28px clamp(20px,5vw,56px);disp
 
 <div class="divider"></div>
 
-<!-- ═══ BRANDS TICKER ═══ -->
+<!-- ═══ BRANDS STATIC ═══ -->
 <section id="brands">
   <p class="brands-label">Empresas que confían en NexCode97</p>
-  <div class="ticker-wrap">
-    <div class="ticker-track">
-      <!-- set 1 -->
+  <div class="brands-grid">
       <div class="ticker-item">
         <img src="assets/logo-ntrl.png" alt="Natural Ropa Deportiva"/>
         <span>Natural Ropa Deportiva</span>
@@ -588,24 +581,6 @@ footer{border-top:1px solid var(--border);padding:28px clamp(20px,5vw,56px);disp
         <img src="assets/logo-grupo500.png" alt="Grupo 500"/>
         <span>Grupo 500</span>
       </div>
-      <!-- set 2 — duplicado para loop seamless -->
-      <div class="ticker-item">
-        <img src="assets/logo-ntrl.png" alt="Natural Ropa Deportiva"/>
-        <span>Natural Ropa Deportiva</span>
-      </div>
-      <div class="ticker-item">
-        <img src="assets/logo-gvr.png" alt="Guevara Sport"/>
-        <span>Guevara Sport</span>
-      </div>
-      <div class="ticker-item">
-        <img src="assets/VeloClub - Icono.png" alt="VeloClub"/>
-        <span>VeloClub</span>
-      </div>
-      <div class="ticker-item">
-        <img src="assets/logo-grupo500.png" alt="Grupo 500"/>
-        <span>Grupo 500</span>
-      </div>
-    </div>
   </div>
 </section>
 

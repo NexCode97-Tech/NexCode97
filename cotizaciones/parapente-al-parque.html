@@ -338,15 +338,11 @@ body{
 
 .total-amount{
   font-family:var(--sans);
-  font-size:clamp(22px, 5vw, 46px);
+  font-size:clamp(20px, 4vw, 42px);
   font-weight:900;
-  letter-spacing:-0.04em;
+  letter-spacing:-0.02em;
   line-height:1;
-  background:linear-gradient(135deg, var(--sky-l, #38BDF8), var(--sunset-l));
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text;
-  white-space:nowrap;
+  color:var(--sky);
 }
 
 .total-currency{
@@ -541,6 +537,20 @@ body{
   font-family:var(--sans);
   font-weight:600;
   letter-spacing:.1em;
+}
+
+/* ── MOBILE ── */
+@media screen and (max-width:600px){
+  .section-client,.section-intro,.section-services,.section-total,
+  .section-deliverables,.section-terms,.section-sign{padding-left:16px;padding-right:16px;}
+  .total-box{padding:20px 18px;}
+  .total-amount{font-size:32px !important;}
+  .total-left{flex:1 1 100%;}
+  .total-right{flex:1 1 100%;}
+  .terms-grid,.deliverables-grid,.section-sign{grid-template-columns:1fr;}
+  .brands-card{padding:0 16px;}
+  .section-client{grid-template-columns:1fr;}
+  .validity-block{align-items:flex-start;}
 }
 
 /* ── PRINT ── */

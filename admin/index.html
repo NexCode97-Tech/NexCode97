@@ -411,6 +411,8 @@ tr:hover td{background:rgba(124,58,237,.05);}
 }
 .form-select{appearance:none;}
 .form-textarea{resize:vertical;min-height:78px;}
+input[type="date"]::-webkit-calendar-picker-indicator{filter:invert(.6);cursor:pointer;opacity:.7;transition:opacity 150ms ease-out;}
+input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1;}
 .form-select:focus,.form-textarea:focus{border-color:rgba(124,58,237,.5);box-shadow:0 0 0 3px rgba(124,58,237,.1);}
 .btn-cancel{
   background:rgba(255,255,255,.04);border:1px solid var(--border);

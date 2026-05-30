@@ -13,8 +13,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css"/>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.min.css"/>
-<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
@@ -545,112 +543,61 @@ tbody tr.clickable:hover td{background:rgba(124,58,237,.07);}
 input[type="date"]{cursor:pointer;}
 
 /* ════════════════════════════════
-   TOM SELECT — resetear completamente
+   CUSTOM SELECT — dropdown propio
 ════════════════════════════════ */
-.ts-wrapper{width:100% !important;padding:0 !important;}
-.ts-wrapper *{box-sizing:border-box !important;}
-
-/* El wrapper exterior NO debe tener borde/fondo — lo pone el ts-control */
-.ts-wrapper.single .ts-control,
-.ts-wrapper.multi .ts-control,
-.ts-control{
-  width:100% !important;
-  background:rgba(255,255,255,.04) !important;
-  border:1px solid rgba(255,255,255,.07) !important;
-  border-radius:9px !important;
-  padding:11px 13px !important;
-  font-family:var(--sans) !important;
-  font-size:.87rem !important;
-  line-height:1.4 !important;
-  color:var(--text) !important;
-  box-shadow:none !important;
-  min-height:unset !important;
-  cursor:pointer !important;
-  display:flex !important;
-  align-items:center !important;
-  flex-wrap:nowrap !important;
-  gap:0 !important;
+.csel-wrap{position:relative;width:100%;}
+.csel-trigger{
+  width:100%;background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:9px;padding:11px 36px 11px 13px;
+  font-family:var(--sans);font-size:.87rem;
+  color:var(--text);cursor:pointer;
+  transition:border-color 100ms ease-out,box-shadow 100ms ease-out;
+  text-align:left;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  position:relative;user-select:none;
 }
-
-/* Estado focus */
-.ts-wrapper.focus .ts-control{
-  border-color:rgba(124,58,237,.5) !important;
-  box-shadow:0 0 0 3px rgba(124,58,237,.1) !important;
-  outline:none !important;
+.csel-trigger.placeholder{color:var(--t2);}
+.csel-trigger::after{
+  content:'';position:absolute;right:13px;top:50%;transform:translateY(-50%);
+  width:0;height:0;
+  border-left:4px solid transparent;border-right:4px solid transparent;
+  border-top:5px solid var(--t2);
+  transition:transform 150ms ease-out;
 }
-
-/* El item seleccionado — sin caja, sin fondo */
-.ts-control .item{
-  background:none !important;
-  border:none !important;
-  border-radius:0 !important;
-  padding:0 !important;
-  margin:0 !important;
-  font-size:.87rem !important;
-  line-height:1.4 !important;
-  color:var(--text) !important;
-  display:inline !important;
+.csel-trigger.open{border-color:rgba(124,58,237,.5);box-shadow:0 0 0 3px rgba(124,58,237,.1);}
+.csel-trigger.open::after{transform:translateY(-50%) rotate(180deg);}
+.csel-dropdown{
+  position:absolute;top:calc(100% + 4px);left:0;right:0;
+  background:var(--bg2);
+  border:1px solid rgba(124,58,237,.15);
+  border-radius:10px;
+  box-shadow:0 16px 48px rgba(0,0,0,.55);
+  z-index:9999;
+  max-height:220px;overflow-y:auto;
+  padding:4px;
+  display:none;
+  animation:pageIn 150ms var(--ease) both;
 }
-
-/* Input de búsqueda dentro */
-.ts-control input{
-  color:var(--text) !important;
-  font-family:var(--sans) !important;
-  font-size:.87rem !important;
-  line-height:1.4 !important;
-  background:none !important;
-  border:none !important;
-  outline:none !important;
-  padding:0 !important;
-  margin:0 !important;
-  flex:1 !important;
+.csel-dropdown.open{display:block;}
+.csel-search{
+  width:100%;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:7px;padding:8px 11px;
+  font-family:var(--sans);font-size:.82rem;color:var(--text);
+  outline:none;margin-bottom:4px;
 }
-.ts-control input::placeholder,.ts-wrapper .placeholder{
-  color:var(--t2) !important;
-  font-size:.87rem !important;
+.csel-search::placeholder{color:var(--t2);}
+.csel-option{
+  padding:9px 11px;font-size:.85rem;color:var(--text);
+  border-radius:7px;cursor:pointer;
+  transition:background 80ms ease-out;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
 }
-
-/* Flecha */
-.ts-wrapper.single .ts-control::after{
-  border-color:var(--t2) transparent transparent !important;
-  margin-left:auto !important;
-}
-
-/* Dropdown */
-.ts-dropdown{
-  background:var(--bg2) !important;
-  border:1px solid rgba(124,58,237,.15) !important;
-  border-radius:10px !important;
-  box-shadow:0 16px 48px rgba(0,0,0,.55) !important;
-  font-family:var(--sans) !important;
-  margin-top:4px !important;
-  overflow:hidden !important;
-  z-index:9999 !important;
-}
-.ts-dropdown .ts-dropdown-content{padding:4px !important;}
-.ts-dropdown .option{
-  color:var(--text) !important;
-  padding:9px 12px !important;
-  font-size:.85rem !important;
-  line-height:1.4 !important;
-  cursor:pointer !important;
-  border-radius:7px !important;
-  transition:background 100ms ease-out !important;
-}
-.ts-dropdown .option:hover,
-.ts-dropdown .option.active{
-  background:rgba(124,58,237,.15) !important;
-  color:#fff !important;
-}
-.ts-dropdown .option.selected{
-  background:rgba(124,58,237,.08) !important;
-  color:var(--vl) !important;
-}
-.ts-dropdown .optgroup-header{
-  font-size:.63rem !important;font-weight:700 !important;
-  letter-spacing:.1em !important;text-transform:uppercase !important;
-  color:var(--t3) !important;padding:10px 12px 4px !important;
-}
+.csel-option:hover{background:rgba(124,58,237,.15);color:#fff;}
+.csel-option.selected{background:rgba(124,58,237,.08);color:var(--vl);}
+.csel-option.empty{color:var(--t2);font-size:.82rem;text-align:center;padding:12px;}
+::-webkit-scrollbar{width:3px;}
+.csel-dropdown::-webkit-scrollbar-thumb{background:rgba(124,58,237,.3);border-radius:99px;}
 
 /* ════════════════════════════════
    A11Y
@@ -1191,10 +1138,10 @@ sb.auth.onAuthStateChange((event, session) => {
     document.getElementById('user-email-display').textContent = session.user.email;
     initTelDropdown();
     initFlatpickr();
-    initTomSelects();
+    initCustomSelects();
     document.getElementById('lead-departamento').addEventListener('change', e => {
       updateCiudades(e.target.value);
-      refreshTomSelect('lead-ciudad');
+      refreshCustomSelect('lead-ciudad');
     });
     loadDashboard();
     loadLeads();
@@ -1294,31 +1241,127 @@ function initFlatpickr() {
   });
 }
 
-// ── TOM SELECT — dropdowns ────────────────────────
-const _tomSelects = {};
-function initTomSelects() {
-  const ids = ['lead-fuente','lead-estado','lead-departamento','lead-ciudad',
-               'proy-cliente','proy-estado','proy-tech','proy-sector',
-               'fin-tipo','fin-proyecto'];
-  ids.forEach(id => {
-    const el = document.getElementById(id);
-    if (!el || _tomSelects[id]) return;
-    _tomSelects[id] = new TomSelect(el, {
-      create: false,
-      allowEmptyOption: true,
-      plugins: [],
-      render: {
-        no_results: () => `<div class="no-results" style="padding:10px 14px;color:var(--t2);font-size:.83rem;">Sin resultados</div>`
-      }
+// ── CUSTOM SELECT — dropdown propio ───────────────
+const _cselects = {};
+
+function initCustomSelect(id, { searchable = false } = {}) {
+  if (_cselects[id]) return;
+  const sel = document.getElementById(id);
+  if (!sel) return;
+
+  // Ocultar select nativo
+  sel.style.display = 'none';
+
+  const wrap = document.createElement('div');
+  wrap.className = 'csel-wrap';
+
+  const trigger = document.createElement('button');
+  trigger.type = 'button';
+  trigger.className = 'csel-trigger';
+
+  const dropdown = document.createElement('div');
+  dropdown.className = 'csel-dropdown';
+
+  let searchEl = null;
+  if (searchable) {
+    searchEl = document.createElement('input');
+    searchEl.className = 'csel-search';
+    searchEl.placeholder = 'Buscar...';
+    searchEl.addEventListener('input', () => renderOptions(searchEl.value));
+    dropdown.appendChild(searchEl);
+  }
+
+  const optsList = document.createElement('div');
+  dropdown.appendChild(optsList);
+
+  function getLabel() {
+    const opt = sel.options[sel.selectedIndex];
+    return opt ? opt.text : '';
+  }
+
+  function updateTrigger() {
+    const label = getLabel();
+    const val = sel.value;
+    trigger.textContent = label;
+    trigger.classList.toggle('placeholder', !val);
+    // Re-add arrow after textContent reset
+    trigger.classList.toggle('open', dropdown.classList.contains('open'));
+  }
+
+  function renderOptions(filter = '') {
+    optsList.innerHTML = '';
+    const opts = Array.from(sel.options);
+    const filtered = filter
+      ? opts.filter(o => o.text.toLowerCase().includes(filter.toLowerCase()))
+      : opts;
+
+    if (!filtered.length) {
+      optsList.innerHTML = '<div class="csel-option empty">Sin resultados</div>';
+      return;
+    }
+    filtered.forEach(opt => {
+      const item = document.createElement('div');
+      item.className = 'csel-option' + (opt.value === sel.value ? ' selected' : '');
+      item.textContent = opt.text;
+      item.addEventListener('click', () => {
+        sel.value = opt.value;
+        sel.dispatchEvent(new Event('change'));
+        updateTrigger();
+        close();
+      });
+      optsList.appendChild(item);
     });
+  }
+
+  function open() {
+    document.querySelectorAll('.csel-dropdown.open').forEach(d => d.classList.remove('open'));
+    document.querySelectorAll('.csel-trigger.open').forEach(t => t.classList.remove('open'));
+    renderOptions(searchEl?.value || '');
+    dropdown.classList.add('open');
+    trigger.classList.add('open');
+    if (searchEl) { searchEl.value = ''; searchEl.focus(); }
+  }
+
+  function close() {
+    dropdown.classList.remove('open');
+    trigger.classList.remove('open');
+  }
+
+  trigger.addEventListener('click', e => {
+    e.stopPropagation();
+    dropdown.classList.contains('open') ? close() : open();
   });
+
+  document.addEventListener('click', close);
+  dropdown.addEventListener('click', e => e.stopPropagation());
+
+  // Escuchar cambios programáticos al select nativo
+  sel.addEventListener('change', updateTrigger);
+
+  wrap.appendChild(trigger);
+  wrap.appendChild(dropdown);
+  sel.parentNode.insertBefore(wrap, sel.nextSibling);
+
+  updateTrigger();
+
+  _cselects[id] = { update: () => { renderOptions(); updateTrigger(); } };
 }
 
-function refreshTomSelect(id) {
-  if (_tomSelects[id]) {
-    _tomSelects[id].sync();
-    _tomSelects[id].refreshOptions(false);
-  }
+function initCustomSelects() {
+  initCustomSelect('lead-fuente');
+  initCustomSelect('lead-estado');
+  initCustomSelect('lead-departamento', { searchable: true });
+  initCustomSelect('lead-ciudad', { searchable: true });
+  initCustomSelect('proy-cliente', { searchable: true });
+  initCustomSelect('proy-estado');
+  initCustomSelect('proy-tech');
+  initCustomSelect('proy-sector', { searchable: true });
+  initCustomSelect('fin-tipo');
+  initCustomSelect('fin-proyecto', { searchable: true });
+}
+
+function refreshCustomSelect(id) {
+  if (_cselects[id]) _cselects[id].update();
 }
 
 // ── CONFIRM DELETE ────────────────────────────────
@@ -1642,7 +1685,7 @@ function populateProyClientes(selectedVal='') {
   const sel = document.getElementById('proy-cliente');
   sel.innerHTML = '<option value="">— Seleccionar lead —</option>' +
     cachedLeads.map(l=>`<option value="${s(l.nombre)}"${l.nombre===selectedVal?' selected':''}>${s(l.nombre)}${l.empresa?' — '+s(l.empresa):''}</option>`).join('');
-  refreshTomSelect('proy-cliente');
+  refreshCustomSelect('proy-cliente');
 }
 
 document.getElementById('btn-add-proyecto').addEventListener('click', () => {
@@ -1714,7 +1757,7 @@ function populateProyectosSelect() {
   sel.innerHTML = '<option value="">— Ninguno —</option>' +
     cachedProyectos.map(p=>`<option value="${s(p.id)}">${s(p.nombre)}</option>`).join('');
   sel.value = current;
-  refreshTomSelect('fin-proyecto');
+  refreshCustomSelect('fin-proyecto');
 }
 
 async function loadFinanzas() {

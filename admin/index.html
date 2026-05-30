@@ -10,6 +10,11 @@
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet"/>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/themes/dark.css"/>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/es.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/css/tom-select.min.css"/>
+<script src="https://cdn.jsdelivr.net/npm/tom-select@2.3.1/dist/js/tom-select.complete.min.js"></script>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400&family=JetBrains+Mono:wght@400;500;600&display=swap');
 
@@ -497,6 +502,101 @@ tbody tr.clickable:hover td{background:rgba(124,58,237,.07);}
   border:2px solid var(--border);border-top-color:var(--vl);
   animation:spin .65s linear infinite;
 }
+
+/* ════════════════════════════════
+   FLATPICKR — override dark theme
+════════════════════════════════ */
+.flatpickr-calendar{
+  background:var(--bg2) !important;
+  border:1px solid rgba(124,58,237,.2) !important;
+  border-radius:14px !important;
+  box-shadow:0 20px 60px rgba(0,0,0,.6) !important;
+  font-family:var(--sans) !important;
+}
+.flatpickr-month,.flatpickr-weekdays,.flatpickr-weekday{
+  background:var(--bg1) !important;
+  color:var(--t2) !important;
+}
+.flatpickr-month{border-radius:14px 14px 0 0 !important;}
+.flatpickr-day{
+  color:var(--text) !important;
+  border-radius:8px !important;
+}
+.flatpickr-day:hover{background:rgba(124,58,237,.2) !important;border-color:transparent !important;}
+.flatpickr-day.selected,.flatpickr-day.selected:hover{
+  background:var(--v) !important;
+  border-color:var(--v) !important;
+  color:#fff !important;
+}
+.flatpickr-day.today{border-color:rgba(124,58,237,.4) !important;}
+.flatpickr-day.today:hover{background:rgba(124,58,237,.15) !important;}
+.flatpickr-day.flatpickr-disabled,.flatpickr-day.prevMonthDay,.flatpickr-day.nextMonthDay{
+  color:var(--t3) !important;
+}
+.flatpickr-current-month input.cur-year,.flatpickr-current-month .flatpickr-monthDropdown-months{
+  color:var(--text) !important;font-weight:700 !important;
+  background:transparent !important;
+}
+.flatpickr-prev-month,.flatpickr-next-month{color:var(--t2) !important;fill:var(--t2) !important;}
+.flatpickr-prev-month:hover,.flatpickr-next-month:hover{color:var(--vl) !important;fill:var(--vl) !important;}
+.numInputWrapper:hover{background:rgba(255,255,255,.04) !important;}
+
+/* Input date — ocultar ícono nativo ahora que usamos flatpickr */
+input[type="date"]{cursor:pointer;}
+
+/* ════════════════════════════════
+   TOM SELECT — override estilos
+════════════════════════════════ */
+.ts-wrapper{width:100% !important;}
+.ts-control{
+  background:rgba(255,255,255,.04) !important;
+  border:1px solid rgba(255,255,255,.07) !important;
+  border-radius:9px !important;
+  padding:10px 13px !important;
+  font-family:var(--sans) !important;
+  font-size:.87rem !important;
+  color:var(--text) !important;
+  box-shadow:none !important;
+  min-height:unset !important;
+  cursor:pointer !important;
+}
+.ts-wrapper.focus .ts-control{
+  border-color:rgba(124,58,237,.5) !important;
+  box-shadow:0 0 0 3px rgba(124,58,237,.1) !important;
+}
+.ts-dropdown{
+  background:var(--bg2) !important;
+  border:1px solid rgba(124,58,237,.15) !important;
+  border-radius:10px !important;
+  box-shadow:0 16px 48px rgba(0,0,0,.5) !important;
+  font-family:var(--sans) !important;
+  font-size:.85rem !important;
+  margin-top:4px !important;
+  overflow:hidden !important;
+}
+.ts-dropdown .option{
+  color:var(--text) !important;
+  padding:10px 14px !important;
+  cursor:pointer !important;
+  transition:background 100ms ease-out !important;
+}
+.ts-dropdown .option:hover,.ts-dropdown .option.active{
+  background:rgba(124,58,237,.15) !important;
+  color:#fff !important;
+}
+.ts-dropdown .option.selected{
+  background:rgba(124,58,237,.1) !important;
+  color:var(--vl) !important;
+}
+.ts-dropdown .optgroup-header{
+  font-size:.65rem !important;font-weight:700 !important;
+  letter-spacing:.1em !important;text-transform:uppercase !important;
+  color:var(--t3) !important;padding:10px 14px 4px !important;
+}
+.ts-control input{color:var(--text) !important;font-family:var(--sans) !important;}
+.ts-control input::placeholder{color:var(--t2) !important;}
+/* Ocultar la flecha nativa del select ya que Tom Select pone la suya */
+.ts-wrapper .ts-control::after{border-color:var(--t2) transparent transparent !important;}
 
 /* ════════════════════════════════
    A11Y
@@ -1036,8 +1136,11 @@ sb.auth.onAuthStateChange((event, session) => {
     app.style.display = 'block';
     document.getElementById('user-email-display').textContent = session.user.email;
     initTelDropdown();
+    initFlatpickr();
+    initTomSelects();
     document.getElementById('lead-departamento').addEventListener('change', e => {
       updateCiudades(e.target.value);
+      refreshTomSelect('lead-ciudad');
     });
     loadDashboard();
     loadLeads();
@@ -1119,6 +1222,49 @@ function closeModal(id) {
     el.classList.remove('open');
   }
   document.body.style.overflow = '';
+}
+
+// ── FLATPICKR — calendarios ───────────────────────
+function initFlatpickr() {
+  const fpConfig = {
+    locale: 'es',
+    dateFormat: 'Y-m-d',
+    altInput: true,
+    altFormat: 'd/m/Y',
+    disableMobile: true,
+    theme: 'dark',
+  };
+  ['proy-inicio','proy-entrega','fin-fecha'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el && !el._flatpickr) flatpickr(el, fpConfig);
+  });
+}
+
+// ── TOM SELECT — dropdowns ────────────────────────
+const _tomSelects = {};
+function initTomSelects() {
+  const ids = ['lead-fuente','lead-estado','lead-departamento','lead-ciudad',
+               'proy-cliente','proy-estado','proy-tech','proy-sector',
+               'fin-tipo','fin-proyecto'];
+  ids.forEach(id => {
+    const el = document.getElementById(id);
+    if (!el || _tomSelects[id]) return;
+    _tomSelects[id] = new TomSelect(el, {
+      create: false,
+      allowEmptyOption: true,
+      plugins: [],
+      render: {
+        no_results: () => `<div class="no-results" style="padding:10px 14px;color:var(--t2);font-size:.83rem;">Sin resultados</div>`
+      }
+    });
+  });
+}
+
+function refreshTomSelect(id) {
+  if (_tomSelects[id]) {
+    _tomSelects[id].sync();
+    _tomSelects[id].refreshOptions(false);
+  }
 }
 
 // ── CONFIRM DELETE ────────────────────────────────
@@ -1442,6 +1588,7 @@ function populateProyClientes(selectedVal='') {
   const sel = document.getElementById('proy-cliente');
   sel.innerHTML = '<option value="">— Seleccionar lead —</option>' +
     cachedLeads.map(l=>`<option value="${s(l.nombre)}"${l.nombre===selectedVal?' selected':''}>${s(l.nombre)}${l.empresa?' — '+s(l.empresa):''}</option>`).join('');
+  refreshTomSelect('proy-cliente');
 }
 
 document.getElementById('btn-add-proyecto').addEventListener('click', () => {
@@ -1513,6 +1660,7 @@ function populateProyectosSelect() {
   sel.innerHTML = '<option value="">— Ninguno —</option>' +
     cachedProyectos.map(p=>`<option value="${s(p.id)}">${s(p.nombre)}</option>`).join('');
   sel.value = current;
+  refreshTomSelect('fin-proyecto');
 }
 
 async function loadFinanzas() {

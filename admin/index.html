@@ -190,6 +190,10 @@ tr:hover td{background:rgba(255,255,255,.02);}
     </div>
     <button class="btn-login" id="btn-login">Entrar al panel</button>
     <div class="login-err" id="login-err"></div>
+    <div style="text-align:center;margin-top:14px;">
+      <button id="btn-forgot" style="background:none;border:none;color:#7c3aed;font-size:.8rem;cursor:pointer;text-decoration:underline;font-family:inherit;">¿Olvidaste tu contraseña?</button>
+      <div id="forgot-msg" style="font-size:.78rem;margin-top:8px;min-height:18px;"></div>
+    </div>
   </div>
 </div>
 
@@ -683,6 +687,22 @@ document.getElementById('btn-login').addEventListener('click', async () => {
 
 document.getElementById('login-pass').addEventListener('keydown', e => {
   if (e.key === 'Enter') document.getElementById('btn-login').click();
+});
+
+document.getElementById('btn-forgot').addEventListener('click', async () => {
+  const email = document.getElementById('login-email').value.trim();
+  const msg = document.getElementById('forgot-msg');
+  if (!email) { msg.style.color = '#ef4444'; msg.textContent = 'Escribe tu email arriba primero.'; return; }
+  const { error } = await sb.auth.resetPasswordForEmail(email, {
+    redirectTo: window.location.href
+  });
+  if (error) {
+    msg.style.color = '#ef4444';
+    msg.textContent = 'Error al enviar. Intenta de nuevo.';
+  } else {
+    msg.style.color = '#22c55e';
+    msg.textContent = 'Correo enviado a ' + email + '. Revisa tu bandeja.';
+  }
 });
 
 document.getElementById('btn-logout').addEventListener('click', async () => {

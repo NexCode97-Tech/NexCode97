@@ -1478,37 +1478,97 @@ function renderChart() {
 
   if (_chart) _chart.destroy();
   _chart = new Chart(ctx, {
-    type: 'bar',
+    type: 'line',
     data: {
-      labels: meses.map(m=>m.label),
+      labels: meses.map(m => m.label),
       datasets: [
         {
           label: 'Ingresos',
           data: ingData,
-          backgroundColor: 'rgba(74,222,128,.25)',
           borderColor: '#4ade80',
-          borderWidth: 1.5,
-          borderRadius: 6,
+          borderWidth: 2.5,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          pointBackgroundColor: '#4ade80',
+          pointBorderColor: '#08080f',
+          pointBorderWidth: 2,
+          tension: 0.42,
+          fill: true,
+          backgroundColor: (ctx) => {
+            const chart = ctx.chart;
+            const {ctx: c, chartArea} = chart;
+            if (!chartArea) return 'rgba(74,222,128,.08)';
+            const grad = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+            grad.addColorStop(0, 'rgba(74,222,128,.22)');
+            grad.addColorStop(1, 'rgba(74,222,128,.0)');
+            return grad;
+          },
         },
         {
           label: 'Gastos',
           data: gastData,
-          backgroundColor: 'rgba(248,113,113,.2)',
           borderColor: '#f87171',
-          borderWidth: 1.5,
-          borderRadius: 6,
+          borderWidth: 2.5,
+          pointRadius: 4,
+          pointHoverRadius: 6,
+          pointBackgroundColor: '#f87171',
+          pointBorderColor: '#08080f',
+          pointBorderWidth: 2,
+          tension: 0.42,
+          fill: true,
+          backgroundColor: (ctx) => {
+            const chart = ctx.chart;
+            const {ctx: c, chartArea} = chart;
+            if (!chartArea) return 'rgba(248,113,113,.06)';
+            const grad = c.createLinearGradient(0, chartArea.top, 0, chartArea.bottom);
+            grad.addColorStop(0, 'rgba(248,113,113,.16)');
+            grad.addColorStop(1, 'rgba(248,113,113,.0)');
+            return grad;
+          },
         }
       ]
     },
     options: {
-      responsive: true, maintainAspectRatio: false,
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', intersect: false },
       plugins: {
-        legend: { labels: { color: '#72768e', font: { family: 'Plus Jakarta Sans', size: 11 } } },
-        tooltip: { callbacks: { label: ctx => ' $' + ctx.parsed.y.toLocaleString('es-CO') } }
+        legend: {
+          labels: {
+            color: '#72768e',
+            font: { family: 'Plus Jakarta Sans', size: 11 },
+            usePointStyle: true,
+            pointStyle: 'circle',
+            padding: 20,
+          }
+        },
+        tooltip: {
+          backgroundColor: 'rgba(15,15,26,.95)',
+          borderColor: 'rgba(124,58,237,.2)',
+          borderWidth: 1,
+          titleColor: '#ededf5',
+          bodyColor: '#72768e',
+          padding: 12,
+          callbacks: {
+            label: ctx => `  ${ctx.dataset.label}: $${ctx.parsed.y.toLocaleString('es-CO')}`
+          }
+        }
       },
       scales: {
-        x: { grid: { color: 'rgba(255,255,255,.04)' }, ticks: { color: '#72768e', font: { family: 'Plus Jakarta Sans', size: 11 } } },
-        y: { grid: { color: 'rgba(255,255,255,.04)' }, ticks: { color: '#72768e', font: { family: 'Plus Jakarta Sans', size: 11 }, callback: v => '$'+Number(v).toLocaleString('es-CO') } }
+        x: {
+          grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
+          ticks: { color: '#72768e', font: { family: 'Plus Jakarta Sans', size: 11 } },
+          border: { display: false }
+        },
+        y: {
+          grid: { color: 'rgba(255,255,255,.04)', drawBorder: false },
+          ticks: {
+            color: '#72768e',
+            font: { family: 'Plus Jakarta Sans', size: 11 },
+            callback: v => '$' + Number(v).toLocaleString('es-CO')
+          },
+          border: { display: false }
+        }
       }
     }
   });

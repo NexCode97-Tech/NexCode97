@@ -443,6 +443,124 @@ input[type="date"]::-webkit-calendar-picker-indicator:hover{opacity:1;}
 tbody tr.clickable{cursor:pointer;}
 tbody tr.clickable:hover td{background:rgba(124,58,237,.07);}
 
+/* ════════════════════════════════
+   KANBAN LEADS
+════════════════════════════════ */
+.kanban-bar{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:20px 24px;gap:12px;flex-wrap:wrap;
+}
+.kanban-bar-left{display:flex;align-items:center;gap:10px;flex-wrap:wrap;}
+
+.kanban-wrap{
+  overflow-x:auto;
+  padding:0 24px 28px;
+  display:flex;gap:14px;
+  align-items:flex-start;
+  min-height:400px;
+}
+.kanban-wrap::-webkit-scrollbar{height:4px;}
+.kanban-wrap::-webkit-scrollbar-track{background:transparent;}
+.kanban-wrap::-webkit-scrollbar-thumb{background:rgba(124,58,237,.3);border-radius:99px;}
+
+/* Columna */
+.k-col{
+  flex-shrink:0;width:262px;
+  display:flex;flex-direction:column;gap:10px;
+}
+.k-col-header{
+  display:flex;align-items:center;justify-content:space-between;
+  padding:10px 14px;
+  border-radius:10px;
+  margin-bottom:2px;
+}
+.k-col-label{
+  display:flex;align-items:center;gap:8px;
+  font-size:.75rem;font-weight:800;letter-spacing:.04em;text-transform:uppercase;
+}
+.k-col-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
+.k-col-count{
+  font-size:.7rem;font-weight:700;
+  background:rgba(255,255,255,.08);
+  border-radius:99px;padding:2px 9px;
+  color:var(--t2);
+}
+
+/* Card */
+.k-card{
+  background:var(--bg1);
+  border:1px solid var(--border);
+  border-radius:12px;
+  padding:16px;
+  cursor:pointer;
+  transition:border-color 150ms ease-out,transform 150ms ease-out,box-shadow 150ms ease-out;
+  position:relative;
+  overflow:hidden;
+}
+.k-card::before{
+  content:'';position:absolute;left:0;top:0;bottom:0;width:3px;
+  background:var(--k-color,var(--v));
+  border-radius:3px 0 0 3px;
+}
+.k-card:hover{
+  border-color:var(--border-h);
+  transform:translateY(-2px);
+  box-shadow:0 8px 24px rgba(0,0,0,.35);
+}
+
+.k-card-top{display:flex;align-items:flex-start;gap:11px;margin-bottom:12px;}
+.k-avatar{
+  width:36px;height:36px;border-radius:10px;
+  background:var(--k-color,var(--v));
+  display:flex;align-items:center;justify-content:center;
+  font-size:.8rem;font-weight:800;color:#fff;flex-shrink:0;
+  opacity:.85;
+}
+.k-info{flex:1;min-width:0;}
+.k-name{
+  font-size:.88rem;font-weight:700;color:var(--text);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  margin-bottom:2px;
+}
+.k-company{
+  font-size:.72rem;color:var(--t2);
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+}
+
+.k-card-meta{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:8px;
+}
+.k-source{
+  font-size:.67rem;font-weight:600;color:var(--t2);
+  background:rgba(255,255,255,.05);
+  border:1px solid var(--border);
+  border-radius:99px;padding:2px 9px;
+  white-space:nowrap;
+}
+.k-date{font-size:.67rem;color:var(--t3);}
+
+.k-card-actions{
+  display:flex;gap:5px;margin-top:12px;
+  padding-top:10px;border-top:1px solid var(--border);
+  opacity:0;transition:opacity 150ms ease-out;
+}
+.k-card:hover .k-card-actions{opacity:1;}
+
+/* Columna vacía */
+.k-empty{
+  border:1px dashed rgba(255,255,255,.07);
+  border-radius:12px;padding:28px 16px;
+  text-align:center;font-size:.75rem;color:var(--t3);
+}
+
+/* Colores por estado */
+.k-nuevo{--k-color:#06b6d4;}
+.k-conversacion{--k-color:#7c3aed;}
+.k-propuesta{--k-color:#fbbf24;}
+.k-cerrado{--k-color:#4ade80;}
+.k-perdido{--k-color:#f87171;}
+
 /* Dashboard chart */
 .dash-layout{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px;}
 .chart-card{
@@ -730,24 +848,16 @@ input[type="date"]{cursor:pointer;}
     <!-- LEADS -->
     <div class="page" id="page-leads">
       <div class="page-header">
-        <div class="page-title">Leads</div>
-        <div class="page-sub">Clientes potenciales y prospectos</div>
+        <div>
+          <div class="page-title">Leads</div>
+          <div class="page-sub">Pipeline de clientes potenciales</div>
+        </div>
       </div>
+
       <div class="table-card">
-        <div class="table-head">
-          <span class="table-title">Todos los leads</span>
-          <button class="btn-add" id="btn-add-lead">+ Nuevo lead</button>
-        </div>
-        <div class="table-filters" id="leads-filters" style="flex-wrap:wrap;gap:6px;align-items:center;">
-          <button class="filter-btn active" data-filter="todos">Todos</button>
-          <button class="filter-btn" data-filter="Nuevo">Nuevo</button>
-          <button class="filter-btn" data-filter="En conversación">En conversación</button>
-          <button class="filter-btn" data-filter="Propuesta enviada">Propuesta enviada</button>
-          <button class="filter-btn" data-filter="Cerrado">Cerrado</button>
-          <button class="filter-btn" data-filter="Perdido">Perdido</button>
-        </div>
-        <div style="padding:0 22px 14px;">
-          <select id="leads-filter-depto" class="form-select" style="height:36px;font-size:.78rem;padding:0 10px;width:240px;border-radius:99px;">
+        <div class="kanban-bar">
+          <div class="kanban-bar-left">
+            <select id="leads-filter-depto" class="form-select" style="height:34px;font-size:.78rem;padding:0 10px;width:220px;border-radius:99px;">
             <option value="">Todos los departamentos</option>
             <option>Amazonas</option><option>Antioquia</option><option>Arauca</option>
             <option>Atlántico</option><option>Bolívar</option><option>Boyacá</option>
@@ -762,12 +872,13 @@ input[type="date"]{cursor:pointer;}
             <option>Valle del Cauca</option><option>Vaupés</option><option>Vichada</option>
             <option>Bogotá D.C.</option>
           </select>
+          </div>
+          <button class="btn-add" id="btn-add-lead">+ Nuevo lead</button>
         </div>
-        <div class="table-wrap">
-          <table>
-            <thead><tr><th>Contacto</th><th>Ubicación</th><th>Teléfono</th><th>Fuente</th><th>Estado</th><th>Fecha</th><th></th></tr></thead>
-            <tbody id="leads-body"><tr class="empty-row"><td colspan="7">Cargando...</td></tr></tbody>
-          </table>
+
+        <!-- Kanban board -->
+        <div class="kanban-wrap" id="kanban-leads">
+          <!-- columnas generadas por JS -->
         </div>
       </div>
     </div>
@@ -1574,9 +1685,20 @@ function renderChart() {
   });
 }
 
-// ── LEADS ─────────────────────────────────────────
-let leadsFilter = 'todos';
+// ── LEADS — KANBAN ────────────────────────────────
 let leadsFilterDepto = '';
+
+const KANBAN_COLS = [
+  { key:'Nuevo',             label:'Nuevo',              color:'#06b6d4' },
+  { key:'En conversación',   label:'En conversación',    color:'#7c3aed' },
+  { key:'Propuesta enviada', label:'Propuesta enviada',  color:'#fbbf24' },
+  { key:'Cerrado',           label:'Cerrado',            color:'#4ade80' },
+  { key:'Perdido',           label:'Perdido',            color:'#f87171' },
+];
+
+function avatarInitials(nombre) {
+  return (nombre||'?').split(' ').slice(0,2).map(w=>(w[0]||'').toUpperCase()).join('');
+}
 
 async function loadLeads() {
   const { data } = await sb.from('leads').select('*').order('created_at',{ascending:false});
@@ -1585,46 +1707,48 @@ async function loadLeads() {
 }
 
 function renderLeads() {
-  let list = leadsFilter === 'todos' ? cachedLeads : cachedLeads.filter(l=>l.estado===leadsFilter);
-  if (leadsFilterDepto) list = list.filter(l=>l.departamento===leadsFilterDepto);
-  const tbody = document.getElementById('leads-body');
-  tbody.innerHTML = list.length ? list.map(l=>`
-    <tr class="clickable" onclick="editLead('${s(l.id)}')">
-      <td class="td-contact">
-        <strong>${s(l.nombre)}</strong>
-        ${l.empresa ? `<span class="sub">${s(l.empresa)}</span>` : ''}
-        ${l.email ? `<span class="sub">${s(l.email)}</span>` : ''}
-      </td>
-      <td>
-        ${l.ciudad||l.departamento ? `${s(l.ciudad||'')}${l.ciudad&&l.departamento?', ':''}${s(l.departamento||'')}` : '—'}
-      </td>
-      <td>${(() => {
-        if (!l.telefono) return '—';
-        const m = l.telefono.match(/^(\+\d+)\s*(.*)/);
-        if (!m) return s(l.telefono);
-        const c = COUNTRIES.find(x=>x.code===m[1]);
-        const flag = c ? `<img src="https://flagcdn.com/w20/${s(c.iso)}.png" width="18" height="13" style="border-radius:2px;object-fit:cover;vertical-align:middle;margin-right:5px;"/>` : '';
-        return `${flag}<span style="vertical-align:middle;">${s(l.telefono)}</span>`;
-      })()}</td>
-      <td>${s(l.fuente)||'—'}</td>
-      <td>${badgeEstado(l.estado)}</td>
-      <td>${fmtDate(l.created_at?.split('T')[0])}</td>
-      <td><div class="td-actions">
-        <button class="btn-edit" data-id="${s(l.id)}" data-action="edit-lead">Editar</button>
-        <button class="btn-del" data-id="${s(l.id)}" data-action="del-lead">Borrar</button>
-      </div></td>
-    </tr>`).join('')
-  : '<tr class="empty-row"><td colspan="7">No hay leads con este filtro</td></tr>';
+  const list = leadsFilterDepto ? cachedLeads.filter(l=>l.departamento===leadsFilterDepto) : cachedLeads;
+  const board = document.getElementById('kanban-leads');
+  board.innerHTML = '';
+
+  KANBAN_COLS.forEach(col => {
+    const cards = list.filter(l => l.estado === col.key);
+    const colEl = document.createElement('div');
+    colEl.className = 'k-col';
+
+    const headerColor = col.color;
+    colEl.innerHTML = `
+      <div class="k-col-header" style="background:${headerColor}14;border:1px solid ${headerColor}28;">
+        <div class="k-col-label">
+          <span class="k-col-dot" style="background:${headerColor};box-shadow:0 0 7px ${headerColor}90;"></span>
+          ${s(col.label)}
+        </div>
+        <span class="k-col-count">${cards.length}</span>
+      </div>
+      ${cards.length ? cards.map(l => `
+        <div class="k-card" style="--k-color:${headerColor};" onclick="editLead('${s(l.id)}')">
+          <div class="k-card-top">
+            <div class="k-avatar" style="background:${headerColor}22;color:${headerColor};">${s(avatarInitials(l.nombre))}</div>
+            <div class="k-info">
+              <div class="k-name">${s(l.nombre)}</div>
+              <div class="k-company">${s(l.empresa||l.email||l.ciudad||'Sin detalle')}</div>
+            </div>
+          </div>
+          <div class="k-card-meta">
+            <span class="k-source">${s(l.fuente||'—')}</span>
+            <span class="k-date">${fmtDate(l.created_at?.split('T')[0])}</span>
+          </div>
+          <div class="k-card-actions">
+            <button class="btn-edit" onclick="event.stopPropagation();editLead('${s(l.id)}')">Editar</button>
+            <button class="btn-del" onclick="event.stopPropagation();deleteLead('${s(l.id)}')">Borrar</button>
+          </div>
+        </div>
+      `).join('') : `<div class="k-empty">Sin leads</div>`}
+    `;
+    board.appendChild(colEl);
+  });
 }
 
-document.getElementById('leads-filters').addEventListener('click', e => {
-  const btn = e.target.closest('.filter-btn');
-  if (!btn) return;
-  document.querySelectorAll('#leads-filters .filter-btn').forEach(b=>b.classList.remove('active'));
-  btn.classList.add('active');
-  leadsFilter = btn.dataset.filter;
-  renderLeads();
-});
 document.getElementById('leads-filter-depto').addEventListener('change', e => {
   leadsFilterDepto = e.target.value;
   renderLeads();

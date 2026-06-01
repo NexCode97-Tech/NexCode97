@@ -101,104 +101,282 @@ nav{
 .nav-cta:active{transform:scale(.97);}
 
 /* ════════════════════
-   HERO CINEMÁTICO
+   HERO PREMIUM — Variante 5 estilo 21st.dev
 ════════════════════ */
-@keyframes slowZoom{0%{transform:scale(1.05);}100%{transform:scale(1.18);}}
-@keyframes grainShift{
-  0%,100%{transform:translate(0,0);}
-  10%{transform:translate(-5%,-10%);}
-  30%{transform:translate(3%,-15%);}
-  50%{transform:translate(12%,9%);}
-  70%{transform:translate(9%,4%);}
-  90%{transform:translate(-1%,7%);}
-}
-@keyframes lineDraw{from{transform:scaleX(0);}to{transform:scaleX(1);}}
+@keyframes badgeIn{from{opacity:0;transform:scale(.85);}to{opacity:1;transform:scale(1);}}
+@keyframes titleUp{from{opacity:0;transform:translateY(50px);}to{opacity:1;transform:translateY(0);}}
+@keyframes arrowSlide{0%,100%{transform:translateX(0);}50%{transform:translateX(6px);}}
+@keyframes scrollBounce{0%,100%{transform:translateY(0);opacity:.8;}50%{transform:translateY(8px);opacity:1;}}
+@keyframes navIn{from{opacity:0;transform:translate(-50%,-100%);}to{opacity:1;transform:translate(-50%,0);}}
 
 #hero{
-  min-height:100vh;
-  display:flex;align-items:center;justify-content:center;
-  position:relative;overflow:hidden;
+  position:relative;
+  height:100vh;width:100%;
+  overflow:hidden;
   background:#000;
+  /* Para scroll parallax controlado por JS */
+  will-change:opacity,transform;
 }
 
-/* Video de fondo con slow zoom */
-.hero-video-wrap{
-  position:absolute;inset:0;
-  overflow:hidden;
-}
+/* Video de fondo */
+.hero-video-wrap{position:absolute;inset:0;}
 .hero-video{
   position:absolute;inset:0;
   width:100%;height:100%;
   object-fit:cover;
-  animation:slowZoom 20s ease-in-out infinite alternate;
-  will-change:transform;
 }
 
-/* Overlay degradado — oscurece bordes para legibilidad */
+/* Overlay degradado — legibilidad del texto */
 .hero-overlay{
   position:absolute;inset:0;
   background:
-    linear-gradient(to bottom, rgba(0,0,0,.55) 0%, rgba(0,0,0,.3) 35%, rgba(0,0,0,.3) 65%, rgba(0,0,0,.85) 100%),
-    linear-gradient(135deg, rgba(14,165,233,.18) 0%, transparent 50%, rgba(249,115,22,.15) 100%);
+    linear-gradient(to bottom, rgba(0,0,0,.6) 0%, rgba(0,0,0,.3) 35%, rgba(0,0,0,.3) 65%, rgba(0,0,0,.8) 100%);
   pointer-events:none;
 }
-
-/* Vignette — oscurece esquinas estilo cine */
-.hero-vignette{
+.hero-tint{
   position:absolute;inset:0;
-  background:radial-gradient(ellipse 90% 80% at 50% 50%, transparent 30%, rgba(0,0,0,.7) 100%);
+  background:linear-gradient(to right, rgba(14,165,233,.1), rgba(249,115,22,.1));
   pointer-events:none;
-  mix-blend-mode:multiply;
 }
 
-/* Grain — textura granulada de cine */
-.hero-grain{
-  position:absolute;
-  top:-50%;left:-50%;
-  width:200%;height:200%;
-  background-image:url("data:image/svg+xml;utf8,<svg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'><filter id='noiseFilter'><feTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/></filter><rect width='100%25' height='100%25' filter='url(%23noiseFilter)'/></svg>");
-  opacity:.07;
-  pointer-events:none;
-  animation:grainShift 8s steps(10) infinite;
+/* Noise texture overlay — cinemático */
+.hero-noise{
+  position:absolute;inset:0;
+  opacity:.18;
   mix-blend-mode:overlay;
-}
-
-/* Barras superior/inferior estilo widescreen letterbox sutil */
-.hero-letterbox{
-  position:absolute;left:0;right:0;
-  background:#000;
-  z-index:3;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' /%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' /%3E%3C/svg%3E");
   pointer-events:none;
 }
-.hero-letterbox.top{top:0;height:0;}
-.hero-letterbox.bottom{bottom:0;height:0;}
 
-/* Marca de tiempo cinemática esquina */
-.hero-rec{
-  position:absolute;top:90px;left:32px;
-  display:flex;align-items:center;gap:8px;
-  z-index:3;
-  font-family:var(--sans);font-size:.7rem;font-weight:700;
-  color:rgba(255,255,255,.85);letter-spacing:.12em;
-  background:rgba(0,0,0,.4);
+/* ── NAVBAR FLOTANTE PILL ── */
+.hero-nav{
+  position:fixed;top:24px;left:50%;
+  transform:translateX(-50%);
+  z-index:50;
+  display:flex;align-items:center;gap:6px;
+  padding:10px 14px;
+  border-radius:9999px;
+  background:rgba(255,255,255,.08);
+  backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
+  border:1px solid rgba(255,255,255,.18);
+  box-shadow:0 8px 32px rgba(0,0,0,.4);
+  animation:navIn .8s var(--ease) .4s both;
+}
+.hero-nav-brand{
+  font-family:var(--sans);font-size:.88rem;font-weight:800;
+  color:#fff;padding:6px 14px;letter-spacing:-.02em;
+}
+.hero-nav-brand span{color:var(--sky);}
+.hero-nav-divider{
+  width:1px;height:18px;
+  background:rgba(255,255,255,.18);
+  margin:0 4px;
+}
+.hero-nav-links{display:flex;align-items:center;gap:2px;}
+.hero-nav-links a{
+  font-family:var(--sans);font-size:.82rem;font-weight:500;
+  color:rgba(255,255,255,.85);
+  padding:6px 14px;
+  text-decoration:none;border-radius:9999px;
+  transition:color 150ms ease-out,background 150ms ease-out;
+}
+.hero-nav-links a:hover{color:#fff;background:rgba(255,255,255,.1);}
+
+/* ── HERO CONTENT ── */
+.hero-content{
+  position:absolute;inset:0;
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  padding:0 24px;text-align:center;
+  z-index:10;
+}
+
+.hero-stack{
+  display:flex;flex-direction:column;align-items:center;
+  gap:30px;max-width:1100px;
+}
+
+/* Badge premium */
+.hero-badge-v5{
+  display:inline-flex;align-items:center;gap:8px;
+  padding:8px 22px;border-radius:9999px;
+  background:rgba(255,255,255,.1);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,.22);
+  font-family:var(--sans);font-size:.82rem;font-weight:600;
+  color:rgba(255,255,255,.95);letter-spacing:.01em;
+  animation:badgeIn .6s var(--ease) .4s both;
+}
+.hero-badge-v5::before{
+  content:'';width:6px;height:6px;border-radius:50%;
+  background:var(--sky);
+  box-shadow:0 0 10px var(--sky);
+  animation:pulse 2s ease-in-out infinite;
+}
+
+/* Heading masivo Variante 5 */
+.hero-title-v5{
+  font-family:var(--sans);
+  font-size:clamp(4rem,11vw,11rem);
+  font-weight:800;
+  letter-spacing:-.055em;
+  line-height:.9;
+  margin:0;
+  animation:titleUp 1s var(--ease) .6s both;
+}
+.hero-title-v5 .l1{
+  display:block;color:#fff;
+}
+.hero-title-v5 .l2{
+  display:block;
+  background:linear-gradient(90deg, #38BDF8 0%, #0EA5E9 50%, #F97316 100%);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+/* Subtítulo */
+.hero-sub-v5{
+  font-family:var(--body);
+  font-size:clamp(1rem,1.4vw,1.35rem);
+  color:rgba(255,255,255,.82);
+  max-width:680px;
+  font-weight:300;line-height:1.6;
+  animation:titleUp 1s var(--ease) .8s both;
+}
+
+/* Botones */
+.hero-cta-row{
+  display:flex;align-items:center;gap:14px;
+  flex-wrap:wrap;justify-content:center;
+  margin-top:8px;
+  animation:titleUp 1s var(--ease) 1s both;
+}
+
+.hero-btn-primary{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:16px 32px;border-radius:9999px;
+  background:linear-gradient(135deg, #0EA5E9 0%, #0284C7 100%);
+  color:#fff;text-decoration:none;
+  font-family:var(--sans);font-size:.95rem;font-weight:700;
+  box-shadow:0 0 0 1px rgba(255,255,255,.05) inset, 0 12px 40px rgba(14,165,233,.5);
+  transition:transform 120ms ease-out,box-shadow 200ms ease-out;
+}
+.hero-btn-primary:hover{
+  transform:translateY(-2px) scale(1.02);
+  box-shadow:0 0 0 1px rgba(255,255,255,.08) inset, 0 18px 50px rgba(14,165,233,.65);
+}
+.hero-btn-primary:active{transform:scale(.97);}
+.hero-btn-primary .arrow{
+  display:inline-block;font-size:1.05rem;
+  animation:arrowSlide 1.6s ease-in-out infinite;
+}
+
+.hero-btn-secondary{
+  display:inline-flex;align-items:center;gap:10px;
+  padding:16px 32px;border-radius:9999px;
+  background:rgba(255,255,255,.1);
+  backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);
+  border:2px solid rgba(255,255,255,.28);
+  color:#fff;text-decoration:none;
+  font-family:var(--sans);font-size:.95rem;font-weight:600;
+  transition:background 200ms ease-out,border-color 200ms ease-out,transform 120ms ease-out;
+}
+.hero-btn-secondary:hover{
+  background:rgba(255,255,255,.18);
+  border-color:rgba(255,255,255,.45);
+  transform:translateY(-1px);
+}
+.hero-btn-secondary:active{transform:scale(.97);}
+.hero-btn-secondary svg{width:18px;height:18px;fill:currentColor;}
+
+/* Scroll indicator */
+.hero-scroll{
+  position:absolute;bottom:42px;left:50%;
+  transform:translateX(-50%);
+  z-index:11;
+  display:flex;flex-direction:column;align-items:center;gap:8px;
+  color:rgba(255,255,255,.85);
+  animation:scrollBounce 1.8s ease-in-out infinite;
+  font-family:var(--sans);font-size:.78rem;font-weight:500;
+  letter-spacing:.05em;
+}
+.hero-scroll svg{
+  width:22px;height:22px;
+  stroke:currentColor;fill:none;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+}
+
+/* ── STATS SECTION (debajo del hero) ── */
+.stats-section{
+  position:relative;
+  background:linear-gradient(to bottom, var(--dark) 0%, #0a0a14 100%);
+  padding:120px 24px 100px;
+  z-index:2;
+}
+.stats-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+  max-width:1100px;margin:-160px auto 0;
+  position:relative;z-index:20;
+}
+
+.stat-card{
+  position:relative;
+  border-radius:24px;
   border:1px solid rgba(255,255,255,.1);
-  border-radius:100px;padding:6px 14px;
-  backdrop-filter:blur(8px);
-  animation:fadeIn 1s ease-out 1.5s both;
+  background:rgba(255,255,255,.04);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  padding:32px 28px;
+  text-align:center;
+  overflow:hidden;
+  transition:background 250ms ease-out,transform 250ms ease-out,border-color 250ms ease-out;
 }
-.hero-rec-dot{
-  width:8px;height:8px;border-radius:50%;
-  background:#ef4444;
-  animation:pulse 1.4s ease-in-out infinite;
+.stat-card:hover{
+  background:rgba(255,255,255,.08);
+  border-color:rgba(255,255,255,.18);
+  transform:translateY(-4px);
+}
+.stat-card::before{
+  content:'';position:absolute;
+  top:-60px;right:-60px;
+  width:200px;height:200px;border-radius:50%;
+  background:radial-gradient(circle, rgba(14,165,233,.18), transparent 70%);
+  filter:blur(40px);pointer-events:none;
+  transition:transform 400ms ease-out;
+}
+.stat-card:hover::before{transform:scale(1.3);}
+
+.stat-icon{
+  width:60px;height:60px;border-radius:16px;
+  background:linear-gradient(135deg, rgba(14,165,233,.2), rgba(249,115,22,.2));
+  border:1px solid rgba(255,255,255,.15);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 22px;
+  transition:transform 250ms ease-out;
+}
+.stat-card:hover .stat-icon{transform:scale(1.1);}
+.stat-icon svg{
+  width:28px;height:28px;
+  stroke:var(--sky);fill:none;
+  stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;
 }
 
-/* Línea horizontal animada debajo del título */
-.hero-line{
-  width:60px;height:2px;
-  background:var(--grad);border-radius:99px;
-  margin:0 auto 28px;
-  transform-origin:left;
-  animation:lineDraw 1.2s var(--ease) .4s both;
+.stat-num{
+  font-family:var(--sans);font-size:3rem;font-weight:800;
+  color:#fff;letter-spacing:-.04em;line-height:1;
+  margin-bottom:12px;
+}
+.stat-num .suffix{color:var(--sky);}
+.stat-label{
+  font-size:.85rem;color:rgba(255,255,255,.7);
+  font-weight:500;letter-spacing:.02em;
+}
+
+@media (max-width:768px){
+  .hero-nav-links{display:none;}
+  .hero-nav-divider{display:none;}
+  .stats-grid{grid-template-columns:1fr;gap:14px;}
+  .hero-stack{gap:24px;}
 }
 
 .hero-content{
@@ -697,84 +875,91 @@ footer{
 </head>
 <body>
 
-<!-- NAV -->
-<nav>
-  <div class="nav-logo">Parapente<span>alParque</span></div>
-  <div class="nav-links">
+<!-- NAVBAR GLASSMORPHISM FLOTANTE -->
+<nav class="hero-nav">
+  <span class="hero-nav-brand">Parapente<span>alParque</span></span>
+  <span class="hero-nav-divider"></span>
+  <div class="hero-nav-links">
     <a href="#experiencias">Experiencias</a>
     <a href="#porquenosotros">Nosotros</a>
     <a href="#galeria">Galería</a>
-    <a href="#testimonios">Testimonios</a>
+    <a href="#reservar">Contacto</a>
   </div>
-  <a href="https://wa.me/573006359008?text=Hola%2C%20quiero%20información%20sobre%20parapente" class="nav-cta" target="_blank">Reservar vuelo</a>
 </nav>
 
-<!-- HERO CINEMÁTICO -->
+<!-- HERO PREMIUM Variante 5 -->
 <section id="hero">
-  <!-- Video de fondo con slow zoom -->
+  <!-- Video de fondo -->
   <div class="hero-video-wrap">
     <video class="hero-video" autoplay muted loop playsinline preload="auto">
       <source src="hero-video.mp4" type="video/mp4"/>
     </video>
   </div>
 
-  <!-- Capas cinemáticas -->
+  <!-- Overlays cinemáticos -->
   <div class="hero-overlay"></div>
-  <div class="hero-vignette"></div>
-  <div class="hero-grain"></div>
+  <div class="hero-tint"></div>
+  <div class="hero-noise"></div>
 
-  <!-- Tag REC tipo cámara -->
-  <div class="hero-rec">
-    <span class="hero-rec-dot"></span>
-    LIVE · COLOMBIA
+  <!-- Contenido central -->
+  <div class="hero-content">
+    <div class="hero-stack">
+      <div class="hero-badge-v5">Experiencia Premium de Parapente</div>
+
+      <h1 class="hero-title-v5">
+        <span class="l1">Vuela Sobre</span>
+        <span class="l2">Las Nubes</span>
+      </h1>
+
+      <p class="hero-sub-v5">
+        Vive la adrenalina del vuelo libre con vistas panorámicas inolvidables y guías profesionales. Tu aventura te espera.
+      </p>
+
+      <div class="hero-cta-row">
+        <a href="https://wa.me/573006359008?text=Hola%2C%20quiero%20reservar%20un%20vuelo%20de%20parapente" class="hero-btn-primary" target="_blank">
+          Reservar tu Vuelo
+          <span class="arrow">→</span>
+        </a>
+        <a href="#experiencias" class="hero-btn-secondary">
+          <svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
+          Ver Experiencias
+        </a>
+      </div>
+    </div>
   </div>
 
-  <div class="hero-content">
-    <div class="hero-badge">
-      <span class="hero-badge-dot"></span>
-      Colombia · Vuelos todo el año
+  <!-- Scroll indicator -->
+  <div class="hero-scroll">
+    <span>Desliza para explorar</span>
+    <svg viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+</section>
+
+<!-- STATS SECTION (cards flotando sobre el hero) -->
+<section class="stats-section">
+  <div class="stats-grid">
+    <div class="stat-card reveal">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      </div>
+      <div class="stat-num" data-count="500"><span>0</span><span class="suffix">+</span></div>
+      <div class="stat-label">Vuelos Realizados</div>
     </div>
 
-    <h1 class="hero-title">
-      Siente la<br/>
-      <span class="line2">libertad</span>
-      de volar
-    </h1>
-
-    <div class="hero-line"></div>
-
-    <p class="hero-sub">
-      Experimenta la adrenalina del parapente sobre los paisajes más increíbles de Colombia. Vuelos tándem, bautizos y cursos certificados.
-    </p>
-
-    <div class="hero-actions">
-      <a href="https://wa.me/573006359008?text=Hola%2C%20quiero%20reservar%20un%20vuelo" class="btn-primary" target="_blank">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.553 4.118 1.523 5.851L.057 23.886l6.205-1.467A11.947 11.947 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.013-1.37l-.36-.213-3.688.872.934-3.596-.234-.37A9.818 9.818 0 012.182 12C2.182 6.58 6.58 2.182 12 2.182S21.818 6.58 21.818 12 17.42 21.818 12 21.818z"/></svg>
-        Reservar ahora
-      </a>
-      <a href="#experiencias" class="btn-secondary">
-        Ver experiencias
-        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
-      </a>
+    <div class="stat-card reveal reveal-delay-1">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+      </div>
+      <div class="stat-num" data-count="8"><span>0</span><span class="suffix"> Años</span></div>
+      <div class="stat-label">De Experiencia</div>
     </div>
 
-    <div class="hero-stats">
-      <div class="hero-stat">
-        <span class="hero-stat-num">500<span class="unit">+</span></span>
-        <span class="hero-stat-label">Vuelos realizados</span>
+    <div class="stat-card reveal reveal-delay-2">
+      <div class="stat-icon">
+        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
       </div>
-      <div class="hero-stat">
-        <span class="hero-stat-num">8<span class="unit">+</span></span>
-        <span class="hero-stat-label">Años de experiencia</span>
-      </div>
-      <div class="hero-stat">
-        <span class="hero-stat-num">100<span class="unit">%</span></span>
-        <span class="hero-stat-label">Seguridad certificada</span>
-      </div>
-      <div class="hero-stat">
-        <span class="hero-stat-num">4.9<span class="unit">★</span></span>
-        <span class="hero-stat-label">Calificación clientes</span>
-      </div>
+      <div class="stat-num" data-count="100"><span>0</span><span class="suffix">%</span></div>
+      <div class="stat-label">Seguridad Certificada</div>
     </div>
   </div>
 </section>
@@ -1075,13 +1260,40 @@ const observer = new IntersectionObserver(entries => {
 
 document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 
-// ── NAV SCROLL ──
-const nav = document.querySelector('nav');
+// ── HERO PARALLAX (Variante 5: opacity + scale al hacer scroll) ──
+const heroEl = document.getElementById('hero');
 window.addEventListener('scroll', () => {
-  nav.style.background = scrollY > 60
-    ? 'rgba(10,10,15,.92)'
-    : 'rgba(10,10,15,.7)';
+  const sy = window.scrollY;
+  const vh = window.innerHeight;
+  const progress = Math.min(sy / (vh * 0.6), 1);
+  heroEl.style.opacity = (1 - progress).toFixed(3);
+  heroEl.style.transform = `scale(${(1 - progress * 0.18).toFixed(3)})`;
 }, { passive: true });
+
+// ── COUNTER ANIMADO ──
+function animateCounter(el, target, duration = 2000) {
+  const numSpan = el.querySelector('span:not(.suffix)');
+  let start = null;
+  function step(t) {
+    if (!start) start = t;
+    const p = Math.min((t - start) / duration, 1);
+    numSpan.textContent = Math.floor(p * target);
+    if (p < 1) requestAnimationFrame(step);
+  }
+  requestAnimationFrame(step);
+}
+
+const counterObserver = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const target = parseInt(e.target.dataset.count);
+      animateCounter(e.target, target);
+      counterObserver.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.5 });
+
+document.querySelectorAll('.stat-num[data-count]').forEach(el => counterObserver.observe(el));
 
 // ── SMOOTH SCROLL ──
 document.querySelectorAll('a[href^="#"]').forEach(a => {

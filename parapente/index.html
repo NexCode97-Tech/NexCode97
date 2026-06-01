@@ -186,6 +186,78 @@ nav{
 }
 .hero-nav-links a:hover{color:#fff;background:rgba(255,255,255,.1);}
 
+/* Hamburger toggle (oculto en desktop) */
+.hero-nav-toggle{
+  display:none;
+  width:38px;height:38px;
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.15);
+  border-radius:9999px;
+  cursor:pointer;
+  padding:0;
+  position:relative;
+  transition:background 150ms ease-out;
+}
+.hero-nav-toggle:hover{background:rgba(255,255,255,.12);}
+.hero-nav-toggle span{
+  position:absolute;left:50%;
+  width:16px;height:1.5px;
+  background:#fff;border-radius:2px;
+  transform:translateX(-50%);
+  transition:transform 300ms cubic-bezier(0.23,1,0.32,1),opacity 200ms ease-out;
+}
+.hero-nav-toggle span:nth-child(1){top:13px;}
+.hero-nav-toggle span:nth-child(2){top:18px;}
+.hero-nav-toggle span:nth-child(3){top:23px;}
+.hero-nav-toggle.open span:nth-child(1){top:18px;transform:translateX(-50%) rotate(45deg);}
+.hero-nav-toggle.open span:nth-child(2){opacity:0;}
+.hero-nav-toggle.open span:nth-child(3){top:18px;transform:translateX(-50%) rotate(-45deg);}
+
+/* Mobile menu overlay */
+.mobile-menu{
+  position:fixed;top:0;left:0;right:0;bottom:0;
+  z-index:48;
+  background:rgba(8,8,15,.92);
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  display:flex;flex-direction:column;
+  align-items:center;justify-content:center;
+  gap:8px;
+  opacity:0;pointer-events:none;
+  transition:opacity 280ms cubic-bezier(0.23,1,0.32,1);
+}
+.mobile-menu.open{opacity:1;pointer-events:auto;}
+.mobile-menu a{
+  font-family:var(--sans);font-size:1.4rem;font-weight:500;
+  color:rgba(255,255,255,.85);
+  text-decoration:none;
+  padding:14px 28px;
+  border-radius:9999px;
+  letter-spacing:-.01em;
+  transform:translateY(20px);opacity:0;
+  transition:transform 350ms cubic-bezier(0.23,1,0.32,1),opacity 350ms ease-out,background 150ms ease-out,color 150ms ease-out;
+}
+.mobile-menu.open a{transform:translateY(0);opacity:1;}
+.mobile-menu.open a:nth-child(1){transition-delay:.08s;}
+.mobile-menu.open a:nth-child(2){transition-delay:.14s;}
+.mobile-menu.open a:nth-child(3){transition-delay:.20s;}
+.mobile-menu.open a:nth-child(4){transition-delay:.26s;}
+.mobile-menu.open a:nth-child(5){transition-delay:.34s;}
+.mobile-menu a:hover{color:#fff;background:rgba(255,255,255,.06);}
+.mobile-menu a.mm-cta{
+  margin-top:18px;
+  background:linear-gradient(135deg,#0EA5E9,#0284C7);
+  color:#fff;font-weight:700;
+  font-size:1rem;
+  padding:14px 36px;
+  box-shadow:0 8px 28px rgba(14,165,233,.35);
+}
+.mobile-menu a.mm-cta:hover{
+  background:linear-gradient(135deg,#0EA5E9,#0284C7);
+  transform:translateY(-2px);
+}
+
+body.menu-open{overflow:hidden;}
+
 /* ── HERO CONTENT — centrado entre navbar y scroll indicator ── */
 .hero-content{
   position:absolute;
@@ -416,10 +488,11 @@ nav{
 }
 
 @media (max-width:768px){
-  /* Navbar: solo brand */
+  /* Navbar: solo brand + toggle */
   .hero-nav-links{display:none;}
   .hero-nav-divider{display:none;}
-  .hero-nav{padding:8px 18px;top:18px;}
+  .hero-nav-toggle{display:inline-block;}
+  .hero-nav{padding:6px 6px 6px 18px;top:18px;gap:8px;}
   .hero-nav-brand{padding:6px 4px;font-size:.85rem;}
 
   /* Stats responsive */
@@ -969,7 +1042,19 @@ footer{
     <a href="#galeria">Galería</a>
     <a href="#reservar">Contacto</a>
   </div>
+  <button class="hero-nav-toggle" id="navToggle" aria-label="Abrir menú">
+    <span></span><span></span><span></span>
+  </button>
 </nav>
+
+<!-- MENÚ MÓVIL OVERLAY -->
+<div class="mobile-menu" id="mobileMenu">
+  <a href="#experiencias">Experiencias</a>
+  <a href="#porquenosotros">Nosotros</a>
+  <a href="#galeria">Galería</a>
+  <a href="#reservar">Contacto</a>
+  <a href="https://wa.me/573006359008?text=Hola%2C%20quiero%20información%20sobre%20parapente" target="_blank" class="mm-cta">Reservar vuelo</a>
+</div>
 
 <!-- HERO PREMIUM Variante 5 -->
 <section id="hero">
@@ -1394,6 +1479,26 @@ const counterObserver = new IntersectionObserver(entries => {
 }, { threshold: 0.5 });
 
 document.querySelectorAll('.stat-num[data-count]').forEach(el => counterObserver.observe(el));
+
+// ── MOBILE MENU ──
+const navToggle = document.getElementById('navToggle');
+const mobileMenu = document.getElementById('mobileMenu');
+if (navToggle && mobileMenu) {
+  navToggle.addEventListener('click', () => {
+    const isOpen = mobileMenu.classList.toggle('open');
+    navToggle.classList.toggle('open', isOpen);
+    document.body.classList.toggle('menu-open', isOpen);
+    navToggle.setAttribute('aria-label', isOpen ? 'Cerrar menú' : 'Abrir menú');
+  });
+  // Cerrar al hacer clic en un link
+  mobileMenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      mobileMenu.classList.remove('open');
+      navToggle.classList.remove('open');
+      document.body.classList.remove('menu-open');
+    });
+  });
+}
 
 // ── SMOOTH SCROLL ──
 document.querySelectorAll('a[href^="#"]').forEach(a => {

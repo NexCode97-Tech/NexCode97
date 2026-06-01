@@ -934,18 +934,21 @@ section{padding:120px 24px;}
   display:flex;flex-direction:column;gap:14px;
 }
 
-/* Título vertical cuando NO está expandida */
+/* Título vertical cuando NO está expandida — escrito de abajo hacia arriba */
 .exp-title-collapsed{
   position:absolute;
-  bottom:28px;left:50%;
-  transform:translateX(-50%) rotate(-90deg);
-  transform-origin:center;
-  font-family:var(--sans);font-size:.95rem;font-weight:700;
-  letter-spacing:.04em;
+  bottom:32px;left:50%;
+  transform:translateX(-50%);
+  writing-mode:vertical-rl;
+  transform:translateX(-50%) rotate(180deg);
+  font-family:var(--sans);font-size:.85rem;font-weight:700;
+  letter-spacing:.08em;
   color:#fff;text-transform:uppercase;
   white-space:nowrap;
   opacity:1;transition:opacity 350ms ease-out;
   pointer-events:none;
+  max-height:calc(100% - 120px);
+  overflow:hidden;
 }
 .exp-card.expanded .exp-title-collapsed{opacity:0;}
 
@@ -974,10 +977,11 @@ section{padding:120px 24px;}
 }
 
 .exp-title{
-  font-family:var(--sans);font-size:clamp(1.7rem,2.2vw,2.2rem);
+  font-family:var(--sans);font-size:clamp(1.4rem,2vw,1.9rem);
   font-weight:700;letter-spacing:-.03em;
   color:#fff;line-height:1.05;
   font-variation-settings:"opsz" 72;
+  white-space:nowrap;
 }
 
 .exp-desc{
@@ -1560,7 +1564,7 @@ footer{
           <div class="exp-title-collapsed">Bautizo de vuelo</div>
           <div class="exp-expanded-content exp-bottom">
             <span class="exp-tag">Más popular</span>
-            <h3 class="exp-title">Bautizo<br/>de vuelo</h3>
+            <h3 class="exp-title">Bautizo de vuelo</h3>
             <p class="exp-desc">Tu primera experiencia en el aire. Sin requisitos previos, solo ganas de sentir la emoción de volar junto a un instructor certificado.</p>
             <div class="exp-cta-row">
               <span class="exp-price-mini"><strong>Consultar</strong> por persona</span>
@@ -1585,7 +1589,7 @@ footer{
           <div class="exp-title-collapsed">Vuelo tándem</div>
           <div class="exp-expanded-content exp-bottom">
             <span class="exp-tag">Adrenalina total</span>
-            <h3 class="exp-title">Vuelo<br/>tándem</h3>
+            <h3 class="exp-title">Vuelo tándem</h3>
             <p class="exp-desc">Un vuelo completo en parapente tándem. Experimenta las maniobras, los térmicos y las vistas panorámicas con total seguridad.</p>
             <div class="exp-cta-row">
               <span class="exp-price-mini"><strong>Consultar</strong> por persona</span>
@@ -1610,7 +1614,7 @@ footer{
           <div class="exp-title-collapsed">Curso de parapente</div>
           <div class="exp-expanded-content exp-bottom">
             <span class="exp-tag">Sé piloto</span>
-            <h3 class="exp-title">Curso de<br/>parapente</h3>
+            <h3 class="exp-title">Curso de parapente</h3>
             <p class="exp-desc">Aprende a volar de manera autónoma. Curso completo con teoría, práctica en tierra y vuelos progresivos hasta lograr tu independencia.</p>
             <div class="exp-cta-row">
               <span class="exp-price-mini"><strong>Consultar</strong> el curso</span>
@@ -1789,7 +1793,7 @@ footer{
 <section id="reservar">
   <div class="container">
     <div class="reveal">
-      <h2 class="cta-title">¿Listo para<br/><span><em>volar</em></span>?</h2>
+      <h2 class="cta-title">¿Listo para <span><em>volar</em></span>?</h2>
       <p class="cta-sub">Contáctanos por WhatsApp y te damos toda la información sobre disponibilidad, precios y ubicación. Respondemos en minutos.</p>
       <div class="cta-actions">
         <a href="https://wa.me/573006359008?text=Hola%2C%20quiero%20reservar%20un%20vuelo%20de%20parapente" class="btn-wa" target="_blank">

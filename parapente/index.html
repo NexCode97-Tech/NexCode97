@@ -7,7 +7,7 @@
 <meta name="description" content="Experimenta la libertad de volar en parapente. Bautizos, vuelos tándem y cursos de parapente en Colombia."/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
-<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,400;12..96,500;12..96,600;12..96,700;12..96,800&family=Instrument+Serif:ital@0;1&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet"/>
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 
@@ -23,8 +23,9 @@
   --t3:#334155;
   --white:#FFFFFF;
   --grad:linear-gradient(135deg,#0EA5E9,#F97316);
-  --sans:'Outfit',sans-serif;
-  --body:'Work Sans',sans-serif;
+  --sans:'Bricolage Grotesque','Inter',-apple-system,sans-serif;
+  --serif:'Instrument Serif',Georgia,serif;
+  --body:'Inter',-apple-system,sans-serif;
   --ease:cubic-bezier(0.23,1,0.32,1);
 }
 
@@ -195,8 +196,10 @@ nav{
 }
 
 .hero-stack{
-  display:flex;flex-direction:column;align-items:center;
-  gap:30px;max-width:1100px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;
+  gap:30px;width:100%;max-width:1100px;
+  text-align:center;
+  margin:0 auto;
 }
 
 /* Badge premium */
@@ -217,34 +220,45 @@ nav{
   animation:pulse 2s ease-in-out infinite;
 }
 
-/* Heading masivo Variante 5 */
+/* Heading masivo — Bricolage Grotesque + Instrument Serif italic */
 .hero-title-v5{
   font-family:var(--sans);
-  font-size:clamp(4rem,11vw,11rem);
-  font-weight:800;
-  letter-spacing:-.055em;
-  line-height:.9;
+  font-size:clamp(3.5rem,10vw,9.5rem);
+  font-weight:700;
+  letter-spacing:-.045em;
+  line-height:.94;
   margin:0;
+  text-align:center;
+  width:100%;
+  font-variation-settings:"opsz" 96;
   animation:titleUp 1s var(--ease) .6s both;
 }
 .hero-title-v5 .l1{
   display:block;color:#fff;
+  font-weight:700;
 }
 .hero-title-v5 .l2{
   display:block;
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:400;
+  letter-spacing:-.02em;
   background:linear-gradient(90deg, #38BDF8 0%, #0EA5E9 50%, #F97316 100%);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
   background-clip:text;
+  padding:0 .05em;
 }
 
 /* Subtítulo */
 .hero-sub-v5{
   font-family:var(--body);
-  font-size:clamp(1rem,1.4vw,1.35rem);
-  color:rgba(255,255,255,.82);
-  max-width:680px;
-  font-weight:300;line-height:1.6;
+  font-size:clamp(1.05rem,1.3vw,1.25rem);
+  color:rgba(255,255,255,.78);
+  max-width:620px;
+  font-weight:400;line-height:1.55;
+  letter-spacing:-.005em;
+  text-align:center;
   animation:titleUp 1s var(--ease) .8s both;
 }
 
@@ -499,10 +513,18 @@ section{padding:120px 24px;}
 
 .section-title{
   font-family:var(--sans);
-  font-size:clamp(2rem,4vw,3.2rem);
-  font-weight:900;letter-spacing:-.04em;
-  color:var(--white);line-height:1.1;
+  font-size:clamp(2.2rem,4.5vw,3.6rem);
+  font-weight:600;letter-spacing:-.04em;
+  color:var(--white);line-height:1.05;
   margin-bottom:16px;
+  font-variation-settings:"opsz" 72;
+}
+.section-title em{
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:400;
+  letter-spacing:-.02em;
+  color:var(--sky);
 }
 .section-sub{
   font-size:1rem;color:var(--t2);
@@ -781,12 +803,15 @@ section{padding:120px 24px;}
 
 .cta-title{
   font-family:var(--sans);
-  font-size:clamp(2.5rem,5vw,4.5rem);
-  font-weight:900;letter-spacing:-.05em;
+  font-size:clamp(2.5rem,5vw,4.8rem);
+  font-weight:600;letter-spacing:-.05em;
   color:var(--white);line-height:1;
   margin-bottom:20px;
+  font-variation-settings:"opsz" 96;
 }
-.cta-title span{
+.cta-title span em{
+  font-family:var(--serif);
+  font-style:italic;font-weight:400;
   background:var(--grad);
   -webkit-background-clip:text;-webkit-text-fill-color:transparent;
   background-clip:text;
@@ -972,7 +997,7 @@ footer{
   <div class="container">
     <div class="reveal">
       <div class="section-label">Nuestros servicios</div>
-      <h2 class="section-title">Elige tu experiencia<br/>en el cielo</h2>
+      <h2 class="section-title">Elige tu <em>experiencia</em><br/>en el cielo</h2>
       <p class="section-sub">Tenemos opciones para todos — desde tu primer vuelo hasta convertirte en piloto certificado.</p>
     </div>
 
@@ -1064,7 +1089,7 @@ footer{
       <div>
         <div class="reveal">
           <div class="section-label">Por qué elegirnos</div>
-          <h2 class="section-title">Seguridad y emoción en cada vuelo</h2>
+          <h2 class="section-title"><em>Seguridad</em> y emoción en cada vuelo</h2>
         </div>
         <div class="why-features">
           <div class="why-item reveal reveal-delay-1">
@@ -1117,7 +1142,7 @@ footer{
   <div class="container">
     <div class="reveal" style="text-align:center;">
       <div class="section-label" style="justify-content:center;">Galería</div>
-      <h2 class="section-title">Momentos que<br/>definen la aventura</h2>
+      <h2 class="section-title">Momentos que<br/>definen la <em>aventura</em></h2>
     </div>
 
     <div class="gallery-grid">
@@ -1169,7 +1194,7 @@ footer{
   <div class="container">
     <div class="reveal" style="text-align:center;">
       <div class="section-label" style="justify-content:center;">Testimonios</div>
-      <h2 class="section-title">Lo que dicen<br/>quienes ya volaron</h2>
+      <h2 class="section-title">Lo que dicen<br/>quienes ya <em>volaron</em></h2>
     </div>
 
     <div class="test-grid">
@@ -1216,7 +1241,7 @@ footer{
 <section id="reservar">
   <div class="container">
     <div class="reveal">
-      <h2 class="cta-title">¿Listo para<br/><span>volar</span>?</h2>
+      <h2 class="cta-title">¿Listo para<br/><span><em>volar</em></span>?</h2>
       <p class="cta-sub">Contáctanos por WhatsApp y te damos toda la información sobre disponibilidad, precios y ubicación. Respondemos en minutos.</p>
       <div class="cta-actions">
         <a href="https://wa.me/573006359008?text=Hola%2C%20quiero%20reservar%20un%20vuelo%20de%20parapente" class="btn-wa" target="_blank">

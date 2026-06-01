@@ -1,0 +1,1029 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Parapente al Parque — Vuela sobre Colombia</title>
+<meta name="description" content="Experimenta la libertad de volar en parapente. Bautizos, vuelos tándem y cursos de parapente en Colombia."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&family=Work+Sans:wght@300;400;500;600&display=swap" rel="stylesheet"/>
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+
+:root{
+  --sky:#0EA5E9;
+  --sky-d:#0284C7;
+  --sunset:#F97316;
+  --sunset-l:#FB923C;
+  --dark:#0A0A0F;
+  --dark2:#111118;
+  --text:#F0F4FF;
+  --t2:#94A3B8;
+  --t3:#334155;
+  --white:#FFFFFF;
+  --grad:linear-gradient(135deg,#0EA5E9,#F97316);
+  --sans:'Outfit',sans-serif;
+  --body:'Work Sans',sans-serif;
+  --ease:cubic-bezier(0.23,1,0.32,1);
+}
+
+html{scroll-behavior:smooth;}
+body{
+  font-family:var(--body);
+  background:var(--dark);
+  color:var(--text);
+  overflow-x:hidden;
+  -webkit-font-smoothing:antialiased;
+}
+
+/* ── SCROLLBAR ── */
+::-webkit-scrollbar{width:4px;}
+::-webkit-scrollbar-track{background:var(--dark);}
+::-webkit-scrollbar-thumb{background:var(--sky-d);border-radius:99px;}
+
+/* ── KEYFRAMES ── */
+@keyframes fadeUp{from{opacity:0;transform:translateY(24px);}to{opacity:1;transform:translateY(0);}}
+@keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
+@keyframes float{0%,100%{transform:translateY(0);}50%{transform:translateY(-12px);}}
+@keyframes pulse{0%,100%{opacity:1;}50%{opacity:.5;}}
+@keyframes slideRight{from{transform:translateX(-100%);}to{transform:translateX(0);}}
+@keyframes scaleIn{from{opacity:0;transform:scale(.92);}to{opacity:1;transform:scale(1);}}
+@keyframes drift{0%{transform:translateX(0) translateY(0) rotate(0deg);}33%{transform:translateX(30px) translateY(-20px) rotate(5deg);}66%{transform:translateX(-20px) translateY(10px) rotate(-3deg);}100%{transform:translateX(0) translateY(0) rotate(0deg);}}
+
+/* ── REVEAL ON SCROLL ── */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s var(--ease),transform .7s var(--ease);}
+.reveal.visible{opacity:1;transform:translateY(0);}
+.reveal-delay-1{transition-delay:.1s;}
+.reveal-delay-2{transition-delay:.2s;}
+.reveal-delay-3{transition-delay:.3s;}
+.reveal-delay-4{transition-delay:.4s;}
+
+/* ════════════════════
+   NAV
+════════════════════ */
+nav{
+  position:fixed;top:16px;left:50%;transform:translateX(-50%);
+  z-index:100;
+  width:calc(100% - 48px);max-width:1100px;
+  background:rgba(10,10,15,.7);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:100px;
+  padding:14px 28px;
+  display:flex;align-items:center;justify-content:space-between;
+  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
+  animation:fadeIn .6s var(--ease) both;
+}
+
+.nav-logo{
+  font-family:var(--sans);font-size:1.1rem;font-weight:800;
+  letter-spacing:-.03em;color:var(--white);
+}
+.nav-logo span{color:var(--sky);}
+
+.nav-links{display:flex;align-items:center;gap:6px;}
+.nav-links a{
+  font-family:var(--sans);font-size:.82rem;font-weight:500;
+  color:var(--t2);text-decoration:none;padding:6px 14px;
+  border-radius:100px;
+  transition:color 150ms ease-out,background 150ms ease-out;
+}
+.nav-links a:hover{color:var(--white);background:rgba(255,255,255,.07);}
+
+.nav-cta{
+  background:var(--grad);color:#fff;
+  font-family:var(--sans);font-size:.82rem;font-weight:700;
+  padding:9px 20px;border-radius:100px;text-decoration:none;
+  transition:transform 100ms ease-out,box-shadow 150ms ease-out;
+  box-shadow:0 4px 20px rgba(249,115,22,.3);
+}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 8px 28px rgba(249,115,22,.4);}
+.nav-cta:active{transform:scale(.97);}
+
+/* ════════════════════
+   HERO
+════════════════════ */
+#hero{
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;overflow:hidden;
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 0%,rgba(14,165,233,.15),transparent 60%),
+    radial-gradient(ellipse 60% 40% at 80% 80%,rgba(249,115,22,.1),transparent 50%),
+    var(--dark);
+}
+
+/* Parapente SVG flotando */
+.hero-paraglider{
+  position:absolute;top:18%;right:8%;
+  width:340px;opacity:.18;
+  animation:drift 12s ease-in-out infinite;
+  pointer-events:none;
+}
+
+/* Partículas / estrellas */
+.hero-stars{
+  position:absolute;inset:0;
+  background-image:
+    radial-gradient(1px 1px at 20% 30%,rgba(255,255,255,.6) 0%,transparent 100%),
+    radial-gradient(1px 1px at 40% 60%,rgba(255,255,255,.4) 0%,transparent 100%),
+    radial-gradient(1px 1px at 60% 20%,rgba(255,255,255,.5) 0%,transparent 100%),
+    radial-gradient(1px 1px at 80% 70%,rgba(255,255,255,.3) 0%,transparent 100%),
+    radial-gradient(1px 1px at 10% 80%,rgba(255,255,255,.4) 0%,transparent 100%),
+    radial-gradient(1px 1px at 90% 40%,rgba(255,255,255,.5) 0%,transparent 100%),
+    radial-gradient(1px 1px at 70% 90%,rgba(255,255,255,.3) 0%,transparent 100%),
+    radial-gradient(1px 1px at 30% 10%,rgba(255,255,255,.6) 0%,transparent 100%);
+  pointer-events:none;
+}
+
+.hero-content{
+  position:relative;z-index:2;
+  text-align:center;
+  padding:0 24px;
+  max-width:860px;
+}
+
+.hero-badge{
+  display:inline-flex;align-items:center;gap:8px;
+  background:rgba(14,165,233,.1);
+  border:1px solid rgba(14,165,233,.25);
+  border-radius:100px;padding:6px 18px;
+  font-family:var(--sans);font-size:.75rem;font-weight:700;
+  color:var(--sky);letter-spacing:.08em;text-transform:uppercase;
+  margin-bottom:32px;
+  animation:fadeUp .7s var(--ease) .1s both;
+}
+.hero-badge-dot{
+  width:6px;height:6px;border-radius:50%;
+  background:var(--sky);
+  animation:pulse 2s ease-in-out infinite;
+}
+
+.hero-title{
+  font-family:var(--sans);
+  font-size:clamp(3.5rem,9vw,8rem);
+  font-weight:900;
+  letter-spacing:-.05em;
+  line-height:.95;
+  color:var(--white);
+  margin-bottom:24px;
+  animation:fadeUp .7s var(--ease) .2s both;
+}
+.hero-title .accent{
+  color:transparent;
+  -webkit-text-stroke:2px var(--sky);
+}
+.hero-title .line2{
+  display:block;
+  background:var(--grad);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.hero-sub{
+  font-size:1.1rem;color:var(--t2);
+  line-height:1.75;max-width:520px;margin:0 auto 40px;
+  animation:fadeUp .7s var(--ease) .3s both;
+}
+
+.hero-actions{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  flex-wrap:wrap;
+  animation:fadeUp .7s var(--ease) .4s both;
+}
+
+.btn-primary{
+  background:var(--grad);color:#fff;
+  font-family:var(--sans);font-size:.95rem;font-weight:700;
+  padding:16px 36px;border-radius:100px;text-decoration:none;
+  display:inline-flex;align-items:center;gap:10px;
+  transition:transform 100ms ease-out,box-shadow 150ms ease-out;
+  box-shadow:0 8px 32px rgba(249,115,22,.35);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px rgba(249,115,22,.45);}
+.btn-primary:active{transform:scale(.97);}
+
+.btn-secondary{
+  background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.12);
+  color:var(--white);
+  font-family:var(--sans);font-size:.95rem;font-weight:600;
+  padding:16px 36px;border-radius:100px;text-decoration:none;
+  display:inline-flex;align-items:center;gap:10px;
+  backdrop-filter:blur(8px);
+  transition:background 150ms ease-out,border-color 150ms ease-out,transform 100ms ease-out;
+}
+.btn-secondary:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2);transform:translateY(-1px);}
+.btn-secondary:active{transform:scale(.97);}
+
+/* Stats flotantes */
+.hero-stats{
+  display:flex;align-items:center;justify-content:center;gap:40px;
+  margin-top:64px;padding-top:48px;
+  border-top:1px solid rgba(255,255,255,.06);
+  animation:fadeUp .7s var(--ease) .5s both;
+  flex-wrap:wrap;
+}
+.hero-stat{}
+.hero-stat-num{
+  font-family:var(--sans);font-size:2.2rem;font-weight:900;
+  letter-spacing:-.04em;color:var(--white);
+  display:block;line-height:1;margin-bottom:6px;
+}
+.hero-stat-num .unit{font-size:1.2rem;color:var(--sky);}
+.hero-stat-label{font-size:.78rem;color:var(--t2);font-weight:500;letter-spacing:.04em;text-transform:uppercase;}
+
+/* ════════════════════
+   SECCIÓN GENERAL
+════════════════════ */
+section{padding:120px 24px;}
+.container{max-width:1100px;margin:0 auto;}
+
+.section-label{
+  font-family:var(--sans);font-size:.7rem;font-weight:700;
+  letter-spacing:.16em;text-transform:uppercase;
+  color:var(--sky);margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;
+}
+.section-label::before{
+  content:'';width:24px;height:2px;
+  background:var(--sky);border-radius:99px;
+}
+
+.section-title{
+  font-family:var(--sans);
+  font-size:clamp(2rem,4vw,3.2rem);
+  font-weight:900;letter-spacing:-.04em;
+  color:var(--white);line-height:1.1;
+  margin-bottom:16px;
+}
+.section-sub{
+  font-size:1rem;color:var(--t2);
+  line-height:1.75;max-width:480px;
+}
+
+/* ════════════════════
+   EXPERIENCIAS
+════════════════════ */
+#experiencias{
+  background:
+    radial-gradient(ellipse 50% 50% at 80% 20%,rgba(14,165,233,.08),transparent),
+    var(--dark2);
+}
+
+.exp-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:16px;margin-top:64px;
+}
+
+.exp-card{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.07);
+  border-radius:20px;padding:36px 28px;
+  position:relative;overflow:hidden;
+  cursor:default;
+  transition:border-color 200ms ease-out,transform 200ms ease-out,box-shadow 200ms ease-out;
+}
+.exp-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:2px;
+  background:var(--grad);opacity:0;
+  transition:opacity 200ms ease-out;
+}
+.exp-card:hover{
+  border-color:rgba(14,165,233,.2);
+  transform:translateY(-4px);
+  box-shadow:0 20px 60px rgba(0,0,0,.4);
+}
+.exp-card:hover::before{opacity:1;}
+
+/* Número de fondo decorativo */
+.exp-num{
+  position:absolute;top:16px;right:20px;
+  font-family:var(--sans);font-size:5rem;font-weight:900;
+  color:rgba(255,255,255,.04);letter-spacing:-.05em;line-height:1;
+  pointer-events:none;
+}
+
+.exp-icon{
+  width:52px;height:52px;border-radius:14px;
+  background:linear-gradient(135deg,rgba(14,165,233,.15),rgba(249,115,22,.1));
+  border:1px solid rgba(14,165,233,.2);
+  display:flex;align-items:center;justify-content:center;
+  margin-bottom:24px;
+}
+.exp-icon svg{width:24px;height:24px;stroke:var(--sky);fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;}
+
+.exp-tag{
+  display:inline-block;
+  background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2);
+  border-radius:100px;padding:3px 12px;
+  font-family:var(--sans);font-size:.68rem;font-weight:700;
+  color:var(--sunset-l);letter-spacing:.05em;text-transform:uppercase;
+  margin-bottom:14px;
+}
+
+.exp-title{
+  font-family:var(--sans);font-size:1.4rem;font-weight:800;
+  letter-spacing:-.03em;color:var(--white);margin-bottom:10px;
+}
+.exp-desc{font-size:.9rem;color:var(--t2);line-height:1.7;}
+
+.exp-price{
+  margin-top:24px;padding-top:20px;
+  border-top:1px solid rgba(255,255,255,.06);
+  display:flex;align-items:center;justify-content:space-between;
+}
+.exp-price-val{
+  font-family:var(--sans);font-size:1.4rem;font-weight:900;
+  color:var(--white);letter-spacing:-.03em;
+}
+.exp-price-label{font-size:.72rem;color:var(--t2);}
+
+.exp-link{
+  display:inline-flex;align-items:center;gap:6px;
+  font-family:var(--sans);font-size:.8rem;font-weight:700;
+  color:var(--sky);text-decoration:none;
+  transition:gap 150ms ease-out;
+}
+.exp-link:hover{gap:10px;}
+.exp-link svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+
+/* ════════════════════
+   POR QUÉ NOSOTROS
+════════════════════ */
+#porquenosotros{}
+
+.why-layout{
+  display:grid;grid-template-columns:1fr 1fr;
+  gap:80px;align-items:center;
+  margin-top:80px;
+}
+
+.why-visual{
+  position:relative;
+}
+.why-img-wrap{
+  border-radius:24px;overflow:hidden;
+  aspect-ratio:4/5;
+  background:linear-gradient(135deg,rgba(14,165,233,.15),rgba(249,115,22,.1));
+  border:1px solid rgba(255,255,255,.07);
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+}
+
+/* SVG parapente grande decorativo */
+.why-para-svg{
+  width:70%;opacity:.35;
+  animation:float 6s ease-in-out infinite;
+}
+
+/* Badge flotante */
+.why-badge{
+  position:absolute;bottom:-20px;right:-20px;
+  background:rgba(10,10,15,.9);
+  border:1px solid rgba(14,165,233,.2);
+  border-radius:16px;padding:20px 24px;
+  backdrop-filter:blur(20px);
+}
+.why-badge-num{
+  font-family:var(--sans);font-size:2rem;font-weight:900;
+  color:var(--sky);letter-spacing:-.04em;
+}
+.why-badge-label{font-size:.75rem;color:var(--t2);margin-top:2px;}
+
+.why-features{
+  display:flex;flex-direction:column;gap:28px;
+}
+
+.why-item{
+  display:flex;align-items:flex-start;gap:18px;
+  padding:20px;
+  border-radius:14px;
+  transition:background 150ms ease-out;
+}
+.why-item:hover{background:rgba(255,255,255,.03);}
+
+.why-item-icon{
+  width:44px;height:44px;border-radius:12px;
+  background:rgba(14,165,233,.08);
+  border:1px solid rgba(14,165,233,.15);
+  display:flex;align-items:center;justify-content:center;
+  flex-shrink:0;
+}
+.why-item-icon svg{width:20px;height:20px;stroke:var(--sky);fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;}
+
+.why-item-title{
+  font-family:var(--sans);font-size:1rem;font-weight:700;
+  color:var(--white);margin-bottom:5px;letter-spacing:-.01em;
+}
+.why-item-desc{font-size:.87rem;color:var(--t2);line-height:1.65;}
+
+/* ════════════════════
+   GALERÍA
+════════════════════ */
+#galeria{
+  background:var(--dark2);
+  padding:120px 0;
+}
+#galeria .container{padding:0 24px;}
+
+.gallery-grid{
+  display:grid;
+  grid-template-columns:repeat(12,1fr);
+  grid-template-rows:auto;
+  gap:12px;
+  margin-top:64px;
+}
+
+.gal-item{
+  border-radius:16px;overflow:hidden;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.06);
+  aspect-ratio:1;
+  display:flex;align-items:center;justify-content:center;
+  position:relative;
+  transition:transform 200ms ease-out,box-shadow 200ms ease-out;
+  cursor:pointer;
+}
+.gal-item:hover{transform:scale(1.02);box-shadow:0 20px 50px rgba(0,0,0,.5);}
+
+/* Layouts asimétricos */
+.gal-1{grid-column:1/6;grid-row:1/3;aspect-ratio:auto;}
+.gal-2{grid-column:6/10;}
+.gal-3{grid-column:10/13;}
+.gal-4{grid-column:6/9;}
+.gal-5{grid-column:9/13;}
+
+/* Placeholder content para cada foto */
+.gal-placeholder{
+  width:100%;height:100%;min-height:180px;
+  background:linear-gradient(135deg,rgba(14,165,233,.08),rgba(249,115,22,.06));
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
+  padding:20px;
+}
+.gal-placeholder svg{width:40px;height:40px;stroke:rgba(255,255,255,.15);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
+.gal-placeholder span{font-size:.75rem;color:rgba(255,255,255,.12);font-family:var(--sans);font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
+
+.gal-overlay{
+  position:absolute;inset:0;
+  background:linear-gradient(to top,rgba(0,0,0,.7),transparent 50%);
+  opacity:0;transition:opacity 200ms ease-out;
+  display:flex;align-items:flex-end;padding:20px;
+}
+.gal-item:hover .gal-overlay{opacity:1;}
+.gal-overlay span{
+  font-family:var(--sans);font-size:.8rem;font-weight:700;
+  color:#fff;letter-spacing:.04em;
+}
+
+/* ════════════════════
+   TESTIMONIOS
+════════════════════ */
+#testimonios{
+  background:
+    radial-gradient(ellipse 40% 40% at 20% 50%,rgba(249,115,22,.07),transparent),
+    var(--dark);
+}
+
+.test-grid{
+  display:grid;grid-template-columns:repeat(3,1fr);
+  gap:16px;margin-top:64px;
+}
+
+.test-card{
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:18px;padding:28px;
+  transition:border-color 200ms ease-out,transform 200ms ease-out;
+}
+.test-card:hover{border-color:rgba(255,255,255,.1);transform:translateY(-3px);}
+
+.test-stars{
+  display:flex;gap:3px;margin-bottom:16px;
+}
+.test-stars span{color:var(--sunset);font-size:.85rem;}
+
+.test-text{
+  font-size:.92rem;color:var(--t2);line-height:1.75;
+  margin-bottom:20px;font-style:italic;
+}
+.test-text::before{content:'"';}
+.test-text::after{content:'"';}
+
+.test-author{display:flex;align-items:center;gap:12px;}
+.test-avatar{
+  width:40px;height:40px;border-radius:50%;
+  background:var(--grad);
+  display:flex;align-items:center;justify-content:center;
+  font-family:var(--sans);font-size:.8rem;font-weight:800;color:#fff;
+  flex-shrink:0;
+}
+.test-name{font-family:var(--sans);font-size:.88rem;font-weight:700;color:var(--white);}
+.test-role{font-size:.75rem;color:var(--t2);}
+
+/* ════════════════════
+   CTA / RESERVAR
+════════════════════ */
+#reservar{
+  background:
+    radial-gradient(ellipse 70% 60% at 50% 50%,rgba(14,165,233,.1),transparent 60%),
+    radial-gradient(ellipse 40% 40% at 80% 20%,rgba(249,115,22,.08),transparent),
+    var(--dark2);
+  text-align:center;
+}
+
+.cta-title{
+  font-family:var(--sans);
+  font-size:clamp(2.5rem,5vw,4.5rem);
+  font-weight:900;letter-spacing:-.05em;
+  color:var(--white);line-height:1;
+  margin-bottom:20px;
+}
+.cta-title span{
+  background:var(--grad);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;
+  background-clip:text;
+}
+
+.cta-sub{font-size:1rem;color:var(--t2);line-height:1.7;margin-bottom:48px;}
+
+.cta-actions{
+  display:flex;align-items:center;justify-content:center;gap:14px;
+  flex-wrap:wrap;
+}
+
+.btn-wa{
+  background:#25D366;color:#fff;
+  font-family:var(--sans);font-size:.95rem;font-weight:700;
+  padding:16px 36px;border-radius:100px;text-decoration:none;
+  display:inline-flex;align-items:center;gap:10px;
+  transition:transform 100ms ease-out,box-shadow 150ms ease-out;
+  box-shadow:0 8px 28px rgba(37,211,102,.3);
+}
+.btn-wa:hover{transform:translateY(-2px);box-shadow:0 14px 36px rgba(37,211,102,.4);}
+.btn-wa:active{transform:scale(.97);}
+.btn-wa svg{width:20px;height:20px;fill:#fff;}
+
+/* ════════════════════
+   FOOTER
+════════════════════ */
+footer{
+  background:var(--dark);
+  border-top:1px solid rgba(255,255,255,.06);
+  padding:40px 24px;
+}
+.footer-inner{
+  max-width:1100px;margin:0 auto;
+  display:flex;align-items:center;justify-content:space-between;
+  flex-wrap:wrap;gap:16px;
+}
+.footer-brand{
+  font-family:var(--sans);font-size:1rem;font-weight:800;
+  color:var(--white);letter-spacing:-.02em;
+}
+.footer-brand span{color:var(--sky);}
+.footer-links{display:flex;gap:24px;}
+.footer-links a{
+  font-size:.82rem;color:var(--t2);text-decoration:none;
+  transition:color 150ms ease-out;
+}
+.footer-links a:hover{color:var(--white);}
+.footer-copy{font-size:.78rem;color:var(--t3);}
+
+/* WhatsApp flotante */
+.wa-float{
+  position:fixed;bottom:28px;right:28px;z-index:50;
+  width:56px;height:56px;border-radius:50%;
+  background:#25D366;
+  display:flex;align-items:center;justify-content:center;
+  box-shadow:0 8px 28px rgba(37,211,102,.4);
+  text-decoration:none;
+  transition:transform 150ms ease-out,box-shadow 150ms ease-out;
+  animation:fadeIn 1s var(--ease) 1s both;
+}
+.wa-float:hover{transform:scale(1.1);box-shadow:0 14px 36px rgba(37,211,102,.5);}
+.wa-float svg{width:28px;height:28px;fill:#fff;}
+
+/* ════════════════════
+   RESPONSIVE
+════════════════════ */
+@media(max-width:900px){
+  .exp-grid,.test-grid{grid-template-columns:1fr;}
+  .why-layout{grid-template-columns:1fr;gap:48px;}
+  .why-badge{bottom:-12px;right:-12px;}
+  .gallery-grid{grid-template-columns:1fr 1fr;}
+  .gal-1,.gal-2,.gal-3,.gal-4,.gal-5{grid-column:auto;grid-row:auto;aspect-ratio:1;}
+  .nav-links{display:none;}
+}
+
+@media(max-width:600px){
+  nav{padding:12px 18px;}
+  section{padding:80px 16px;}
+  .hero-title{letter-spacing:-.04em;}
+  .gallery-grid{grid-template-columns:1fr;}
+  .hero-stats{gap:24px;}
+}
+
+@media(prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;transition-duration:.01ms !important;}
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Parapente<span>alParque</span></div>
+  <div class="nav-links">
+    <a href="#experiencias">Experiencias</a>
+    <a href="#porquenosotros">Nosotros</a>
+    <a href="#galeria">Galería</a>
+    <a href="#testimonios">Testimonios</a>
+  </div>
+  <a href="https://wa.me/573006359008?text=Hola%2C%20quiero%20información%20sobre%20parapente" class="nav-cta" target="_blank">Reservar vuelo</a>
+</nav>
+
+<!-- HERO -->
+<section id="hero">
+  <div class="hero-stars"></div>
+
+  <!-- Parapente SVG decorativo -->
+  <svg class="hero-paraglider" viewBox="0 0 400 300" fill="none">
+    <path d="M200 60 Q100 20 20 80 Q100 100 200 90 Q300 100 380 80 Q300 20 200 60Z" fill="rgba(14,165,233,0.6)"/>
+    <path d="M200 60 Q100 20 20 80 Q100 100 200 90 Q300 100 380 80 Q300 20 200 60Z" stroke="rgba(14,165,233,0.8)" stroke-width="1.5" fill="none"/>
+    <path d="M200 90 Q180 120 175 160" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+    <path d="M200 90 Q185 125 183 160" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+    <path d="M200 90 Q200 130 200 165" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+    <path d="M200 90 Q215 125 217 160" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+    <path d="M200 90 Q220 120 225 160" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+    <ellipse cx="200" cy="168" rx="14" ry="8" fill="rgba(249,115,22,0.7)"/>
+    <line x1="200" y1="176" x2="200" y2="195" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+    <line x1="188" y1="183" x2="212" y2="183" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+    <line x1="200" y1="195" x2="193" y2="210" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+    <line x1="200" y1="195" x2="207" y2="210" stroke="rgba(255,255,255,0.5)" stroke-width="1.5"/>
+  </svg>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <span class="hero-badge-dot"></span>
+      Colombia · Vuelos todo el año
+    </div>
+
+    <h1 class="hero-title">
+      Siente la<br/>
+      <span class="line2">libertad</span>
+      de volar
+    </h1>
+
+    <p class="hero-sub">
+      Experimenta la adrenalina del parapente sobre los paisajes más increíbles de Colombia. Vuelos tándem, bautizos y cursos certificados.
+    </p>
+
+    <div class="hero-actions">
+      <a href="https://wa.me/573006359008?text=Hola%2C%20quiero%20reservar%20un%20vuelo" class="btn-primary" target="_blank">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.553 4.118 1.523 5.851L.057 23.886l6.205-1.467A11.947 11.947 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.013-1.37l-.36-.213-3.688.872.934-3.596-.234-.37A9.818 9.818 0 012.182 12C2.182 6.58 6.58 2.182 12 2.182S21.818 6.58 21.818 12 17.42 21.818 12 21.818z"/></svg>
+        Reservar ahora
+      </a>
+      <a href="#experiencias" class="btn-secondary">
+        Ver experiencias
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+      </a>
+    </div>
+
+    <div class="hero-stats">
+      <div class="hero-stat">
+        <span class="hero-stat-num">500<span class="unit">+</span></span>
+        <span class="hero-stat-label">Vuelos realizados</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">8<span class="unit">+</span></span>
+        <span class="hero-stat-label">Años de experiencia</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">100<span class="unit">%</span></span>
+        <span class="hero-stat-label">Seguridad certificada</span>
+      </div>
+      <div class="hero-stat">
+        <span class="hero-stat-num">4.9<span class="unit">★</span></span>
+        <span class="hero-stat-label">Calificación clientes</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- EXPERIENCIAS -->
+<section id="experiencias">
+  <div class="container">
+    <div class="reveal">
+      <div class="section-label">Nuestros servicios</div>
+      <h2 class="section-title">Elige tu experiencia<br/>en el cielo</h2>
+      <p class="section-sub">Tenemos opciones para todos — desde tu primer vuelo hasta convertirte en piloto certificado.</p>
+    </div>
+
+    <div class="exp-grid">
+      <div class="exp-card reveal reveal-delay-1">
+        <span class="exp-num">01</span>
+        <div class="exp-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+        </div>
+        <span class="exp-tag">Más popular</span>
+        <h3 class="exp-title">Bautizo de vuelo</h3>
+        <p class="exp-desc">Tu primera experiencia en el aire. Sin requisitos previos, solo ganas de sentir la emoción de volar junto a un instructor certificado.</p>
+        <div class="exp-price">
+          <div>
+            <div class="exp-price-val">Consultar</div>
+            <div class="exp-price-label">precio por persona</div>
+          </div>
+          <a href="https://wa.me/573006359008?text=Hola%2C%20quiero%20información%20sobre%20el%20bautizo%20de%20vuelo" class="exp-link" target="_blank">
+            Reservar <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="exp-card reveal reveal-delay-2">
+        <span class="exp-num">02</span>
+        <div class="exp-icon">
+          <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
+        </div>
+        <span class="exp-tag">Adrenalina total</span>
+        <h3 class="exp-title">Vuelo tándem</h3>
+        <p class="exp-desc">Un vuelo completo en parapente tándem. Experimenta las maniobras, los térmicos y las vistas panorámicas con total seguridad.</p>
+        <div class="exp-price">
+          <div>
+            <div class="exp-price-val">Consultar</div>
+            <div class="exp-price-label">precio por persona</div>
+          </div>
+          <a href="https://wa.me/573006359008?text=Hola%2C%20quiero%20información%20sobre%20el%20vuelo%20tándem" class="exp-link" target="_blank">
+            Reservar <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+
+      <div class="exp-card reveal reveal-delay-3">
+        <span class="exp-num">03</span>
+        <div class="exp-icon">
+          <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+        </div>
+        <span class="exp-tag">Sé piloto</span>
+        <h3 class="exp-title">Curso de parapente</h3>
+        <p class="exp-desc">Aprende a volar de manera autónoma. Curso completo con teoría, práctica en tierra y vuelos progresivos hasta lograr tu independencia.</p>
+        <div class="exp-price">
+          <div>
+            <div class="exp-price-val">Consultar</div>
+            <div class="exp-price-label">precio del curso</div>
+          </div>
+          <a href="https://wa.me/573006359008?text=Hola%2C%20quiero%20información%20sobre%20el%20curso%20de%20parapente" class="exp-link" target="_blank">
+            Más info <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- POR QUÉ NOSOTROS -->
+<section id="porquenosotros">
+  <div class="container">
+    <div class="why-layout">
+      <div class="why-visual reveal">
+        <div class="why-img-wrap">
+          <svg class="why-para-svg" viewBox="0 0 400 300" fill="none">
+            <path d="M200 80 Q80 30 10 100 Q80 130 200 115 Q320 130 390 100 Q320 30 200 80Z" fill="rgba(14,165,233,0.4)" stroke="rgba(14,165,233,0.6)" stroke-width="1.5"/>
+            <path d="M200 115 Q175 150 170 200" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+            <path d="M200 115 Q190 155 188 200" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+            <path d="M200 115 Q200 160 200 205" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+            <path d="M200 115 Q210 155 212 200" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+            <path d="M200 115 Q225 150 230 200" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+            <ellipse cx="200" cy="208" rx="18" ry="10" fill="rgba(249,115,22,0.5)"/>
+            <line x1="200" y1="218" x2="200" y2="240" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+            <line x1="185" y1="228" x2="215" y2="228" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
+          </svg>
+        </div>
+        <div class="why-badge">
+          <div class="why-badge-num">+500</div>
+          <div class="why-badge-label">vuelos exitosos</div>
+        </div>
+      </div>
+
+      <div>
+        <div class="reveal">
+          <div class="section-label">Por qué elegirnos</div>
+          <h2 class="section-title">Seguridad y emoción en cada vuelo</h2>
+        </div>
+        <div class="why-features">
+          <div class="why-item reveal reveal-delay-1">
+            <div class="why-item-icon">
+              <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+            </div>
+            <div>
+              <div class="why-item-title">Seguridad certificada</div>
+              <div class="why-item-desc">Equipos homologados y revisados antes de cada vuelo. Instructores certificados por la Federación Colombiana de Deportes Aéreos.</div>
+            </div>
+          </div>
+
+          <div class="why-item reveal reveal-delay-2">
+            <div class="why-item-icon">
+              <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M6 20v-2a6 6 0 0112 0v2"/></svg>
+            </div>
+            <div>
+              <div class="why-item-title">Instructores expertos</div>
+              <div class="why-item-desc">Más de 8 años de experiencia formando pilotos. Atención personalizada con máximo 1 instructor por alumno.</div>
+            </div>
+          </div>
+
+          <div class="why-item reveal reveal-delay-3">
+            <div class="why-item-icon">
+              <svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg>
+            </div>
+            <div>
+              <div class="why-item-title">Ubicaciones espectaculares</div>
+              <div class="why-item-desc">Vuela sobre paisajes únicos de Colombia. Vistas de montañas, valles y ciudades que no olvidarás jamás.</div>
+            </div>
+          </div>
+
+          <div class="why-item reveal reveal-delay-4">
+            <div class="why-item-icon">
+              <svg viewBox="0 0 24 24"><path d="M14.5 10c-.83 0-1.5-.67-1.5-1.5v-5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5z"/><path d="M20.5 10H19V8.5c0-.83.67-1.5 1.5-1.5s1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/><path d="M9.5 14c.83 0 1.5.67 1.5 1.5v5c0 .83-.67 1.5-1.5 1.5S8 21.33 8 20.5v-5c0-.83.67-1.5 1.5-1.5z"/><path d="M3.5 14H5v1.5c0 .83-.67 1.5-1.5 1.5S2 16.33 2 15.5 2.67 14 3.5 14z"/><path d="M14 14.5c0-.83.67-1.5 1.5-1.5h5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-5c-.83 0-1.5-.67-1.5-1.5z"/><path d="M15.5 19H14v1.5c0 .83.67 1.5 1.5 1.5s1.5-.67 1.5-1.5-.67-1.5-1.5-1.5z"/><path d="M10 9.5C10 8.67 9.33 8 8.5 8h-5C2.67 8 2 8.67 2 9.5S2.67 11 3.5 11h5c.83 0 1.5-.67 1.5-1.5z"/><path d="M8.5 5H10V3.5C10 2.67 9.33 2 8.5 2S7 2.67 7 3.5 7.67 5 8.5 5z"/></svg>
+            </div>
+            <div>
+              <div class="why-item-title">Foto y video incluido</div>
+              <div class="why-item-desc">Llevamos registro de tu vuelo con fotos y video en alta calidad para que revivas la experiencia cuantas veces quieras.</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GALERÍA -->
+<section id="galeria">
+  <div class="container">
+    <div class="reveal" style="text-align:center;">
+      <div class="section-label" style="justify-content:center;">Galería</div>
+      <h2 class="section-title">Momentos que<br/>definen la aventura</h2>
+    </div>
+
+    <div class="gallery-grid">
+      <div class="gal-item gal-1 reveal">
+        <div class="gal-placeholder">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Vuelo panorámico</span>
+        </div>
+        <div class="gal-overlay"><span>Vista desde las alturas</span></div>
+      </div>
+      <div class="gal-item gal-2 reveal reveal-delay-1">
+        <div class="gal-placeholder">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Bautizo de vuelo</span>
+        </div>
+        <div class="gal-overlay"><span>Primera experiencia</span></div>
+      </div>
+      <div class="gal-item gal-3 reveal reveal-delay-2">
+        <div class="gal-placeholder">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Vuelo tándem</span>
+        </div>
+        <div class="gal-overlay"><span>Tándem en acción</span></div>
+      </div>
+      <div class="gal-item gal-4 reveal reveal-delay-1">
+        <div class="gal-placeholder">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Atardecer en vuelo</span>
+        </div>
+        <div class="gal-overlay"><span>Golden hour</span></div>
+      </div>
+      <div class="gal-item gal-5 reveal reveal-delay-2">
+        <div class="gal-placeholder">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
+          <span>Curso de piloto</span>
+        </div>
+        <div class="gal-overlay"><span>Formación completa</span></div>
+      </div>
+    </div>
+
+    <p style="text-align:center;margin-top:24px;font-size:.82rem;color:var(--t3);">
+      * Los placeholders serán reemplazados por fotos reales de los vuelos
+    </p>
+  </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section id="testimonios">
+  <div class="container">
+    <div class="reveal" style="text-align:center;">
+      <div class="section-label" style="justify-content:center;">Testimonios</div>
+      <h2 class="section-title">Lo que dicen<br/>quienes ya volaron</h2>
+    </div>
+
+    <div class="test-grid">
+      <div class="test-card reveal reveal-delay-1">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text">La experiencia más increíble de mi vida. El instructor me dio toda la confianza desde el primer momento. Definitivamente volvería.</p>
+        <div class="test-author">
+          <div class="test-avatar">CM</div>
+          <div>
+            <div class="test-name">Carlos M.</div>
+            <div class="test-role">Bautizo de vuelo</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-card reveal reveal-delay-2">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text">Fui con mi familia y todos quedamos enamorados. Las vistas son espectaculares y el equipo es muy profesional. 100% recomendado.</p>
+        <div class="test-author">
+          <div class="test-avatar">LR</div>
+          <div>
+            <div class="test-name">Laura R.</div>
+            <div class="test-role">Vuelo tándem</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="test-card reveal reveal-delay-3">
+        <div class="test-stars">★★★★★</div>
+        <p class="test-text">Hice el curso completo y en pocas semanas ya estaba volando solo. La metodología de enseñanza es excelente y muy segura.</p>
+        <div class="test-author">
+          <div class="test-avatar">JP</div>
+          <div>
+            <div class="test-name">Jorge P.</div>
+            <div class="test-role">Curso de piloto</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- RESERVAR -->
+<section id="reservar">
+  <div class="container">
+    <div class="reveal">
+      <h2 class="cta-title">¿Listo para<br/><span>volar</span>?</h2>
+      <p class="cta-sub">Contáctanos por WhatsApp y te damos toda la información sobre disponibilidad, precios y ubicación. Respondemos en minutos.</p>
+      <div class="cta-actions">
+        <a href="https://wa.me/573006359008?text=Hola%2C%20quiero%20reservar%20un%20vuelo%20de%20parapente" class="btn-wa" target="_blank">
+          <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.553 4.118 1.523 5.851L.057 23.886l6.205-1.467A11.947 11.947 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.013-1.37l-.36-.213-3.688.872.934-3.596-.234-.37A9.818 9.818 0 012.182 12C2.182 6.58 6.58 2.182 12 2.182S21.818 6.58 21.818 12 17.42 21.818 12 21.818z"/></svg>
+          Escribir por WhatsApp
+        </a>
+        <a href="tel:+573006359008" class="btn-secondary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81a19.79 19.79 0 01-3.07-8.68A2 2 0 012 0h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          +57 300 635 9008
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div class="footer-brand">Parapente<span>alParque</span></div>
+    <div class="footer-links">
+      <a href="#experiencias">Experiencias</a>
+      <a href="#porquenosotros">Nosotros</a>
+      <a href="#galeria">Galería</a>
+    </div>
+    <div class="footer-copy">© 2026 Parapente al Parque · Hecho por NexCode97</div>
+  </div>
+</footer>
+
+<!-- WhatsApp flotante -->
+<a href="https://wa.me/573006359008?text=Hola%2C%20quiero%20información%20sobre%20parapente" class="wa-float" target="_blank" rel="noopener noreferrer" aria-label="WhatsApp">
+  <svg viewBox="0 0 24 24"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.124.553 4.118 1.523 5.851L.057 23.886l6.205-1.467A11.947 11.947 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 21.818a9.818 9.818 0 01-5.013-1.37l-.36-.213-3.688.872.934-3.596-.234-.37A9.818 9.818 0 012.182 12C2.182 6.58 6.58 2.182 12 2.182S21.818 6.58 21.818 12 17.42 21.818 12 21.818z"/></svg>
+</a>
+
+<script>
+// ── SCROLL REVEAL ──
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      e.target.classList.add('visible');
+      observer.unobserve(e.target);
+    }
+  });
+}, { threshold: 0.12, rootMargin: '0px 0px -40px 0px' });
+
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+// ── NAV SCROLL ──
+const nav = document.querySelector('nav');
+window.addEventListener('scroll', () => {
+  nav.style.background = scrollY > 60
+    ? 'rgba(10,10,15,.92)'
+    : 'rgba(10,10,15,.7)';
+}, { passive: true });
+
+// ── SMOOTH SCROLL ──
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const el = document.querySelector(a.getAttribute('href'));
+    if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+});
+</script>
+</body>
+</html>

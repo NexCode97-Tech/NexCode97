@@ -394,10 +394,47 @@ nav{
 }
 
 @media (max-width:768px){
+  /* Navbar: solo brand */
   .hero-nav-links{display:none;}
   .hero-nav-divider{display:none;}
+  .hero-nav{padding:8px 18px;top:18px;}
+  .hero-nav-brand{padding:6px 4px;font-size:.85rem;}
+
+  /* Stats responsive */
   .stats-grid{grid-template-columns:1fr;gap:14px;}
-  .hero-stack{gap:24px;}
+  .stats-section{padding:60px 18px;}
+
+  /* Hero content compacto */
+  .hero-content{top:90px;bottom:110px;padding:0 18px;}
+  .hero-stack{gap:20px;}
+
+  /* Badge más pequeño */
+  .hero-badge-v5{padding:6px 16px;font-size:.74rem;}
+
+  /* Subtítulo */
+  .hero-sub-v5{font-size:.95rem;padding:0 8px;}
+
+  /* Botones full width en móvil */
+  .hero-cta-row{flex-direction:column;width:100%;gap:10px;}
+  .hero-btn-primary,.hero-btn-secondary{
+    width:100%;justify-content:center;
+    padding:14px 28px;font-size:.9rem;
+  }
+
+  /* Scroll indicator: separar del WhatsApp flotante */
+  .hero-scroll{bottom:30px;font-size:.72rem;}
+  .hero-scroll svg{width:18px;height:18px;}
+
+  /* WhatsApp más pequeño para no chocar */
+  .wa-float{bottom:18px;right:18px;width:48px;height:48px;}
+  .wa-float svg{width:24px;height:24px;}
+}
+
+/* Móvil pequeño */
+@media (max-width:480px){
+  .hero-title-v5{font-size:clamp(2.6rem,14vw,4rem);letter-spacing:-.04em;}
+  .hero-content{top:80px;bottom:100px;}
+  .hero-stack{gap:18px;}
 }
 
 .hero-badge{

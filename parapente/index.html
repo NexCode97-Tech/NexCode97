@@ -12,8 +12,8 @@
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
 
 :root{
-  --sky:#0EA5E9;
-  --sky-d:#0284C7;
+  --sky:#F5A623;
+  --sky-d:#D88C12;
   --sunset:#F5A623;
   --sunset-l:#FBBF24;
   --dark:#0A0A0F;
@@ -136,7 +136,7 @@ nav{
 }
 .hero-tint{
   position:absolute;inset:0;
-  background:linear-gradient(to right, rgba(14,165,233,.1), rgba(245,166,35,.1));
+  background:linear-gradient(to right, rgba(245,166,35,.1), rgba(245,166,35,.1));
   pointer-events:none;
 }
 
@@ -245,14 +245,14 @@ nav{
 .mobile-menu a:hover{color:#fff;background:rgba(255,255,255,.06);}
 .mobile-menu a.mm-cta{
   margin-top:18px;
-  background:linear-gradient(135deg,#0EA5E9,#0284C7);
+  background:linear-gradient(135deg,#F5A623,#D88C12);
   color:#fff;font-weight:700;
   font-size:1rem;
   padding:14px 36px;
-  box-shadow:0 8px 28px rgba(14,165,233,.35);
+  box-shadow:0 8px 28px rgba(245,166,35,.35);
 }
 .mobile-menu a.mm-cta:hover{
-  background:linear-gradient(135deg,#0EA5E9,#0284C7);
+  background:linear-gradient(135deg,#F5A623,#D88C12);
   transform:translateY(-2px);
 }
 
@@ -432,7 +432,7 @@ body.menu-open{overflow:hidden;}
 .stats-section{
   position:relative;
   background:
-    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(14,165,233,.08), transparent 60%),
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(245,166,35,.08), transparent 60%),
     linear-gradient(to bottom, var(--dark) 0%, #0a0a14 100%);
   padding:120px 24px;
   z-index:2;
@@ -509,7 +509,7 @@ body.menu-open{overflow:hidden;}
     inset -1px -1px 1px -.5px rgba(255,255,255,.5),
     inset 0 0 6px 6px rgba(255,255,255,.08),
     inset 0 0 2px 2px rgba(255,255,255,.04),
-    0 0 14px rgba(14,165,233,.08);
+    0 0 14px rgba(245,166,35,.08);
 }
 .lg-card:hover{
   transform:translateY(-4px);
@@ -706,8 +706,8 @@ body.menu-open{overflow:hidden;}
 
 .hero-badge{
   display:inline-flex;align-items:center;gap:8px;
-  background:rgba(14,165,233,.1);
-  border:1px solid rgba(14,165,233,.25);
+  background:rgba(245,166,35,.1);
+  border:1px solid rgba(245,166,35,.25);
   border-radius:100px;padding:6px 18px;
   font-family:var(--sans);font-size:.75rem;font-weight:700;
   color:var(--sky);letter-spacing:.08em;text-transform:uppercase;
@@ -837,7 +837,7 @@ section{padding:120px 24px;}
 ════════════════════════════════ */
 #experiencias{
   background:
-    radial-gradient(ellipse 50% 50% at 80% 20%,rgba(14,165,233,.08),transparent),
+    radial-gradient(ellipse 50% 50% at 80% 20%,rgba(245,166,35,.08),transparent),
     var(--dark2);
 }
 
@@ -863,13 +863,13 @@ section{padding:120px 24px;}
 /* Card expandida ocupa más espacio */
 .exp-card.expanded{
   flex-grow:4;
-  border-color:rgba(14,165,233,.22);
+  border-color:rgba(245,166,35,.22);
 }
 
 /* Background visual: gradiente + imagen decorativa */
 .exp-bg{
   position:absolute;inset:0;
-  background:linear-gradient(135deg, rgba(14,165,233,.22) 0%, rgba(14,165,233,.05) 40%, rgba(245,166,35,.18) 100%);
+  background:linear-gradient(135deg, rgba(245,166,35,.22) 0%, rgba(245,166,35,.05) 40%, rgba(245,166,35,.18) 100%);
   transition:opacity 500ms ease-out;
 }
 .exp-bg::before{
@@ -881,8 +881,8 @@ section{padding:120px 24px;}
 /* Card 1 — Bautizo: azul cielo */
 .exp-card[data-color="sky"] .exp-bg{
   background:
-    radial-gradient(ellipse 80% 60% at 30% 20%, rgba(34,211,238,.35), transparent 70%),
-    linear-gradient(160deg, rgba(14,165,233,.45) 0%, rgba(2,132,199,.85) 100%);
+    radial-gradient(ellipse 80% 60% at 30% 20%, rgba(251,191,36,.35), transparent 70%),
+    linear-gradient(160deg, rgba(245,166,35,.45) 0%, rgba(216,140,18,.85) 100%);
 }
 /* Card 2 — Tándem: naranja atardecer */
 .exp-card[data-color="sunset"] .exp-bg{
@@ -1047,7 +1047,7 @@ section{padding:120px 24px;}
   position:absolute;inset:0;
   background:
     linear-gradient(to top,rgba(0,0,0,.4) 0%,transparent 50%),
-    linear-gradient(135deg,rgba(14,165,233,.08),transparent 50%,rgba(245,166,35,.06));
+    linear-gradient(135deg,rgba(245,166,35,.08),transparent 50%,rgba(245,166,35,.06));
   pointer-events:none;
 }
 
@@ -1061,7 +1061,7 @@ section{padding:120px 24px;}
 .why-badge{
   position:absolute;bottom:-20px;right:-20px;
   background:rgba(10,10,15,.9);
-  border:1px solid rgba(14,165,233,.2);
+  border:1px solid rgba(245,166,35,.2);
   border-radius:16px;padding:20px 24px;
   backdrop-filter:blur(20px);
 }
@@ -1085,8 +1085,8 @@ section{padding:120px 24px;}
 
 .why-item-icon{
   width:44px;height:44px;border-radius:12px;
-  background:rgba(14,165,233,.08);
-  border:1px solid rgba(14,165,233,.15);
+  background:rgba(245,166,35,.08);
+  border:1px solid rgba(245,166,35,.15);
   display:flex;align-items:center;justify-content:center;
   flex-shrink:0;
 }
@@ -1214,7 +1214,7 @@ section{padding:120px 24px;}
 ════════════════════ */
 #reservar{
   background:
-    radial-gradient(ellipse 70% 60% at 50% 50%,rgba(14,165,233,.1),transparent 60%),
+    radial-gradient(ellipse 70% 60% at 50% 50%,rgba(245,166,35,.1),transparent 60%),
     radial-gradient(ellipse 40% 40% at 80% 20%,rgba(245,166,35,.08),transparent),
     var(--dark2);
   text-align:center;

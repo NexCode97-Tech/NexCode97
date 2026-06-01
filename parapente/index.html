@@ -422,69 +422,156 @@ body.menu-open{overflow:hidden;}
   stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
 }
 
-/* ── STATS SECTION (separada del hero) ── */
+/* ── STATS SECTION editorial premium ── */
 .stats-section{
   position:relative;
   background:linear-gradient(to bottom, var(--dark) 0%, #0a0a14 100%);
-  padding:100px 24px;
+  padding:120px 24px;
   z-index:2;
 }
+
+/* Heading editorial encima de los stats */
+.stats-heading{
+  max-width:1100px;margin:0 auto 56px;
+  display:flex;align-items:flex-end;justify-content:space-between;
+  gap:24px;flex-wrap:wrap;
+}
+.stats-eyebrow{
+  font-family:var(--sans);font-size:.72rem;font-weight:700;
+  letter-spacing:.18em;text-transform:uppercase;
+  color:var(--sky);
+  display:flex;align-items:center;gap:10px;
+}
+.stats-eyebrow::before{
+  content:'';width:32px;height:1px;background:var(--sky);
+}
+.stats-heading-title{
+  font-family:var(--sans);
+  font-size:clamp(1.6rem,3vw,2.4rem);
+  font-weight:600;color:#fff;
+  letter-spacing:-.03em;line-height:1.1;
+  margin-top:12px;
+}
+.stats-heading-title em{
+  font-family:var(--serif);font-style:italic;font-weight:400;
+  color:var(--sky);
+}
+.stats-heading-side{
+  font-family:var(--body);font-size:.88rem;
+  color:rgba(255,255,255,.55);max-width:280px;line-height:1.6;
+}
+
 .stats-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
+  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
   max-width:1100px;margin:0 auto;
   position:relative;z-index:20;
+  border-top:1px solid rgba(255,255,255,.08);
+  border-bottom:1px solid rgba(255,255,255,.08);
+  background:rgba(255,255,255,.05);
 }
 
 .stat-card{
   position:relative;
-  border-radius:24px;
-  border:1px solid rgba(255,255,255,.1);
-  background:rgba(255,255,255,.04);
-  backdrop-filter:blur(20px);-webkit-backdrop-filter:blur(20px);
-  padding:32px 28px;
-  text-align:center;
+  background:#0a0a14;
+  padding:48px 32px;
+  text-align:left;
   overflow:hidden;
-  transition:background 250ms ease-out,transform 250ms ease-out,border-color 250ms ease-out;
+  transition:background 250ms ease-out;
 }
-.stat-card:hover{
-  background:rgba(255,255,255,.08);
-  border-color:rgba(255,255,255,.18);
-  transform:translateY(-4px);
+.stat-card:hover{background:#0d0d1a;}
+
+/* Línea inferior animada que se dibuja en hover */
+.stat-card::after{
+  content:'';position:absolute;
+  bottom:0;left:0;right:0;height:1px;
+  background:linear-gradient(90deg,transparent,var(--sky),var(--sunset),transparent);
+  transform:scaleX(0);transform-origin:left;
+  transition:transform 500ms cubic-bezier(0.23,1,0.32,1);
 }
+.stat-card:hover::after{transform:scaleX(1);}
+
+/* Glow ambiente que aparece en hover */
 .stat-card::before{
   content:'';position:absolute;
-  top:-60px;right:-60px;
-  width:200px;height:200px;border-radius:50%;
-  background:radial-gradient(circle, rgba(14,165,233,.18), transparent 70%);
-  filter:blur(40px);pointer-events:none;
-  transition:transform 400ms ease-out;
+  top:-40px;left:-40px;
+  width:180px;height:180px;border-radius:50%;
+  background:radial-gradient(circle, rgba(14,165,233,.12), transparent 70%);
+  opacity:0;pointer-events:none;
+  transition:opacity 400ms ease-out,transform 400ms ease-out;
 }
-.stat-card:hover::before{transform:scale(1.3);}
+.stat-card:hover::before{opacity:1;transform:translate(20px,20px);}
 
+/* Eyebrow con índice + label */
+.stat-meta{
+  display:flex;align-items:center;gap:12px;
+  margin-bottom:32px;
+}
+.stat-index{
+  font-family:var(--body);font-size:.7rem;
+  color:rgba(255,255,255,.4);font-weight:500;
+  letter-spacing:.1em;
+  font-variant-numeric:tabular-nums;
+}
 .stat-icon{
-  width:60px;height:60px;border-radius:16px;
-  background:linear-gradient(135deg, rgba(14,165,233,.2), rgba(249,115,22,.2));
-  border:1px solid rgba(255,255,255,.15);
+  width:28px;height:28px;border-radius:8px;
   display:flex;align-items:center;justify-content:center;
-  margin:0 auto 22px;
-  transition:transform 250ms ease-out;
+  background:rgba(14,165,233,.1);
+  border:1px solid rgba(14,165,233,.2);
+  transition:background 250ms ease-out,transform 300ms ease-out;
 }
-.stat-card:hover .stat-icon{transform:scale(1.1);}
+.stat-card:hover .stat-icon{
+  background:rgba(14,165,233,.2);
+  transform:rotate(-8deg) scale(1.08);
+}
 .stat-icon svg{
-  width:28px;height:28px;
+  width:14px;height:14px;
   stroke:var(--sky);fill:none;
-  stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
 }
 
+/* Número HUGE editorial */
 .stat-num{
-  font-family:var(--sans);font-size:3rem;font-weight:800;
-  color:#fff;letter-spacing:-.04em;line-height:1;
-  margin-bottom:12px;
+  font-family:var(--sans);
+  font-size:clamp(3.5rem,6vw,5rem);
+  font-weight:500;
+  color:#fff;letter-spacing:-.06em;line-height:.95;
+  margin-bottom:14px;
+  font-variation-settings:"opsz" 96;
+  display:flex;align-items:baseline;gap:4px;
 }
-.stat-num .suffix{color:var(--sky);}
+.stat-num .suffix{
+  font-family:var(--serif);
+  font-style:italic;font-weight:400;
+  font-size:.7em;letter-spacing:-.02em;
+  background:linear-gradient(90deg,#38BDF8,#F97316);
+  -webkit-background-clip:text;
+  -webkit-text-fill-color:transparent;
+  background-clip:text;
+}
 .stat-label{
-  font-size:.85rem;color:rgba(255,255,255,.7);
-  font-weight:500;letter-spacing:.02em;
+  font-family:var(--body);font-size:.82rem;
+  color:rgba(255,255,255,.55);
+  font-weight:400;letter-spacing:.01em;line-height:1.5;
+  max-width:200px;
+}
+
+/* Arrow indicator que aparece en hover */
+.stat-arrow{
+  position:absolute;top:48px;right:32px;
+  width:24px;height:24px;
+  display:flex;align-items:center;justify-content:center;
+  color:rgba(255,255,255,.3);
+  opacity:0;transform:translateX(-8px);
+  transition:opacity 300ms ease-out,transform 300ms ease-out,color 300ms ease-out;
+}
+.stat-card:hover .stat-arrow{
+  opacity:1;transform:translateX(0);
+  color:var(--sky);
+}
+.stat-arrow svg{
+  width:18px;height:18px;
+  stroke:currentColor;fill:none;
+  stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
 }
 
 @media (max-width:768px){
@@ -496,8 +583,13 @@ body.menu-open{overflow:hidden;}
   .hero-nav-brand{padding:6px 4px;font-size:.85rem;}
 
   /* Stats responsive */
-  .stats-grid{grid-template-columns:1fr;gap:14px;}
-  .stats-section{padding:60px 18px;}
+  .stats-grid{grid-template-columns:1fr;gap:1px;}
+  .stats-section{padding:70px 18px;}
+  .stats-heading{flex-direction:column;align-items:flex-start;margin-bottom:36px;}
+  .stats-heading-side{max-width:100%;}
+  .stat-card{padding:32px 22px;}
+  .stat-num{font-size:3.2rem;}
+  .stat-arrow{top:32px;right:22px;}
 
   /* Hero content compacto */
   .hero-content{top:90px;bottom:110px;padding:0 18px;}
@@ -1120,31 +1212,57 @@ footer{
   </div>
 </section>
 
-<!-- STATS SECTION (cards flotando sobre el hero) -->
+<!-- STATS SECTION editorial premium -->
 <section class="stats-section">
+  <div class="stats-heading reveal">
+    <div>
+      <div class="stats-eyebrow">Por los números</div>
+      <h2 class="stats-heading-title">Confianza construida<br/>vuelo tras <em>vuelo</em></h2>
+    </div>
+    <p class="stats-heading-side">Cada cifra representa años de dedicación, pasión y compromiso con la seguridad de quienes vuelan con nosotros.</p>
+  </div>
+
   <div class="stats-grid">
     <div class="stat-card reveal">
-      <div class="stat-icon">
-        <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/><path d="M16 3.13a4 4 0 010 7.75"/></svg>
+      <div class="stat-meta">
+        <span class="stat-index">01 / 03</span>
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/></svg>
+        </div>
       </div>
       <div class="stat-num" data-count="500"><span>0</span><span class="suffix">+</span></div>
-      <div class="stat-label">Vuelos Realizados</div>
+      <div class="stat-label">Vuelos realizados con instructores certificados</div>
+      <div class="stat-arrow">
+        <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+      </div>
     </div>
 
     <div class="stat-card reveal reveal-delay-1">
-      <div class="stat-icon">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+      <div class="stat-meta">
+        <span class="stat-index">02 / 03</span>
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+        </div>
       </div>
-      <div class="stat-num" data-count="8"><span>0</span><span class="suffix"> Años</span></div>
-      <div class="stat-label">De Experiencia</div>
+      <div class="stat-num" data-count="8"><span>0</span><span class="suffix">años</span></div>
+      <div class="stat-label">De experiencia formando pilotos y guiando vuelos</div>
+      <div class="stat-arrow">
+        <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+      </div>
     </div>
 
     <div class="stat-card reveal reveal-delay-2">
-      <div class="stat-icon">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/></svg>
+      <div class="stat-meta">
+        <span class="stat-index">03 / 03</span>
+        <div class="stat-icon">
+          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        </div>
       </div>
       <div class="stat-num" data-count="100"><span>0</span><span class="suffix">%</span></div>
-      <div class="stat-label">Seguridad Certificada</div>
+      <div class="stat-label">Seguridad certificada con equipos homologados</div>
+      <div class="stat-arrow">
+        <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+      </div>
     </div>
   </div>
 </section>

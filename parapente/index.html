@@ -648,6 +648,29 @@ body.menu-open{overflow:hidden;}
   .lg-num-value{font-size:2.6rem;height:2.6rem;}
   .lg-num-suffix{font-size:1.3rem;}
 
+  /* Expand cards responsive: apilar vertical */
+  .exp-expand-row{
+    flex-direction:column;
+    height:auto;gap:12px;
+    margin-top:48px;
+  }
+  .exp-card{
+    flex:none;width:100%;
+    height:120px;
+    transition:height 600ms cubic-bezier(0.65,0.05,0.36,1),border-color 400ms ease-out;
+  }
+  .exp-card.expanded{
+    height:460px;
+    flex-grow:0;
+  }
+  .exp-title-collapsed{
+    bottom:50%;left:28px;
+    transform:translateY(50%) rotate(0deg);
+    transform-origin:left center;
+  }
+  .exp-card.expanded .exp-title-collapsed{opacity:0;}
+  .exp-title{font-size:1.8rem;}
+
   /* Hero content compacto */
   .hero-content{top:90px;bottom:110px;padding:0 18px;}
   .hero-stack{gap:20px;}
@@ -809,91 +832,184 @@ section{padding:120px 24px;}
   line-height:1.75;max-width:480px;
 }
 
-/* ════════════════════
-   EXPERIENCIAS
-════════════════════ */
+/* ════════════════════════════════
+   EXPERIENCIAS — Expand on Hover
+════════════════════════════════ */
 #experiencias{
   background:
     radial-gradient(ellipse 50% 50% at 80% 20%,rgba(14,165,233,.08),transparent),
     var(--dark2);
 }
 
-.exp-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:16px;margin-top:64px;
+.exp-expand-row{
+  display:flex;align-items:stretch;justify-content:center;
+  gap:14px;margin-top:64px;
+  width:100%;
+  height:520px;
 }
 
 .exp-card{
-  background:rgba(255,255,255,.03);
+  position:relative;
+  flex:1 1 0;
+  min-width:90px;
+  border-radius:24px;
+  overflow:hidden;
+  cursor:pointer;
   border:1px solid rgba(255,255,255,.07);
-  border-radius:20px;padding:36px 28px;
-  position:relative;overflow:hidden;
-  cursor:default;
-  transition:border-color 200ms ease-out,transform 200ms ease-out,box-shadow 200ms ease-out;
+  transition:flex-grow 700ms cubic-bezier(0.65,0.05,0.36,1),border-color 400ms ease-out;
+  background:#0a0a14;
 }
-.exp-card::before{
-  content:'';position:absolute;top:0;left:0;right:0;height:2px;
-  background:var(--grad);opacity:0;
-  transition:opacity 200ms ease-out;
-}
-.exp-card:hover{
-  border-color:rgba(14,165,233,.2);
-  transform:translateY(-4px);
-  box-shadow:0 20px 60px rgba(0,0,0,.4);
-}
-.exp-card:hover::before{opacity:1;}
 
-/* Número de fondo decorativo */
-.exp-num{
-  position:absolute;top:16px;right:20px;
-  font-family:var(--sans);font-size:5rem;font-weight:900;
-  color:rgba(255,255,255,.04);letter-spacing:-.05em;line-height:1;
+/* Card expandida ocupa más espacio */
+.exp-card.expanded{
+  flex-grow:4;
+  border-color:rgba(14,165,233,.22);
+}
+
+/* Background visual: gradiente + imagen decorativa */
+.exp-bg{
+  position:absolute;inset:0;
+  background:linear-gradient(135deg, rgba(14,165,233,.22) 0%, rgba(14,165,233,.05) 40%, rgba(249,115,22,.18) 100%);
+  transition:opacity 500ms ease-out;
+}
+.exp-bg::before{
+  content:'';position:absolute;inset:0;
+  background-image:url("data:image/svg+xml,%3Csvg viewBox='0 0 400 400' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity:.08;mix-blend-mode:overlay;
+}
+
+/* Card 1 — Bautizo: azul cielo */
+.exp-card[data-color="sky"] .exp-bg{
+  background:
+    radial-gradient(ellipse 80% 60% at 30% 20%, rgba(34,211,238,.35), transparent 70%),
+    linear-gradient(160deg, rgba(14,165,233,.45) 0%, rgba(2,132,199,.85) 100%);
+}
+/* Card 2 — Tándem: naranja atardecer */
+.exp-card[data-color="sunset"] .exp-bg{
+  background:
+    radial-gradient(ellipse 80% 60% at 70% 20%, rgba(251,191,36,.35), transparent 70%),
+    linear-gradient(200deg, rgba(249,115,22,.45) 0%, rgba(234,88,12,.85) 100%);
+}
+/* Card 3 — Curso: morado profundo */
+.exp-card[data-color="violet"] .exp-bg{
+  background:
+    radial-gradient(ellipse 80% 60% at 50% 30%, rgba(167,139,250,.3), transparent 70%),
+    linear-gradient(180deg, rgba(124,58,237,.45) 0%, rgba(76,29,149,.9) 100%);
+}
+
+/* Overlay degradado abajo para legibilidad */
+.exp-card::after{
+  content:'';position:absolute;left:0;right:0;bottom:0;height:60%;
+  background:linear-gradient(to top, rgba(0,0,0,.85), transparent);
   pointer-events:none;
 }
 
-.exp-icon{
-  width:52px;height:52px;border-radius:14px;
-  background:linear-gradient(135deg,rgba(14,165,233,.15),rgba(249,115,22,.1));
-  border:1px solid rgba(14,165,233,.2);
-  display:flex;align-items:center;justify-content:center;
-  margin-bottom:24px;
+/* CONTENIDO — comprimido cuando NO está expandida */
+.exp-content{
+  position:absolute;inset:0;z-index:2;
+  display:flex;flex-direction:column;justify-content:space-between;
+  padding:28px;
 }
-.exp-icon svg{width:24px;height:24px;stroke:var(--sky);fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;}
+
+/* Top: número + ícono */
+.exp-top{
+  display:flex;align-items:flex-start;justify-content:space-between;
+  opacity:1;transition:opacity 300ms ease-out;
+}
+.exp-num{
+  font-family:var(--sans);font-size:.72rem;font-weight:700;
+  letter-spacing:.18em;color:rgba(255,255,255,.65);
+}
+.exp-icon-wrap{
+  width:42px;height:42px;border-radius:12px;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.2);
+  display:flex;align-items:center;justify-content:center;
+  backdrop-filter:blur(8px);
+}
+.exp-icon-wrap svg{width:20px;height:20px;stroke:#fff;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;}
+
+/* Bottom: tag + título + descripción + price + botón */
+.exp-bottom{
+  display:flex;flex-direction:column;gap:14px;
+}
+
+/* Título vertical cuando NO está expandida */
+.exp-title-collapsed{
+  position:absolute;
+  bottom:28px;left:50%;
+  transform:translateX(-50%) rotate(-90deg);
+  transform-origin:center;
+  font-family:var(--sans);font-size:.95rem;font-weight:700;
+  letter-spacing:.04em;
+  color:#fff;text-transform:uppercase;
+  white-space:nowrap;
+  opacity:1;transition:opacity 350ms ease-out;
+  pointer-events:none;
+}
+.exp-card.expanded .exp-title-collapsed{opacity:0;}
+
+/* Contenido expandido: solo visible cuando .expanded */
+.exp-expanded-content{
+  opacity:0;
+  transform:translateY(20px);
+  pointer-events:none;
+  transition:opacity 400ms ease-out 250ms, transform 500ms cubic-bezier(0.23,1,0.32,1) 250ms;
+}
+.exp-card.expanded .exp-expanded-content{
+  opacity:1;
+  transform:translateY(0);
+  pointer-events:auto;
+}
 
 .exp-tag{
-  display:inline-block;
-  background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.2);
-  border-radius:100px;padding:3px 12px;
-  font-family:var(--sans);font-size:.68rem;font-weight:700;
-  color:var(--sunset-l);letter-spacing:.05em;text-transform:uppercase;
-  margin-bottom:14px;
+  display:inline-flex;align-items:center;
+  background:rgba(255,255,255,.15);
+  backdrop-filter:blur(10px);
+  border:1px solid rgba(255,255,255,.22);
+  border-radius:100px;padding:5px 14px;
+  font-family:var(--sans);font-size:.64rem;font-weight:700;
+  color:#fff;letter-spacing:.1em;text-transform:uppercase;
+  width:max-content;
 }
 
 .exp-title{
-  font-family:var(--sans);font-size:1.4rem;font-weight:800;
-  letter-spacing:-.03em;color:var(--white);margin-bottom:10px;
+  font-family:var(--sans);font-size:clamp(1.7rem,2.2vw,2.2rem);
+  font-weight:700;letter-spacing:-.03em;
+  color:#fff;line-height:1.05;
+  font-variation-settings:"opsz" 72;
 }
-.exp-desc{font-size:.9rem;color:var(--t2);line-height:1.7;}
 
-.exp-price{
-  margin-top:24px;padding-top:20px;
-  border-top:1px solid rgba(255,255,255,.06);
+.exp-desc{
+  font-family:var(--body);font-size:.92rem;
+  color:rgba(255,255,255,.85);line-height:1.55;
+  max-width:380px;
+}
+
+.exp-cta-row{
   display:flex;align-items:center;justify-content:space-between;
+  gap:14px;margin-top:6px;flex-wrap:wrap;
 }
-.exp-price-val{
-  font-family:var(--sans);font-size:1.4rem;font-weight:900;
-  color:var(--white);letter-spacing:-.03em;
-}
-.exp-price-label{font-size:.72rem;color:var(--t2);}
 
 .exp-link{
-  display:inline-flex;align-items:center;gap:6px;
-  font-family:var(--sans);font-size:.8rem;font-weight:700;
-  color:var(--sky);text-decoration:none;
-  transition:gap 150ms ease-out;
+  display:inline-flex;align-items:center;gap:8px;
+  background:#fff;color:#0a0a14;
+  font-family:var(--sans);font-size:.84rem;font-weight:700;
+  padding:11px 22px;border-radius:9999px;
+  text-decoration:none;letter-spacing:-.01em;
+  transition:gap 200ms ease-out,transform 100ms ease-out;
 }
-.exp-link:hover{gap:10px;}
+.exp-link:hover{gap:12px;}
+.exp-link:active{transform:scale(.97);}
 .exp-link svg{width:14px;height:14px;stroke:currentColor;fill:none;stroke-width:2.5;stroke-linecap:round;stroke-linejoin:round;}
+
+.exp-price-mini{
+  font-family:var(--body);font-size:.78rem;
+  color:rgba(255,255,255,.7);
+}
+.exp-price-mini strong{
+  color:#fff;font-weight:700;font-family:var(--sans);
+}
 
 /* ════════════════════
    POR QUÉ NOSOTROS
@@ -1419,63 +1535,83 @@ footer{
       <p class="section-sub">Tenemos opciones para todos — desde tu primer vuelo hasta convertirte en piloto certificado.</p>
     </div>
 
-    <div class="exp-grid">
-      <div class="exp-card reveal reveal-delay-1">
-        <span class="exp-num">01</span>
-        <div class="exp-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
-        </div>
-        <span class="exp-tag">Más popular</span>
-        <h3 class="exp-title">Bautizo de vuelo</h3>
-        <p class="exp-desc">Tu primera experiencia en el aire. Sin requisitos previos, solo ganas de sentir la emoción de volar junto a un instructor certificado.</p>
-        <div class="exp-price">
-          <div>
-            <div class="exp-price-val">Consultar</div>
-            <div class="exp-price-label">precio por persona</div>
+    <div class="exp-expand-row" id="expRow">
+
+      <!-- CARD 1: Bautizo (expandida por defecto) -->
+      <div class="exp-card expanded" data-color="sky">
+        <div class="exp-bg"></div>
+        <div class="exp-content">
+          <div class="exp-top">
+            <span class="exp-num">01 / Bautizo</span>
+            <div class="exp-icon-wrap">
+              <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            </div>
           </div>
-          <a href="https://wa.me/573006359008?text=Hola%2C%20quiero%20información%20sobre%20el%20bautizo%20de%20vuelo" class="exp-link" target="_blank">
-            Reservar <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
+          <div class="exp-title-collapsed">Bautizo de vuelo</div>
+          <div class="exp-expanded-content exp-bottom">
+            <span class="exp-tag">Más popular</span>
+            <h3 class="exp-title">Bautizo<br/>de vuelo</h3>
+            <p class="exp-desc">Tu primera experiencia en el aire. Sin requisitos previos, solo ganas de sentir la emoción de volar junto a un instructor certificado.</p>
+            <div class="exp-cta-row">
+              <span class="exp-price-mini"><strong>Consultar</strong> por persona</span>
+              <a href="https://wa.me/573006359008?text=Hola%2C%20quiero%20información%20sobre%20el%20bautizo%20de%20vuelo" class="exp-link" target="_blank">
+                Reservar <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="exp-card reveal reveal-delay-2">
-        <span class="exp-num">02</span>
-        <div class="exp-icon">
-          <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
-        </div>
-        <span class="exp-tag">Adrenalina total</span>
-        <h3 class="exp-title">Vuelo tándem</h3>
-        <p class="exp-desc">Un vuelo completo en parapente tándem. Experimenta las maniobras, los térmicos y las vistas panorámicas con total seguridad.</p>
-        <div class="exp-price">
-          <div>
-            <div class="exp-price-val">Consultar</div>
-            <div class="exp-price-label">precio por persona</div>
+      <!-- CARD 2: Tándem -->
+      <div class="exp-card" data-color="sunset">
+        <div class="exp-bg"></div>
+        <div class="exp-content">
+          <div class="exp-top">
+            <span class="exp-num">02 / Tándem</span>
+            <div class="exp-icon-wrap">
+              <svg viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 010 8h-1"/><path d="M2 8h16v9a4 4 0 01-4 4H6a4 4 0 01-4-4V8z"/></svg>
+            </div>
           </div>
-          <a href="https://wa.me/573006359008?text=Hola%2C%20quiero%20información%20sobre%20el%20vuelo%20tándem" class="exp-link" target="_blank">
-            Reservar <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
+          <div class="exp-title-collapsed">Vuelo tándem</div>
+          <div class="exp-expanded-content exp-bottom">
+            <span class="exp-tag">Adrenalina total</span>
+            <h3 class="exp-title">Vuelo<br/>tándem</h3>
+            <p class="exp-desc">Un vuelo completo en parapente tándem. Experimenta las maniobras, los térmicos y las vistas panorámicas con total seguridad.</p>
+            <div class="exp-cta-row">
+              <span class="exp-price-mini"><strong>Consultar</strong> por persona</span>
+              <a href="https://wa.me/573006359008?text=Hola%2C%20quiero%20información%20sobre%20el%20vuelo%20tándem" class="exp-link" target="_blank">
+                Reservar <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="exp-card reveal reveal-delay-3">
-        <span class="exp-num">03</span>
-        <div class="exp-icon">
-          <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
-        </div>
-        <span class="exp-tag">Sé piloto</span>
-        <h3 class="exp-title">Curso de parapente</h3>
-        <p class="exp-desc">Aprende a volar de manera autónoma. Curso completo con teoría, práctica en tierra y vuelos progresivos hasta lograr tu independencia.</p>
-        <div class="exp-price">
-          <div>
-            <div class="exp-price-val">Consultar</div>
-            <div class="exp-price-label">precio del curso</div>
+      <!-- CARD 3: Curso -->
+      <div class="exp-card" data-color="violet">
+        <div class="exp-bg"></div>
+        <div class="exp-content">
+          <div class="exp-top">
+            <span class="exp-num">03 / Curso</span>
+            <div class="exp-icon-wrap">
+              <svg viewBox="0 0 24 24"><path d="M22 10v6M2 10l10-5 10 5-10 5-10-5z"/><path d="M6 12v5c3 3 9 3 12 0v-5"/></svg>
+            </div>
           </div>
-          <a href="https://wa.me/573006359008?text=Hola%2C%20quiero%20información%20sobre%20el%20curso%20de%20parapente" class="exp-link" target="_blank">
-            Más info <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </a>
+          <div class="exp-title-collapsed">Curso de parapente</div>
+          <div class="exp-expanded-content exp-bottom">
+            <span class="exp-tag">Sé piloto</span>
+            <h3 class="exp-title">Curso de<br/>parapente</h3>
+            <p class="exp-desc">Aprende a volar de manera autónoma. Curso completo con teoría, práctica en tierra y vuelos progresivos hasta lograr tu independencia.</p>
+            <div class="exp-cta-row">
+              <span class="exp-price-mini"><strong>Consultar</strong> el curso</span>
+              <a href="https://wa.me/573006359008?text=Hola%2C%20quiero%20información%20sobre%20el%20curso%20de%20parapente" class="exp-link" target="_blank">
+                Más info <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+              </a>
+            </div>
+          </div>
         </div>
       </div>
+
     </div>
   </div>
 </section>
@@ -1750,6 +1886,23 @@ const gaugeObserver = new IntersectionObserver(entries => {
 }, { threshold: 0.4 });
 
 document.querySelectorAll('.lg-card').forEach(el => gaugeObserver.observe(el));
+
+// ── EXPAND CARDS (experiencias) ──
+const expRow = document.getElementById('expRow');
+if (expRow) {
+  const cards = expRow.querySelectorAll('.exp-card');
+  cards.forEach(card => {
+    card.addEventListener('mouseenter', () => {
+      cards.forEach(c => c.classList.remove('expanded'));
+      card.classList.add('expanded');
+    });
+    // En móvil: click para expandir
+    card.addEventListener('click', () => {
+      cards.forEach(c => c.classList.remove('expanded'));
+      card.classList.add('expanded');
+    });
+  });
+}
 
 // ── MOBILE MENU ──
 const navToggle = document.getElementById('navToggle');

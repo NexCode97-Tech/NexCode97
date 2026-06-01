@@ -1130,27 +1130,35 @@ section{padding:120px 24px;}
 .gal-4{grid-column:6/9;}
 .gal-5{grid-column:9/13;}
 
-/* Placeholder content para cada foto */
-.gal-placeholder{
-  width:100%;height:100%;min-height:180px;
-  background:linear-gradient(135deg,rgba(14,165,233,.08),rgba(249,115,22,.06));
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;
-  padding:20px;
+/* Video dentro de cada item de galería */
+.gal-video{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+  transition:transform 700ms cubic-bezier(0.23,1,0.32,1),filter 400ms ease-out;
+  filter:saturate(1.05);
 }
-.gal-placeholder svg{width:40px;height:40px;stroke:rgba(255,255,255,.15);fill:none;stroke-width:1.5;stroke-linecap:round;stroke-linejoin:round;}
-.gal-placeholder span{font-size:.75rem;color:rgba(255,255,255,.12);font-family:var(--sans);font-weight:600;letter-spacing:.08em;text-transform:uppercase;}
+.gal-item:hover .gal-video{
+  transform:scale(1.06);
+  filter:saturate(1.15) brightness(1.05);
+}
 
 .gal-overlay{
   position:absolute;inset:0;
-  background:linear-gradient(to top,rgba(0,0,0,.7),transparent 50%);
-  opacity:0;transition:opacity 200ms ease-out;
-  display:flex;align-items:flex-end;padding:20px;
+  background:linear-gradient(to top,rgba(0,0,0,.85) 0%,rgba(0,0,0,.2) 40%,transparent 70%);
+  display:flex;align-items:flex-end;padding:22px;
+  opacity:.6;transition:opacity 250ms ease-out;
+  z-index:2;
 }
 .gal-item:hover .gal-overlay{opacity:1;}
 .gal-overlay span{
-  font-family:var(--sans);font-size:.8rem;font-weight:700;
-  color:#fff;letter-spacing:.04em;
+  font-family:var(--sans);font-size:.88rem;font-weight:700;
+  color:#fff;letter-spacing:-.01em;
+  transform:translateY(8px);
+  transition:transform 350ms cubic-bezier(0.23,1,0.32,1);
 }
+.gal-item:hover .gal-overlay span{transform:translateY(0);}
 
 /* ════════════════════
    TESTIMONIOS
@@ -1694,45 +1702,36 @@ footer{
 
     <div class="gallery-grid">
       <div class="gal-item gal-1 reveal">
-        <div class="gal-placeholder">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span>Vuelo panorámico</span>
-        </div>
-        <div class="gal-overlay"><span>Vista desde las alturas</span></div>
+        <video class="gal-video" autoplay muted loop playsinline preload="metadata">
+          <source src="galeria-1.mp4" type="video/mp4"/>
+        </video>
+        <div class="gal-overlay"><span>Vuelo panorámico</span></div>
       </div>
       <div class="gal-item gal-2 reveal reveal-delay-1">
-        <div class="gal-placeholder">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span>Bautizo de vuelo</span>
-        </div>
-        <div class="gal-overlay"><span>Primera experiencia</span></div>
+        <video class="gal-video" autoplay muted loop playsinline preload="metadata">
+          <source src="galeria-2.mp4" type="video/mp4"/>
+        </video>
+        <div class="gal-overlay"><span>Bautizo de vuelo</span></div>
       </div>
       <div class="gal-item gal-3 reveal reveal-delay-2">
-        <div class="gal-placeholder">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span>Vuelo tándem</span>
-        </div>
-        <div class="gal-overlay"><span>Tándem en acción</span></div>
+        <video class="gal-video" autoplay muted loop playsinline preload="metadata">
+          <source src="galeria-3.mp4" type="video/mp4"/>
+        </video>
+        <div class="gal-overlay"><span>Vuelo tándem</span></div>
       </div>
       <div class="gal-item gal-4 reveal reveal-delay-1">
-        <div class="gal-placeholder">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span>Atardecer en vuelo</span>
-        </div>
-        <div class="gal-overlay"><span>Golden hour</span></div>
+        <video class="gal-video" autoplay muted loop playsinline preload="metadata">
+          <source src="galeria-4.mp4" type="video/mp4"/>
+        </video>
+        <div class="gal-overlay"><span>Atardecer en vuelo</span></div>
       </div>
       <div class="gal-item gal-5 reveal reveal-delay-2">
-        <div class="gal-placeholder">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></svg>
-          <span>Curso de piloto</span>
-        </div>
-        <div class="gal-overlay"><span>Formación completa</span></div>
+        <video class="gal-video" autoplay muted loop playsinline preload="metadata">
+          <source src="galeria-5.mp4" type="video/mp4"/>
+        </video>
+        <div class="gal-overlay"><span>Curso de piloto</span></div>
       </div>
     </div>
-
-    <p style="text-align:center;margin-top:24px;font-size:.82rem;color:var(--t3);">
-      * Los placeholders serán reemplazados por fotos reales de los vuelos
-    </p>
   </div>
 </section>
 

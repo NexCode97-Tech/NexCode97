@@ -422,157 +422,215 @@ body.menu-open{overflow:hidden;}
   stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
 }
 
-/* ── STATS SECTION editorial premium ── */
+/* ════════════════════════════════
+   STATS LIQUID GLASS CARDS
+════════════════════════════════ */
+@keyframes digitUp{from{transform:translateY(100%);opacity:0;}to{transform:translateY(0);opacity:1;}}
+@keyframes liquidIn{from{opacity:0;transform:translateY(40px);}to{opacity:1;transform:translateY(0);}}
+@keyframes strokeDraw{from{stroke-dashoffset:var(--from);}to{stroke-dashoffset:var(--to);}}
+
 .stats-section{
   position:relative;
-  background:linear-gradient(to bottom, var(--dark) 0%, #0a0a14 100%);
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 0%, rgba(14,165,233,.08), transparent 60%),
+    linear-gradient(to bottom, var(--dark) 0%, #0a0a14 100%);
   padding:120px 24px;
   z-index:2;
 }
 
-/* Heading editorial encima de los stats */
 .stats-heading{
-  max-width:1100px;margin:0 auto 56px;
-  display:flex;align-items:flex-end;justify-content:space-between;
-  gap:24px;flex-wrap:wrap;
+  max-width:1100px;margin:0 auto 64px;
+  text-align:center;
 }
 .stats-eyebrow{
   font-family:var(--sans);font-size:.72rem;font-weight:700;
   letter-spacing:.18em;text-transform:uppercase;
   color:var(--sky);
-  display:flex;align-items:center;gap:10px;
+  display:inline-flex;align-items:center;gap:10px;
+  margin-bottom:18px;
 }
-.stats-eyebrow::before{
-  content:'';width:32px;height:1px;background:var(--sky);
+.stats-eyebrow::before,
+.stats-eyebrow::after{
+  content:'';width:24px;height:1px;background:var(--sky);
 }
 .stats-heading-title{
   font-family:var(--sans);
-  font-size:clamp(1.6rem,3vw,2.4rem);
+  font-size:clamp(1.8rem,3.4vw,2.8rem);
   font-weight:600;color:#fff;
-  letter-spacing:-.03em;line-height:1.1;
-  margin-top:12px;
+  letter-spacing:-.04em;line-height:1.08;
+  max-width:680px;margin:0 auto;
+  font-variation-settings:"opsz" 72;
 }
 .stats-heading-title em{
   font-family:var(--serif);font-style:italic;font-weight:400;
-  color:var(--sky);
-}
-.stats-heading-side{
-  font-family:var(--body);font-size:.88rem;
-  color:rgba(255,255,255,.55);max-width:280px;line-height:1.6;
+  background:linear-gradient(90deg,#38BDF8,#F97316);
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
 
 .stats-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);gap:1px;
-  max-width:1100px;margin:0 auto;
+  display:flex;flex-wrap:wrap;align-items:stretch;justify-content:center;
+  gap:18px;
+  max-width:1200px;margin:0 auto;
   position:relative;z-index:20;
-  border-top:1px solid rgba(255,255,255,.08);
-  border-bottom:1px solid rgba(255,255,255,.08);
-  background:rgba(255,255,255,.05);
 }
 
-.stat-card{
+/* ── LIQUID GLASS CARD ── */
+.lg-card{
   position:relative;
-  background:#0a0a14;
-  padding:48px 32px;
-  text-align:left;
+  flex:1 1 320px;max-width:380px;
+  border-radius:22px;
+  padding:36px 32px 32px;
+  text-align:center;
+  background:rgba(255,255,255,.02);
+  border:1px solid rgba(255,255,255,.06);
   overflow:hidden;
-  transition:background 250ms ease-out;
-}
-.stat-card:hover{background:#0d0d1a;}
-
-/* Línea inferior animada que se dibuja en hover */
-.stat-card::after{
-  content:'';position:absolute;
-  bottom:0;left:0;right:0;height:1px;
-  background:linear-gradient(90deg,transparent,var(--sky),var(--sunset),transparent);
-  transform:scaleX(0);transform-origin:left;
-  transition:transform 500ms cubic-bezier(0.23,1,0.32,1);
-}
-.stat-card:hover::after{transform:scaleX(1);}
-
-/* Glow ambiente que aparece en hover */
-.stat-card::before{
-  content:'';position:absolute;
-  top:-40px;left:-40px;
-  width:180px;height:180px;border-radius:50%;
-  background:radial-gradient(circle, rgba(14,165,233,.12), transparent 70%);
-  opacity:0;pointer-events:none;
-  transition:opacity 400ms ease-out,transform 400ms ease-out;
-}
-.stat-card:hover::before{opacity:1;transform:translate(20px,20px);}
-
-/* Eyebrow con índice + label */
-.stat-meta{
-  display:flex;align-items:center;gap:12px;
-  margin-bottom:32px;
-}
-.stat-index{
-  font-family:var(--body);font-size:.7rem;
-  color:rgba(255,255,255,.4);font-weight:500;
-  letter-spacing:.1em;
-  font-variant-numeric:tabular-nums;
-}
-.stat-icon{
-  width:28px;height:28px;border-radius:8px;
-  display:flex;align-items:center;justify-content:center;
-  background:rgba(14,165,233,.1);
-  border:1px solid rgba(14,165,233,.2);
-  transition:background 250ms ease-out,transform 300ms ease-out;
-}
-.stat-card:hover .stat-icon{
-  background:rgba(14,165,233,.2);
-  transform:rotate(-8deg) scale(1.08);
-}
-.stat-icon svg{
-  width:14px;height:14px;
-  stroke:var(--sky);fill:none;
-  stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+  isolation:isolate;
+  transition:transform 350ms cubic-bezier(0.23,1,0.32,1),border-color 350ms ease-out;
 }
 
-/* Número HUGE editorial */
-.stat-num{
+/* Glass distortion layer — usa el filtro SVG turbulence */
+.lg-card::before{
+  content:'';position:absolute;inset:0;z-index:-1;
+  border-radius:22px;
+  backdrop-filter:url(#liquid-glass);
+  -webkit-backdrop-filter:blur(0px);
+}
+
+/* Inset glass shadow — efecto cristal real */
+.lg-card::after{
+  content:'';position:absolute;inset:0;z-index:1;
+  border-radius:22px;pointer-events:none;
+  box-shadow:
+    0 0 8px rgba(0,0,0,.04),
+    0 2px 8px rgba(0,0,0,.08),
+    inset 3px 3px 0.5px -3.5px rgba(255,255,255,.18),
+    inset -3px -3px 0.5px -3.5px rgba(255,255,255,.85),
+    inset 1px 1px 1px -.5px rgba(255,255,255,.5),
+    inset -1px -1px 1px -.5px rgba(255,255,255,.5),
+    inset 0 0 6px 6px rgba(255,255,255,.08),
+    inset 0 0 2px 2px rgba(255,255,255,.04),
+    0 0 14px rgba(14,165,233,.08);
+}
+.lg-card:hover{
+  transform:translateY(-4px);
+  border-color:rgba(255,255,255,.12);
+}
+
+.lg-card-inner{position:relative;z-index:2;}
+
+/* Header con título + badge */
+.lg-head{
+  display:flex;align-items:center;justify-content:space-between;
+  gap:14px;margin-bottom:24px;
+  opacity:0;animation:liquidIn .7s var(--ease) .1s both;
+}
+.lg-title{
+  font-family:var(--sans);font-size:1.05rem;font-weight:600;
+  color:#fff;letter-spacing:-.02em;text-align:left;
+}
+.lg-badge{
+  font-family:var(--body);font-size:.65rem;font-weight:700;
+  letter-spacing:.1em;text-transform:uppercase;
+  padding:5px 12px;border-radius:9999px;
+  white-space:nowrap;
+}
+.lg-badge.strong{
+  background:rgba(74,222,128,.12);
+  border:1px solid rgba(74,222,128,.3);
+  color:#4ade80;
+}
+.lg-badge.moderate{
+  background:rgba(251,191,36,.12);
+  border:1px solid rgba(251,191,36,.3);
+  color:#fbbf24;
+}
+
+/* Gauge semicircular */
+.lg-gauge{
+  position:relative;
+  margin:8px auto 16px;
+  width:100%;max-width:240px;
+  opacity:0;animation:liquidIn .7s var(--ease) .2s both;
+}
+.lg-gauge svg{
+  display:block;width:100%;height:auto;
+}
+.lg-gauge .track{stroke:rgba(255,255,255,.08);}
+.lg-gauge .stroke{
+  stroke-linecap:round;
+  transition:stroke-dashoffset 1.4s cubic-bezier(0.65,0,0.35,1);
+}
+
+/* Número con digit animation */
+.lg-num{
+  position:absolute;
+  bottom:0;left:0;right:0;
+  text-align:center;
+}
+.lg-num-value{
   font-family:var(--sans);
-  font-size:clamp(3.5rem,6vw,5rem);
-  font-weight:500;
-  color:#fff;letter-spacing:-.06em;line-height:.95;
-  margin-bottom:14px;
-  font-variation-settings:"opsz" 96;
-  display:flex;align-items:baseline;gap:4px;
+  font-size:3rem;font-weight:600;
+  color:#fff;letter-spacing:-.05em;line-height:1;
+  display:inline-flex;align-items:baseline;
+  height:3rem;overflow:hidden;
 }
-.stat-num .suffix{
-  font-family:var(--serif);
-  font-style:italic;font-weight:400;
-  font-size:.7em;letter-spacing:-.02em;
+.lg-num-value .digit{
+  display:inline-block;
+  animation:digitUp .9s cubic-bezier(0.23,1,0.32,1) both;
+}
+.lg-num-suffix{
+  font-family:var(--serif);font-style:italic;font-weight:400;
+  font-size:1.6rem;margin-left:2px;
   background:linear-gradient(90deg,#38BDF8,#F97316);
-  -webkit-background-clip:text;
-  -webkit-text-fill-color:transparent;
-  background-clip:text;
+  -webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;
 }
-.stat-label{
-  font-family:var(--body);font-size:.82rem;
-  color:rgba(255,255,255,.55);
-  font-weight:400;letter-spacing:.01em;line-height:1.5;
-  max-width:200px;
+.lg-num-label{
+  font-family:var(--body);font-size:.72rem;font-weight:500;
+  color:rgba(255,255,255,.5);
+  letter-spacing:.1em;text-transform:uppercase;
+  margin-top:6px;
 }
 
-/* Arrow indicator que aparece en hover */
-.stat-arrow{
-  position:absolute;top:48px;right:32px;
-  width:24px;height:24px;
-  display:flex;align-items:center;justify-content:center;
-  color:rgba(255,255,255,.3);
-  opacity:0;transform:translateX(-8px);
-  transition:opacity 300ms ease-out,transform 300ms ease-out,color 300ms ease-out;
+/* Descripción */
+.lg-desc{
+  font-family:var(--body);font-size:.85rem;
+  color:rgba(255,255,255,.6);line-height:1.6;
+  margin:22px 0 24px;
+  min-height:4rem;
+  opacity:0;animation:liquidIn .7s var(--ease) .3s both;
 }
-.stat-card:hover .stat-arrow{
-  opacity:1;transform:translateX(0);
-  color:var(--sky);
+
+/* Botón liquid */
+.lg-btn{
+  display:inline-flex;align-items:center;justify-content:center;
+  gap:8px;width:100%;
+  padding:14px 24px;border-radius:9999px;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.1);
+  color:#fff;text-decoration:none;
+  font-family:var(--sans);font-size:.85rem;font-weight:600;
+  letter-spacing:-.01em;
+  transition:background 200ms ease-out,border-color 200ms ease-out,transform 100ms ease-out;
+  opacity:0;animation:liquidIn .7s var(--ease) .4s both;
 }
-.stat-arrow svg{
-  width:18px;height:18px;
+.lg-btn:hover{
+  background:rgba(255,255,255,.08);
+  border-color:rgba(255,255,255,.2);
+}
+.lg-btn:active{transform:scale(.97);}
+.lg-btn svg{
+  width:14px;height:14px;
   stroke:currentColor;fill:none;
   stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
+  transition:transform 150ms ease-out;
 }
+.lg-btn:hover svg{transform:translateX(3px);}
+
+/* Stagger entrada por card */
+.lg-card{animation:liquidIn .8s var(--ease) both;}
+.lg-card:nth-child(1){animation-delay:.1s;}
+.lg-card:nth-child(2){animation-delay:.3s;}
+.lg-card:nth-child(3){animation-delay:.5s;}
 
 @media (max-width:768px){
   /* Navbar: solo brand + toggle */
@@ -583,13 +641,12 @@ body.menu-open{overflow:hidden;}
   .hero-nav-brand{padding:6px 4px;font-size:.85rem;}
 
   /* Stats responsive */
-  .stats-grid{grid-template-columns:1fr;gap:1px;}
   .stats-section{padding:70px 18px;}
-  .stats-heading{flex-direction:column;align-items:flex-start;margin-bottom:36px;}
-  .stats-heading-side{max-width:100%;}
-  .stat-card{padding:32px 22px;}
-  .stat-num{font-size:3.2rem;}
-  .stat-arrow{top:32px;right:22px;}
+  .stats-heading{margin-bottom:40px;}
+  .stats-grid{flex-direction:column;align-items:center;gap:16px;}
+  .lg-card{max-width:100%;width:100%;padding:28px 22px;}
+  .lg-num-value{font-size:2.6rem;height:2.6rem;}
+  .lg-num-suffix{font-size:1.3rem;}
 
   /* Hero content compacto */
   .hero-content{top:90px;bottom:110px;padding:0 18px;}
@@ -1225,58 +1282,131 @@ footer{
   </div>
 </section>
 
-<!-- STATS SECTION editorial premium -->
+<!-- STATS LIQUID GLASS CARDS -->
 <section class="stats-section">
+  <!-- Filtro SVG global Liquid Glass -->
+  <svg style="position:absolute;width:0;height:0;" aria-hidden="true">
+    <defs>
+      <filter id="liquid-glass" x="0%" y="0%" width="100%" height="100%" color-interpolation-filters="sRGB">
+        <feTurbulence type="fractalNoise" baseFrequency="0.02 0.02" numOctaves="1" seed="3" result="turbulence"/>
+        <feGaussianBlur in="turbulence" stdDeviation="2" result="blurredNoise"/>
+        <feDisplacementMap in="SourceGraphic" in2="blurredNoise" scale="80" xChannelSelector="R" yChannelSelector="B" result="displaced"/>
+        <feGaussianBlur in="displaced" stdDeviation="3" result="finalBlur"/>
+        <feComposite in="finalBlur" in2="finalBlur" operator="over"/>
+      </filter>
+      <!-- Gradientes para gauges -->
+      <linearGradient id="grad-sky" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#22D3EE"/>
+        <stop offset="50%" stop-color="#0EA5E9"/>
+        <stop offset="100%" stop-color="#0284C7"/>
+      </linearGradient>
+      <linearGradient id="grad-orange" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#FBBF24"/>
+        <stop offset="50%" stop-color="#F97316"/>
+        <stop offset="100%" stop-color="#EA580C"/>
+      </linearGradient>
+      <linearGradient id="grad-green" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#86EFAC"/>
+        <stop offset="50%" stop-color="#4ADE80"/>
+        <stop offset="100%" stop-color="#22C55E"/>
+      </linearGradient>
+    </defs>
+  </svg>
+
   <div class="stats-heading reveal">
-    <div>
-      <div class="stats-eyebrow">Por los números</div>
-      <h2 class="stats-heading-title">Confianza construida<br/>vuelo tras <em>vuelo</em></h2>
-    </div>
-    <p class="stats-heading-side">Cada cifra representa años de dedicación, pasión y compromiso con la seguridad de quienes vuelan con nosotros.</p>
+    <div class="stats-eyebrow">Por los números</div>
+    <h2 class="stats-heading-title">Confianza construida<br/>vuelo tras <em>vuelo</em></h2>
   </div>
 
   <div class="stats-grid">
-    <div class="stat-card reveal">
-      <div class="stat-meta">
-        <span class="stat-index">01 / 03</span>
-        <div class="stat-icon">
-          <svg viewBox="0 0 24 24"><path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 00-3-3.87"/></svg>
+
+    <!-- CARD 1: Vuelos -->
+    <div class="lg-card">
+      <div class="lg-card-inner">
+        <div class="lg-head">
+          <h3 class="lg-title">Vuelos Realizados</h3>
+          <span class="lg-badge strong">Excelente</span>
         </div>
-      </div>
-      <div class="stat-num" data-count="500"><span>0</span><span class="suffix">+</span></div>
-      <div class="stat-label">Vuelos realizados con instructores certificados</div>
-      <div class="stat-arrow">
-        <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        <div class="lg-gauge">
+          <svg viewBox="0 0 100 60">
+            <g transform="translate(50,52)" fill="none" stroke-width="8">
+              <path class="track" d="M -45 0 A 45 45 0 0 1 45 0"/>
+              <path class="stroke" stroke="url(#grad-sky)" d="M -45 0 A 45 45 0 0 1 45 0"
+                pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"
+                data-gauge="95"/>
+            </g>
+          </svg>
+          <div class="lg-num">
+            <div class="lg-num-value" data-num="500"><span class="digit">0</span></div>
+            <div class="lg-num-label">vuelos completados</div>
+          </div>
+        </div>
+        <p class="lg-desc">Más de quinientos vuelos seguros con clientes de todas partes de Colombia y el exterior.</p>
+        <a href="https://wa.me/573006359008?text=Hola%2C%20quiero%20información%20sobre%20parapente" class="lg-btn" target="_blank">
+          Vuela con nosotros
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
       </div>
     </div>
 
-    <div class="stat-card reveal reveal-delay-1">
-      <div class="stat-meta">
-        <span class="stat-index">02 / 03</span>
-        <div class="stat-icon">
-          <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="7"/><polyline points="8.21 13.89 7 23 12 20 17 23 15.79 13.88"/></svg>
+    <!-- CARD 2: Años -->
+    <div class="lg-card">
+      <div class="lg-card-inner">
+        <div class="lg-head">
+          <h3 class="lg-title">Años de Experiencia</h3>
+          <span class="lg-badge moderate">Sólido</span>
         </div>
-      </div>
-      <div class="stat-num" data-count="8"><span>0</span><span class="suffix">años</span></div>
-      <div class="stat-label">De experiencia formando pilotos y guiando vuelos</div>
-      <div class="stat-arrow">
-        <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        <div class="lg-gauge">
+          <svg viewBox="0 0 100 60">
+            <g transform="translate(50,52)" fill="none" stroke-width="8">
+              <path class="track" d="M -45 0 A 45 45 0 0 1 45 0"/>
+              <path class="stroke" stroke="url(#grad-orange)" d="M -45 0 A 45 45 0 0 1 45 0"
+                pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"
+                data-gauge="80"/>
+            </g>
+          </svg>
+          <div class="lg-num">
+            <div class="lg-num-value" data-num="8"><span class="digit">0</span><span class="lg-num-suffix">años</span></div>
+            <div class="lg-num-label">formando pilotos</div>
+          </div>
+        </div>
+        <p class="lg-desc">Ocho años de experiencia continua enseñando, guiando y descubriendo nuevos cielos.</p>
+        <a href="#porquenosotros" class="lg-btn">
+          Conoce al equipo
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
       </div>
     </div>
 
-    <div class="stat-card reveal reveal-delay-2">
-      <div class="stat-meta">
-        <span class="stat-index">03 / 03</span>
-        <div class="stat-icon">
-          <svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+    <!-- CARD 3: Seguridad -->
+    <div class="lg-card">
+      <div class="lg-card-inner">
+        <div class="lg-head">
+          <h3 class="lg-title">Seguridad Certificada</h3>
+          <span class="lg-badge strong">Excelente</span>
         </div>
-      </div>
-      <div class="stat-num" data-count="100"><span>0</span><span class="suffix">%</span></div>
-      <div class="stat-label">Seguridad certificada con equipos homologados</div>
-      <div class="stat-arrow">
-        <svg viewBox="0 0 24 24"><path d="M7 17L17 7M17 7H7M17 7v10"/></svg>
+        <div class="lg-gauge">
+          <svg viewBox="0 0 100 60">
+            <g transform="translate(50,52)" fill="none" stroke-width="8">
+              <path class="track" d="M -45 0 A 45 45 0 0 1 45 0"/>
+              <path class="stroke" stroke="url(#grad-green)" d="M -45 0 A 45 45 0 0 1 45 0"
+                pathLength="100" stroke-dasharray="100" stroke-dashoffset="100"
+                data-gauge="100"/>
+            </g>
+          </svg>
+          <div class="lg-num">
+            <div class="lg-num-value" data-num="100"><span class="digit">0</span><span class="lg-num-suffix">%</span></div>
+            <div class="lg-num-label">equipos homologados</div>
+          </div>
+        </div>
+        <p class="lg-desc">Cien por ciento de seguridad: equipos revisados y avalados por la Federación Colombiana.</p>
+        <a href="#porquenosotros" class="lg-btn">
+          Nuestros protocolos
+          <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
       </div>
     </div>
+
   </div>
 </section>
 
@@ -1579,30 +1709,47 @@ window.addEventListener('scroll', () => {
   heroEl.style.transform = `scale(${(1 - progress * 0.18).toFixed(3)})`;
 }, { passive: true });
 
-// ── COUNTER ANIMADO ──
-function animateCounter(el, target, duration = 2000) {
-  const numSpan = el.querySelector('span:not(.suffix)');
-  let start = null;
-  function step(t) {
-    if (!start) start = t;
-    const p = Math.min((t - start) / duration, 1);
-    numSpan.textContent = Math.floor(p * target);
-    if (p < 1) requestAnimationFrame(step);
-  }
-  requestAnimationFrame(step);
+// ── LIQUID GLASS STATS: gauges + digit animation ──
+function renderDigits(el, target) {
+  const suffix = el.querySelector('.lg-num-suffix');
+  const digits = String(target).split('');
+  // Limpiar contenido excepto suffix
+  el.innerHTML = '';
+  digits.forEach((d, i) => {
+    const span = document.createElement('span');
+    span.className = 'digit';
+    span.textContent = d;
+    span.style.animationDelay = `${400 + i * 100}ms`;
+    span.style.animationDuration = `${800 + i * 200}ms`;
+    el.appendChild(span);
+  });
+  if (suffix) el.appendChild(suffix);
 }
 
-const counterObserver = new IntersectionObserver(entries => {
+const gaugeObserver = new IntersectionObserver(entries => {
   entries.forEach(e => {
     if (e.isIntersecting) {
-      const target = parseInt(e.target.dataset.count);
-      animateCounter(e.target, target);
-      counterObserver.unobserve(e.target);
+      // Animar gauge (semicircle)
+      const stroke = e.target.querySelector('.stroke');
+      if (stroke) {
+        const targetPercent = parseInt(stroke.dataset.gauge);
+        // pathLength=100, dashoffset 100 → 100 - targetPercent
+        setTimeout(() => {
+          stroke.style.strokeDashoffset = String(100 - targetPercent);
+        }, 200);
+      }
+      // Animar dígitos
+      const numEl = e.target.querySelector('.lg-num-value');
+      if (numEl) {
+        const target = parseInt(numEl.dataset.num);
+        renderDigits(numEl, target);
+      }
+      gaugeObserver.unobserve(e.target);
     }
   });
-}, { threshold: 0.5 });
+}, { threshold: 0.4 });
 
-document.querySelectorAll('.stat-num[data-count]').forEach(el => counterObserver.observe(el));
+document.querySelectorAll('.lg-card').forEach(el => gaugeObserver.observe(el));
 
 // ── MOBILE MENU ──
 const navToggle = document.getElementById('navToggle');

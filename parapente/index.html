@@ -148,29 +148,32 @@ nav{
   pointer-events:none;
 }
 
-/* ── NAVBAR FLOTANTE PILL ── */
+/* ── NAVBAR FLOTANTE PILL — compacto y centrado ── */
 .hero-nav{
   position:fixed;top:24px;left:50%;
   transform:translateX(-50%);
   z-index:50;
-  display:flex;align-items:center;gap:6px;
-  padding:10px 14px;
+  display:inline-flex;align-items:center;gap:4px;
+  padding:8px 10px 8px 18px;
   border-radius:9999px;
   background:rgba(255,255,255,.08);
   backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);
   border:1px solid rgba(255,255,255,.18);
   box-shadow:0 8px 32px rgba(0,0,0,.4);
   animation:navIn .8s var(--ease) .4s both;
+  width:auto;max-width:calc(100% - 32px);
 }
 .hero-nav-brand{
   font-family:var(--sans);font-size:.88rem;font-weight:800;
-  color:#fff;padding:6px 14px;letter-spacing:-.02em;
+  color:#fff;padding:6px 14px 6px 0;letter-spacing:-.02em;
+  white-space:nowrap;
 }
 .hero-nav-brand span{color:var(--sky);}
 .hero-nav-divider{
   width:1px;height:18px;
   background:rgba(255,255,255,.18);
-  margin:0 4px;
+  margin:0 6px;
+  flex-shrink:0;
 }
 .hero-nav-links{display:flex;align-items:center;gap:2px;}
 .hero-nav-links a{
@@ -307,16 +310,16 @@ nav{
   stroke-width:2;stroke-linecap:round;stroke-linejoin:round;
 }
 
-/* ── STATS SECTION (debajo del hero) ── */
+/* ── STATS SECTION (separada del hero) ── */
 .stats-section{
   position:relative;
   background:linear-gradient(to bottom, var(--dark) 0%, #0a0a14 100%);
-  padding:120px 24px 100px;
+  padding:100px 24px;
   z-index:2;
 }
 .stats-grid{
   display:grid;grid-template-columns:repeat(3,1fr);gap:20px;
-  max-width:1100px;margin:-160px auto 0;
+  max-width:1100px;margin:0 auto;
   position:relative;z-index:20;
 }
 

@@ -855,10 +855,23 @@ section{padding:120px 24px;}
 .why-img-wrap{
   border-radius:24px;overflow:hidden;
   aspect-ratio:4/5;
-  background:linear-gradient(135deg,rgba(14,165,233,.15),rgba(249,115,22,.1));
+  background:#0a0a14;
   border:1px solid rgba(255,255,255,.07);
-  display:flex;align-items:center;justify-content:center;
   position:relative;
+  box-shadow:0 24px 60px rgba(0,0,0,.4);
+}
+.why-video{
+  position:absolute;inset:0;
+  width:100%;height:100%;
+  object-fit:cover;
+  display:block;
+}
+.why-video-overlay{
+  position:absolute;inset:0;
+  background:
+    linear-gradient(to top,rgba(0,0,0,.4) 0%,transparent 50%),
+    linear-gradient(135deg,rgba(14,165,233,.08),transparent 50%,rgba(249,115,22,.06));
+  pointer-events:none;
 }
 
 /* SVG parapente grande decorativo */
@@ -1343,17 +1356,10 @@ footer{
     <div class="why-layout">
       <div class="why-visual reveal">
         <div class="why-img-wrap">
-          <svg class="why-para-svg" viewBox="0 0 400 300" fill="none">
-            <path d="M200 80 Q80 30 10 100 Q80 130 200 115 Q320 130 390 100 Q320 30 200 80Z" fill="rgba(14,165,233,0.4)" stroke="rgba(14,165,233,0.6)" stroke-width="1.5"/>
-            <path d="M200 115 Q175 150 170 200" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-            <path d="M200 115 Q190 155 188 200" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-            <path d="M200 115 Q200 160 200 205" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-            <path d="M200 115 Q210 155 212 200" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-            <path d="M200 115 Q225 150 230 200" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-            <ellipse cx="200" cy="208" rx="18" ry="10" fill="rgba(249,115,22,0.5)"/>
-            <line x1="200" y1="218" x2="200" y2="240" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-            <line x1="185" y1="228" x2="215" y2="228" stroke="rgba(255,255,255,0.4)" stroke-width="1.5"/>
-          </svg>
+          <video class="why-video" autoplay muted loop playsinline preload="auto">
+            <source src="video-2.mp4" type="video/mp4"/>
+          </video>
+          <div class="why-video-overlay"></div>
         </div>
         <div class="why-badge">
           <div class="why-badge-num">+500</div>

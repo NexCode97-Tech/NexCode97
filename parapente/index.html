@@ -247,11 +247,33 @@ nav{
   font-style:italic;
   font-weight:400;
   letter-spacing:-.02em;
+  padding:0 .05em;
+}
+
+/* ── GOOEY MORPH WRAPPER ── */
+.gooey-wrap{
+  position:relative;
+  display:flex;align-items:center;justify-content:center;
+  width:100%;
+  filter:url(#gooey-threshold);
+  height:1em;
+  line-height:1;
+}
+.gooey-text{
+  position:absolute;
+  left:50%;top:50%;
+  transform:translate(-50%,-50%);
+  white-space:nowrap;
+  font-family:var(--serif);
+  font-style:italic;
+  font-weight:400;
+  font-size:inherit;
+  line-height:1;
   background:linear-gradient(90deg, #38BDF8 0%, #0EA5E9 50%, #F97316 100%);
   -webkit-background-clip:text;
   -webkit-text-fill-color:transparent;
   background-clip:text;
-  padding:0 .05em;
+  will-change:filter,opacity;
 }
 
 /* Subtítulo */
@@ -970,8 +992,24 @@ footer{
 
       <h1 class="hero-title-v5">
         <span class="l1">Vuela Sobre</span>
-        <span class="l2">Las Nubes</span>
+        <span class="l2 gooey-wrap">
+          <span class="gooey-text" id="gooey-1"></span>
+          <span class="gooey-text" id="gooey-2"></span>
+        </span>
       </h1>
+
+      <!-- SVG filter para el efecto gooey/threshold -->
+      <svg style="position:absolute;width:0;height:0;" aria-hidden="true">
+        <defs>
+          <filter id="gooey-threshold">
+            <feColorMatrix in="SourceGraphic" type="matrix" values="
+              1 0 0 0 0
+              0 1 0 0 0
+              0 0 1 0 0
+              0 0 0 255 -140"/>
+          </filter>
+        </defs>
+      </svg>
 
       <p class="hero-sub-v5">
         Vive la adrenalina del vuelo libre con vistas panorámicas inolvidables y guías profesionales. Tu aventura te espera.
@@ -1365,6 +1403,74 @@ document.querySelectorAll('a[href^="#"]').forEach(a => {
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
   });
 });
+
+// ── GOOEY TEXT MORPH ──
+(function gooeyMorph() {
+  const WORDS = ['Las Nubes', 'El Cielo', 'Los Andes', 'El Viento', 'La Libertad'];
+  const MORPH_TIME = 1.2;   // segundos de transición
+  const COOLDOWN = 1.4;     // tiempo que se ve fija cada palabra
+
+  const text1 = document.getElementById('gooey-1');
+  const text2 = document.getElementById('gooey-2');
+  if (!text1 || !text2) return;
+
+  let textIndex = WORDS.length - 1;
+  let time = Date.now();
+  let morph = 0;
+  let cooldown = COOLDOWN;
+
+  text1.textContent = WORDS[textIndex % WORDS.length];
+  text2.textContent = WORDS[(textIndex + 1) % WORDS.length];
+
+  function setMorph(fraction) {
+    text2.style.filter = `blur(${Math.min(8 / fraction - 8, 100)}px)`;
+    text2.style.opacity = `${Math.pow(fraction, 0.4) * 100}%`;
+    const inv = 1 - fraction;
+    text1.style.filter = `blur(${Math.min(8 / inv - 8, 100)}px)`;
+    text1.style.opacity = `${Math.pow(inv, 0.4) * 100}%`;
+  }
+
+  function doCooldown() {
+    morph = 0;
+    text2.style.filter = '';
+    text2.style.opacity = '100%';
+    text1.style.filter = '';
+    text1.style.opacity = '0%';
+  }
+
+  function doMorph() {
+    morph -= cooldown;
+    cooldown = 0;
+    let fraction = morph / MORPH_TIME;
+    if (fraction > 1) {
+      cooldown = COOLDOWN;
+      fraction = 1;
+    }
+    setMorph(fraction);
+  }
+
+  function animate() {
+    requestAnimationFrame(animate);
+    const newTime = Date.now();
+    const shouldIncrementIndex = cooldown > 0;
+    const dt = (newTime - time) / 1000;
+    time = newTime;
+    cooldown -= dt;
+
+    if (cooldown <= 0) {
+      if (shouldIncrementIndex) {
+        textIndex = (textIndex + 1) % WORDS.length;
+        text1.textContent = WORDS[textIndex % WORDS.length];
+        text2.textContent = WORDS[(textIndex + 1) % WORDS.length];
+      }
+      doMorph();
+    } else {
+      doCooldown();
+    }
+  }
+
+  animate();
+})();
 </script>
 </body>
 </html>

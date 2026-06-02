@@ -102,7 +102,7 @@ export function TestimoniosSection() {
                 <img
                   src="/logos/logo-ntrl.webp"
                   alt="Natural Ropa Deportiva"
-                  className="h-8 w-auto object-contain opacity-80"
+                  className="h-8 w-auto object-contain opacity-80 self-start"
                 />
               </CardHeader>
               <CardContent className="p-0">

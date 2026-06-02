@@ -84,15 +84,15 @@ export const ServicesSection = () => {
           className="mb-14"
         >
           <p className="text-xs font-bold tracking-[0.14em] uppercase mb-4 flex items-center gap-3"
-            style={{ color: "#22d3ee", fontFamily: "'Inter', sans-serif" }}>
+            style={{ color: "#22d3ee" }}>
             <span className="inline-block w-4 h-0.5 rounded" style={{ background: "linear-gradient(135deg,#7c3aed,#06b6d4)" }} />
             Servicios
           </p>
-          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-tight mb-4"
-            style={{ fontFamily: "'Inter', sans-serif", letterSpacing: "-0.04em", color: "#09090e" }}>
+          <h2 className="text-3xl md:text-4xl font-extrabold mb-4"
+            style={{ letterSpacing: "-0.04em", color: "#09090e" }}>
             Lo que construimos
           </h2>
-          <p className="text-sm max-w-md leading-relaxed" style={{ color: "#475569", fontFamily: "'Inter', sans-serif" }}>
+          <p className="text-sm max-w-md leading-relaxed" style={{ color: "#475569" }}>
             Soluciones digitales a la medida para cualquier tipo de negocio. Pasa el cursor sobre cada servicio.
           </p>
         </motion.div>

@@ -39,19 +39,19 @@ export default function StackFeatureSection() {
         {/* Left: texto */}
         <div className="w-1/2 z-10 relative">
           <p className="text-xs font-bold tracking-[0.14em] uppercase mb-4 flex items-center gap-3"
-            style={{ color: "#22d3ee", fontFamily: "var(--font-inter), sans-serif" }}>
+            style={{ color: "#22d3ee" }}>
             <span className="inline-block w-4 h-0.5 rounded" style={{ background: "linear-gradient(135deg,#7c3aed,#06b6d4)" }} />
             Tecnología
           </p>
           <h2 className="text-4xl sm:text-5xl font-extrabold mb-4 leading-tight"
-            style={{ color: "#fff", fontFamily: "var(--font-inter), sans-serif", letterSpacing: "-0.04em" }}>
+            style={{ color: "#fff", letterSpacing: "-0.04em" }}>
             Construye tu<br />
             <span style={{ background: "linear-gradient(135deg,#7c3aed,#06b6d4)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
               idea con nosotros
             </span>
           </h2>
           <p className="mb-8 max-w-sm text-sm leading-relaxed"
-            style={{ color: "#888ca4", fontFamily: "var(--font-inter), sans-serif" }}>
+            style={{ color: "#888ca4" }}>
             Usamos el stack más moderno y probado para que tu producto sea rápido, escalable y fácil de mantener.
           </p>
           <div className="flex items-center gap-3">

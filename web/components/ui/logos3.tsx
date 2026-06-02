@@ -58,8 +58,10 @@ const Logos3 = ({
                     alt={logo.description}
                     width={120}
                     height={48}
+                    quality={100}
                     className={`${logo.className} opacity-40 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300`}
                     loading="lazy"
+                    unoptimized
                   />
                 </div>
               </CarouselItem>

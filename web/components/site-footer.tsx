@@ -1,19 +1,12 @@
-import {
-  Instagram,
-  Mail,
-  MapPin,
-  Phone,
-  Github,
-  Linkedin,
-  MessageCircle,
-} from "lucide-react";
+import { Mail, MapPin } from "lucide-react";
+import { FaInstagram, FaGithub, FaLinkedinIn, FaWhatsapp } from "react-icons/fa";
 import Link from "next/link";
 
 const socialLinks = [
-  { icon: Instagram,      label: "Instagram", href: "https://instagram.com/nexcode97" },
-  { icon: MessageCircle,  label: "WhatsApp",  href: "https://wa.me/573006359008" },
-  { icon: Github,         label: "GitHub",    href: "https://github.com/NexCode97" },
-  { icon: Linkedin,       label: "LinkedIn",  href: "https://linkedin.com/company/nexcode97" },
+  { icon: FaInstagram,   label: "Instagram", href: "https://instagram.com/nexcode97" },
+  { icon: FaWhatsapp,    label: "WhatsApp",  href: "https://wa.me/573006359008" },
+  { icon: FaGithub,      label: "GitHub",    href: "https://github.com/NexCode97" },
+  { icon: FaLinkedinIn,  label: "LinkedIn",  href: "https://linkedin.com/company/nexcode97" },
 ];
 
 const serviciosLinks = [
@@ -32,7 +25,7 @@ const empresaLinks = [
 ];
 
 const contactInfo = [
-  { icon: MessageCircle, text: "+57 300 635 9008",       href: "https://wa.me/573006359008" },
+  { icon: FaWhatsapp,    text: "+57 300 635 9008",       href: "https://wa.me/573006359008" },
   { icon: Mail,          text: "hola@nexcode97.com",     href: "mailto:hola@nexcode97.com" },
   { icon: MapPin,        text: "Colombia",               href: "#", isAddress: true },
 ];

@@ -71,7 +71,7 @@ export const ExpandingCards = React.forwardRef<HTMLUListElement, ExpandingCardsP
               src={item.imgSrc}
               alt={item.title}
               fill
-              sizes="100vw"
+              sizes="(max-width: 768px) 100vw, 50vw"
               quality={100}
               className="object-cover transition-all duration-500 ease-out group-data-[active=true]:scale-100 group-data-[active=true]:grayscale-0 scale-110 grayscale"
               loading={index === 0 ? "eager" : "lazy"}

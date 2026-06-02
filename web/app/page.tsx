@@ -1,6 +1,7 @@
 import { WovenLightHero } from "@/components/hero-dynamic";
 import { ServicesSection } from "@/components/services-section";
 import StackFeatureSection from "@/components/ui/stack-feature-section";
+import { NosotrosSection } from "@/components/nosotros-section";
 
 export default function Home() {
   return (
@@ -8,6 +9,7 @@ export default function Home() {
       <WovenLightHero />
       <ServicesSection />
       <StackFeatureSection />
+      <NosotrosSection />
     </main>
   );
 }

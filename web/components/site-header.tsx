@@ -238,7 +238,10 @@ export function SiteHeader() {
                           {group.items.map((tech) => (
                             <div
                               key={tech.label}
-                              className="flex flex-col items-center gap-2 rounded-lg p-2.5 text-center transition-colors hover:bg-white/6 cursor-default"
+                              className="flex flex-col items-center gap-2 rounded-lg p-2.5 text-center cursor-pointer"
+                              style={{ transition: 'background 100ms ease-out' }}
+                              onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,255,255,0.07)')}
+                              onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                             >
                               <div
                                 className="flex h-9 w-9 items-center justify-center rounded-lg text-lg"

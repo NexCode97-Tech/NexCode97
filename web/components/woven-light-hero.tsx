@@ -152,19 +152,18 @@ const WovenCanvas = () => {
             const velocity = new THREE.Vector3(velocities[ix], velocities[iy], velocities[iz]);
 
             const dist = currentPos.distanceTo(mouseWorld);
-            if (dist < 2.0) {
-                const force = (2.0 - dist) * 0.012;
-                // Attract toward cursor instead of repelling
-                const direction = new THREE.Vector3().subVectors(mouseWorld, currentPos).normalize();
+            if (dist < 1.5) {
+                const force = (1.5 - dist) * 0.01;
+                const direction = new THREE.Vector3().subVectors(currentPos, mouseWorld).normalize();
                 velocity.add(direction.multiplyScalar(force));
             }
 
             // Return to original position
-            const returnForce = new THREE.Vector3().subVectors(originalPos, currentPos).multiplyScalar(0.002);
+            const returnForce = new THREE.Vector3().subVectors(originalPos, currentPos).multiplyScalar(0.001);
             velocity.add(returnForce);
 
             // Damping
-            velocity.multiplyScalar(0.92);
+            velocity.multiplyScalar(0.95);
 
             positions[ix] += velocity.x;
             positions[iy] += velocity.y;
@@ -176,9 +175,7 @@ const WovenCanvas = () => {
         }
         geometry.attributes.position.needsUpdate = true;
 
-        // Slow auto-rotation + smooth tilt toward cursor
-        points.rotation.y += (mouse.x * 0.3 - points.rotation.y) * 0.03;
-        points.rotation.x += (-mouse.y * 0.2 - points.rotation.x) * 0.03;
+        points.rotation.y = elapsedTime * 0.05;
         renderer.render(scene, camera);
     };
     animate();

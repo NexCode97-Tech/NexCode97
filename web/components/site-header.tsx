@@ -36,6 +36,7 @@ import {
 } from 'react-icons/si';
 import { ShieldCheck } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
+import Image from 'next/image';
 
 type LinkItem = {
   title: string;
@@ -172,16 +173,15 @@ export function SiteHeader() {
       <nav className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-6">
 
         {/* Logo */}
-        <a href="/" className="flex items-center gap-2.5 rounded-lg p-1 transition-opacity hover:opacity-80">
-          <div
-            className="flex h-8 w-8 items-center justify-center rounded-lg text-xs font-extrabold text-white"
-            style={{ background: 'linear-gradient(135deg,#7c3aed,#06b6d4)', letterSpacing: '-0.03em' }}
-          >
-            N97
-          </div>
-          <span className="hidden text-sm font-bold text-white sm:block" style={{ letterSpacing: '-0.02em' }}>
-            NexCode97
-          </span>
+        <a href="/" className="flex items-center rounded-lg p-1 transition-opacity hover:opacity-80">
+          <Image
+            src="/logo-nexcode97.png"
+            alt="NexCode97"
+            width={160}
+            height={40}
+            className="h-9 w-auto object-contain"
+            priority
+          />
         </a>
 
         {/* Nav desktop */}

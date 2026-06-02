@@ -199,13 +199,13 @@ export function NosotrosSection() {
               <div>
                 <p
                   className="mb-2 text-lg font-bold"
-                  style={{ color: "#fff" }}
+                  style={{ color: "#09090e" }}
                 >
                   Sin mensualidades. Sin excusas.
                 </p>
                 <p
                   className="text-sm leading-relaxed"
-                  style={{ color: "#888ca4" }}
+                  style={{ color: "#475569" }}
                 >
                   Pago único, producto tuyo para siempre. Creemos que un
                   software bien hecho no debería costarte eternamente.

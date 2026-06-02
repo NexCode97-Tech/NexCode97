@@ -35,14 +35,14 @@ export const WovenLightHero = () => {
     }
   }, [textControls, buttonControls]);
 
-  const headline = "Woven by Light";
-  
+  const headline = "Cada negocio merece su propio sistema.";
+
   return (
-    <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-black dark:bg-white">
+    <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-black">
       <WovenCanvas />
       <HeroNav />
-      <div className="relative z-10 text-center px-4">
-        <h1 className="text-6xl md:text-8xl text-white dark:text-slate-900" style={{ fontFamily: "'Playfair Display', serif", textShadow: '0 0 50px rgba(255, 255, 255, 0.3)' }}>
+      <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-tight" style={{ fontFamily: "'Playfair Display', serif", textShadow: '0 0 60px rgba(124, 58, 237, 0.4)' }}>
             {headline.split(" ").map((word, i) => (
                 <span key={i} className="inline-block">
                     {word.split("").map((char, j) => (
@@ -58,15 +58,18 @@ export const WovenLightHero = () => {
           custom={headline.length}
           initial={{ opacity: 0, y: 30 }}
           animate={textControls}
-          className="mx-auto mt-6 max-w-xl text-lg text-slate-300 dark:text-slate-600"
+          className="mx-auto mt-8 max-w-xl text-lg text-slate-300"
           style={{ fontFamily: "'Inter', sans-serif" }}
         >
-          An interactive tapestry of light and motion, crafted with code and creativity.
+          Construimos la herramienta exacta que necesitas. Sin plantillas, sin mensualidades — solo software que trabaja para ti.
         </motion.p>
-        <motion.div initial={{ opacity: 0 }} animate={buttonControls} className="mt-10">
-          <button className="rounded-full border-2 border-white/20 bg-white/10 px-8 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20 dark:border-slate-800/20 dark:bg-slate-800/5 dark:text-slate-800 dark:hover:bg-slate-800/10" style={{ fontFamily: "'Inter', sans-serif" }}>
-            Explore the Weave
-          </button>
+        <motion.div initial={{ opacity: 0 }} animate={buttonControls} className="mt-10 flex flex-wrap gap-4 justify-center">
+          <a href="#portafolio" className="rounded-full bg-white/10 border-2 border-white/20 px-8 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20" style={{ fontFamily: "'Inter', sans-serif" }}>
+            Ver portafolio
+          </a>
+          <a href="https://wa.me/573164134212" target="_blank" rel="noopener noreferrer" className="rounded-full bg-violet-600/80 border-2 border-violet-400/30 px-8 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:bg-violet-600" style={{ fontFamily: "'Inter', sans-serif" }}>
+            Hablemos
+          </a>
         </motion.div>
       </div>
     </div>
@@ -83,8 +86,19 @@ const HeroNav = () => {
         >
             <div className="max-w-7xl mx-auto flex justify-between items-center">
                 <div className="flex items-center gap-2">
-                    <span className="text-2xl font-bold text-white dark:text-slate-800">⎎</span>
-                    <span className="text-xl font-bold text-white dark:text-slate-800" style={{ fontFamily: "'Inter', sans-serif" }}>Woven</span>
+                    <svg viewBox="0 0 24 24" className="w-7 h-7" fill="none">
+                      <path d="M7 8L3 12L7 16" stroke="url(#g1)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M17 8L21 12L17 16" stroke="url(#g2)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M14 4L10 20" stroke="url(#g3)" strokeWidth="2.2" strokeLinecap="round"/>
+                      <defs>
+                        <linearGradient id="g1" x1="3" y1="12" x2="7" y2="12" gradientUnits="userSpaceOnUse"><stop stopColor="#7c3aed"/><stop offset="1" stopColor="#06b6d4"/></linearGradient>
+                        <linearGradient id="g2" x1="17" y1="12" x2="21" y2="12" gradientUnits="userSpaceOnUse"><stop stopColor="#7c3aed"/><stop offset="1" stopColor="#06b6d4"/></linearGradient>
+                        <linearGradient id="g3" x1="10" y1="4" x2="14" y2="20" gradientUnits="userSpaceOnUse"><stop stopColor="#7c3aed"/><stop offset="1" stopColor="#06b6d4"/></linearGradient>
+                      </defs>
+                    </svg>
+                    <span className="text-lg font-bold text-white" style={{ fontFamily: "'Inter', sans-serif" }}>
+                      Nex<span style={{ background: 'linear-gradient(135deg,#7c3aed,#06b6d4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Code97</span>
+                    </span>
                 </div>
             </div>
         </motion.nav>

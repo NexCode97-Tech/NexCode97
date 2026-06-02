@@ -141,7 +141,7 @@ export function NosotrosSection() {
             style={{ color: "#475569" }}
           >
             NexCode97 es un equipo de desarrollo especializado en construir
-            sistemas a la medida. No vendemos plantillas — construimos la
+            sistemas a la medida. No vendemos plantillas. Construimos la
             solución exacta que tu negocio necesita, sin mensualidades y con
             código que tú posees.
           </p>

@@ -51,7 +51,7 @@ export const WovenLightHero = () => {
           className="mx-auto mt-8 max-w-xl text-lg text-slate-300"
           style={{ fontFamily: "var(--font-inter), sans-serif" }}
         >
-          Construimos la herramienta exacta que necesitas. Sin plantillas, sin mensualidades — solo software que trabaja para ti.
+          Construimos la herramienta exacta que necesitas. Sin plantillas, sin mensualidades. Solo software que trabaja para ti.
         </motion.p>
         <motion.div initial={{ opacity: 0 }} animate={buttonControls} className="mt-10 flex flex-wrap gap-4 justify-center">
           <a href="#portafolio" className="rounded-full bg-white/10 border-2 border-white/20 px-8 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20" style={{ fontFamily: "var(--font-inter), sans-serif" }}>

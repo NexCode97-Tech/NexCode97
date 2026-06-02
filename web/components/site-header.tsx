@@ -32,7 +32,9 @@ import {
 import {
   SiNextdotjs, SiTypescript, SiTailwindcss, SiPrisma,
   SiPostgresql, SiVercel, SiCloudinary, SiRailway,
+  SiFramer, SiReactquery, SiPnpm,
 } from 'react-icons/si';
+import { ShieldCheck } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
 type LinkItem = {
@@ -62,18 +64,21 @@ const techGroups: { category: string; items: TechItem[] }[] = [
   {
     category: 'Frontend',
     items: [
-      { label: 'React',       description: 'UI declarativa y componentizada',        icon: <FaReact />,       color: '#61DAFB' },
-      { label: 'Next.js',     description: 'SSR, rutas y optimización automática',   icon: <SiNextdotjs />,   color: '#ffffff' },
-      { label: 'TypeScript',  description: 'Tipado estático para código robusto',    icon: <SiTypescript />,  color: '#3178C6' },
-      { label: 'Tailwind CSS',description: 'Estilos utilitarios sin fricción',       icon: <SiTailwindcss />, color: '#06B6D4' },
+      { label: 'React',           description: 'UI declarativa y componentizada',        icon: <FaReact />,         color: '#61DAFB' },
+      { label: 'Next.js',         description: 'SSR, rutas y optimización automática',   icon: <SiNextdotjs />,     color: '#ffffff' },
+      { label: 'TypeScript',      description: 'Tipado estático para código robusto',    icon: <SiTypescript />,    color: '#3178C6' },
+      { label: 'Tailwind CSS',    description: 'Estilos utilitarios sin fricción',       icon: <SiTailwindcss />,   color: '#06B6D4' },
+      { label: 'Framer Motion',   description: 'Animaciones fluidas para interfaces',    icon: <SiFramer />,        color: '#ffffff' },
+      { label: 'TanStack Query',  description: 'Fetching y caché de datos en cliente',   icon: <SiReactquery />,    color: '#FF4154' },
     ],
   },
   {
     category: 'Backend',
     items: [
-      { label: 'Node.js',     description: 'Runtime JS rápido y escalable',          icon: <FaNodeJs />,      color: '#339933' },
-      { label: 'Python',      description: 'Scripts, IA y automatizaciones',         icon: <FaPython />,      color: '#3776AB' },
-      { label: 'Prisma',      description: 'ORM moderno con tipado completo',        icon: <SiPrisma />,      color: '#5a67d8' },
+      { label: 'Node.js',     description: 'Runtime JS rápido y escalable',          icon: <FaNodeJs />,                                           color: '#339933' },
+      { label: 'Python',      description: 'Scripts, IA y automatizaciones',         icon: <FaPython />,                                           color: '#3776AB' },
+      { label: 'NextAuth',    description: 'Autenticación segura para Next.js',      icon: <ShieldCheck className="w-4 h-4" />,                    color: '#a78bfa' },
+      { label: 'Prisma ORM',  description: 'ORM moderno con tipado completo',        icon: <SiPrisma />,                                           color: '#5a67d8' },
       { label: 'PostgreSQL',  description: 'Base de datos relacional de alto nivel', icon: <SiPostgresql />,  color: '#336791' },
       { label: 'Cloudinary',  description: 'Gestión de imágenes y archivos en nube', icon: <SiCloudinary />,  color: '#3448C5' },
     ],
@@ -82,9 +87,10 @@ const techGroups: { category: string; items: TechItem[] }[] = [
     category: 'Infraestructura',
     items: [
       { label: 'Vercel',      description: 'Deploy instantáneo con CDN global',      icon: <SiVercel />,      color: '#ffffff' },
-      { label: 'Railway',     description: 'Backend y bases de datos en la nube',    icon: <SiRailway />,     color: '#B928F5' },
-      { label: 'Docker',      description: 'Contenedores para entornos consistentes',icon: <FaDocker />,      color: '#2496ED' },
-      { label: 'Git',         description: 'Control de versiones y colaboración',    icon: <FaGitAlt />,      color: '#F05032' },
+      { label: 'Railway',     description: 'Backend y bases de datos en la nube',    icon: <SiRailway />,  color: '#B928F5' },
+      { label: 'Docker',      description: 'Contenedores para entornos consistentes',icon: <FaDocker />,   color: '#2496ED' },
+      { label: 'pnpm',        description: 'Gestor de paquetes rápido y eficiente',  icon: <SiPnpm />,     color: '#F69220' },
+      { label: 'Git',         description: 'Control de versiones y colaboración',    icon: <FaGitAlt />,   color: '#F05032' },
     ],
   },
 ];

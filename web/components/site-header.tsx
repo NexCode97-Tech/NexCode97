@@ -185,33 +185,6 @@ export function SiteHeader() {
         <NavigationMenu className="hidden md:flex">
           <NavigationMenuList>
             <NavigationMenuItem>
-              <NavigationMenuTrigger>Servicios</NavigationMenuTrigger>
-              <NavigationMenuContent>
-                <ul className="grid w-[520px] grid-cols-2 gap-1.5 p-3">
-                  {serviciosLinks.map((item) => (
-                    <li key={item.title}>
-                      <ListItem {...item} />
-                    </li>
-                  ))}
-                </ul>
-                <div className="border-t px-4 py-3" style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
-                  <p className="text-xs text-white/40">
-                    ¿Tienes un proyecto en mente?{' '}
-                    <a
-                      href="https://wa.me/573006359008"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="font-semibold transition-colors hover:text-violet-400"
-                      style={{ color: '#a78bfa' }}
-                    >
-                      Contacta a ventas
-                    </a>
-                  </p>
-                </div>
-              </NavigationMenuContent>
-            </NavigationMenuItem>
-
-            <NavigationMenuItem>
               <NavigationMenuTrigger>
                 <span style={{ background: 'linear-gradient(135deg,#7c3aed,#06b6d4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
                   Nex
@@ -259,6 +232,33 @@ export function SiteHeader() {
                       </div>
                     ))}
                   </div>
+                </div>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <NavigationMenuTrigger>Servicios</NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <ul className="grid w-[520px] grid-cols-2 gap-1.5 p-3">
+                  {serviciosLinks.map((item) => (
+                    <li key={item.title}>
+                      <ListItem {...item} />
+                    </li>
+                  ))}
+                </ul>
+                <div className="border-t px-4 py-3" style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
+                  <p className="text-xs text-white/40">
+                    ¿Tienes un proyecto en mente?{' '}
+                    <a
+                      href="https://wa.me/573006359008"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="font-semibold transition-colors hover:text-violet-400"
+                      style={{ color: '#a78bfa' }}
+                    >
+                      Contacta a ventas
+                    </a>
+                  </p>
                 </div>
               </NavigationMenuContent>
             </NavigationMenuItem>

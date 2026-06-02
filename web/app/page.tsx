@@ -1,4 +1,4 @@
-import { WovenLightHero } from "@/components/woven-light-hero";
+import { WovenLightHero } from "@/components/hero-dynamic";
 import { Logos3 } from "@/components/ui/logos3";
 import { ServicesSection } from "@/components/services-section";
 

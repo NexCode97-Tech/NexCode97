@@ -331,3 +331,5 @@ const WovenCanvas = () => {
   return <div ref={mountRef} className="absolute inset-0 z-0" />;
 };
 
+
+export default WovenLightHero;

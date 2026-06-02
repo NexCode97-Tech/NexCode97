@@ -1,6 +1,7 @@
 "use client";
 
 import * as React from "react";
+import Image from "next/image";
 import { cn } from "@/lib/utils";
 
 export interface CardItem {
@@ -66,10 +67,13 @@ export const ExpandingCards = React.forwardRef<HTMLUListElement, ExpandingCardsP
             tabIndex={0}
             data-active={activeIndex === index}
           >
-            <img
+            <Image
               src={item.imgSrc}
               alt={item.title}
-              className="absolute inset-0 h-full w-full object-cover transition-all duration-500 ease-out group-data-[active=true]:scale-100 group-data-[active=true]:grayscale-0 scale-110 grayscale"
+              fill
+              sizes="(max-width:768px) 100vw, 20vw"
+              className="object-cover transition-all duration-500 ease-out group-data-[active=true]:scale-100 group-data-[active=true]:grayscale-0 scale-110 grayscale"
+              loading={index === 0 ? "eager" : "lazy"}
             />
             {/* overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/10" />

@@ -1,11 +1,11 @@
 import { WovenLightHero } from "@/components/woven-light-hero";
-import { BrandsSection } from "@/components/brands-section";
+import { Logos3 } from "@/components/ui/logos3";
 
 export default function Home() {
   return (
     <main style={{ background: "#09090e" }}>
       <WovenLightHero />
-      <BrandsSection />
+      <Logos3 />
     </main>
   );
 }

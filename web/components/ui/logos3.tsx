@@ -19,15 +19,15 @@ interface Logos3Props {
 const Logos3 = ({
   heading = "Empresas que confían en NexCode97",
   logos = [
-    { id: "logo-1", description: "Natural Ropa Deportiva", image: "/logos/logo-ntrl.png",      className: "h-10 w-auto" },
-    { id: "logo-2", description: "Guevara Sport",          image: "/logos/logo-gvr.png",       className: "h-10 w-auto" },
-    { id: "logo-3", description: "VeloClub",               image: "/logos/logo-veloclub.png",  className: "h-10 w-auto" },
-    { id: "logo-4", description: "Grupo 500",              image: "/logos/logo-grupo500.png",  className: "h-10 w-auto" },
+    { id: "logo-1", description: "Natural Ropa Deportiva", image: "/logos/logo-ntrl.webp",      className: "h-10 w-auto" },
+    { id: "logo-2", description: "Guevara Sport",          image: "/logos/logo-gvr.webp",       className: "h-10 w-auto" },
+    { id: "logo-3", description: "VeloClub",               image: "/logos/logo-veloclub.webp",  className: "h-10 w-auto" },
+    { id: "logo-4", description: "Grupo 500",              image: "/logos/logo-grupo500.webp",  className: "h-10 w-auto" },
     /* duplicados para que el scroll se vea continuo con pocos logos */
-    { id: "logo-5", description: "Natural Ropa Deportiva", image: "/logos/logo-ntrl.png",      className: "h-10 w-auto" },
-    { id: "logo-6", description: "Guevara Sport",          image: "/logos/logo-gvr.png",       className: "h-10 w-auto" },
-    { id: "logo-7", description: "VeloClub",               image: "/logos/logo-veloclub.png",  className: "h-10 w-auto" },
-    { id: "logo-8", description: "Grupo 500",              image: "/logos/logo-grupo500.png",  className: "h-10 w-auto" },
+    { id: "logo-5", description: "Natural Ropa Deportiva", image: "/logos/logo-ntrl.webp",      className: "h-10 w-auto" },
+    { id: "logo-6", description: "Guevara Sport",          image: "/logos/logo-gvr.webp",       className: "h-10 w-auto" },
+    { id: "logo-7", description: "VeloClub",               image: "/logos/logo-veloclub.webp",  className: "h-10 w-auto" },
+    { id: "logo-8", description: "Grupo 500",              image: "/logos/logo-grupo500.webp",  className: "h-10 w-auto" },
   ],
 }: Logos3Props) => {
   return (
@@ -58,7 +58,6 @@ const Logos3 = ({
                     quality={100}
                     className={`${logo.className} opacity-40 grayscale hover:opacity-100 hover:grayscale-0 transition-all duration-300`}
                     loading="lazy"
-                    unoptimized
                   />
                 </div>
               </CarouselItem>

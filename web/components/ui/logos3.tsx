@@ -31,12 +31,9 @@ const Logos3 = ({
   ],
 }: Logos3Props) => {
   return (
-    <section className="py-16" style={{ background: "#09090e" }}>
-      {/* Divider */}
-      <div className="h-px mx-auto max-w-5xl mb-14" style={{ background: "linear-gradient(90deg,transparent,rgba(124,58,237,.4) 30%,rgba(6,182,212,.3) 70%,transparent)" }} />
-
+    <section className="py-16" style={{ background: "#06b6d4" }}>
       <div className="flex flex-col items-center text-center px-6 mb-10">
-        <p className="text-xs font-bold tracking-[0.14em] uppercase" style={{ color: "#3d3f52", fontFamily: "'Inter', sans-serif" }}>
+        <p className="text-xs font-bold tracking-[0.14em] uppercase" style={{ color: "rgba(255,255,255,0.75)", fontFamily: "var(--font-inter), sans-serif" }}>
           {heading}
         </p>
       </div>
@@ -70,8 +67,8 @@ const Logos3 = ({
         </Carousel>
 
         {/* fade edges */}
-        <div className="pointer-events-none absolute inset-y-0 left-0 w-16" style={{ background: "linear-gradient(to right, #09090e, transparent)" }} />
-        <div className="pointer-events-none absolute inset-y-0 right-0 w-16" style={{ background: "linear-gradient(to left, #09090e, transparent)" }} />
+        <div className="pointer-events-none absolute inset-y-0 left-0 w-16" style={{ background: "linear-gradient(to right, #06b6d4, transparent)" }} />
+        <div className="pointer-events-none absolute inset-y-0 right-0 w-16" style={{ background: "linear-gradient(to left, #06b6d4, transparent)" }} />
       </div>
     </section>
   );

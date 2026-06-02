@@ -184,17 +184,12 @@ export function NosotrosSection() {
                 border: "1px solid rgba(124,58,237,0.25)",
               }}
             >
-              {/* Badge N97 */}
-              <div
-                className="w-12 h-12 rounded-xl flex items-center justify-center font-extrabold text-sm shrink-0"
-                style={{
-                  background: "linear-gradient(135deg,#7c3aed,#06b6d4)",
-                  color: "#fff",
-                  letterSpacing: "-0.03em",
-                }}
-              >
-                N97
-              </div>
+              {/* Logo NexCode97 */}
+              <img
+                src="/logo-nexcode97.png"
+                alt="NexCode97"
+                className="h-10 w-auto object-contain shrink-0"
+              />
 
               <div>
                 <p

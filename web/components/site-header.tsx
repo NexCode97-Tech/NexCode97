@@ -114,7 +114,7 @@ export function SiteHeader() {
         scrolled && 'border-white/8',
       )}
       style={{
-        background: scrolled ? 'rgba(9,9,14,0.92)' : 'transparent',
+        background: '#09090e',
         backdropFilter: scrolled ? 'blur(16px)' : 'none',
       }}
     >

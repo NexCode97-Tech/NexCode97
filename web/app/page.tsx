@@ -2,6 +2,7 @@ import { WovenLightHero } from "@/components/hero-dynamic";
 import { ServicesSection } from "@/components/services-section";
 import StackFeatureSection from "@/components/ui/stack-feature-section";
 import { NosotrosSection } from "@/components/nosotros-section";
+import { TestimoniosSection } from "@/components/testimonios-section";
 import { WhatsAppFAB } from "@/components/whatsapp-fab";
 
 export default function Home() {
@@ -11,6 +12,7 @@ export default function Home() {
       <ServicesSection />
       <StackFeatureSection />
       <NosotrosSection />
+      <TestimoniosSection />
       <WhatsAppFAB />
     </main>
   );

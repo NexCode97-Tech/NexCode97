@@ -151,8 +151,8 @@ nav.scrolled{border-bottom-color:var(--bv);}
 
 /* ── HERO VIDEO BG ─────────────────────────────── */
 .hero-video-bg{position:absolute;inset:0;overflow:hidden;z-index:0;}
-.hero-video-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,9,14,.55) 0%,rgba(9,9,14,.15) 40%,rgba(9,9,14,.65) 80%,rgba(9,9,14,1) 100%);}
-#cinematicBg{position:absolute;top:0;left:0;width:100%;height:100%;opacity:.48;filter:brightness(.92);pointer-events:none;}
+.hero-video-overlay{position:absolute;inset:0;background:linear-gradient(180deg,rgba(9,9,14,.28) 0%,rgba(9,9,14,.04) 35%,rgba(9,9,14,.48) 75%,rgba(9,9,14,1) 100%);}
+#wovenCanvas{position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;display:block;}
 
 /* ── HERO ─────────────────────────────────────── */
 #hero{min-height:100dvh;display:flex;align-items:center;justify-content:center;padding:100px clamp(20px,5vw,56px) 60px;width:100%;position:relative;z-index:2;}
@@ -335,6 +335,7 @@ footer{border-top:1px solid var(--border);padding:28px clamp(20px,5vw,56px);disp
   .pf-live{left:14px;bottom:12px;}
 }
 </style>
+<script type="importmap">{"imports":{"three":"https://cdn.jsdelivr.net/npm/three@0.169.0/build/three.module.js"}}</script>
 </head>
 <body>
 
@@ -521,9 +522,7 @@ footer{border-top:1px solid var(--border);padding:28px clamp(20px,5vw,56px);disp
 <!-- ═══ HERO ═══ -->
 <section id="hero-section" style="z-index:2;position:relative;overflow:hidden;">
   <div class="hero-video-bg">
-    <video id="heroBgVideo" autoplay muted loop playsinline style="position:absolute;top:0;left:0;width:100%;height:100%;object-fit:cover;opacity:.45;pointer-events:none;">
-      <source src="assets/hero-bg.mp4" type="video/mp4"/>
-    </video>
+    <canvas id="wovenCanvas"></canvas>
     <div class="hero-video-overlay"></div>
   </div>
   <div id="hero">
@@ -914,213 +913,117 @@ drawer.querySelectorAll('a').forEach(a=>{
 })();
 </script>
 
-<script>
-/* ── CINEMATIC CANVAS ANIMATION ──────────────────────── */
+<script type="module">
+/* ── WOVEN LIGHT — THREE.JS TORUS KNOT PARTICLES ── */
+import * as THREE from 'three';
 (function(){
-  const canvas=document.getElementById('cinematicBg');
+  const canvas=document.getElementById('wovenCanvas');
   if(!canvas)return;
+  if(window.matchMedia('(prefers-reduced-motion:reduce)').matches)return;
   const ctx=canvas.getContext('2d');
-  let W,H;
+  const hasTouch=window.matchMedia('(hover:none)').matches;
+  const COUNT=hasTouch?12000:30000;
 
-  const resize=()=>{
-    const p=canvas.parentElement;
-    W=canvas.width=p.offsetWidth||window.innerWidth;
-    H=canvas.height=p.offsetHeight||window.innerHeight;
-  };
-  resize();
-  window.addEventListener('resize',()=>{resize();SCENES[cur].init();},{passive:true});
+  /* renderer */
+  const renderer=new THREE.WebGLRenderer({canvas,antialias:!hasTouch,alpha:true});
+  renderer.setSize(window.innerWidth,window.innerHeight);
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio,1.5));
 
-  const V=[124,58,237],C=[6,182,212],VL=[167,139,250],CL=[34,211,238];
-  const rgb=(c,a)=>`rgba(${c[0]},${c[1]},${c[2]},${Math.max(0,Math.min(1,a)).toFixed(3)})`;
-  const lerp=(a,b,t)=>a+(b-a)*t;
-  const rand=(a,b)=>a+Math.random()*(b-a);
+  const scene=new THREE.Scene();
+  const camera=new THREE.PerspectiveCamera(75,window.innerWidth/window.innerHeight,0.1,1000);
+  camera.position.z=5;
 
-  /* SCENE 1 — LIGHT SPEED STREAMS */
-  let str=[];
-  const S1={
-    init(){
-      str=Array.from({length:95},()=>({
-        x:rand(-W*0.2,W*1.2),y:rand(0,H),
-        len:rand(40,230),spd:rand(3,9),
-        w:rand(0.3,1.5),c:Math.random()<0.55?V:C,
-        a:rand(0.25,0.9)
-      }));
-    },
-    draw(){
-      ctx.fillStyle='rgba(9,9,14,0.1)';ctx.fillRect(0,0,W,H);
-      const dx=Math.cos(Math.PI*0.16),dy=Math.sin(Math.PI*0.16);
-      str.forEach(s=>{
-        s.x+=dx*s.spd;s.y+=dy*s.spd;
-        if(s.x-s.len*dx>W||s.y>H+60){s.x=rand(-80,40);s.y=rand(-40,H*0.8);}
-        const gx=ctx.createLinearGradient(s.x-s.len*dx,s.y-s.len*dy,s.x,s.y);
-        gx.addColorStop(0,rgb(s.c,0));
-        gx.addColorStop(0.55,rgb(s.c,s.a*0.3));
-        gx.addColorStop(1,rgb(s.c,s.a));
-        ctx.beginPath();ctx.moveTo(s.x-s.len*dx,s.y-s.len*dy);ctx.lineTo(s.x,s.y);
-        ctx.strokeStyle=gx;ctx.lineWidth=s.w;ctx.stroke();
-        ctx.beginPath();ctx.arc(s.x,s.y,s.w*2,0,Math.PI*2);
-        ctx.fillStyle=rgb(s.c,Math.min(1,s.a*1.5));ctx.fill();
-      });
-    }
-  };
+  const clock=new THREE.Clock();
+  let mx=0,my=0;
 
-  /* SCENE 2 — NEURAL NETWORK BUILD */
-  let nds=[],edgs=[],sigs=[],nTick=0;
-  const S2={
-    init(){nds=[];edgs=[];sigs=[];nTick=0;},
-    draw(t){
-      ctx.clearRect(0,0,W,H);
-      if(t<0.65&&nds.length<48){
-        nTick++;
-        if(nTick%7===0){
-          const n={x:rand(W*.08,W*.92),y:rand(H*.08,H*.92),r:rand(3,6),c:Math.random()<.5?V:C,ph:rand(0,Math.PI*2),age:0};
-          nds.push(n);
-          nds.forEach(o=>{
-            if(o===n)return;
-            const d=Math.hypot(n.x-o.x,n.y-o.y);
-            if(d<W*.22&&!edgs.some(e=>(e.a===n&&e.b===o)||(e.a===o&&e.b===n)))
-              edgs.push({a:n,b:o,age:0,c:Math.random()<.5?V:C});
-          });
-        }
-      }
-      if(t>0.25&&edgs.length>2&&Math.random()<.06){
-        const e=edgs[Math.floor(Math.random()*edgs.length)];
-        sigs.push({e,t:0});
-      }
-      edgs.forEach(e=>{
-        e.age=Math.min(1,e.age+.04);
-        ctx.beginPath();ctx.moveTo(e.a.x,e.a.y);ctx.lineTo(e.b.x,e.b.y);
-        ctx.strokeStyle=rgb(e.c,.1*e.age);ctx.lineWidth=.7;ctx.stroke();
-      });
-      for(let i=sigs.length-1;i>=0;i--){
-        const s=sigs[i];s.t+=.018;
-        if(s.t>1){sigs.splice(i,1);continue;}
-        const sx=lerp(s.e.a.x,s.e.b.x,s.t),sy=lerp(s.e.a.y,s.e.b.y,s.t);
-        const g=ctx.createRadialGradient(sx,sy,0,sx,sy,7);
-        g.addColorStop(0,rgb(CL,.9));g.addColorStop(1,rgb(CL,0));
-        ctx.beginPath();ctx.arc(sx,sy,7,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
-      }
-      nds.forEach(n=>{
-        n.age=Math.min(1,n.age+.032);n.ph+=.038;
-        const pulse=(Math.sin(n.ph)+1)*.5;
-        const g=ctx.createRadialGradient(n.x,n.y,0,n.x,n.y,n.r*7);
-        g.addColorStop(0,rgb(n.c,.5*n.age));g.addColorStop(1,rgb(n.c,0));
-        ctx.beginPath();ctx.arc(n.x,n.y,n.r*7,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
-        ctx.beginPath();ctx.arc(n.x,n.y,n.r*(1+pulse*.25),0,Math.PI*2);
-        ctx.fillStyle=rgb(n.c,.85*n.age);ctx.fill();
-      });
-    }
-  };
+  /* sample torus knot geometry for particle positions */
+  const tkGeo=new THREE.TorusKnotGeometry(1.5,0.5,200,32);
+  const srcPos=tkGeo.attributes.position;
 
-  /* SCENE 3 — RADAR GRID SCAN */
-  let gCells=[];
-  const S3={
-    init(){
-      gCells=[];
-      const SZ=55,cols=Math.ceil(W/SZ)+2,rows=Math.ceil(H/SZ)+2;
-      for(let r=0;r<rows;r++)for(let c=0;c<cols;c++){
-        const x=c*SZ,y=r*SZ;
-        gCells.push({x,y,d:Math.hypot(x-W/2,y-H/2),lit:false,lt:0,c:Math.random()<.5?V:C});
-      }
-    },
-    draw(t){
-      ctx.clearRect(0,0,W,H);
-      const scanR=Math.hypot(W,H)*.72*Math.min(1,t*1.65);
-      gCells.forEach(c=>{if(!c.lit&&c.d<=scanR){c.lit=true;c.lt=t;}});
-      const SZ=55;
-      ctx.strokeStyle=rgb(V,.05);ctx.lineWidth=.5;
-      for(let x=0;x<=W;x+=SZ){ctx.beginPath();ctx.moveTo(x,0);ctx.lineTo(x,H);ctx.stroke();}
-      for(let y=0;y<=H;y+=SZ){ctx.beginPath();ctx.moveTo(0,y);ctx.lineTo(W,y);ctx.stroke();}
-      ctx.beginPath();ctx.arc(W/2,H/2,scanR,0,Math.PI*2);
-      ctx.strokeStyle=rgb(C,.22);ctx.lineWidth=1.5;ctx.stroke();
-      gCells.forEach(c=>{
-        if(!c.lit)return;
-        const age=t-c.lt,op=Math.max(0,1-age*2.8)*.9+Math.min(1,age*5)*.28;
-        ctx.beginPath();ctx.arc(c.x,c.y,2.5,0,Math.PI*2);ctx.fillStyle=rgb(c.c,op);ctx.fill();
-        if(op>0.12){
-          const g=ctx.createRadialGradient(c.x,c.y,0,c.x,c.y,12);
-          g.addColorStop(0,rgb(c.c,op*.45));g.addColorStop(1,rgb(c.c,0));
-          ctx.beginPath();ctx.arc(c.x,c.y,12,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
-        }
-      });
-      const cg=ctx.createRadialGradient(W/2,H/2,0,W/2,H/2,88);
-      cg.addColorStop(0,rgb(V,.38*Math.min(1,t*4)));cg.addColorStop(1,rgb(V,0));
-      ctx.beginPath();ctx.arc(W/2,H/2,88,0,Math.PI*2);ctx.fillStyle=cg;ctx.fill();
-    }
-  };
+  const positions=new Float32Array(COUNT*3);
+  const origPos=new Float32Array(COUNT*3);
+  const colors=new Float32Array(COUNT*3);
+  const velocities=new Float32Array(COUNT*3);
+  const col=new THREE.Color();
 
-  /* SCENE 4 — ORBITAL RINGS */
-  let orbP=[];
-  const S4={
-    init(){
-      orbP=[];
-      [[80,18,.009,.3,V],[145,28,-.006,.95,C],[205,38,.004,.55,V],[272,48,-.003,.2,C],[342,56,.0025,.78,VL]].forEach(([r,n,spd,tilt,c])=>{
-        for(let i=0;i<n;i++)
-          orbP.push({th:(i/n)*Math.PI*2,r,spd,tilt,c,sz:rand(1,2.6),bright:Math.random()<.18,trail:[]});
-      });
-    },
-    draw(t){
-      ctx.fillStyle='rgba(9,9,14,0.16)';ctx.fillRect(0,0,W,H);
-      const cx=W/2,cy=H/2,ap=Math.min(1,t*2.8);
-      [[72,V,.1],[38,C,.2],[14,VL,.48]].forEach(([r,c,a])=>{
-        const g=ctx.createRadialGradient(cx,cy,0,cx,cy,r);
-        g.addColorStop(0,rgb(c,a*ap));g.addColorStop(1,rgb(c,0));
-        ctx.beginPath();ctx.arc(cx,cy,r,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
-      });
-      orbP.forEach(p=>{
-        p.th+=p.spd;
-        const x=cx+p.r*Math.cos(p.th);
-        const y=cy+p.r*Math.sin(p.th)*Math.sin(p.tilt);
-        const z=p.r*Math.sin(p.th)*Math.cos(p.tilt);
-        const depth=(z+p.r)/(2*p.r);
-        const a=(0.12+depth*.65)*ap,sz=p.sz*(.4+depth*.82);
-        p.trail.push({x,y});if(p.trail.length>9)p.trail.shift();
-        if(p.bright&&p.trail.length>2){
-          p.trail.forEach((pt,i)=>{
-            ctx.beginPath();ctx.arc(pt.x,pt.y,sz*.6,0,Math.PI*2);
-            ctx.fillStyle=rgb(p.c,(i/p.trail.length)*a*.55);ctx.fill();
-          });
-        }
-        ctx.beginPath();ctx.arc(x,y,sz,0,Math.PI*2);ctx.fillStyle=rgb(p.c,a);ctx.fill();
-        if(p.bright){
-          const g=ctx.createRadialGradient(x,y,0,x,y,sz*5);
-          g.addColorStop(0,rgb(p.c,a*.75));g.addColorStop(1,rgb(p.c,0));
-          ctx.beginPath();ctx.arc(x,y,sz*5,0,Math.PI*2);ctx.fillStyle=g;ctx.fill();
-        }
-      });
-    }
-  };
-
-  /* SCENE MANAGER */
-  const SCENES=[S1,S2,S3,S4];
-  const SDUR=7500,FADE=750;
-  let cur=0,sceneT0=0,fadeV=0,phase='fadein',phaseT0=0,started=false;
-  SCENES[0].init();
-
-  function frame(now){
-    requestAnimationFrame(frame);
-    if(!started){sceneT0=now;phaseT0=now;started=true;}
-    const elapsed=now-sceneT0;
-    const sp=elapsed/SDUR;
-
-    if(phase==='playing'){
-      SCENES[cur].draw(Math.min(.98,sp));
-      if(elapsed>=SDUR-FADE){phase='fadeout';phaseT0=now;}
-    } else if(phase==='fadeout'){
-      SCENES[cur].draw(1);
-      fadeV=Math.min(1,(now-phaseT0)/FADE);
-      if(fadeV>=1){cur=(cur+1)%SCENES.length;SCENES[cur].init();sceneT0=now;phase='fadein';phaseT0=now;}
-    } else if(phase==='fadein'){
-      SCENES[cur].draw(0);
-      fadeV=1-Math.min(1,(now-phaseT0)/FADE);
-      if(fadeV<=0){fadeV=0;phase='playing';}
-    }
-    if(fadeV>0){
-      ctx.fillStyle=`rgba(9,9,14,${fadeV.toFixed(3)})`;
-      ctx.fillRect(0,0,W,H);
-    }
+  for(let i=0;i<COUNT;i++){
+    const vi=i%srcPos.count;
+    const x=srcPos.getX(vi),y=srcPos.getY(vi),z=srcPos.getZ(vi);
+    positions[i*3]=origPos[i*3]=x;
+    positions[i*3+1]=origPos[i*3+1]=y;
+    positions[i*3+2]=origPos[i*3+2]=z;
+    col.setHSL(Math.random(),0.82,0.65);
+    colors[i*3]=col.r;colors[i*3+1]=col.g;colors[i*3+2]=col.b;
   }
-  requestAnimationFrame(frame);
+  tkGeo.dispose();
+
+  const geo=new THREE.BufferGeometry();
+  geo.setAttribute('position',new THREE.BufferAttribute(positions,3));
+  geo.setAttribute('color',new THREE.BufferAttribute(colors,3));
+
+  const mat=new THREE.PointsMaterial({
+    size:0.022,vertexColors:true,
+    blending:THREE.AdditiveBlending,
+    transparent:true,opacity:0.82,depthWrite:false
+  });
+
+  const pts=new THREE.Points(geo,mat);
+  scene.add(pts);
+
+  /* mouse */
+  if(!hasTouch){
+    window.addEventListener('mousemove',e=>{
+      mx=(e.clientX/window.innerWidth)*2-1;
+      my=-(e.clientY/window.innerHeight)*2+1;
+    },{passive:true});
+  }
+
+  /* animation loop */
+  let rafId;
+  const animate=()=>{
+    rafId=requestAnimationFrame(animate);
+    const t=clock.getElapsedTime();
+
+    if(!hasTouch){
+      const mwx=mx*3,mwy=my*3;
+      for(let i=0;i<COUNT;i++){
+        const ix=i*3,iy=ix+1,iz=ix+2;
+        const px=positions[ix],py=positions[iy],pz=positions[iz];
+        let vx=velocities[ix],vy=velocities[iy],vz=velocities[iz];
+        /* repulsion */
+        const dx=px-mwx,dy=py-mwy,dz=pz;
+        const d=Math.sqrt(dx*dx+dy*dy+dz*dz);
+        if(d<1.5&&d>0.001){const f=(1.5-d)*0.012/d;vx+=dx*f;vy+=dy*f;vz+=dz*f;}
+        /* spring return */
+        vx+=(origPos[ix]-px)*0.001;
+        vy+=(origPos[iy]-py)*0.001;
+        vz+=(origPos[iz]-pz)*0.001;
+        /* damping */
+        vx*=0.95;vy*=0.95;vz*=0.95;
+        positions[ix]=px+vx;positions[iy]=py+vy;positions[iz]=pz+vz;
+        velocities[ix]=vx;velocities[iy]=vy;velocities[iz]=vz;
+      }
+      geo.attributes.position.needsUpdate=true;
+    }
+
+    pts.rotation.y=t*0.05;
+    pts.rotation.x=Math.sin(t*0.018)*0.12;
+    renderer.render(scene,camera);
+  };
+  animate();
+
+  /* resize */
+  window.addEventListener('resize',()=>{
+    camera.aspect=window.innerWidth/window.innerHeight;
+    camera.updateProjectionMatrix();
+    renderer.setSize(window.innerWidth,window.innerHeight);
+  },{passive:true});
+
+  /* pause when hidden */
+  document.addEventListener('visibilitychange',()=>{
+    if(document.hidden){cancelAnimationFrame(rafId);clock.stop();}
+    else{clock.start();animate();}
+  });
 })();
 </script>
 </body>

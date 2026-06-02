@@ -1,7 +1,7 @@
 "use client";
 
-import React, { useRef, useEffect, useState } from 'react';
-import { motion, useAnimation, AnimatePresence } from 'framer-motion';
+import React, { useRef, useEffect } from 'react';
+import { motion, useAnimation } from 'framer-motion';
 import * as THREE from 'three';
 
 // --- Main Hero Component ---
@@ -28,9 +28,8 @@ export const WovenLightHero = () => {
   const headline = "Cada negocio merece su propio sistema.";
 
   return (
-    <div className="relative flex h-screen w-full flex-col items-center justify-center overflow-hidden bg-black">
+    <div className="relative flex min-h-[calc(100vh-3.5rem)] w-full flex-col items-center justify-center overflow-hidden bg-black">
       <WovenCanvas />
-      <HeroNav />
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-tight" style={{ fontFamily: "var(--font-playfair), serif", textShadow: '0 0 60px rgba(124, 58, 237, 0.4)' }}>
             {headline.split(" ").map((word, i) => (
@@ -63,103 +62,6 @@ export const WovenLightHero = () => {
         </motion.div>
       </div>
     </div>
-  );
-};
-
-// --- Navigation Component ---
-const NAV_LINKS = [
-  { label: 'Servicios',  href: '#servicios'  },
-  { label: 'Portafolio', href: '#portafolio' },
-  { label: 'Nosotros',   href: '#nosotros'   },
-];
-
-const NavLogo = () => (
-  <a href="#" className="flex items-center gap-2 no-underline">
-    <svg viewBox="0 0 24 24" className="w-7 h-7 shrink-0" fill="none">
-      <path d="M7 8L3 12L7 16" stroke="url(#ng1)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M17 8L21 12L17 16" stroke="url(#ng2)" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round"/>
-      <path d="M14 4L10 20" stroke="url(#ng3)" strokeWidth="2.2" strokeLinecap="round"/>
-      <defs>
-        <linearGradient id="ng1" x1="3" y1="12" x2="7" y2="12" gradientUnits="userSpaceOnUse"><stop stopColor="#7c3aed"/><stop offset="1" stopColor="#06b6d4"/></linearGradient>
-        <linearGradient id="ng2" x1="17" y1="12" x2="21" y2="12" gradientUnits="userSpaceOnUse"><stop stopColor="#7c3aed"/><stop offset="1" stopColor="#06b6d4"/></linearGradient>
-        <linearGradient id="ng3" x1="10" y1="4" x2="14" y2="20" gradientUnits="userSpaceOnUse"><stop stopColor="#7c3aed"/><stop offset="1" stopColor="#06b6d4"/></linearGradient>
-      </defs>
-    </svg>
-    <span className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
-      Nex<span style={{ background: 'linear-gradient(135deg,#7c3aed,#06b6d4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Code97</span>
-    </span>
-  </a>
-);
-
-const HeroNav = () => {
-  const [open, setOpen] = useState(false);
-
-  return (
-    <motion.header
-      initial={{ opacity: 0, y: -16 }}
-      animate={{ opacity: 1, y: 0, transition: { delay: 0.8, duration: 0.8, ease: [0.2, 0.65, 0.3, 0.9] } }}
-      className="absolute top-0 left-0 right-0 z-20"
-    >
-      {/* ── Desktop bar ── */}
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-6 py-5">
-        <NavLogo />
-
-        {/* Links centro */}
-        <nav className="hidden md:flex items-center gap-1">
-          {NAV_LINKS.map(({ label, href }) => (
-            <a
-              key={label}
-              href={href}
-              className="px-4 py-2 rounded-lg text-sm font-medium text-white/60 hover:text-white hover:bg-white/8 transition-all duration-200"
-              style={{ fontFamily: "var(--font-inter), sans-serif" }}
-            >
-              {label}
-            </a>
-          ))}
-        </nav>
-
-        {/* hamburger */}
-        <div className="flex items-center gap-3">
-          {/* Hamburger */}
-          <button
-            onClick={() => setOpen(!open)}
-            className="md:hidden flex flex-col gap-[5px] p-2 rounded-lg hover:bg-white/8 transition-colors"
-            aria-label="Menú"
-          >
-            <span className={`block w-5 h-0.5 bg-white transition-all duration-300 ${open ? 'translate-y-[7px] rotate-45' : ''}`} />
-            <span className={`block w-5 h-0.5 bg-white transition-all duration-300 ${open ? 'opacity-0' : ''}`} />
-            <span className={`block w-5 h-0.5 bg-white transition-all duration-300 ${open ? '-translate-y-[7px] -rotate-45' : ''}`} />
-          </button>
-        </div>
-      </div>
-
-      {/* ── Mobile drawer ── */}
-      <AnimatePresence>
-        {open && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            transition={{ duration: 0.25, ease: 'easeInOut' }}
-            className="md:hidden overflow-hidden border-t border-white/10 bg-black/80 backdrop-blur-xl"
-          >
-            <div className="px-6 py-4 flex flex-col gap-1">
-              {NAV_LINKS.map(({ label, href }) => (
-                <a
-                  key={label}
-                  href={href}
-                  onClick={() => setOpen(false)}
-                  className="px-3 py-3 rounded-lg text-sm font-medium text-white/70 hover:text-white hover:bg-white/8 transition-all"
-                  style={{ fontFamily: "var(--font-inter), sans-serif" }}
-                >
-                  {label}
-                </a>
-              ))}
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.header>
   );
 };
 

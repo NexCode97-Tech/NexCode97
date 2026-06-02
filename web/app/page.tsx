@@ -3,7 +3,7 @@ import { ServicesSection } from "@/components/services-section";
 import StackFeatureSection from "@/components/ui/stack-feature-section";
 import { NosotrosSection } from "@/components/nosotros-section";
 import { TestimoniosSection } from "@/components/testimonios-section";
-import { CinematicFooter } from "@/components/ui/motion-footer";
+import { SiteFooter } from "@/components/site-footer";
 import { WhatsAppFAB } from "@/components/whatsapp-fab";
 
 export default function Home() {
@@ -14,7 +14,7 @@ export default function Home() {
       <StackFeatureSection />
       <NosotrosSection />
       <TestimoniosSection />
-      <CinematicFooter />
+      <SiteFooter />
       <WhatsAppFAB />
     </main>
   );

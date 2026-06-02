@@ -210,7 +210,7 @@ export function SiteHeader() {
             <ListItem key={link.title} {...link} />
           ))}
           <div className="my-2 h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
-          <
+          <a
             href="#nosotros"
             onClick={() => setOpen(false)}
             className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-white/70 transition-colors hover:bg-white/6 hover:text-white"

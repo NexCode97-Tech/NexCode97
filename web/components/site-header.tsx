@@ -64,33 +64,28 @@ const techGroups: { category: string; items: TechItem[] }[] = [
   {
     category: 'Frontend',
     items: [
-      { label: 'React',           description: 'UI declarativa y componentizada',        icon: <FaReact />,         color: '#61DAFB' },
-      { label: 'Next.js',         description: 'SSR, rutas y optimización automática',   icon: <SiNextdotjs />,     color: '#ffffff' },
-      { label: 'TypeScript',      description: 'Tipado estático para código robusto',    icon: <SiTypescript />,    color: '#3178C6' },
-      { label: 'Tailwind CSS',    description: 'Estilos utilitarios sin fricción',       icon: <SiTailwindcss />,   color: '#06B6D4' },
-      { label: 'Framer Motion',   description: 'Animaciones fluidas para interfaces',    icon: <SiFramer />,        color: '#ffffff' },
-      { label: 'TanStack Query',  description: 'Fetching y caché de datos en cliente',   icon: <SiReactquery />,    color: '#FF4154' },
+      { label: 'React',        description: 'UI declarativa y componentizada',      icon: <FaReact />,       color: '#61DAFB' },
+      { label: 'Next.js',      description: 'SSR, rutas y optimización automática', icon: <SiNextdotjs />,   color: '#ffffff' },
+      { label: 'TypeScript',   description: 'Tipado estático para código robusto',  icon: <SiTypescript />,  color: '#3178C6' },
+      { label: 'Tailwind CSS', description: 'Estilos utilitarios sin fricción',     icon: <SiTailwindcss />, color: '#06B6D4' },
     ],
   },
   {
     category: 'Backend',
     items: [
-      { label: 'Node.js',     description: 'Runtime JS rápido y escalable',          icon: <FaNodeJs />,                                           color: '#339933' },
-      { label: 'Python',      description: 'Scripts, IA y automatizaciones',         icon: <FaPython />,                                           color: '#3776AB' },
-      { label: 'NextAuth',    description: 'Autenticación segura para Next.js',      icon: <ShieldCheck className="w-4 h-4" />,                    color: '#a78bfa' },
-      { label: 'Prisma ORM',  description: 'ORM moderno con tipado completo',        icon: <SiPrisma />,                                           color: '#5a67d8' },
-      { label: 'PostgreSQL',  description: 'Base de datos relacional de alto nivel', icon: <SiPostgresql />,  color: '#336791' },
-      { label: 'Cloudinary',  description: 'Gestión de imágenes y archivos en nube', icon: <SiCloudinary />,  color: '#3448C5' },
+      { label: 'Node.js',     description: 'Runtime JS rápido y escalable',          icon: <FaNodeJs />,     color: '#339933' },
+      { label: 'PostgreSQL',  description: 'Base de datos relacional de alto nivel', icon: <SiPostgresql />, color: '#336791' },
+      { label: 'Prisma ORM',  description: 'ORM moderno con tipado completo',        icon: <SiPrisma />,     color: '#5a67d8' },
+      { label: 'Cloudinary',  description: 'Gestión de imágenes y archivos en nube', icon: <SiCloudinary />, color: '#3448C5' },
     ],
   },
   {
     category: 'Infraestructura',
     items: [
-      { label: 'Vercel',      description: 'Deploy instantáneo con CDN global',      icon: <SiVercel />,      color: '#ffffff' },
-      { label: 'Railway',     description: 'Backend y bases de datos en la nube',    icon: <SiRailway />,  color: '#B928F5' },
-      { label: 'Docker',      description: 'Contenedores para entornos consistentes',icon: <FaDocker />,   color: '#2496ED' },
-      { label: 'pnpm',        description: 'Gestor de paquetes rápido y eficiente',  icon: <SiPnpm />,     color: '#F69220' },
-      { label: 'Git',         description: 'Control de versiones y colaboración',    icon: <FaGitAlt />,   color: '#F05032' },
+      { label: 'Vercel',  description: 'Deploy instantáneo con CDN global',       icon: <SiVercel />,  color: '#ffffff' },
+      { label: 'Railway', description: 'Backend y bases de datos en la nube',     icon: <SiRailway />, color: '#B928F5' },
+      { label: 'Docker',  description: 'Contenedores para entornos consistentes', icon: <FaDocker />,  color: '#2496ED' },
+      { label: 'Git',     description: 'Control de versiones y colaboración',     icon: <FaGitAlt />,  color: '#F05032' },
     ],
   },
 ];
@@ -240,6 +235,20 @@ export function SiteHeader() {
                       </div>
                     ))}
                   </div>
+
+                  {/* Ver todas */}
+                  <div className="mt-4 pt-3 border-t" style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
+                    <a
+                      href="/tecnologias"
+                      className="flex items-center justify-between w-full rounded-lg px-3 py-2.5 text-xs font-semibold transition-colors duration-150 group"
+                      style={{ color: '#a78bfa' }}
+                      onMouseEnter={e => (e.currentTarget.style.background = 'rgba(124,58,237,0.08)')}
+                      onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
+                    >
+                      <span>Ver todas las tecnologías</span>
+                      <span className="transition-transform duration-150 group-hover:translate-x-0.5">→</span>
+                    </a>
+                  </div>
                 </div>
               </NavigationMenuContent>
             </NavigationMenuItem>
@@ -337,6 +346,15 @@ export function SiteHeader() {
               </div>
             </div>
           ))}
+          <a
+            href="/tecnologias"
+            onClick={() => setOpen(false)}
+            className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors hover:bg-white/6"
+            style={{ color: '#a78bfa' }}
+          >
+            <span>Ver todas las tecnologías</span>
+            <span>→</span>
+          </a>
           <div className="my-2 h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
           <a
             href="#nosotros"

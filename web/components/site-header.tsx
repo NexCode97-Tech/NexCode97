@@ -27,11 +27,11 @@ import {
   Cpu,
 } from 'lucide-react';
 import {
-  FaReact, FaNodeJs, FaDocker, FaGitAlt,
+  FaReact, FaNodeJs, FaDocker, FaGitAlt, FaPython,
 } from 'react-icons/fa';
 import {
   SiNextdotjs, SiTypescript, SiTailwindcss, SiPrisma,
-  SiPostgresql, SiVercel, SiCloudinary,
+  SiPostgresql, SiVercel, SiCloudinary, SiRailway,
 } from 'react-icons/si';
 import type { LucideIcon } from 'lucide-react';
 
@@ -72,6 +72,7 @@ const techGroups: { category: string; items: TechItem[] }[] = [
     category: 'Backend',
     items: [
       { label: 'Node.js',     description: 'Runtime JS rápido y escalable',          icon: <FaNodeJs />,      color: '#339933' },
+      { label: 'Python',      description: 'Scripts, IA y automatizaciones',         icon: <FaPython />,      color: '#3776AB' },
       { label: 'Prisma',      description: 'ORM moderno con tipado completo',        icon: <SiPrisma />,      color: '#5a67d8' },
       { label: 'PostgreSQL',  description: 'Base de datos relacional de alto nivel', icon: <SiPostgresql />,  color: '#336791' },
       { label: 'Cloudinary',  description: 'Gestión de imágenes y archivos en nube', icon: <SiCloudinary />,  color: '#3448C5' },
@@ -81,6 +82,7 @@ const techGroups: { category: string; items: TechItem[] }[] = [
     category: 'Infraestructura',
     items: [
       { label: 'Vercel',      description: 'Deploy instantáneo con CDN global',      icon: <SiVercel />,      color: '#ffffff' },
+      { label: 'Railway',     description: 'Backend y bases de datos en la nube',    icon: <SiRailway />,     color: '#B928F5' },
       { label: 'Docker',      description: 'Contenedores para entornos consistentes',icon: <FaDocker />,      color: '#2496ED' },
       { label: 'Git',         description: 'Control de versiones y colaboración',    icon: <FaGitAlt />,      color: '#F05032' },
     ],

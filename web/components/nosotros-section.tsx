@@ -226,14 +226,15 @@ export function NosotrosSection() {
               </a>
             </div>
 
-            {/* Imagen secundaria */}
+            {/* Video secundario */}
             <div className="relative grow min-h-[180px] overflow-hidden rounded-2xl md:w-1/2 lg:w-auto">
-              <Image
-                src="https://images.unsplash.com/photo-1517180102446-f3ece451e9d8?auto=format&fit=crop&w=800&q=80"
-                alt="Setup de desarrollo NexCode97"
-                fill
-                className="object-cover"
-                quality={100}
+              <video
+                src="/Video codigo.mp4"
+                autoPlay
+                muted
+                loop
+                playsInline
+                className="w-full h-full object-cover"
               />
             </div>
           </div>

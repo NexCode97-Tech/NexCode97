@@ -82,9 +82,12 @@ export const ExpandingCards = React.forwardRef<HTMLUListElement, ExpandingCardsP
             <div className="absolute inset-0 opacity-60 group-data-[active=true]:opacity-0 transition-opacity duration-500"
               style={{ background: "linear-gradient(to top, rgba(76,29,149,.7), rgba(9,9,14,.5))" }} />
 
-            <article className="absolute inset-0 flex flex-col justify-end gap-2 p-5">
-              {/* rotated title when collapsed — desktop only */}
-              <h3 className="hidden origin-left rotate-90 text-xs font-semibold uppercase tracking-widest text-white/60 opacity-100 transition-all duration-300 ease-out md:block group-data-[active=true]:opacity-0 whitespace-nowrap">
+            <article className="absolute inset-0 flex flex-col justify-center gap-2 p-5 group-data-[active=true]:justify-end">
+              {/* vertical title when collapsed — desktop only */}
+              <h3
+                className="hidden text-xs font-semibold uppercase tracking-widest text-white/60 transition-all duration-300 ease-out md:block group-data-[active=true]:opacity-0 whitespace-nowrap self-center mx-auto"
+                style={{ writingMode: "vertical-rl", textOrientation: "mixed", transform: "rotate(180deg)" }}
+              >
                 {item.title}
               </h3>
 

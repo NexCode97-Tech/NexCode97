@@ -19,7 +19,6 @@ import {
   ShoppingCart,
   Zap,
   Users,
-  Code2,
 } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 
@@ -176,18 +175,17 @@ export function SiteHeader() {
           </NavigationMenuList>
         </NavigationMenu>
 
-        {/* CTA desktop + hamburger */}
+        {/* Auth + hamburger */}
         <div className="flex items-center gap-2">
-          <a
-            href="https://wa.me/573006359008"
-            target="_blank"
-            rel="noopener noreferrer"
-            className="hidden md:inline-flex items-center gap-2 rounded-full px-5 py-2 text-sm font-semibold text-white transition-all duration-200 hover:opacity-90 cursor-pointer"
-            style={{ background: 'linear-gradient(135deg,#7c3aed,#06b6d4)' }}
-          >
-            <Code2 className="size-3.5" />
-            Iniciar proyecto
-          </a>
+          <div className="hidden md:flex items-center gap-2">
+            <button className="rounded-full px-4 py-2 text-sm font-semibold text-white/70 transition-colors hover:text-white hover:bg-white/8 cursor-pointer">
+              Log in
+            </button>
+            <button className="rounded-full px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:opacity-90 cursor-pointer"
+              style={{ background: 'linear-gradient(135deg,#7c3aed,#06b6d4)' }}>
+              Sign up
+            </button>
+          </div>
 
           <button
             onClick={() => setOpen(!open)}
@@ -224,16 +222,16 @@ export function SiteHeader() {
           </a>
         </div>
 
-        <a
-          href="https://wa.me/573006359008"
-          target="_blank"
-          rel="noopener noreferrer"
-          className="flex w-full items-center justify-center gap-2 rounded-full py-3 text-sm font-bold text-white"
-          style={{ background: 'linear-gradient(135deg,#7c3aed,#06b6d4)' }}
-        >
-          <Code2 className="size-4" />
-          Iniciar proyecto
-        </a>
+        <div className="flex flex-col gap-2">
+          <button className="w-full rounded-full border py-3 text-sm font-semibold text-white/70 transition-colors hover:text-white cursor-pointer"
+            style={{ borderColor: 'rgba(255,255,255,0.12)', background: 'transparent' }}>
+            Log in
+          </button>
+          <button className="w-full rounded-full py-3 text-sm font-bold text-white cursor-pointer"
+            style={{ background: 'linear-gradient(135deg,#7c3aed,#06b6d4)' }}>
+            Sign up
+          </button>
+        </div>
       </MobileMenu>
     </header>
   );

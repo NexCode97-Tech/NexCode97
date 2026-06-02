@@ -62,20 +62,57 @@ export const WovenLightHero = () => {
   );
 };
 
+// --- Fallback gradient for when WebGL is unavailable ---
+const GradientFallback = () => (
+  <div
+    className="absolute inset-0 z-0"
+    style={{
+      background: 'radial-gradient(ellipse 80% 60% at 50% 40%, rgba(124,58,237,0.25) 0%, rgba(6,182,212,0.1) 50%, transparent 100%)',
+    }}
+  />
+);
+
+function isWebGLAvailable(): boolean {
+  try {
+    const canvas = document.createElement('canvas');
+    return !!(
+      window.WebGLRenderingContext &&
+      (canvas.getContext('webgl') || canvas.getContext('experimental-webgl'))
+    );
+  } catch {
+    return false;
+  }
+}
+
 // --- Three.js Canvas Component ---
 const WovenCanvas = () => {
   const mountRef = useRef<HTMLDivElement>(null);
+  const [webglFailed, setWebglFailed] = React.useState(false);
 
   useEffect(() => {
     if (!mountRef.current) return;
+    if (!isWebGLAvailable()) { setWebglFailed(true); return; }
+
+    let renderer: THREE.WebGLRenderer;
+    try {
+      renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+    } catch {
+      setWebglFailed(true);
+      return;
+    }
 
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
     camera.position.z = 5;
-    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
     renderer.setSize(window.innerWidth, window.innerHeight);
-    renderer.setPixelRatio(window.devicePixelRatio);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2)); // cap at 2x para móvil
     mountRef.current.appendChild(renderer.domElement);
+
+    // Manejar pérdida de contexto WebGL
+    renderer.domElement.addEventListener('webglcontextlost', (e) => {
+      e.preventDefault();
+      setWebglFailed(true);
+    });
 
     const mouse = new THREE.Vector2(0, 0);
     const clock = new THREE.Clock();
@@ -190,10 +227,14 @@ const WovenCanvas = () => {
     return () => {
         window.removeEventListener('resize', handleResize);
         window.removeEventListener('mousemove', handleMouseMove);
-        mountRef.current?.removeChild(renderer.domElement);
+        if (mountRef.current && renderer.domElement.parentNode === mountRef.current) {
+          mountRef.current.removeChild(renderer.domElement);
+        }
+        renderer.dispose();
     };
   }, []);
 
+  if (webglFailed) return <GradientFallback />;
   return <div ref={mountRef} className="absolute inset-0 z-0" />;
 };
 

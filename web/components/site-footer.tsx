@@ -20,15 +20,15 @@ const serviciosLinks = [
 ];
 
 const empresaLinks = [
-  { text: "Nosotros",     href: "#nosotros" },
-  { text: "Testimonios",  href: "#testimonios" },
-  { text: "NexTechnology",href: "#" },
+  { text: "Nosotros",      href: "#nosotros" },
+  { text: "Testimonios",   href: "#testimonios" },
+  { text: "NexTechnology", href: "#" },
 ];
 
 const contactInfo = [
-  { icon: FaWhatsapp,    text: "+57 300 635 9008",       href: "https://wa.me/573006359008" },
-  { icon: Mail,          text: "nexcode97@gmail.com",     href: "mailto:nexcode97@gmail.com" },
-  { icon: MapPin,        text: "Colombia",               href: "#", isAddress: true },
+  { icon: FaWhatsapp, text: "+57 300 635 9008",   href: "https://wa.me/573006359008" },
+  { icon: Mail,       text: "nexcode97@gmail.com", href: "mailto:nexcode97@gmail.com" },
+  { icon: MapPin,     text: "Colombia",            href: "#", isAddress: true },
 ];
 
 export function SiteFooter() {
@@ -50,7 +50,7 @@ export function SiteFooter() {
               className="h-12 w-auto object-contain"
             />
 
-            <p className="mt-5 max-w-xs text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.4)" }}>
+            <p className="mt-5 max-w-xs text-sm leading-relaxed text-white/40">
               Construimos el software exacto que tu negocio necesita. Sin plantillas, sin mensualidades. Solo código que trabaja para ti.
             </p>
 
@@ -61,8 +61,8 @@ export function SiteFooter() {
                     href={href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="flex h-9 w-9 items-center justify-center rounded-lg transition-all duration-200 hover:scale-110"
-                    style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)", color: "rgba(255,255,255,0.5)" }}
+                    className="flex h-9 w-9 items-center justify-center rounded-lg text-white/50 transition-all duration-150 hover:text-white hover:scale-110"
+                    style={{ background: "rgba(255,255,255,0.05)", border: "1px solid rgba(255,255,255,0.08)" }}
                     aria-label={label}
                   >
                     <Icon className="size-4" />
@@ -85,8 +85,7 @@ export function SiteFooter() {
                   <li key={text}>
                     <a
                       href={href}
-                      className="text-sm transition-colors duration-150 hover:text-white"
-                      style={{ color: "rgba(255,255,255,0.4)" }}
+                      className="text-sm text-white/40 transition-colors duration-150 hover:text-white"
                     >
                       {text}
                     </a>
@@ -105,8 +104,7 @@ export function SiteFooter() {
                   <li key={text}>
                     <a
                       href={href}
-                      className="text-sm transition-colors duration-150 hover:text-white"
-                      style={{ color: "rgba(255,255,255,0.4)" }}
+                      className="text-sm text-white/40 transition-colors duration-150 hover:text-white"
                     >
                       {text}
                     </a>
@@ -125,8 +123,7 @@ export function SiteFooter() {
                   <li key={text}>
                     <a
                       href={href}
-                      className="flex items-start gap-2.5 text-sm transition-colors duration-150 hover:text-white"
-                      style={{ color: "rgba(255,255,255,0.4)" }}
+                      className="flex items-start gap-2.5 text-sm text-white/40 transition-colors duration-150 hover:text-white"
                     >
                       <Icon className="size-4 shrink-0 mt-0.5" style={{ color: "#a78bfa" }} />
                       {isAddress ? (
@@ -147,10 +144,10 @@ export function SiteFooter() {
           className="mt-12 pt-6 flex flex-col items-center justify-between gap-4 sm:flex-row"
           style={{ borderTop: "1px solid rgba(255,255,255,0.06)" }}
         >
-          <p className="text-xs" style={{ color: "rgba(255,255,255,0.25)" }}>
+          <p className="text-xs text-white/25">
             © {new Date().getFullYear()} NexCode97. Todos los derechos reservados.
           </p>
-          <p className="text-xs flex items-center gap-1.5" style={{ color: "rgba(255,255,255,0.25)" }}>
+          <p className="text-xs flex items-center gap-1.5 text-white/25">
             Hecho con
             <span className="text-red-500">❤</span>
             en Colombia

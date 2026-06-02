@@ -74,7 +74,7 @@ export const ServicesSection = () => {
   const inView = useInView(ref, { once: true, margin: "-60px" });
 
   return (
-    <section ref={ref} id="servicios" className="py-24" style={{ background: "#09090e" }}>
+    <section ref={ref} id="servicios" className="py-24 bg-white">
       <div className="max-w-6xl mx-auto px-6">
         {/* Header */}
         <motion.div
@@ -88,11 +88,11 @@ export const ServicesSection = () => {
             <span className="inline-block w-4 h-0.5 rounded" style={{ background: "linear-gradient(135deg,#7c3aed,#06b6d4)" }} />
             Servicios
           </p>
-          <h2 className="text-3xl md:text-4xl font-extrabold text-white tracking-tight leading-tight mb-4"
-            style={{ fontFamily: "'Inter', sans-serif", letterSpacing: "-0.04em" }}>
+          <h2 className="text-3xl md:text-4xl font-extrabold tracking-tight leading-tight mb-4"
+            style={{ fontFamily: "'Inter', sans-serif", letterSpacing: "-0.04em", color: "#09090e" }}>
             Lo que construimos
           </h2>
-          <p className="text-sm max-w-md leading-relaxed" style={{ color: "#888ca4", fontFamily: "'Inter', sans-serif" }}>
+          <p className="text-sm max-w-md leading-relaxed" style={{ color: "#475569", fontFamily: "'Inter', sans-serif" }}>
             Soluciones digitales a la medida para cualquier tipo de negocio. Pasa el cursor sobre cada servicio.
           </p>
         </motion.div>

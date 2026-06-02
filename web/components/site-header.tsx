@@ -156,7 +156,7 @@ export function SiteHeader() {
                       className="font-semibold transition-colors hover:text-violet-400"
                       style={{ color: '#a78bfa' }}
                     >
-                      Hablemos por WhatsApp
+                      Contacta a ventas
                     </a>
                   </p>
                 </div>

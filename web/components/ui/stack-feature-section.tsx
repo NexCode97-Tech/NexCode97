@@ -61,12 +61,6 @@ export default function StackFeatureSection() {
                 Comenzar proyecto
               </Button>
             </a>
-            <a href="#portafolio">
-              <Button variant="outline" className="rounded-full px-6 font-semibold"
-                style={{ borderColor: "rgba(124,58,237,0.4)", color: "#a78bfa", background: "transparent" }}>
-                Ver portafolio
-              </Button>
-            </a>
           </div>
         </div>
 

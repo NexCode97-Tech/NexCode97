@@ -226,7 +226,7 @@ export function NosotrosSection() {
                     background: "transparent",
                   }}
                 >
-                  Hablemos →
+                  Contacta a ventas
                 </Button>
               </a>
             </div>

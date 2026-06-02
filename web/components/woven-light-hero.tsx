@@ -53,11 +53,8 @@ export const WovenLightHero = () => {
           Construimos la herramienta exacta que necesitas. Sin plantillas, sin mensualidades. Solo software que trabaja para ti.
         </motion.p>
         <motion.div initial={{ opacity: 0 }} animate={buttonControls} className="mt-10 flex flex-wrap gap-4 justify-center">
-          <a href="#portafolio" className="rounded-full bg-white/10 border-2 border-white/20 px-8 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
-            Ver portafolio
-          </a>
           <a href="https://wa.me/573006359008" target="_blank" rel="noopener noreferrer" className="rounded-full bg-violet-600/80 border-2 border-violet-400/30 px-8 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:bg-violet-600" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
-            Hablemos
+            Contacta a ventas
           </a>
         </motion.div>
       </div>

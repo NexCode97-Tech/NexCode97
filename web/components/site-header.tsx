@@ -166,17 +166,6 @@ export function SiteHeader() {
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
                 <a
-                  href="#portafolio"
-                  className="inline-flex h-9 items-center rounded-md px-4 py-2 text-sm font-medium text-white/70 transition-colors hover:bg-white/8 hover:text-white"
-                >
-                  Portafolio
-                </a>
-              </NavigationMenuLink>
-            </NavigationMenuItem>
-
-            <NavigationMenuItem>
-              <NavigationMenuLink asChild>
-                <a
                   href="#nosotros"
                   className="inline-flex h-9 items-center rounded-md px-4 py-2 text-sm font-medium text-white/70 transition-colors hover:bg-white/8 hover:text-white"
                 >
@@ -223,17 +212,7 @@ export function SiteHeader() {
             <ListItem key={link.title} {...link} />
           ))}
           <div className="my-2 h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
-          <a
-            href="#portafolio"
-            onClick={() => setOpen(false)}
-            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-white/70 transition-colors hover:bg-white/6 hover:text-white"
-          >
-            <div className="flex size-10 items-center justify-center rounded-md" style={{ background: 'rgba(124,58,237,0.12)', border: '1px solid rgba(124,58,237,0.2)' }}>
-              <Users className="size-4" style={{ color: '#a78bfa' }} />
-            </div>
-            Portafolio
-          </a>
-          <a
+          <
             href="#nosotros"
             onClick={() => setOpen(false)}
             className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-white/70 transition-colors hover:bg-white/6 hover:text-white"

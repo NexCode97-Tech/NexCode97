@@ -10,12 +10,6 @@ export const WovenLightHero = () => {
   const buttonControls = useAnimation();
 
   useEffect(() => {
-    // Add a more elegant font
-    const link = document.createElement('link');
-    link.href = 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400&display=swap';
-    link.rel = 'stylesheet';
-    document.head.appendChild(link);
-
     textControls.start(i => ({
       opacity: 1,
       y: 0,
@@ -26,13 +20,9 @@ export const WovenLightHero = () => {
       }
     }));
     buttonControls.start({
-        opacity: 1,
-        transition: { delay: 2.5, duration: 1 }
+      opacity: 1,
+      transition: { delay: 2.5, duration: 1 }
     });
-
-    return () => {
-        document.head.removeChild(link);
-    }
   }, [textControls, buttonControls]);
 
   const headline = "Cada negocio merece su propio sistema.";
@@ -42,7 +32,7 @@ export const WovenLightHero = () => {
       <WovenCanvas />
       <HeroNav />
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-tight" style={{ fontFamily: "'Playfair Display', serif", textShadow: '0 0 60px rgba(124, 58, 237, 0.4)' }}>
+        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-tight" style={{ fontFamily: "var(--font-playfair), serif", textShadow: '0 0 60px rgba(124, 58, 237, 0.4)' }}>
             {headline.split(" ").map((word, i) => (
                 <span key={i} className="inline-block">
                     {word.split("").map((char, j) => (
@@ -59,15 +49,15 @@ export const WovenLightHero = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={textControls}
           className="mx-auto mt-8 max-w-xl text-lg text-slate-300"
-          style={{ fontFamily: "'Inter', sans-serif" }}
+          style={{ fontFamily: "var(--font-inter), sans-serif" }}
         >
           Construimos la herramienta exacta que necesitas. Sin plantillas, sin mensualidades — solo software que trabaja para ti.
         </motion.p>
         <motion.div initial={{ opacity: 0 }} animate={buttonControls} className="mt-10 flex flex-wrap gap-4 justify-center">
-          <a href="#portafolio" className="rounded-full bg-white/10 border-2 border-white/20 px-8 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20" style={{ fontFamily: "'Inter', sans-serif" }}>
+          <a href="#portafolio" className="rounded-full bg-white/10 border-2 border-white/20 px-8 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
             Ver portafolio
           </a>
-          <a href="https://wa.me/573164134212" target="_blank" rel="noopener noreferrer" className="rounded-full bg-violet-600/80 border-2 border-violet-400/30 px-8 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:bg-violet-600" style={{ fontFamily: "'Inter', sans-serif" }}>
+          <a href="https://wa.me/573164134212" target="_blank" rel="noopener noreferrer" className="rounded-full bg-violet-600/80 border-2 border-violet-400/30 px-8 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:bg-violet-600" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
             Hablemos
           </a>
         </motion.div>
@@ -95,7 +85,7 @@ const NavLogo = () => (
         <linearGradient id="ng3" x1="10" y1="4" x2="14" y2="20" gradientUnits="userSpaceOnUse"><stop stopColor="#7c3aed"/><stop offset="1" stopColor="#06b6d4"/></linearGradient>
       </defs>
     </svg>
-    <span className="text-lg font-bold text-white" style={{ fontFamily: "'Inter', sans-serif" }}>
+    <span className="text-lg font-bold text-white" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
       Nex<span style={{ background: 'linear-gradient(135deg,#7c3aed,#06b6d4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>Code97</span>
     </span>
   </a>
@@ -121,7 +111,7 @@ const HeroNav = () => {
               key={label}
               href={href}
               className="px-4 py-2 rounded-lg text-sm font-medium text-white/60 hover:text-white hover:bg-white/8 transition-all duration-200"
-              style={{ fontFamily: "'Inter', sans-serif" }}
+              style={{ fontFamily: "var(--font-inter), sans-serif" }}
             >
               {label}
             </a>
@@ -135,7 +125,7 @@ const HeroNav = () => {
             target="_blank"
             rel="noopener noreferrer"
             className="hidden md:inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/8 px-5 py-2 text-sm font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/16 hover:border-violet-400/50"
-            style={{ fontFamily: "'Inter', sans-serif" }}
+            style={{ fontFamily: "var(--font-inter), sans-serif" }}
           >
             {/* WhatsApp icon */}
             <svg viewBox="0 0 24 24" className="w-4 h-4 fill-current text-green-400" xmlns="http://www.w3.org/2000/svg">
@@ -174,7 +164,7 @@ const HeroNav = () => {
                   href={href}
                   onClick={() => setOpen(false)}
                   className="px-3 py-3 rounded-lg text-sm font-medium text-white/70 hover:text-white hover:bg-white/8 transition-all"
-                  style={{ fontFamily: "'Inter', sans-serif" }}
+                  style={{ fontFamily: "var(--font-inter), sans-serif" }}
                 >
                   {label}
                 </a>
@@ -184,7 +174,7 @@ const HeroNav = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 className="mt-2 flex items-center justify-center gap-2 rounded-full bg-violet-600/80 border border-violet-400/30 px-5 py-3 text-sm font-semibold text-white"
-                style={{ fontFamily: "'Inter', sans-serif" }}
+                style={{ fontFamily: "var(--font-inter), sans-serif" }}
               >
                 Hablemos por WhatsApp
               </a>

@@ -57,7 +57,7 @@ export const WovenLightHero = () => {
           <a href="#portafolio" className="rounded-full bg-white/10 border-2 border-white/20 px-8 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:bg-white/20" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
             Ver portafolio
           </a>
-          <a href="https://wa.me/573164134212" target="_blank" rel="noopener noreferrer" className="rounded-full bg-violet-600/80 border-2 border-violet-400/30 px-8 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:bg-violet-600" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
+          <a href="https://wa.me/573006359008" target="_blank" rel="noopener noreferrer" className="rounded-full bg-violet-600/80 border-2 border-violet-400/30 px-8 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:bg-violet-600" style={{ fontFamily: "var(--font-inter), sans-serif" }}>
             Hablemos
           </a>
         </motion.div>

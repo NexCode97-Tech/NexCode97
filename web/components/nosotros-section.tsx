@@ -213,7 +213,7 @@ export function NosotrosSection() {
               </div>
 
               <a
-                href="https://wa.me/573164134212"
+                href="https://wa.me/573006359008"
                 target="_blank"
                 rel="noopener noreferrer"
               >

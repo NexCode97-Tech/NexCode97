@@ -55,7 +55,7 @@ export default function StackFeatureSection() {
             Usamos el stack más moderno y probado para que tu producto sea rápido, escalable y fácil de mantener.
           </p>
           <div className="flex items-center gap-3">
-            <a href="https://wa.me/573164134212" target="_blank" rel="noopener noreferrer">
+            <a href="https://wa.me/573006359008" target="_blank" rel="noopener noreferrer">
               <Button className="rounded-full px-6 font-semibold"
                 style={{ background: "linear-gradient(135deg,#7c3aed,#06b6d4)", border: "none", color: "#fff" }}>
                 Comenzar proyecto

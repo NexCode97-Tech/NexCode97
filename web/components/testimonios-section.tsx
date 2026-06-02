@@ -79,7 +79,7 @@ export function TestimoniosSection() {
             Testimonios
           </p>
           <h2 className="text-4xl font-extrabold leading-tight" style={{ color: "#fff" }}>
-            Lo que dicen nuestros clientes
+            Cada testimonio fue<br />un problema que resolvimos.
           </h2>
           <p className="text-sm leading-relaxed" style={{ color: "#888ca4" }}>
             Empresas reales que confiaron en NexCode97 para construir su software a la medida.

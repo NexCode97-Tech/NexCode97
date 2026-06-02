@@ -19,7 +19,20 @@ import {
   ShoppingCart,
   Zap,
   Users,
+  Database,
+  Server,
+  Cloud,
+  GitBranch,
+  Layers,
+  Cpu,
 } from 'lucide-react';
+import {
+  FaReact, FaNodeJs, FaDocker, FaGitAlt,
+} from 'react-icons/fa';
+import {
+  SiNextdotjs, SiTypescript, SiTailwindcss, SiPrisma,
+  SiPostgresql, SiVercel, SiCloudinary,
+} from 'react-icons/si';
 import type { LucideIcon } from 'lucide-react';
 
 type LinkItem = {
@@ -36,6 +49,42 @@ const serviciosLinks: LinkItem[] = [
   { title: 'Sistemas de gestión',  href: '#servicios', icon: LayoutDashboard,description: 'ERPs, CRMs y herramientas internas a tu medida' },
   { title: 'Tiendas en línea',     href: '#servicios', icon: ShoppingCart,   description: 'E-commerce completo con pagos y administración' },
   { title: 'Integraciones y PWA',  href: '#servicios', icon: Zap,            description: 'WhatsApp, pagos, APIs externas y apps instalables' },
+];
+
+type TechItem = {
+  label: string;
+  description: string;
+  icon: React.ReactNode;
+  color: string;
+};
+
+const techGroups: { category: string; items: TechItem[] }[] = [
+  {
+    category: 'Frontend',
+    items: [
+      { label: 'React',       description: 'UI declarativa y componentizada',        icon: <FaReact />,       color: '#61DAFB' },
+      { label: 'Next.js',     description: 'SSR, rutas y optimización automática',   icon: <SiNextdotjs />,   color: '#ffffff' },
+      { label: 'TypeScript',  description: 'Tipado estático para código robusto',    icon: <SiTypescript />,  color: '#3178C6' },
+      { label: 'Tailwind CSS',description: 'Estilos utilitarios sin fricción',       icon: <SiTailwindcss />, color: '#06B6D4' },
+    ],
+  },
+  {
+    category: 'Backend',
+    items: [
+      { label: 'Node.js',     description: 'Runtime JS rápido y escalable',          icon: <FaNodeJs />,      color: '#339933' },
+      { label: 'Prisma',      description: 'ORM moderno con tipado completo',        icon: <SiPrisma />,      color: '#5a67d8' },
+      { label: 'PostgreSQL',  description: 'Base de datos relacional de alto nivel', icon: <SiPostgresql />,  color: '#336791' },
+      { label: 'Cloudinary',  description: 'Gestión de imágenes y archivos en nube', icon: <SiCloudinary />,  color: '#3448C5' },
+    ],
+  },
+  {
+    category: 'Infraestructura',
+    items: [
+      { label: 'Vercel',      description: 'Deploy instantáneo con CDN global',      icon: <SiVercel />,      color: '#ffffff' },
+      { label: 'Docker',      description: 'Contenedores para entornos consistentes',icon: <FaDocker />,      color: '#2496ED' },
+      { label: 'Git',         description: 'Control de versiones y colaboración',    icon: <FaGitAlt />,      color: '#F05032' },
+    ],
+  },
 ];
 
 function useScroll(threshold: number) {
@@ -163,6 +212,55 @@ export function SiteHeader() {
             </NavigationMenuItem>
 
             <NavigationMenuItem>
+              <NavigationMenuTrigger>
+                <span style={{ background: 'linear-gradient(135deg,#7c3aed,#06b6d4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                  Nex
+                </span>
+                Technology
+              </NavigationMenuTrigger>
+              <NavigationMenuContent>
+                <div className="w-[580px] p-4">
+                  {/* Encabezado */}
+                  <div className="mb-4 pb-3 border-b" style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
+                    <p className="text-sm font-bold text-white">Stack tecnológico</p>
+                    <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.4)' }}>
+                      Las herramientas que usamos para construir cada proyecto
+                    </p>
+                  </div>
+                  {/* Grupos */}
+                  <div className="flex flex-col gap-4">
+                    {techGroups.map((group) => (
+                      <div key={group.category}>
+                        <p className="mb-2 px-1 text-[10px] font-bold uppercase tracking-widest" style={{ color: '#a78bfa' }}>
+                          {group.category}
+                        </p>
+                        <div className="grid grid-cols-4 gap-1.5">
+                          {group.items.map((tech) => (
+                            <div
+                              key={tech.label}
+                              className="flex flex-col items-center gap-2 rounded-lg p-2.5 text-center transition-colors hover:bg-white/6 cursor-default"
+                            >
+                              <div
+                                className="flex h-9 w-9 items-center justify-center rounded-lg text-lg"
+                                style={{ background: 'rgba(124,58,237,0.1)', border: '1px solid rgba(124,58,237,0.18)', color: tech.color }}
+                              >
+                                {tech.icon}
+                              </div>
+                              <div>
+                                <p className="text-xs font-semibold text-white leading-tight">{tech.label}</p>
+                                <p className="text-[10px] leading-tight mt-0.5" style={{ color: 'rgba(255,255,255,0.35)' }}>{tech.description}</p>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </NavigationMenuContent>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
               <NavigationMenuLink asChild>
                 <a
                   href="#nosotros"
@@ -208,6 +306,25 @@ export function SiteHeader() {
           </p>
           {serviciosLinks.map((link) => (
             <ListItem key={link.title} {...link} />
+          ))}
+          <div className="my-2 h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
+          <p className="mb-1 px-2 text-xs font-bold uppercase tracking-widest" style={{ color: '#a78bfa' }}>
+            NexTechnology
+          </p>
+          {techGroups.map((group) => (
+            <div key={group.category}>
+              <p className="px-3 py-1 text-[10px] font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                {group.category}
+              </p>
+              <div className="grid grid-cols-2 gap-1">
+                {group.items.map((tech) => (
+                  <div key={tech.label} className="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors hover:bg-white/6">
+                    <span className="text-base" style={{ color: tech.color }}>{tech.icon}</span>
+                    <span className="text-sm font-medium text-white/70">{tech.label}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
           ))}
           <div className="my-2 h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
           <a

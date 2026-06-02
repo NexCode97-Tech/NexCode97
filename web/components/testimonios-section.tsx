@@ -19,7 +19,7 @@ const testimonials = [
     role: "Director Deportivo",
     company: "VeloClub",
     content:
-      "Buscábamos una solución para digitalizar la gestión de nuestro club de ciclismo y NexCode97 la construyó desde cero. Control de membresías, asistencia y pagos en una sola plataforma. Sin mensualidades, sin letra pequeña.",
+      "Buscábamos una solución para digitalizar la gestión de nuestro club de patinaje y NexCode97 la construyó desde cero. Control de membresías, asistencia y pagos en una sola plataforma. Sin mensualidades, sin letra pequeña.",
     rating: 5,
     avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=200&q=80",
   },

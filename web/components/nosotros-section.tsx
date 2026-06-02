@@ -21,7 +21,7 @@ export function NosotrosSection() {
       ref={ref}
       id="nosotros"
       className="py-32"
-      style={{ background: "#09090e" }}
+      style={{ background: "#ffffff" }}
     >
       <div className="max-w-6xl mx-auto px-6">
 
@@ -35,24 +35,24 @@ export function NosotrosSection() {
           <div>
             <p
               className="text-xs font-bold tracking-[0.14em] uppercase mb-4 flex items-center gap-3"
-              style={{ color: "#22d3ee" }}
+              style={{ color: "#7c3aed" }}
             >
               <span
-                className="inline-block w-4 h-0.5 rounded"
+                className="inline-block w-2 h-2 rounded-full"
                 style={{ background: "linear-gradient(135deg,#7c3aed,#06b6d4)" }}
               />
               Nosotros
             </p>
             <h2
               className="text-4xl md:text-5xl font-extrabold leading-tight"
-              style={{ color: "#fff" }}
+              style={{ color: "#09090e" }}
             >
               Quiénes somos
             </h2>
           </div>
           <p
             className="text-base leading-relaxed"
-            style={{ color: "#888ca4" }}
+            style={{ color: "#475569" }}
           >
             NexCode97 es un equipo de desarrollo especializado en construir
             sistemas a la medida. No vendemos plantillas — construimos la
@@ -165,21 +165,21 @@ export function NosotrosSection() {
           transition={{ duration: 0.7, delay: 0.3 }}
           className="relative mt-6 overflow-hidden rounded-2xl p-10 md:p-14"
           style={{
-            background: "rgba(255,255,255,0.03)",
-            border: "1px solid rgba(255,255,255,0.07)",
+            background: "#f8f7ff",
+            border: "1px solid rgba(124,58,237,0.12)",
           }}
         >
           {/* Texto */}
           <div className="flex flex-col gap-3 text-center md:text-left">
             <h3
               className="text-3xl md:text-4xl font-extrabold"
-              style={{ color: "#fff" }}
+              style={{ color: "#09090e" }}
             >
               Números que respaldan el trabajo
             </h3>
             <p
               className="max-w-lg text-sm leading-relaxed"
-              style={{ color: "#888ca4" }}
+              style={{ color: "#475569" }}
             >
               Cada proyecto es un compromiso. Estos son los resultados de
               cumplirlo.
@@ -190,7 +190,7 @@ export function NosotrosSection() {
           <div className="mt-10 flex flex-wrap justify-between gap-10 text-center">
             {achievements.map((item) => (
               <div key={item.label} className="flex flex-col gap-3">
-                <p className="text-sm" style={{ color: "#888ca4" }}>
+                <p className="text-sm" style={{ color: "#475569" }}>
                   {item.label}
                 </p>
                 <span

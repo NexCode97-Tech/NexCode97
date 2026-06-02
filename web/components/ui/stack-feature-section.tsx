@@ -40,7 +40,7 @@ export default function StackFeatureSection() {
         <div className="w-1/2 z-10 relative">
           <p className="text-xs font-bold tracking-[0.14em] uppercase mb-4 flex items-center gap-3"
             style={{ color: "#22d3ee" }}>
-            <span className="inline-block w-4 h-0.5 rounded" style={{ background: "linear-gradient(135deg,#7c3aed,#06b6d4)" }} />
+            <span className="inline-block w-2 h-2 rounded-full" style={{ background: "linear-gradient(135deg,#7c3aed,#06b6d4)" }} />
             Tecnología
           </p>
           <h2 className="text-4xl sm:text-5xl font-extrabold mb-4 leading-tight"

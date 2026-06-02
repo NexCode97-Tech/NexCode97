@@ -156,13 +156,13 @@ export function NosotrosSection() {
         >
           {/* Imagen principal */}
           <div className="relative overflow-hidden rounded-2xl lg:col-span-2" style={{ maxHeight: "560px" }}>
-            <Image
-              src="https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=1400&q=80"
-              alt="Equipo NexCode97 colaborando en un proyecto"
-              width={1400}
-              height={900}
+            <video
+              src="/video equipo de trabajo.mp4"
+              autoPlay
+              muted
+              loop
+              playsInline
               className="w-full h-full object-cover"
-              quality={100}
             />
             <div
               className="absolute inset-0 rounded-2xl"

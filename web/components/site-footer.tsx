@@ -1,13 +1,11 @@
 import { Mail, MapPin } from "lucide-react";
-import { FaInstagram, FaGithub, FaLinkedinIn, FaWhatsapp } from "react-icons/fa";
+import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
 
 const socialLinks = [
-  { icon: FaInstagram,   label: "Instagram", href: "https://www.instagram.com/nexcode97?igsh=enVnc2pqNTVra2Mw" },
-  { icon: FaWhatsapp,    label: "WhatsApp",  href: "https://wa.me/573006359008" },
-  { icon: FaGithub,      label: "GitHub",    href: "https://github.com/NexCode97" },
-  { icon: FaLinkedinIn,  label: "LinkedIn",  href: "https://linkedin.com/company/nexcode97" },
+  { icon: FaInstagram, label: "Instagram", href: "https://www.instagram.com/nexcode97?igsh=enVnc2pqNTVra2Mw" },
+  { icon: FaWhatsapp,  label: "WhatsApp",  href: "https://wa.me/573006359008" },
 ];
 
 const serviciosLinks = [

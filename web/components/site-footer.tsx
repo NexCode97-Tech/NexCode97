@@ -1,9 +1,10 @@
 import { Mail, MapPin } from "lucide-react";
 import { FaInstagram, FaGithub, FaLinkedinIn, FaWhatsapp } from "react-icons/fa";
+import Image from "next/image";
 import Link from "next/link";
 
 const socialLinks = [
-  { icon: FaInstagram,   label: "Instagram", href: "https://instagram.com/nexcode97" },
+  { icon: FaInstagram,   label: "Instagram", href: "https://www.instagram.com/nexcode97?igsh=enVnc2pqNTVra2Mw" },
   { icon: FaWhatsapp,    label: "WhatsApp",  href: "https://wa.me/573006359008" },
   { icon: FaGithub,      label: "GitHub",    href: "https://github.com/NexCode97" },
   { icon: FaLinkedinIn,  label: "LinkedIn",  href: "https://linkedin.com/company/nexcode97" },
@@ -26,7 +27,7 @@ const empresaLinks = [
 
 const contactInfo = [
   { icon: FaWhatsapp,    text: "+57 300 635 9008",       href: "https://wa.me/573006359008" },
-  { icon: Mail,          text: "hola@nexcode97.com",     href: "mailto:hola@nexcode97.com" },
+  { icon: Mail,          text: "nexcode97@gmail.com",     href: "mailto:nexcode97@gmail.com" },
   { icon: MapPin,        text: "Colombia",               href: "#", isAddress: true },
 ];
 
@@ -41,17 +42,13 @@ export function SiteFooter() {
 
           {/* Brand */}
           <div>
-            <div className="flex items-center gap-3">
-              <div
-                className="flex h-9 w-9 items-center justify-center rounded-lg text-xs font-extrabold text-white shrink-0"
-                style={{ background: "linear-gradient(135deg,#7c3aed,#06b6d4)", letterSpacing: "-0.03em" }}
-              >
-                N97
-              </div>
-              <span className="text-lg font-bold text-white" style={{ letterSpacing: "-0.02em" }}>
-                NexCode97
-              </span>
-            </div>
+            <Image
+              src="/logo-nexcode97.png"
+              alt="NexCode97"
+              width={180}
+              height={54}
+              className="h-12 w-auto object-contain"
+            />
 
             <p className="mt-5 max-w-xs text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.4)" }}>
               Construimos el software exacto que tu negocio necesita. Sin plantillas, sin mensualidades. Solo código que trabaja para ti.

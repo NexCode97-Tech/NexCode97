@@ -1,16 +1,102 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { motion, useInView } from "framer-motion";
 import Image from "next/image";
 import { Button } from "@/components/ui/button";
 
 const achievements = [
-  { label: "Proyectos entregados", value: "15+" },
-  { label: "Clientes satisfechos", value: "100%" },
-  { label: "Años de experiencia", value: "5+" },
-  { label: "Tecnologías dominadas", value: "20+" },
+  { label: "Proyectos entregados", value: "15+",  count: 15,  suffix: "+" },
+  { label: "Clientes satisfechos", value: "100%", count: 100, suffix: "%" },
+  { label: "Años de experiencia",  value: "5+",   count: 5,   suffix: "+" },
+  { label: "Tecnologías dominadas",value: "20+",  count: 20,  suffix: "+" },
 ];
+
+function CountUp({ to, suffix, duration = 1.6, start }: { to: number; suffix: string; duration?: number; start: boolean }) {
+  const [current, setCurrent] = useState(0);
+
+  useEffect(() => {
+    if (!start) return;
+    setCurrent(0);
+    const steps = 40;
+    const stepTime = (duration * 1000) / steps;
+    let step = 0;
+    const timer = setInterval(() => {
+      step++;
+      const progress = step / steps;
+      // ease-out cubic
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setCurrent(Math.round(eased * to));
+      if (step >= steps) clearInterval(timer);
+    }, stepTime);
+    return () => clearInterval(timer);
+  }, [start, to, duration]);
+
+  return <>{current}{suffix}</>;
+}
+
+function StatsBlock() {
+  const ref = useRef(null);
+  const inView = useInView(ref, { once: true, margin: "-60px" });
+
+  return (
+    <motion.div
+      ref={ref}
+      initial={{ opacity: 0, y: 30 }}
+      animate={inView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.7 }}
+      className="relative mt-6 overflow-hidden rounded-2xl p-10 md:p-14"
+      style={{
+        background: "#f8f7ff",
+        border: "1px solid rgba(124,58,237,0.12)",
+      }}
+    >
+      <div className="flex flex-col gap-3 text-center md:text-left">
+        <h3 className="text-3xl md:text-4xl font-extrabold" style={{ color: "#09090e" }}>
+          Números que respaldan el trabajo
+        </h3>
+        <p className="max-w-lg text-sm leading-relaxed" style={{ color: "#475569" }}>
+          Cada proyecto es un compromiso. Estos son los resultados de cumplirlo.
+        </p>
+      </div>
+
+      <div className="mt-10 flex flex-wrap justify-between gap-10 text-center">
+        {achievements.map((item, i) => (
+          <motion.div
+            key={item.label}
+            className="flex flex-col gap-3"
+            initial={{ opacity: 0, y: 16 }}
+            animate={inView ? { opacity: 1, y: 0 } : {}}
+            transition={{ duration: 0.5, delay: 0.1 + i * 0.1 }}
+          >
+            <p className="text-sm" style={{ color: "#475569" }}>{item.label}</p>
+            <span
+              className="text-5xl md:text-6xl font-extrabold tabular-nums"
+              style={{
+                background: "linear-gradient(135deg,#7c3aed,#06b6d4)",
+                WebkitBackgroundClip: "text",
+                WebkitTextFillColor: "transparent",
+              }}
+            >
+              <CountUp to={item.count} suffix={item.suffix} start={inView} duration={1.4 + i * 0.15} />
+            </span>
+          </motion.div>
+        ))}
+      </div>
+
+      {/* Grid decorativo */}
+      <div
+        className="pointer-events-none absolute -top-1 right-1 z-10 hidden h-full w-full md:block"
+        style={{
+          backgroundImage: "linear-gradient(to right,#a78bfa 1px,transparent 1px),linear-gradient(to bottom,#a78bfa 1px,transparent 1px)",
+          backgroundSize: "80px 80px",
+          opacity: 0.06,
+          maskImage: "linear-gradient(to bottom right,#000,transparent,transparent)",
+        }}
+      />
+    </motion.div>
+  );
+}
 
 export function NosotrosSection() {
   const ref = useRef(null);
@@ -159,68 +245,7 @@ export function NosotrosSection() {
         </motion.div>
 
         {/* ── Achievements ── */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.3 }}
-          className="relative mt-6 overflow-hidden rounded-2xl p-10 md:p-14"
-          style={{
-            background: "#f8f7ff",
-            border: "1px solid rgba(124,58,237,0.12)",
-          }}
-        >
-          {/* Texto */}
-          <div className="flex flex-col gap-3 text-center md:text-left">
-            <h3
-              className="text-3xl md:text-4xl font-extrabold"
-              style={{ color: "#09090e" }}
-            >
-              Números que respaldan el trabajo
-            </h3>
-            <p
-              className="max-w-lg text-sm leading-relaxed"
-              style={{ color: "#475569" }}
-            >
-              Cada proyecto es un compromiso. Estos son los resultados de
-              cumplirlo.
-            </p>
-          </div>
-
-          {/* Stats */}
-          <div className="mt-10 flex flex-wrap justify-between gap-10 text-center">
-            {achievements.map((item) => (
-              <div key={item.label} className="flex flex-col gap-3">
-                <p className="text-sm" style={{ color: "#475569" }}>
-                  {item.label}
-                </p>
-                <span
-                  className="text-5xl md:text-6xl font-extrabold"
-                  style={{
-                    background:
-                      "linear-gradient(135deg,#7c3aed,#06b6d4)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                  }}
-                >
-                  {item.value}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          {/* Grid decorativo de fondo */}
-          <div
-            className="pointer-events-none absolute -top-1 right-1 z-10 hidden h-full w-full md:block"
-            style={{
-              backgroundImage:
-                "linear-gradient(to right,#a78bfa 1px,transparent 1px),linear-gradient(to bottom,#a78bfa 1px,transparent 1px)",
-              backgroundSize: "80px 80px",
-              opacity: 0.05,
-              maskImage:
-                "linear-gradient(to bottom right,#000,transparent,transparent)",
-            }}
-          />
-        </motion.div>
+        <StatsBlock />
 
       </div>
     </section>

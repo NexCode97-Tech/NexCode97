@@ -82,15 +82,15 @@ export const ExpandingCards = React.forwardRef<HTMLUListElement, ExpandingCardsP
             <div className="absolute inset-0 opacity-60 group-data-[active=true]:opacity-0 transition-opacity duration-500"
               style={{ background: "linear-gradient(to top, rgba(76,29,149,.7), rgba(9,9,14,.5))" }} />
 
-            <article className="absolute inset-0 flex flex-col justify-center gap-2 p-5 group-data-[active=true]:justify-end">
-              {/* vertical title when collapsed — desktop only */}
-              <h3
-                className="hidden text-xs font-semibold uppercase tracking-widest text-white/60 transition-all duration-300 ease-out md:block group-data-[active=true]:opacity-0 whitespace-nowrap self-center mx-auto"
-                style={{ writingMode: "vertical-rl", textOrientation: "mixed", transform: "rotate(180deg)" }}
-              >
-                {item.title}
-              </h3>
+            {/* Título vertical — capa independiente, solo en colapsado desktop */}
+            <h3
+              className="absolute inset-0 hidden md:flex items-center justify-center text-xs font-semibold uppercase tracking-widest text-white/60 transition-opacity duration-300 ease-out group-data-[active=true]:opacity-0 whitespace-nowrap pointer-events-none"
+              style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}
+            >
+              {item.title}
+            </h3>
 
+            <article className="absolute inset-0 flex flex-col justify-end gap-2 p-5">
               {/* expanded content */}
               <div className="text-violet-300 opacity-0 transition-all duration-300 delay-75 ease-out group-data-[active=true]:opacity-100">
                 {item.icon}

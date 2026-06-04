@@ -207,7 +207,7 @@ export function SiteHeader() {
                   <div className="flex flex-col gap-4">
                     {techGroups.map((group) => (
                       <div key={group.category}>
-                        <p className="mb-2 px-1 text-[10px] font-bold uppercase tracking-widest" style={{ color: '#7c3aed' }}>
+                        <p className="mb-2 px-1 text-[10px] font-bold uppercase tracking-widest" style={{ color: '#a78bfa' }}>
                           {group.category}
                         </p>
                         <div className="grid grid-cols-4 gap-1.5">
@@ -333,7 +333,7 @@ export function SiteHeader() {
           </p>
           {techGroups.map((group) => (
             <div key={group.category}>
-              <p className="px-3 py-1 text-[10px] font-bold uppercase tracking-widest" style={{ color: '#7c3aed' }}>
+              <p className="px-3 py-1 text-[10px] font-bold uppercase tracking-widest" style={{ color: '#a78bfa' }}>
                 {group.category}
               </p>
               <div className="grid grid-cols-2 gap-1">

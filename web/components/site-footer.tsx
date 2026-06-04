@@ -75,7 +75,7 @@ export function SiteFooter() {
 
             {/* Servicios */}
             <div>
-              <p className="text-sm font-bold uppercase tracking-widest mb-5" style={{ color: "#a78bfa" }}>
+              <p className="text-sm font-bold uppercase tracking-widest mb-5" style={{ color: "#ffffff" }}>
                 Servicios
               </p>
               <ul className="space-y-3">
@@ -94,7 +94,7 @@ export function SiteFooter() {
 
             {/* Empresa */}
             <div>
-              <p className="text-sm font-bold uppercase tracking-widest mb-5" style={{ color: "#a78bfa" }}>
+              <p className="text-sm font-bold uppercase tracking-widest mb-5" style={{ color: "#ffffff" }}>
                 Empresa
               </p>
               <ul className="space-y-3">
@@ -113,7 +113,7 @@ export function SiteFooter() {
 
             {/* Contacto */}
             <div>
-              <p className="text-sm font-bold uppercase tracking-widest mb-5" style={{ color: "#a78bfa" }}>
+              <p className="text-sm font-bold uppercase tracking-widest mb-5" style={{ color: "#ffffff" }}>
                 Contacto
               </p>
               <ul className="space-y-3">
@@ -123,7 +123,7 @@ export function SiteFooter() {
                       href={href}
                       className="flex items-start gap-2.5 text-sm text-white/40 transition-colors duration-150 hover:text-white"
                     >
-                      <Icon className="size-4 shrink-0 mt-0.5" style={{ color: "#a78bfa" }} />
+                      <Icon className="size-4 shrink-0 mt-0.5" style={{ color: "#ffffff" }} />
                       {isAddress ? (
                         <address className="not-italic">{text}</address>
                       ) : (

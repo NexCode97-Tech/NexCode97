@@ -198,7 +198,7 @@ export function SiteHeader() {
                 <div className="w-[580px] p-4">
                   {/* Encabezado */}
                   <div className="mb-4 pb-3 border-b" style={{ borderColor: 'rgba(255,255,255,0.07)' }}>
-                    <p className="text-sm font-bold" style={{ color: '#FFF200' }}>Stack tecnológico</p>
+                    <p className="text-sm font-bold" style={{ color: '#ffffff' }}>Stack tecnológico</p>
                     <p className="text-xs mt-0.5" style={{ color: 'rgba(255,255,255,0.4)' }}>
                       Las herramientas que usamos para construir cada proyecto
                     </p>
@@ -207,7 +207,7 @@ export function SiteHeader() {
                   <div className="flex flex-col gap-4">
                     {techGroups.map((group) => (
                       <div key={group.category}>
-                        <p className="mb-2 px-1 text-[10px] font-bold uppercase tracking-widest" style={{ color: '#FFF200' }}>
+                        <p className="mb-2 px-1 text-[10px] font-bold uppercase tracking-widest" style={{ color: '#ffffff' }}>
                           {group.category}
                         </p>
                         <div className="grid grid-cols-4 gap-1.5">
@@ -241,7 +241,7 @@ export function SiteHeader() {
                     <a
                       href="/tecnologias"
                       className="flex items-center justify-between w-full rounded-lg px-3 py-2.5 text-xs font-semibold transition-colors duration-150 group"
-                      style={{ color: '#FFF200' }}
+                      style={{ color: '#ffffff' }}
                       onMouseEnter={e => (e.currentTarget.style.background = 'rgba(124,58,237,0.08)')}
                       onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                     >
@@ -350,7 +350,7 @@ export function SiteHeader() {
             href="/tecnologias"
             onClick={() => setOpen(false)}
             className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors hover:bg-white/6"
-            style={{ color: '#a78bfa' }}
+            style={{ color: '#ffffff' }}
           >
             <span>Ver todas las tecnologías</span>
             <span>→</span>

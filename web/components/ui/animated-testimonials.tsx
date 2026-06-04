@@ -87,14 +87,7 @@ export function AnimatedTestimonials({
           {/* Izquierda — título y navegación */}
           <motion.div variants={itemVariants} className="flex flex-col justify-center">
             <div className="space-y-6">
-              {badgeText && (
-                <p className="text-xs font-bold tracking-[0.14em] uppercase flex items-center gap-3"
-                  style={{ color: "#22d3ee" }}>
-                  <span className="inline-block w-2 h-2 rounded-full flex-shrink-0"
-                    style={{ background: "linear-gradient(135deg,#7c3aed,#06b6d4)" }} />
-                  {badgeText}
-                </p>
-              )}
+              {/* badge oculto */}
 
               <h2 className="text-4xl font-extrabold leading-tight" style={{ color: "#fff" }}>
                 {title}
@@ -114,7 +107,7 @@ export function AnimatedTestimonials({
                     style={{
                       width: activeIndex === index ? "2.5rem" : "0.625rem",
                       background: activeIndex === index
-                        ? "linear-gradient(135deg,#7c3aed,#06b6d4)"
+                        ? "#FFF200"
                         : "rgba(255,255,255,0.2)",
                     }}
                     aria-label={`Ver testimonio ${index + 1}`}

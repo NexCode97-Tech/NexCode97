@@ -41,7 +41,7 @@ export function SiteFooter() {
           {/* Brand */}
           <div>
             <Image
-              src="/logo-nexcode97.png"
+              src="/logo-nuevo.png"
               alt="NexCode97"
               width={180}
               height={54}

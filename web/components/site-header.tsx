@@ -175,7 +175,7 @@ export function SiteHeader() {
         {/* Logo */}
         <a href="/" className="flex items-center rounded-lg p-1 transition-opacity hover:opacity-80">
           <Image
-            src="/logo-nexcode97.png"
+            src="/logo-nuevo.png"
             alt="NexCode97"
             width={160}
             height={40}

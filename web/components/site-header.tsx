@@ -189,7 +189,7 @@ export function SiteHeader() {
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuTrigger>
-                <span style={{ background: 'linear-gradient(135deg,#7c3aed,#06b6d4)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
+                <span style={{ color: '#FFF200' }}>
                   Nex
                 </span>
                 Technology
@@ -300,7 +300,7 @@ export function SiteHeader() {
               Log in
             </button>
             <button className="rounded-full px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:opacity-90 cursor-pointer"
-              style={{ background: 'linear-gradient(135deg,#7c3aed,#06b6d4)' }}>
+              style={{ background: '#FFF200', color: '#09090e' }}>
               Sign up
             </button>
           </div>
@@ -374,7 +374,7 @@ export function SiteHeader() {
             Log in
           </button>
           <button className="w-full rounded-full py-3 text-sm font-bold text-white cursor-pointer"
-            style={{ background: 'linear-gradient(135deg,#7c3aed,#06b6d4)' }}>
+            style={{ background: '#FFF200', color: '#09090e' }}>
             Sign up
           </button>
         </div>

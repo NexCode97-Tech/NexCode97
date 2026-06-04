@@ -78,9 +78,9 @@ export const ExpandingCards = React.forwardRef<HTMLUListElement, ExpandingCardsP
             />
             {/* overlay */}
             <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-black/10" />
-            {/* violet tint on inactive */}
+            {/* dark tint on inactive */}
             <div className="absolute inset-0 opacity-60 group-data-[active=true]:opacity-0 transition-opacity duration-500"
-              style={{ background: "linear-gradient(to top, rgba(76,29,149,.7), rgba(9,9,14,.5))" }} />
+              style={{ background: "linear-gradient(to top, rgba(0,0,0,.8), rgba(9,9,14,.5))" }} />
 
             {/* Título vertical — capa independiente, solo en colapsado desktop */}
             <h3
@@ -92,7 +92,7 @@ export const ExpandingCards = React.forwardRef<HTMLUListElement, ExpandingCardsP
 
             <article className="absolute inset-0 flex flex-col justify-end gap-2 p-5">
               {/* expanded content */}
-              <div className="text-violet-300 opacity-0 transition-all duration-300 delay-75 ease-out group-data-[active=true]:opacity-100">
+              <div className="text-white opacity-0 transition-all duration-300 delay-75 ease-out group-data-[active=true]:opacity-100">
                 {item.icon}
               </div>
               <h3 className="text-lg font-bold text-white opacity-0 transition-all duration-300 delay-150 ease-out group-data-[active=true]:opacity-100">

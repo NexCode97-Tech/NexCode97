@@ -42,7 +42,7 @@ export default function StackFeatureSection() {
           <h2 className="text-4xl sm:text-5xl font-extrabold mb-4 leading-tight"
             style={{ color: "#fff", letterSpacing: "-0.04em" }}>
             Construye tu<br />
-            <span style={{ background: "linear-gradient(135deg,#7c3aed,#06b6d4)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>
+            <span style={{ color: "#FFF200" }}>
               idea con nosotros
             </span>
           </h2>
@@ -51,11 +51,14 @@ export default function StackFeatureSection() {
             Usamos el stack más moderno y probado para que tu producto sea rápido, escalable y fácil de mantener.
           </p>
           <div className="flex items-center gap-3">
-            <a href="https://wa.me/573006359008" target="_blank" rel="noopener noreferrer">
-              <Button className="rounded-full px-6 font-semibold"
-                style={{ background: "linear-gradient(135deg,#7c3aed,#06b6d4)", border: "none", color: "#fff" }}>
-                Comenzar proyecto
-              </Button>
+            <a
+              href="https://wa.me/573006359008"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm font-semibold transition-colors hover:opacity-80"
+              style={{ color: "#a78bfa" }}
+            >
+              Comenzar proyecto →
             </a>
           </div>
         </div>

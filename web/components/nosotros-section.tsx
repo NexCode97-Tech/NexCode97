@@ -119,16 +119,7 @@ export function NosotrosSection() {
           className="mb-14 grid gap-6 md:grid-cols-2 md:items-end"
         >
           <div>
-            <p
-              className="text-xs font-bold tracking-[0.14em] uppercase mb-4 flex items-center gap-3"
-              style={{ color: "#7c3aed" }}
-            >
-              <span
-                className="inline-block w-2 h-2 rounded-full"
-                style={{ background: "linear-gradient(135deg,#7c3aed,#06b6d4)" }}
-              />
-              Nosotros
-            </p>
+            {/* label oculta */}
             <h2
               className="text-4xl md:text-5xl font-extrabold leading-tight"
               style={{ color: "#09090e" }}

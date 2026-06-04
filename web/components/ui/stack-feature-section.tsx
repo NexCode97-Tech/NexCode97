@@ -38,11 +38,7 @@ export default function StackFeatureSection() {
 
         {/* Left: texto */}
         <div className="w-1/2 z-10 relative">
-          <p className="text-xs font-bold tracking-[0.14em] uppercase mb-4 flex items-center gap-3"
-            style={{ color: "#22d3ee" }}>
-            <span className="inline-block w-2 h-2 rounded-full" style={{ background: "linear-gradient(135deg,#7c3aed,#06b6d4)" }} />
-            Tecnología
-          </p>
+          {/* label oculta */}
           <h2 className="text-4xl sm:text-5xl font-extrabold mb-4 leading-tight"
             style={{ color: "#fff", letterSpacing: "-0.04em" }}>
             Construye tu<br />

@@ -83,11 +83,7 @@ export const ServicesSection = () => {
           transition={{ duration: 0.6 }}
           className="mb-14"
         >
-          <p className="text-xs font-bold tracking-[0.14em] uppercase mb-4 flex items-center gap-3"
-            style={{ color: "#22d3ee" }}>
-            <span className="inline-block w-2 h-2 rounded-full" style={{ background: "linear-gradient(135deg,#7c3aed,#06b6d4)" }} />
-            Servicios
-          </p>
+          {/* label oculta */}
           <h2 className="text-3xl md:text-4xl font-extrabold mb-4"
             style={{ letterSpacing: "-0.04em", color: "#09090e" }}>
             Lo que construimos

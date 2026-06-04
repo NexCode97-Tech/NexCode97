@@ -207,7 +207,7 @@ export function SiteHeader() {
                   <div className="flex flex-col gap-4">
                     {techGroups.map((group) => (
                       <div key={group.category}>
-                        <p className="mb-2 px-1 text-[10px] font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.45)' }}>
+                        <p className="mb-2 px-1 text-[10px] font-bold uppercase tracking-widest" style={{ color: '#ffffff' }}>
                           {group.category}
                         </p>
                         <div className="grid grid-cols-4 gap-1.5">
@@ -241,8 +241,8 @@ export function SiteHeader() {
                     <a
                       href="/tecnologias"
                       className="flex items-center justify-between w-full rounded-lg px-3 py-2.5 text-xs font-semibold transition-colors duration-150 group"
-                      style={{ color: '#FFF200' }}
-                      onMouseEnter={e => (e.currentTarget.style.background = 'rgba(255,242,0,0.06)')}
+                      style={{ color: '#ffffff' }}
+                      onMouseEnter={e => (e.currentTarget.style.background = 'rgba(124,58,237,0.08)')}
                       onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
                     >
                       <span>Ver todas las tecnologías</span>

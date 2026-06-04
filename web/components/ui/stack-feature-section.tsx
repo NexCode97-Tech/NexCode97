@@ -55,10 +55,9 @@ export default function StackFeatureSection() {
               href="https://wa.me/573006359008"
               target="_blank"
               rel="noopener noreferrer"
-              className="text-sm font-semibold transition-colors hover:opacity-80"
-              style={{ color: "#a78bfa" }}
+              className="rounded-full bg-violet-600/80 border-2 border-violet-400/30 px-8 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:bg-violet-600"
             >
-              Comenzar proyecto →
+              Comenzar proyecto
             </a>
           </div>
         </div>

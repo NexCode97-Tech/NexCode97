@@ -72,11 +72,7 @@ function StatsBlock() {
             <p className="text-sm" style={{ color: "#475569" }}>{item.label}</p>
             <span
               className="text-5xl md:text-6xl font-extrabold tabular-nums"
-              style={{
-                background: "linear-gradient(135deg,#7c3aed,#06b6d4)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
+              style={{ color: "#09090e" }}
             >
               <CountUp to={item.count} suffix={item.suffix} start={inView} duration={1.4 + i * 0.15} />
             </span>

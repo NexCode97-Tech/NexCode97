@@ -177,7 +177,7 @@ export function NosotrosSection() {
             >
               {/* Logo NexCode97 */}
               <img
-                src="/logo-nexcode-icon.png"
+                src="/logo-nuevo.png"
                 alt="NexCode97"
                 className="h-12 w-12 object-contain rounded-xl shrink-0"
               />

@@ -84,7 +84,7 @@ const techGroups: { category: string; items: TechItem[] }[] = [
     category: 'Infraestructura',
     items: [
       { label: 'Vercel',  description: 'Deploy instantáneo con CDN global',       icon: <SiVercel />,  color: '#ffffff' },
-      { label: 'Railway', description: 'Backend y bases de datos en la nube',     icon: <SiRailway />, color: '#B928F5' },
+      { label: 'Railway', description: 'Backend y bases de datos en la nube',     icon: <SiRailway />, color: '#ffffff' },
       { label: 'Docker',  description: 'Contenedores para entornos consistentes', icon: <FaDocker />,  color: '#2496ED' },
       { label: 'Git',     description: 'Control de versiones y colaboración',     icon: <FaGitAlt />,  color: '#F05032' },
     ],

@@ -92,7 +92,7 @@ export const ExpandingCards = React.forwardRef<HTMLUListElement, ExpandingCardsP
 
             <article className="absolute inset-0 flex flex-col justify-end gap-2 p-5">
               {/* expanded content */}
-              <div className="text-white opacity-0 transition-all duration-300 delay-75 ease-out group-data-[active=true]:opacity-100">
+              <div className="opacity-0 transition-all duration-300 delay-75 ease-out group-data-[active=true]:opacity-100" style={{ color: "#FFF200" }}>
                 {item.icon}
               </div>
               <h3 className="text-lg font-bold text-white opacity-0 transition-all duration-300 delay-150 ease-out group-data-[active=true]:opacity-100">

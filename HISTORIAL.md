@@ -185,3 +185,22 @@ NexCode97/
 
 - [ ] Actualizar dominio a nexcode97.com en Vercel (actualmente nex-code97.vercel.app)
 - [ ] Definir precio y plan de monetización para VeloClub (SaaS)
+
+---
+
+## Historial de Cambios (continuación)
+
+### 2026-06-05 — Sesión Next.js (web NexCode97) + APP NTRL fixes
+
+#### NexCode97 (web)
+- ✅ Stats de nosotros section: gradiente violeta/cian → negro `#09090e`
+- ✅ Category labels stack tecnológico (FRONTEND/BACKEND/INFRAESTRUCTURA): cambiados a `#a78bfa` (violeta claro, igual que "Contacta a ventas")
+- ✅ Railway icon en stack: `#B928F5` → blanco `#ffffff`
+- ✅ Favicon reemplazado con nuevo logo (círculo amarillo, N negra, barra blanca)  
+  Archivos: `web/app/favicon.ico`, `web/app/icon.png`, `web/public/favicon.png`
+- ✅ Title del sitio: guion `—` → pipe `|`
+- ✅ Colores de marca confirmados: amarillo `#FFF200` + blanco + negro (nuevo logo)
+- ✅ Violeta/cian descartados del logo (eran del logo anterior)
+
+#### APP NTRL (dashboard)
+- ✅ KPIs financieros (Total facturado, Recaudado, Pendiente de cobro): porcentaje "vs mes anterior" ahora compara proporcionalmente — escala el mes anterior al % de días transcurridos del mes actual para evitar falsos negativos a inicio de mes

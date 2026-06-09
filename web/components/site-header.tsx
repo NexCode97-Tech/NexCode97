@@ -325,7 +325,21 @@ export function SiteHeader() {
             Servicios
           </p>
           {serviciosLinks.map((link) => (
-            <ListItem key={link.title} {...link} />
+            <a
+              key={link.title}
+              href={link.href}
+              onClick={() => setOpen(false)}
+              className="flex flex-row gap-3 rounded-lg p-2.5 transition-colors duration-150 hover:bg-white/6 cursor-pointer"
+            >
+              <div className="flex aspect-square size-10 shrink-0 items-center justify-center rounded-md"
+                style={{ background: 'rgba(124,58,237,0.12)', border: '1px solid rgba(124,58,237,0.2)' }}>
+                <link.icon className="size-4" style={{ color: '#a78bfa' }} />
+              </div>
+              <div className="flex flex-col justify-center">
+                <span className="text-sm font-semibold text-white">{link.title}</span>
+                {link.description && <span className="text-xs text-white/45 leading-tight mt-0.5">{link.description}</span>}
+              </div>
+            </a>
           ))}
           <div className="my-2 h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
           <p className="mb-1 px-2 text-xs font-bold uppercase tracking-widest" style={{ color: '#a78bfa' }}>

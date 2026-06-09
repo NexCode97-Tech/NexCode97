@@ -33,18 +33,14 @@ const iconsPerOrbit = Math.ceil(iconConfigs.length / ORBIT_COUNT);
 export default function StackFeatureSection() {
   return (
     <section className="relative max-w-6xl mx-auto my-24 px-4">
-      <div className="relative flex items-center justify-between h-[30rem] border overflow-hidden rounded-3xl pl-10"
+      <div className="relative flex items-center justify-between min-h-[30rem] border overflow-hidden rounded-3xl px-6 md:pl-10 md:pr-0 py-10 md:py-0"
         style={{ borderColor: "rgba(124,58,237,0.25)", background: "#09090e" }}>
 
         {/* Left: texto */}
-        <div className="w-1/2 z-10 relative">
-          {/* label oculta */}
-          <h2 className="text-4xl sm:text-5xl font-extrabold mb-4 leading-tight"
+        <div className="w-full md:w-1/2 z-10 relative">
+          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 leading-tight"
             style={{ color: "#fff", letterSpacing: "-0.04em" }}>
-            Construye tu<br />
-            <span style={{ color: "#FFF200" }}>
-              idea con nosotros
-            </span>
+            Construye tu <span style={{ color: "#FFF200" }}>idea con nosotros</span>
           </h2>
           <p className="mb-8 max-w-sm text-sm leading-relaxed"
             style={{ color: "#888ca4" }}>
@@ -55,7 +51,7 @@ export default function StackFeatureSection() {
               href="https://wa.me/573006359008"
               target="_blank"
               rel="noopener noreferrer"
-              className="rounded-full bg-violet-600/80 border-2 border-violet-400/30 px-8 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:bg-violet-600"
+              className="inline-block whitespace-nowrap rounded-full bg-violet-600/80 border-2 border-violet-400/30 px-8 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:bg-violet-600"
             >
               Comenzar proyecto
             </a>

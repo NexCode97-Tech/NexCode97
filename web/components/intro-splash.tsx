@@ -50,10 +50,14 @@ export function IntroSplash() {
       <video
         ref={videoRef}
         src="/intro.mp4"
-        autoPlay
         muted
         playsInline
-        preload="metadata"
+        preload="auto"
+        onCanPlayThrough={(e) => {
+          // Reproducir solo cuando el buffer está completo: evita trabas al inicio
+          const v = e.currentTarget;
+          if (v.paused) v.play().catch(() => handleEnded());
+        }}
         onEnded={handleEnded}
         className="rounded-2xl object-contain"
         style={{ width: "min(480px, 90vw)", height: "auto" }}

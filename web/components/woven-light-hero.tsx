@@ -109,9 +109,18 @@ const WovenCanvas = () => {
   const mountRef = useRef<HTMLDivElement>(null);
   const [webglFailed, setWebglFailed] = React.useState(false);
   const introDone = useIntroDone();
+  const [canvasReady, setCanvasReady] = React.useState(false);
 
+  // Escalonar: el texto anima primero, las partículas inician 900ms después
+  // para que no compitan por el hilo principal
   useEffect(() => {
     if (!introDone) return;
+    const t = setTimeout(() => setCanvasReady(true), 900);
+    return () => clearTimeout(t);
+  }, [introDone]);
+
+  useEffect(() => {
+    if (!canvasReady) return;
     if (!mountRef.current) return;
     if (!isWebGLAvailable()) { setWebglFailed(true); return; }
 
@@ -199,38 +208,41 @@ const WovenCanvas = () => {
         requestAnimationFrame(animate);
         const elapsedTime = clock.getElapsedTime();
         
-        const mouseWorld = new THREE.Vector3(mouse.x * 3, mouse.y * 3, 0);
+        // Matemática escalar sin asignar objetos: evita pausas de GC por frame
+        const mwx = mouse.x * 3, mwy = mouse.y * 3, mwz = 0;
 
         for (let i = 0; i < particleCount; i++) {
             const ix = i * 3;
             const iy = i * 3 + 1;
             const iz = i * 3 + 2;
 
-            const currentPos = new THREE.Vector3(positions[ix], positions[iy], positions[iz]);
-            const originalPos = new THREE.Vector3(originalPositions[ix], originalPositions[iy], originalPositions[iz]);
-            const velocity = new THREE.Vector3(velocities[ix], velocities[iy], velocities[iz]);
+            const px = positions[ix], py = positions[iy], pz = positions[iz];
+            let vx = velocities[ix], vy = velocities[iy], vz = velocities[iz];
 
-            const dist = currentPos.distanceTo(mouseWorld);
-            if (dist < 1.5) {
-                const force = (1.5 - dist) * 0.01;
-                const direction = new THREE.Vector3().subVectors(currentPos, mouseWorld).normalize();
-                velocity.add(direction.multiplyScalar(force));
+            const dx = px - mwx, dy = py - mwy, dz = pz - mwz;
+            const dist = Math.sqrt(dx * dx + dy * dy + dz * dz);
+            if (dist < 1.5 && dist > 0) {
+                const force = ((1.5 - dist) * 0.01) / dist;
+                vx += dx * force;
+                vy += dy * force;
+                vz += dz * force;
             }
 
             // Return to original position
-            const returnForce = new THREE.Vector3().subVectors(originalPos, currentPos).multiplyScalar(0.001);
-            velocity.add(returnForce);
+            vx += (originalPositions[ix] - px) * 0.001;
+            vy += (originalPositions[iy] - py) * 0.001;
+            vz += (originalPositions[iz] - pz) * 0.001;
 
             // Damping
-            velocity.multiplyScalar(0.95);
+            vx *= 0.95; vy *= 0.95; vz *= 0.95;
 
-            positions[ix] += velocity.x;
-            positions[iy] += velocity.y;
-            positions[iz] += velocity.z;
-            
-            velocities[ix] = velocity.x;
-            velocities[iy] = velocity.y;
-            velocities[iz] = velocity.z;
+            positions[ix] = px + vx;
+            positions[iy] = py + vy;
+            positions[iz] = pz + vz;
+
+            velocities[ix] = vx;
+            velocities[iy] = vy;
+            velocities[iz] = vz;
         }
         geometry.attributes.position.needsUpdate = true;
 
@@ -254,7 +266,7 @@ const WovenCanvas = () => {
         }
         renderer.dispose();
     };
-  }, [introDone]);
+  }, [canvasReady]);
 
   if (webglFailed) return <GradientFallback />;
   return <div ref={mountRef} className="absolute inset-0 z-0" />;

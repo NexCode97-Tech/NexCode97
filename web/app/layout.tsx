@@ -37,6 +37,9 @@ export default function RootLayout({
 }: Readonly<{ children: React.ReactNode }>) {
   return (
     <html lang="es" className={`${inter.variable} ${playfair.variable} h-full antialiased`}>
+      <head>
+        <link rel="preload" href="/intro.mp4" as="video" type="video/mp4" />
+      </head>
       <body className="min-h-full flex flex-col">
         <SiteHeader />
         {children}

@@ -40,7 +40,7 @@ export function IntroSplash() {
     <div
       className="fixed inset-0 z-[100] flex items-center justify-center"
       style={{
-        background: "#09090e",
+        background: "#000000",
         opacity: ended ? 0 : 1,
         transition: "opacity 600ms ease-out",
         pointerEvents: ended ? "none" : "auto",

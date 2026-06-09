@@ -23,6 +23,15 @@ export function IntroSplash() {
     setTimeout(() => setHidden(true), 600);
   };
 
+  // Si el video ya estaba listo antes de hidratar (caché), el evento
+  // canplaythrough se disparó sin oyentes: dar play directo al montar
+  useEffect(() => {
+    const v = videoRef.current;
+    if (v && v.paused && v.readyState >= 3) {
+      v.play().catch(() => handleEnded());
+    }
+  }, []);
+
   // Failsafe: si el video no arranca en 4s (red lenta, autoplay bloqueado),
   // no dejar al usuario atrapado en pantalla negra
   useEffect(() => {

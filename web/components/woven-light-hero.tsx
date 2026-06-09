@@ -34,14 +34,14 @@ export const WovenLightHero = () => {
       opacity: 1,
       y: 0,
       transition: {
-        delay: i * 0.1,
-        duration: 1.2,
+        delay: i * 0.08,
+        duration: 0.8,
         ease: [0.2, 0.65, 0.3, 0.9]
       }
     }));
     buttonControls.start({
       opacity: 1,
-      transition: { delay: 1, duration: 1 }
+      transition: { delay: 0.7, duration: 0.8 }
     });
   }, [introDone, textControls, buttonControls]);
 
@@ -54,17 +54,15 @@ export const WovenLightHero = () => {
         <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-tight" style={{ fontFamily: "var(--font-playfair), serif", textShadow: '0 0 60px rgba(124, 58, 237, 0.4)' }}>
             {headline.split(" ").map((word, i) => (
                 <span key={i} className="inline-block">
-                    {word.split("").map((char, j) => (
-                        <motion.span key={j} custom={i * 5 + j} initial={{ opacity: 0, y: 50 }} animate={textControls} style={{ display: 'inline-block' }}>
-                            {char}
-                        </motion.span>
-                    ))}
+                    <motion.span custom={i} initial={{ opacity: 0, y: 50 }} animate={textControls} style={{ display: 'inline-block' }}>
+                        {word}
+                    </motion.span>
                     {i < headline.split(" ").length - 1 && <span>&nbsp;</span>}
                 </span>
             ))}
         </h1>
         <motion.p
-          custom={headline.length}
+          custom={7}
           initial={{ opacity: 0, y: 30 }}
           animate={textControls}
           className="mx-auto mt-8 max-w-xl text-lg text-slate-300"

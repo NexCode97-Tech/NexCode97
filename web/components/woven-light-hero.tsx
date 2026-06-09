@@ -51,13 +51,29 @@ export const WovenLightHero = () => {
     <div className="relative flex min-h-[calc(100vh-3.5rem)] w-full flex-col items-center justify-center overflow-hidden bg-black">
       <WovenCanvas />
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
-        <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-tight" style={{ fontFamily: "var(--font-playfair), serif", textShadow: '0 0 60px rgba(124, 58, 237, 0.4)' }}>
+        {/* Animación de letras por CSS: corre en el compositor (GPU), no se
+            traba aunque el hilo principal esté ocupado con Three.js */}
+        <style>{`
+          .hero-letter {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(50px);
+            will-change: transform, opacity;
+          }
+          .hero-play .hero-letter {
+            animation: heroLetterIn 1.2s cubic-bezier(0.2, 0.65, 0.3, 0.9) forwards;
+          }
+          @keyframes heroLetterIn {
+            to { opacity: 1; transform: translateY(0); }
+          }
+        `}</style>
+        <h1 className={`text-5xl md:text-7xl lg:text-8xl font-bold text-white leading-tight${introDone ? " hero-play" : ""}`} style={{ fontFamily: "var(--font-playfair), serif", textShadow: '0 0 60px rgba(124, 58, 237, 0.4)' }}>
             {headline.split(" ").map((word, i) => (
                 <span key={i} className="inline-block">
                     {word.split("").map((char, j) => (
-                        <motion.span key={j} custom={i * 5 + j} initial={{ opacity: 0, y: 50 }} animate={textControls} style={{ display: 'inline-block' }}>
+                        <span key={j} className="hero-letter" style={{ animationDelay: `${((i * 5 + j) * 0.1 + 1.5).toFixed(2)}s` }}>
                             {char}
-                        </motion.span>
+                        </span>
                     ))}
                     {i < headline.split(" ").length - 1 && <span>&nbsp;</span>}
                 </span>

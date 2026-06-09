@@ -38,7 +38,7 @@ export function IntroSplash() {
 
   return (
     <div
-      className="fixed inset-0 z-[100] flex items-center justify-center transition-opacity duration-600"
+      className="fixed inset-0 z-[100] flex items-center justify-center"
       style={{
         background: "#09090e",
         opacity: ended ? 0 : 1,
@@ -52,9 +52,10 @@ export function IntroSplash() {
         autoPlay
         muted
         playsInline
-        preload="auto"
+        preload="metadata"
         onEnded={handleEnded}
-        className="h-full w-full object-cover"
+        className="rounded-2xl object-contain"
+        style={{ width: "min(480px, 90vw)", height: "auto" }}
       />
     </div>
   );

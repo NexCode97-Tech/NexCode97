@@ -16,9 +16,10 @@ export function IntroSplash() {
     };
   }, [hidden]);
 
-  // Al terminar el video: fade-out y luego desmontar
+  // Al terminar el video: avisar al hero, fade-out y luego desmontar
   const handleEnded = () => {
     setEnded(true);
+    window.dispatchEvent(new Event("nexcode:intro-done"));
     setTimeout(() => setHidden(true), 600);
   };
 

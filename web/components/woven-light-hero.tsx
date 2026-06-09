@@ -4,26 +4,46 @@ import React, { useRef, useEffect } from 'react';
 import { motion, useAnimation } from 'framer-motion';
 import * as THREE from 'three';
 
+// Espera a que el intro splash termine antes de animar/inicializar lo pesado.
+// Respaldo de 5s por si el intro no está presente o el evento ya se disparó.
+function useIntroDone() {
+  const [done, setDone] = React.useState(false);
+
+  useEffect(() => {
+    const markDone = () => setDone(true);
+    window.addEventListener("nexcode:intro-done", markDone);
+    const fallback = setTimeout(markDone, 5000);
+    return () => {
+      window.removeEventListener("nexcode:intro-done", markDone);
+      clearTimeout(fallback);
+    };
+  }, []);
+
+  return done;
+}
+
 // --- Main Hero Component ---
 export const WovenLightHero = () => {
   const textControls = useAnimation();
   const buttonControls = useAnimation();
+  const introDone = useIntroDone();
 
   useEffect(() => {
+    if (!introDone) return;
     textControls.start(i => ({
       opacity: 1,
       y: 0,
       transition: {
-        delay: i * 0.1 + 1.5,
+        delay: i * 0.1,
         duration: 1.2,
         ease: [0.2, 0.65, 0.3, 0.9]
       }
     }));
     buttonControls.start({
       opacity: 1,
-      transition: { delay: 2.5, duration: 1 }
+      transition: { delay: 1, duration: 1 }
     });
-  }, [textControls, buttonControls]);
+  }, [introDone, textControls, buttonControls]);
 
   const headline = "Cada negocio merece su propio sistema.";
 
@@ -88,8 +108,10 @@ function isWebGLAvailable(): boolean {
 const WovenCanvas = () => {
   const mountRef = useRef<HTMLDivElement>(null);
   const [webglFailed, setWebglFailed] = React.useState(false);
+  const introDone = useIntroDone();
 
   useEffect(() => {
+    if (!introDone) return;
     if (!mountRef.current) return;
     if (!isWebGLAvailable()) { setWebglFailed(true); return; }
 
@@ -232,7 +254,7 @@ const WovenCanvas = () => {
         }
         renderer.dispose();
     };
-  }, []);
+  }, [introDone]);
 
   if (webglFailed) return <GradientFallback />;
   return <div ref={mountRef} className="absolute inset-0 z-0" />;

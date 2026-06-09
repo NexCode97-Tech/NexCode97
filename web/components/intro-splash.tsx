@@ -16,24 +16,13 @@ export function IntroSplash() {
     };
   }, [hidden]);
 
-  // Al terminar el video: avisar al hero, fade-out y luego desmontar
   const handleEnded = () => {
     setEnded(true);
     window.dispatchEvent(new Event("nexcode:intro-done"));
     setTimeout(() => setHidden(true), 600);
   };
 
-  // Si el video ya estaba listo antes de hidratar (caché), el evento
-  // canplaythrough se disparó sin oyentes: dar play directo al montar
-  useEffect(() => {
-    const v = videoRef.current;
-    if (v && v.paused && v.readyState >= 3) {
-      v.play().catch(() => handleEnded());
-    }
-  }, []);
-
-  // Failsafe: si el video no arranca en 4s (red lenta, autoplay bloqueado),
-  // no dejar al usuario atrapado en pantalla negra
+  // Failsafe: si el video no arranca en 4s, no dejar al usuario atrapado
   useEffect(() => {
     const failsafe = setTimeout(() => {
       const v = videoRef.current;
@@ -59,14 +48,10 @@ export function IntroSplash() {
       <video
         ref={videoRef}
         src="/intro.mp4"
+        autoPlay
         muted
         playsInline
         preload="auto"
-        onCanPlayThrough={(e) => {
-          // Reproducir solo cuando el buffer está completo: evita trabas al inicio
-          const v = e.currentTarget;
-          if (v.paused) v.play().catch(() => handleEnded());
-        }}
         onEnded={handleEnded}
         className="rounded-2xl object-contain"
         style={{ width: "min(480px, 90vw)", height: "auto" }}

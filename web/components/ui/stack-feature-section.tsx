@@ -60,7 +60,7 @@ export default function StackFeatureSection() {
 
         {/* Órbitas */}
         <div className="relative w-1/2 self-stretch flex items-center justify-start overflow-hidden">
-          <div className="relative w-[50rem] h-[50rem] flex items-center justify-center translate-x-[50%] origin-left">
+          <div className="relative w-[50rem] h-[50rem] flex items-center justify-center translate-x-[50%] origin-left scale-[0.5] md:scale-100">
 
             {/* Centro */}
             <div className="w-20 h-20 rounded-full flex items-center justify-center z-10"

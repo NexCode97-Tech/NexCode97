@@ -496,6 +496,17 @@ export function SiteHeader() {
             </button>
           </div>
 
+          <a
+            href="/login"
+            className="md:hidden flex items-center justify-center w-11 h-11 rounded-xl border transition-colors hover:bg-white/8 cursor-pointer"
+            style={{ borderColor: 'rgba(255,255,255,0.15)', color: 'white' }}
+            aria-label="Iniciar sesión"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" className="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="8" r="4" />
+              <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" />
+            </svg>
+          </a>
           <button
             onClick={() => setOpen(!open)}
             className="md:hidden flex items-center justify-center w-11 h-11 rounded-xl border transition-colors hover:bg-white/8 cursor-pointer"

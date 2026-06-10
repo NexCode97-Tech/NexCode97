@@ -128,7 +128,7 @@ export const ServicesSection = () => {
               className="w-full h-auto"
               onLoad={() => { if (desktopRef.current) setDesktopH(desktopRef.current.offsetHeight); }} />
           </div>
-          <div className="showcase-img img-mobile relative -ml-[4%] rounded-xl overflow-hidden"
+          <div className="showcase-img img-mobile relative ml-4 md:ml-6 rounded-xl overflow-hidden"
             style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.15)", zIndex: 1, height: desktopH || "auto" }}>
             <Image src="/showcase-mobile.png" alt="Proyecto versión móvil" width={600} height={500}
               className="h-full w-auto" />
@@ -136,16 +136,6 @@ export const ServicesSection = () => {
         </motion.div>
       </div>
 
-      <style>{`
-        .showcase-img {
-          mask-image: linear-gradient(to right, black 85%, transparent 100%);
-          -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
-        }
-        .showcase-img.img-mobile {
-          mask-image: linear-gradient(to left, black 85%, transparent 100%);
-          -webkit-mask-image: linear-gradient(to left, black 85%, transparent 100%);
-        }
-      `}</style>
     </section>
   );
 };

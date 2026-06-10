@@ -115,12 +115,16 @@ export default function StackFeatureSection() {
         </div>
 
         {/* Showcase de proyectos */}
-        <div className="relative z-10 px-6 md:px-10 pb-8 flex items-end gap-4 md:gap-6 justify-center">
-          <div className="relative flex-[2] rounded-xl overflow-hidden" style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.4)" }}>
-            <Image src="/showcase-desktop.png" alt="Proyecto versión escritorio" width={800} height={500} className="w-full h-auto" />
+        <div className="showcase-wrap relative z-10 mx-6 md:mx-10 mb-8 h-[200px] md:h-[350px] rounded-xl overflow-hidden">
+          <div className="showcase-img img-desktop absolute top-0 left-0 h-full w-[65%] rounded-xl overflow-hidden cursor-pointer"
+            style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.5)", zIndex: 1 }}>
+            <Image src="/showcase-desktop.png" alt="Proyecto versión escritorio" width={800} height={500}
+              className="h-full w-full object-cover object-left-top" />
           </div>
-          <div className="relative flex-[1] max-w-[30%] rounded-xl overflow-hidden" style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.4)" }}>
-            <Image src="/showcase-mobile.png" alt="Proyecto versión móvil" width={300} height={600} className="w-full h-auto" />
+          <div className="showcase-img img-mobile absolute top-0 right-0 h-full w-[45%] rounded-xl overflow-hidden cursor-pointer"
+            style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.5)", zIndex: 2 }}>
+            <Image src="/showcase-mobile.png" alt="Proyecto versión móvil" width={600} height={500}
+              className="h-full w-full object-cover object-top" />
           </div>
         </div>
       </div>
@@ -134,6 +138,21 @@ export default function StackFeatureSection() {
         .orbit-ccw  { animation: spin-ccw linear infinite; }
         .counter-ccw { animation: counter-ccw linear infinite; }
         .counter-cw  { animation: counter-cw  linear infinite; }
+        .showcase-img {
+          transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), opacity 0.4s ease;
+        }
+        .showcase-img:hover {
+          transform: scale(1.06);
+          z-index: 10 !important;
+        }
+        .showcase-wrap:has(.img-desktop:hover) .img-mobile {
+          transform: scale(0.96);
+          opacity: 0.5;
+        }
+        .showcase-wrap:has(.img-mobile:hover) .img-desktop {
+          transform: scale(0.96);
+          opacity: 0.5;
+        }
       `}</style>
     </section>
   );

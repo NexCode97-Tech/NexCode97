@@ -117,14 +117,16 @@ export default function StackFeatureSection() {
         {/* Showcase de proyectos */}
         <div className="showcase-wrap relative z-10 mx-6 md:mx-10 mb-8 h-[200px] md:h-[350px] rounded-xl overflow-hidden">
           <div className="showcase-img img-desktop absolute top-0 left-0 h-full w-[65%] rounded-xl overflow-hidden cursor-pointer"
-            style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.5)", zIndex: 1 }}>
+            style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.5)", zIndex: 2 }}>
             <Image src="/showcase-desktop.png" alt="Proyecto versión escritorio" width={800} height={500}
               className="h-full w-full object-cover object-left-top" />
+            <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to right, transparent 70%, #09090e)" }} />
           </div>
           <div className="showcase-img img-mobile absolute top-0 right-0 h-full w-[45%] rounded-xl overflow-hidden cursor-pointer"
-            style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.5)", zIndex: 2 }}>
+            style={{ boxShadow: "0 8px 32px rgba(0,0,0,0.5)", zIndex: 1 }}>
             <Image src="/showcase-mobile.png" alt="Proyecto versión móvil" width={600} height={500}
               className="h-full w-full object-cover object-top" />
+            <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to left, transparent 70%, #09090e)" }} />
           </div>
         </div>
       </div>

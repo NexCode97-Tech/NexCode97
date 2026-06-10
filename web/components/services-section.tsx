@@ -122,16 +122,16 @@ export const ServicesSection = () => {
           transition={{ duration: 0.7, delay: 0.4 }}
           className="showcase-wrap relative mt-14 flex items-start"
         >
-          <div ref={desktopRef} className="showcase-img img-desktop relative w-[62%] rounded-xl overflow-hidden"
-            style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.15)", zIndex: 2 }}>
+          <div ref={desktopRef} className="relative w-[62%] rounded-2xl overflow-hidden p-3 md:p-5"
+            style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.1)", zIndex: 2, background: "#f5f5f5" }}>
             <Image src="/showcase-desktop.webp" alt="Proyecto versión escritorio" width={800} height={500}
-              className="w-full h-auto"
+              className="w-full h-auto rounded-lg"
               onLoad={() => { if (desktopRef.current) setDesktopH(desktopRef.current.offsetHeight); }} />
           </div>
-          <div className="showcase-img img-mobile relative ml-4 md:ml-6 rounded-xl overflow-hidden"
-            style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.15)", zIndex: 1, height: desktopH || "auto" }}>
+          <div className="relative ml-4 md:ml-6 rounded-xl overflow-hidden"
+            style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.15)", zIndex: 1, maxHeight: desktopH || "none" }}>
             <Image src="/showcase-mobile.png" alt="Proyecto versión móvil" width={600} height={500}
-              className="h-full w-auto" />
+              className="h-auto w-auto" style={{ maxHeight: desktopH || "none" }} />
           </div>
         </motion.div>
       </div>

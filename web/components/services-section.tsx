@@ -122,13 +122,13 @@ export const ServicesSection = () => {
           transition={{ duration: 0.7, delay: 0.4 }}
           className="showcase-wrap relative mt-14 flex items-start"
         >
-          <div ref={desktopRef} className="showcase-img img-desktop relative w-[62%] rounded-xl overflow-hidden cursor-pointer"
+          <div ref={desktopRef} className="showcase-img img-desktop relative w-[62%] rounded-xl overflow-hidden"
             style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.15)", zIndex: 2 }}>
             <Image src="/showcase-desktop.webp" alt="Proyecto versión escritorio" width={800} height={500}
               className="w-full h-auto"
               onLoad={() => { if (desktopRef.current) setDesktopH(desktopRef.current.offsetHeight); }} />
           </div>
-          <div className="showcase-img img-mobile relative -ml-[4%] rounded-xl overflow-hidden cursor-pointer"
+          <div className="showcase-img img-mobile relative -ml-[4%] rounded-xl overflow-hidden"
             style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.15)", zIndex: 1, height: desktopH || "auto" }}>
             <Image src="/showcase-mobile.png" alt="Proyecto versión móvil" width={600} height={500}
               className="h-full w-auto" />
@@ -138,16 +138,12 @@ export const ServicesSection = () => {
 
       <style>{`
         .showcase-img {
-          transition: z-index 0s;
           mask-image: linear-gradient(to right, black 85%, transparent 100%);
           -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
         }
         .showcase-img.img-mobile {
           mask-image: linear-gradient(to left, black 85%, transparent 100%);
           -webkit-mask-image: linear-gradient(to left, black 85%, transparent 100%);
-        }
-        .showcase-img:hover {
-          z-index: 10 !important;
         }
       `}</style>
     </section>

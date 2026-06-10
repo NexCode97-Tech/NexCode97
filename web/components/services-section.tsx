@@ -1,6 +1,6 @@
 "use client";
 
-import { useRef } from "react";
+import { useRef, useEffect, useState } from "react";
 import { useInView, motion } from "framer-motion";
 import Image from "next/image";
 import {
@@ -72,7 +72,18 @@ const SERVICES: CardItem[] = [
 
 export const ServicesSection = () => {
   const ref = useRef(null);
+  const desktopRef = useRef<HTMLDivElement>(null);
+  const [desktopH, setDesktopH] = useState(0);
   const inView = useInView(ref, { once: true, margin: "-60px" });
+
+  useEffect(() => {
+    function updateH() {
+      if (desktopRef.current) setDesktopH(desktopRef.current.offsetHeight);
+    }
+    updateH();
+    window.addEventListener("resize", updateH);
+    return () => window.removeEventListener("resize", updateH);
+  }, []);
 
   return (
     <section ref={ref} id="servicios" className="py-24 bg-white">
@@ -109,31 +120,43 @@ export const ServicesSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, delay: 0.4 }}
-          className="showcase-wrap relative mt-14 flex items-stretch"
+          className="showcase-wrap relative mt-14 flex items-start"
         >
-          <div className="showcase-img img-desktop relative w-[62%] rounded-xl overflow-hidden cursor-pointer"
+          <div ref={desktopRef} className="showcase-img img-desktop relative w-[62%] rounded-xl overflow-hidden cursor-pointer"
             style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.15)", zIndex: 2 }}>
             <Image src="/showcase-desktop.png" alt="Proyecto versión escritorio" width={800} height={500}
               className="w-full h-auto" />
           </div>
-          <div className="showcase-img img-mobile relative w-[42%] -ml-[4%] rounded-xl overflow-hidden cursor-pointer"
-            style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.15)", zIndex: 1 }}>
+          <div className="showcase-img img-mobile relative -ml-[4%] rounded-xl overflow-hidden cursor-pointer"
+            style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.15)", zIndex: 1, height: desktopH || "auto" }}>
             <Image src="/showcase-mobile.png" alt="Proyecto versión móvil" width={600} height={500}
-              className="w-full h-full object-cover object-top" />
-            <div className="absolute inset-0 pointer-events-none" style={{
-              background: "linear-gradient(to right, rgba(255,255,255,0.6) 0%, transparent 8%)"
-            }} />
+              className="h-full w-auto" />
           </div>
         </motion.div>
       </div>
 
       <style>{`
         .showcase-img {
-          transition: transform 0.5s cubic-bezier(0.23,1,0.32,1), z-index 0s;
+          transition: width 0.6s cubic-bezier(0.23,1,0.32,1), z-index 0s;
+          mask-image: linear-gradient(to right, black 85%, transparent 100%);
+          -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
+        }
+        .showcase-img.img-mobile {
+          mask-image: linear-gradient(to left, black 85%, transparent 100%);
+          -webkit-mask-image: linear-gradient(to left, black 85%, transparent 100%);
         }
         .showcase-img:hover {
           z-index: 10 !important;
-          transform: translateY(-4px);
+        }
+        .showcase-wrap:has(.img-desktop:hover) .img-desktop {
+          width: 85% !important;
+          mask-image: linear-gradient(to right, black 90%, transparent 100%);
+          -webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
+        }
+        .showcase-wrap:has(.img-mobile:hover) .img-mobile {
+          width: 55% !important;
+          mask-image: linear-gradient(to left, black 90%, transparent 100%);
+          -webkit-mask-image: linear-gradient(to left, black 90%, transparent 100%);
         }
       `}</style>
     </section>

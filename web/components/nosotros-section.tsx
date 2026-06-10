@@ -60,7 +60,7 @@ function StatsBlock() {
         </p>
       </div>
 
-      <div className="mt-10 flex justify-between gap-4 text-center overflow-x-auto pb-1">
+      <div className="mt-10 grid grid-cols-2 md:flex md:justify-between gap-8 text-center">
         {achievements.map((item, i) => (
           <motion.div
             key={item.label}

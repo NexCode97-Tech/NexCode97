@@ -1,14 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
-export function ContactForm() {
+function ContactFormContent({ onClose }: { onClose: () => void }) {
   const [form, setForm] = useState({
-    name: "",
-    email: "",
-    whatsapp: "",
-    company: "",
-    description: "",
+    name: "", email: "", whatsapp: "", company: "", description: "",
   });
   const [status, setStatus] = useState<"idle" | "loading" | "success" | "error">("idle");
 
@@ -19,14 +15,12 @@ export function ContactForm() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setStatus("loading");
-
     try {
       const res = await fetch("/api/leads", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(form),
       });
-
       if (!res.ok) throw new Error();
       setStatus("success");
       setForm({ name: "", email: "", whatsapp: "", company: "", description: "" });
@@ -44,13 +38,27 @@ export function ContactForm() {
   const labelStyle = { color: "#94a3b8" } as React.CSSProperties;
 
   return (
-    <section id="contacto" className="py-24" style={{ background: "#09090e" }}>
-      <div className="max-w-2xl mx-auto px-6">
-        <div className="mb-10 text-center">
-          <h2 className="text-4xl font-extrabold mb-3" style={{ color: "#ffffff" }}>
+    <div
+      className="fixed inset-0 z-50 flex items-center justify-center px-4"
+      style={{ background: "rgba(0,0,0,0.7)", backdropFilter: "blur(6px)" }}
+      onClick={(e) => { if (e.target === e.currentTarget) onClose(); }}
+    >
+      <div
+        className="relative w-full max-w-2xl rounded-2xl p-8 max-h-[90vh] overflow-y-auto"
+        style={{ background: "#0f0f14", border: "1px solid rgba(255,255,255,0.08)" }}
+      >
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-white/40 hover:text-white transition-colors text-xl leading-none"
+        >
+          ✕
+        </button>
+
+        <div className="mb-8 text-center">
+          <h2 className="text-3xl font-extrabold mb-2" style={{ color: "#ffffff" }}>
             Hablemos de tu proyecto
           </h2>
-          <p className="text-base" style={{ color: "#64748b" }}>
+          <p className="text-sm" style={{ color: "#64748b" }}>
             Cuéntanos qué necesitas y te respondemos por WhatsApp en menos de 24 horas.
           </p>
         </div>
@@ -66,11 +74,7 @@ export function ContactForm() {
             </p>
           </div>
         ) : (
-          <form
-            onSubmit={handleSubmit}
-            className="rounded-2xl p-8 flex flex-col gap-5"
-            style={{ background: "rgba(255,255,255,0.03)", border: "1px solid rgba(255,255,255,0.07)" }}
-          >
+          <form onSubmit={handleSubmit} className="flex flex-col gap-5">
             <div className="grid md:grid-cols-2 gap-5">
               <Field label="Nombre *" name="name" value={form.name} onChange={handleChange} placeholder="Tu nombre" required inputStyle={inputStyle} labelStyle={labelStyle} />
               <Field label="WhatsApp *" name="whatsapp" value={form.whatsapp} onChange={handleChange} placeholder="+57 300 000 0000" required inputStyle={inputStyle} labelStyle={labelStyle} />
@@ -79,11 +83,8 @@ export function ContactForm() {
               <Field label="Correo" name="email" type="email" value={form.email} onChange={handleChange} placeholder="tu@correo.com" inputStyle={inputStyle} labelStyle={labelStyle} />
               <Field label="Empresa" name="company" value={form.company} onChange={handleChange} placeholder="Nombre de tu negocio" inputStyle={inputStyle} labelStyle={labelStyle} />
             </div>
-
             <div className="flex flex-col gap-1.5">
-              <label className="text-sm font-medium" style={labelStyle}>
-                ¿Qué necesitas? *
-              </label>
+              <label className="text-sm font-medium" style={labelStyle}>¿Qué necesitas? *</label>
               <textarea
                 name="description"
                 value={form.description}
@@ -95,13 +96,11 @@ export function ContactForm() {
                 style={inputStyle}
               />
             </div>
-
             {status === "error" && (
               <p className="text-sm text-center" style={{ color: "#f87171" }}>
                 Ocurrió un error. Por favor intenta de nuevo.
               </p>
             )}
-
             <button
               type="submit"
               disabled={status === "loading"}
@@ -113,41 +112,42 @@ export function ContactForm() {
           </form>
         )}
       </div>
-    </section>
+    </div>
   );
 }
 
+export function ContactFormModal() {
+  const [open, setOpen] = useState(false);
+
+  useEffect(() => {
+    const handler = () => setOpen(true);
+    window.addEventListener("open:contact-form", handler);
+    return () => window.removeEventListener("open:contact-form", handler);
+  }, []);
+
+  useEffect(() => {
+    document.body.style.overflow = open ? "hidden" : "";
+    return () => { document.body.style.overflow = ""; };
+  }, [open]);
+
+  if (!open) return null;
+  return <ContactFormContent onClose={() => setOpen(false)} />;
+}
+
 function Field({
-  label,
-  name,
-  type = "text",
-  value,
-  onChange,
-  placeholder,
-  required,
-  inputStyle,
-  labelStyle,
+  label, name, type = "text", value, onChange, placeholder, required, inputStyle, labelStyle,
 }: {
-  label: string;
-  name: string;
-  type?: string;
-  value: string;
+  label: string; name: string; type?: string; value: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  placeholder?: string;
-  required?: boolean;
-  inputStyle: React.CSSProperties;
-  labelStyle: React.CSSProperties;
+  placeholder?: string; required?: boolean;
+  inputStyle: React.CSSProperties; labelStyle: React.CSSProperties;
 }) {
   return (
     <div className="flex flex-col gap-1.5">
       <label className="text-sm font-medium" style={labelStyle}>{label}</label>
       <input
-        type={type}
-        name={name}
-        value={value}
-        onChange={onChange}
-        placeholder={placeholder}
-        required={required}
+        type={type} name={name} value={value} onChange={onChange}
+        placeholder={placeholder} required={required}
         className="rounded-lg px-4 py-2.5 text-sm outline-none transition-colors"
         style={inputStyle}
       />

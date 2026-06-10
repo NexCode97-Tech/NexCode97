@@ -110,7 +110,7 @@ function MobileMenu({ open, children, className, ...props }: MobileMenuProps) {
   return createPortal(
     <div
       id="mobile-menu"
-      className="fixed top-14 right-0 bottom-0 left-0 z-40 flex flex-col overflow-hidden border-t md:hidden"
+      className="fixed top-16 right-0 bottom-0 left-0 z-40 flex flex-col overflow-hidden border-t md:hidden"
       style={{ background: 'rgba(9,9,14,0.97)', borderColor: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(16px)' }}
     >
       <div
@@ -179,7 +179,7 @@ export function SiteHeader() {
         backdropFilter: scrolled ? 'blur(16px)' : 'none',
       }}
     >
-      <nav className="mx-auto flex h-14 w-full max-w-6xl items-center justify-between px-6">
+      <nav className="mx-auto flex h-16 md:h-14 w-full max-w-6xl items-center justify-between px-6">
 
         {/* Logo */}
         <a href="/" className="flex items-center rounded-lg p-1 transition-opacity hover:opacity-80">
@@ -316,13 +316,13 @@ export function SiteHeader() {
 
           <button
             onClick={() => setOpen(!open)}
-            className="md:hidden flex items-center justify-center w-9 h-9 rounded-lg border transition-colors hover:bg-white/8 cursor-pointer"
-            style={{ borderColor: 'rgba(255,255,255,0.12)', color: 'white' }}
+            className="md:hidden flex items-center justify-center w-11 h-11 rounded-xl border transition-colors hover:bg-white/8 cursor-pointer"
+            style={{ borderColor: 'rgba(255,255,255,0.15)', color: 'white' }}
             aria-expanded={open}
             aria-controls="mobile-menu"
             aria-label="Toggle menu"
           >
-            <MenuToggleIcon open={open} className="size-5" duration={300} />
+            <MenuToggleIcon open={open} className="size-6" duration={300} />
           </button>
         </div>
       </nav>

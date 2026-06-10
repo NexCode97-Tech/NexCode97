@@ -24,6 +24,7 @@ export const metadata: Metadata = {
     apple: "/apple-touch-icon.png",
     icon: "/favicon.png",
   },
+  manifest: "/manifest.json",
   title: "NexCode97 | Cada negocio merece su propio sistema",
   description:
     "Desarrollo de software a la medida. Apps web, móviles, sistemas de gestión y más. Sin mensualidades.",

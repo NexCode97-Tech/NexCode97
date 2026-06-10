@@ -40,26 +40,25 @@ export default function StackFeatureSection() {
         <div className="w-full md:w-1/2 z-10 relative">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 leading-tight"
             style={{ color: "#fff", letterSpacing: "-0.04em" }}>
-            Construye<br />tu <span style={{ color: "#FFF200" }}>idea con<br />nosotros</span>
+            <span className="md:hidden">Construye<br />tu <span style={{ color: "#FFF200" }}>idea con<br />nosotros</span></span>
+            <span className="hidden md:inline">Construye tu<br /><span style={{ color: "#FFF200" }}>idea con nosotros</span></span>
           </h2>
           <p className="mb-8 max-w-sm text-sm leading-relaxed"
             style={{ color: "#888ca4" }}>
             Usamos el stack más moderno y probado para que tu producto sea rápido, escalable y fácil de mantener.
           </p>
           <div className="flex items-center gap-3">
-            <a
-              href="https://wa.me/573006359008"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-block whitespace-nowrap rounded-full bg-violet-600/80 border-2 border-violet-400/30 px-6 py-3 md:px-8 font-semibold text-white backdrop-blur-sm transition-all hover:bg-violet-600"
+            <button
+              onClick={() => window.dispatchEvent(new Event("open:contact-form"))}
+              className="inline-block whitespace-nowrap rounded-full bg-violet-600/80 border-2 border-violet-400/30 px-6 py-3 md:px-8 font-semibold text-white backdrop-blur-sm transition-all hover:bg-violet-600 cursor-pointer"
             >
               Comenzar proyecto
-            </a>
+            </button>
           </div>
         </div>
 
-        {/* Right: órbitas — oculto en móvil */}
-        <div className="hidden md:flex relative w-1/2 h-full items-center justify-start overflow-hidden">
+        {/* Right: órbitas */}
+        <div className="relative w-1/2 h-full flex items-center justify-start overflow-hidden">
           <div className="relative w-[50rem] h-[50rem] translate-x-[50%] flex items-center justify-center">
 
             {/* Centro */}

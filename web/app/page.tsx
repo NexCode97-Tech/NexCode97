@@ -6,7 +6,7 @@ import { TestimoniosSection } from "@/components/testimonios-section";
 import { SiteFooter } from "@/components/site-footer";
 import { WhatsAppFAB } from "@/components/whatsapp-fab";
 import { IntroSplash } from "@/components/intro-splash";
-import { ContactForm } from "@/components/contact-form";
+import { ContactFormModal } from "@/components/contact-form";
 
 export default function Home() {
   return (
@@ -17,7 +17,7 @@ export default function Home() {
       <StackFeatureSection />
       <NosotrosSection />
       <TestimoniosSection />
-      <ContactForm />
+      <ContactFormModal />
       <SiteFooter />
       <WhatsAppFAB />
     </main>

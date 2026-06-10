@@ -1,0 +1,160 @@
+<h2>Diseño final del menú móvil</h2>
+<p class="subtitle">Revisa las 3 tabs. ¿Todo bien antes de implementar?</p>
+
+<style>
+  .phone { background:#09090e; border-radius:16px; padding:0; font-family:sans-serif; overflow:hidden; border:1px solid rgba(255,255,255,0.08); }
+  .tab-bar { display:flex; gap:4px; padding:12px 12px 0; }
+  .tab { flex:1; text-align:center; padding:8px 4px; border-radius:8px; cursor:pointer; transition:all 0.15s; font-size:11px; font-weight:600; }
+  .tab.active { background:rgba(124,58,237,0.25); border:1px solid rgba(124,58,237,0.5); color:#fff; }
+  .tab.inactive { color:rgba(255,255,255,0.35); border:1px solid transparent; }
+  .tab-content { padding:12px; min-height:280px; }
+  .section-label { color:#a78bfa; font-size:8px; font-weight:700; letter-spacing:2px; text-transform:uppercase; margin:0 0 8px; }
+  .service-item { display:flex; align-items:center; gap:10px; border-radius:8px; padding:8px 10px; margin-bottom:2px; }
+  .service-item.highlighted { background:rgba(255,255,255,0.04); }
+  .service-icon { width:30px; height:30px; background:rgba(124,58,237,0.2); border:1px solid rgba(124,58,237,0.3); border-radius:7px; flex-shrink:0; display:flex; align-items:center; justify-content:center; }
+  .service-title { color:#fff; font-size:11px; font-weight:600; margin:0; }
+  .service-desc { color:rgba(255,255,255,0.35); font-size:9px; margin:0; line-height:1.3; }
+  .tech-group-label { color:rgba(255,255,255,0.3); font-size:8px; font-weight:700; letter-spacing:1.5px; text-transform:uppercase; margin:10px 0 5px; }
+  .tech-grid { display:grid; grid-template-columns:1fr 1fr; gap:3px; }
+  .tech-item { background:rgba(255,255,255,0.04); border-radius:7px; padding:6px 8px; display:flex; align-items:center; gap:6px; }
+  .tech-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; }
+  .tech-name { color:rgba(255,255,255,0.7); font-size:10px; font-weight:500; }
+  .footer-btn { margin:10px 12px 12px; }
+  .footer-btn button { width:100%; background:#FFF200; color:#09090e; border:none; border-radius:999px; padding:11px; font-size:12px; font-weight:700; cursor:pointer; }
+  .nosotros-item { display:flex; align-items:center; gap:10px; border-radius:8px; padding:10px; background:rgba(255,255,255,0.04); margin-bottom:6px; }
+  .tabs-row { display:flex; gap:6px; margin-bottom:12px; }
+  .tab-btn { padding:4px 10px; border-radius:6px; font-size:10px; font-weight:600; border:1px solid transparent; cursor:pointer; }
+  .tab-btn.on { background:rgba(124,58,237,0.25); border-color:rgba(124,58,237,0.5); color:#fff; }
+  .tab-btn.off { color:rgba(255,255,255,0.35); }
+</style>
+
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;align-items:start;">
+
+  <!-- TAB 1: SERVICIOS -->
+  <div>
+    <p class="label" style="text-align:center;margin-bottom:8px;">Tab: Servicios</p>
+    <div class="phone">
+      <div class="tab-bar">
+        <div class="tab active">Servicios</div>
+        <div class="tab inactive">Tecnología</div>
+        <div class="tab inactive">Nosotros</div>
+      </div>
+      <div class="tab-content">
+        <p class="section-label">¿Qué necesitas?</p>
+        <div class="service-item highlighted">
+          <div class="service-icon"><span style="color:#a78bfa;font-size:12px;">⬛</span></div>
+          <div><p class="service-title">Apps web a la medida</p><p class="service-desc">Plataformas con roles y dashboards</p></div>
+        </div>
+        <div class="service-item">
+          <div class="service-icon"><span style="color:#a78bfa;font-size:12px;">📱</span></div>
+          <div><p class="service-title">Apps móviles</p><p class="service-desc">iOS y Android, nativas o multi</p></div>
+        </div>
+        <div class="service-item">
+          <div class="service-icon"><span style="color:#a78bfa;font-size:12px;">🌐</span></div>
+          <div><p class="service-title">Páginas y landings</p><p class="service-desc">Sitios de alto impacto</p></div>
+        </div>
+        <div class="service-item">
+          <div class="service-icon"><span style="color:#a78bfa;font-size:12px;">📊</span></div>
+          <div><p class="service-title">Sistemas de gestión</p><p class="service-desc">ERPs, CRMs e internos</p></div>
+        </div>
+        <div class="service-item">
+          <div class="service-icon"><span style="color:#a78bfa;font-size:12px;">🛒</span></div>
+          <div><p class="service-title">Tiendas en línea</p><p class="service-desc">E-commerce con pagos</p></div>
+        </div>
+        <div class="service-item">
+          <div class="service-icon"><span style="color:#a78bfa;font-size:12px;">⚡</span></div>
+          <div><p class="service-title">Integraciones y PWA</p><p class="service-desc">APIs y apps instalables</p></div>
+        </div>
+      </div>
+      <div class="footer-btn"><button>Comenzar proyecto</button></div>
+    </div>
+  </div>
+
+  <!-- TAB 2: TECNOLOGÍA -->
+  <div>
+    <p class="label" style="text-align:center;margin-bottom:8px;">Tab: Tecnología</p>
+    <div class="phone">
+      <div class="tab-bar">
+        <div class="tab inactive">Servicios</div>
+        <div class="tab active">Tecnología</div>
+        <div class="tab inactive">Nosotros</div>
+      </div>
+      <div class="tab-content">
+        <p class="section-label">Nuestro stack</p>
+        <p class="tech-group-label">Frontend</p>
+        <div class="tech-grid">
+          <div class="tech-item"><div class="tech-dot" style="background:#61DAFB;"></div><span class="tech-name">React</span></div>
+          <div class="tech-item"><div class="tech-dot" style="background:#fff;"></div><span class="tech-name">Next.js</span></div>
+          <div class="tech-item"><div class="tech-dot" style="background:#3178C6;"></div><span class="tech-name">TypeScript</span></div>
+          <div class="tech-item"><div class="tech-dot" style="background:#06B6D4;"></div><span class="tech-name">Tailwind</span></div>
+        </div>
+        <p class="tech-group-label">Backend</p>
+        <div class="tech-grid">
+          <div class="tech-item"><div class="tech-dot" style="background:#339933;"></div><span class="tech-name">Node.js</span></div>
+          <div class="tech-item"><div class="tech-dot" style="background:#336791;"></div><span class="tech-name">PostgreSQL</span></div>
+          <div class="tech-item"><div class="tech-dot" style="background:#5a67d8;"></div><span class="tech-name">Prisma</span></div>
+          <div class="tech-item"><div class="tech-dot" style="background:#fff;"></div><span class="tech-name">Express</span></div>
+        </div>
+        <p class="tech-group-label">Infraestructura</p>
+        <div class="tech-grid">
+          <div class="tech-item"><div class="tech-dot" style="background:#fff;"></div><span class="tech-name">Vercel</span></div>
+          <div class="tech-item"><div class="tech-dot" style="background:#fff;"></div><span class="tech-name">Railway</span></div>
+          <div class="tech-item"><div class="tech-dot" style="background:#2496ED;"></div><span class="tech-name">Docker</span></div>
+          <div class="tech-item"><div class="tech-dot" style="background:#F05032;"></div><span class="tech-name">Git</span></div>
+        </div>
+      </div>
+      <div class="footer-btn"><button>Comenzar proyecto</button></div>
+    </div>
+  </div>
+
+  <!-- TAB 3: NOSOTROS -->
+  <div>
+    <p class="label" style="text-align:center;margin-bottom:8px;">Tab: Nosotros</p>
+    <div class="phone">
+      <div class="tab-bar">
+        <div class="tab inactive">Servicios</div>
+        <div class="tab inactive">Tecnología</div>
+        <div class="tab active">Nosotros</div>
+      </div>
+      <div class="tab-content">
+        <p class="section-label">El equipo</p>
+        <div class="nosotros-item">
+          <div style="width:36px;height:36px;background:rgba(124,58,237,0.2);border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;">
+            <span style="color:#a78bfa;font-size:14px;">N</span>
+          </div>
+          <div>
+            <p style="color:#fff;font-size:11px;font-weight:700;margin:0;">NexCode97</p>
+            <p style="color:rgba(255,255,255,0.4);font-size:9px;margin:0;">Software a la medida · Colombia</p>
+          </div>
+        </div>
+        <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 0;"></div>
+        <div style="display:flex;flex-direction:column;gap:3px;">
+          <div style="display:flex;justify-content:space-between;padding:6px 0;">
+            <span style="color:rgba(255,255,255,0.4);font-size:10px;">Proyectos</span>
+            <span style="color:#fff;font-size:10px;font-weight:700;">15+</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;">
+            <span style="color:rgba(255,255,255,0.4);font-size:10px;">Satisfacción</span>
+            <span style="color:#fff;font-size:10px;font-weight:700;">100%</span>
+          </div>
+          <div style="display:flex;justify-content:space-between;padding:6px 0;">
+            <span style="color:rgba(255,255,255,0.4);font-size:10px;">Experiencia</span>
+            <span style="color:#fff;font-size:10px;font-weight:700;">5+ años</span>
+          </div>
+        </div>
+        <div style="height:1px;background:rgba(255,255,255,0.06);margin:8px 0;"></div>
+        <a href="#nosotros" style="display:flex;align-items:center;justify-content:space-between;padding:8px 10px;border-radius:8px;background:rgba(255,255,255,0.04);text-decoration:none;">
+          <span style="color:#fff;font-size:11px;font-weight:600;">Conocer más sobre nosotros</span>
+          <span style="color:#a78bfa;font-size:12px;">→</span>
+        </a>
+      </div>
+      <div class="footer-btn"><button>Comenzar proyecto</button></div>
+    </div>
+  </div>
+
+</div>
+
+<div style="margin-top:16px;padding:12px;background:rgba(124,58,237,0.08);border:1px solid rgba(124,58,237,0.2);border-radius:10px;">
+  <p class="label">Animaciones (Framer Motion)</p>
+  <p style="color:rgba(255,255,255,0.6);font-size:11px;margin:4px 0 0;">• Tab activa: spring animation en background violeta<br>• Contenido: fade + scale(0.97→1) al cambiar tab<br>• Menú completo: slide desde arriba al abrir (AnimatePresence)</p>
+</div>

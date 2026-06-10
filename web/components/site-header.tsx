@@ -2,6 +2,7 @@
 import React from 'react';
 import { cn } from '@/lib/utils';
 import { createPortal } from 'react-dom';
+import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { MenuToggleIcon } from '@/components/ui/menu-toggle-icon';
 import {
   NavigationMenu,
@@ -18,23 +19,15 @@ import {
   LayoutDashboard,
   ShoppingCart,
   Zap,
-  Users,
-  Database,
-  Server,
-  Cloud,
-  GitBranch,
-  Layers,
-  Cpu,
 } from 'lucide-react';
 import {
-  FaReact, FaNodeJs, FaDocker, FaGitAlt, FaPython,
+  FaReact, FaNodeJs, FaDocker, FaGitAlt,
 } from 'react-icons/fa';
 import {
   SiNextdotjs, SiTypescript, SiTailwindcss, SiPrisma,
   SiPostgresql, SiVercel, SiCloudinary, SiRailway,
   SiFramer, SiReactquery, SiPnpm,
 } from 'react-icons/si';
-import { ShieldCheck } from 'lucide-react';
 import type { LucideIcon } from 'lucide-react';
 import Image from 'next/image';
 
@@ -104,23 +97,211 @@ function useScroll(threshold: number) {
   return scrolled;
 }
 
-type MobileMenuProps = React.ComponentProps<'div'> & { open: boolean };
-function MobileMenu({ open, children, className, ...props }: MobileMenuProps) {
-  if (!open || typeof window === 'undefined') return null;
+const TABS = ['Servicios', 'Tecnología', 'Nosotros'] as const;
+type Tab = typeof TABS[number];
+
+function MobileMenuPortal({ open, activeTab, setActiveTab, onClose }: {
+  open: boolean;
+  activeTab: Tab;
+  setActiveTab: (t: Tab) => void;
+  onClose: () => void;
+}) {
+  const prefersReduced = useReducedMotion();
+
+  const iosEase = [0.32, 0.72, 0, 1] as [number, number, number, number];
+  const strongEaseOut = [0.23, 1, 0.32, 1] as [number, number, number, number];
+
+  const menuVariants = {
+    hidden:  { y: prefersReduced ? 0 : '-100%' as const, opacity: prefersReduced ? 0 : 1 },
+    visible: { y: 0, opacity: 1, transition: { duration: 0.5, ease: iosEase } },
+    exit:    { y: prefersReduced ? 0 : '-100%' as const, opacity: prefersReduced ? 0 : 1, transition: { duration: 0.35, ease: iosEase } },
+  };
+
+  const contentVariants = {
+    hidden:  { opacity: 0, scale: prefersReduced ? 1 : 0.97 },
+    visible: { opacity: 1, scale: 1, transition: { duration: 0.18, ease: strongEaseOut } },
+    exit:    { opacity: 0, scale: prefersReduced ? 1 : 0.97, transition: { duration: 0.12, ease: 'easeIn' as const } },
+  };
+
+  if (typeof window === 'undefined') return null;
+
   return createPortal(
-    <div
-      id="mobile-menu"
-      className="fixed top-16 right-0 bottom-0 left-0 z-40 flex flex-col overflow-hidden border-t md:hidden"
-      style={{ background: 'rgba(9,9,14,0.97)', borderColor: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(16px)' }}
-    >
-      <div
-        data-slot={open ? 'open' : 'closed'}
-        className={cn('data-[slot=open]:animate-in data-[slot=open]:zoom-in-97 ease-out size-full p-5', className)}
-        {...props}
-      >
-        {children}
-      </div>
-    </div>,
+    <AnimatePresence>
+      {open && (
+        <motion.div
+          id="mobile-menu"
+          key="mobile-menu"
+          variants={menuVariants}
+          initial="hidden"
+          animate="visible"
+          exit="exit"
+          className="fixed top-16 right-0 bottom-0 left-0 z-40 flex flex-col overflow-hidden border-t md:hidden"
+          style={{ background: 'rgba(9,9,14,0.98)', borderColor: 'rgba(255,255,255,0.08)', backdropFilter: 'blur(20px)' }}
+        >
+          {/* Tab bar */}
+          <div className="flex gap-2 px-4 pt-4 pb-2 shrink-0">
+            {TABS.map((tab) => {
+              const isActive = activeTab === tab;
+              return (
+                <button
+                  key={tab}
+                  onClick={() => setActiveTab(tab)}
+                  className="relative flex-1 py-2.5 rounded-lg text-xs font-semibold cursor-pointer transition-colors duration-150"
+                  style={{ color: isActive ? '#fff' : 'rgba(255,255,255,0.35)' }}
+                >
+                  {isActive && (
+                    <motion.div
+                      layoutId="tab-bg"
+                      className="absolute inset-0 rounded-lg"
+                      style={{ background: 'rgba(124,58,237,0.25)', border: '1px solid rgba(124,58,237,0.5)' }}
+                      transition={{ type: 'spring', duration: 0.4, bounce: 0.2 }}
+                    />
+                  )}
+                  <span className="relative z-10">{tab}</span>
+                </button>
+              );
+            })}
+          </div>
+
+          {/* Divider */}
+          <div className="mx-4 h-px shrink-0" style={{ background: 'rgba(255,255,255,0.06)' }} />
+
+          {/* Tab content */}
+          <div className="flex-1 overflow-y-auto">
+            <AnimatePresence mode="wait" initial={false}>
+              <motion.div
+                key={activeTab}
+                variants={contentVariants}
+                initial="hidden"
+                animate="visible"
+                exit="exit"
+                className="p-4"
+              >
+                {activeTab === 'Servicios' && (
+                  <div className="flex flex-col gap-1">
+                    <p className="px-2 pb-2 text-[10px] font-bold uppercase tracking-widest" style={{ color: '#a78bfa' }}>
+                      ¿Qué necesitas?
+                    </p>
+                    {serviciosLinks.map((link) => (
+                      <a
+                        key={link.title}
+                        href={link.href}
+                        onClick={onClose}
+                        className="flex items-center gap-3 rounded-xl p-3 transition-colors duration-150 hover:bg-white/5 cursor-pointer"
+                      >
+                        <div
+                          className="flex size-10 shrink-0 items-center justify-center rounded-xl"
+                          style={{ background: 'rgba(124,58,237,0.12)', border: '1px solid rgba(124,58,237,0.2)' }}
+                        >
+                          <link.icon className="size-4" style={{ color: '#a78bfa' }} />
+                        </div>
+                        <div>
+                          <p className="text-sm font-semibold text-white">{link.title}</p>
+                          {link.description && (
+                            <p className="text-xs leading-tight mt-0.5" style={{ color: 'rgba(255,255,255,0.38)' }}>
+                              {link.description}
+                            </p>
+                          )}
+                        </div>
+                      </a>
+                    ))}
+                  </div>
+                )}
+
+                {activeTab === 'Tecnología' && (
+                  <div className="flex flex-col gap-4">
+                    <p className="px-2 text-[10px] font-bold uppercase tracking-widest" style={{ color: '#a78bfa' }}>
+                      Nuestro stack
+                    </p>
+                    {techGroups.map((group) => (
+                      <div key={group.category}>
+                        <p className="px-1 pb-2 text-[10px] font-bold uppercase tracking-widest" style={{ color: 'rgba(255,255,255,0.3)' }}>
+                          {group.category}
+                        </p>
+                        <div className="grid grid-cols-2 gap-1.5">
+                          {group.items.map((tech) => (
+                            <div
+                              key={tech.label}
+                              className="flex items-center gap-2.5 rounded-xl px-3 py-2.5 transition-colors duration-150 hover:bg-white/5"
+                              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}
+                            >
+                              <span className="text-base shrink-0" style={{ color: tech.color }}>{tech.icon}</span>
+                              <span className="text-xs font-medium" style={{ color: 'rgba(255,255,255,0.75)' }}>{tech.label}</span>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                )}
+
+                {activeTab === 'Nosotros' && (
+                  <div className="flex flex-col gap-3">
+                    <p className="px-2 text-[10px] font-bold uppercase tracking-widest" style={{ color: '#a78bfa' }}>
+                      El equipo
+                    </p>
+                    {/* Card equipo */}
+                    <div className="rounded-2xl p-4" style={{ background: 'rgba(124,58,237,0.08)', border: '1px solid rgba(124,58,237,0.18)' }}>
+                      <div className="flex items-center gap-3 mb-3">
+                        <div className="w-10 h-10 rounded-full flex items-center justify-center shrink-0"
+                          style={{ background: 'rgba(124,58,237,0.2)', border: '1px solid rgba(124,58,237,0.3)' }}>
+                          <span className="text-sm font-bold" style={{ color: '#a78bfa' }}>N</span>
+                        </div>
+                        <div>
+                          <p className="text-sm font-bold text-white">NexCode97</p>
+                          <p className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>Software a la medida · Colombia</p>
+                        </div>
+                      </div>
+                      <p className="text-xs leading-relaxed" style={{ color: 'rgba(255,255,255,0.5)' }}>
+                        No vendemos plantillas. Construimos la solución exacta que tu negocio necesita, sin mensualidades y con código que tú posees.
+                      </p>
+                    </div>
+                    {/* Stats */}
+                    <div className="grid grid-cols-3 gap-2">
+                      {[
+                        { label: 'Proyectos', value: '15+' },
+                        { label: 'Satisfacción', value: '100%' },
+                        { label: 'Experiencia', value: '5+ años' },
+                      ].map((stat) => (
+                        <div key={stat.label} className="rounded-xl p-3 text-center"
+                          style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}>
+                          <p className="text-base font-extrabold text-white">{stat.value}</p>
+                          <p className="text-[10px] mt-0.5" style={{ color: 'rgba(255,255,255,0.38)' }}>{stat.label}</p>
+                        </div>
+                      ))}
+                    </div>
+                    {/* Link nosotros */}
+                    <a
+                      href="#nosotros"
+                      onClick={onClose}
+                      className="flex items-center justify-between rounded-xl px-4 py-3 transition-colors duration-150 hover:bg-white/5 cursor-pointer"
+                      style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}
+                    >
+                      <span className="text-sm font-semibold text-white">Conocer más sobre nosotros</span>
+                      <span style={{ color: '#a78bfa' }}>→</span>
+                    </a>
+                  </div>
+                )}
+              </motion.div>
+            </AnimatePresence>
+          </div>
+
+          {/* CTA fijo abajo */}
+          <div className="p-4 shrink-0" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+            <button
+              onClick={() => {
+                onClose();
+                window.dispatchEvent(new Event('open:contact-form'));
+              }}
+              className="w-full rounded-full py-3.5 text-sm font-bold cursor-pointer transition-opacity hover:opacity-90 active:scale-[0.97]"
+              style={{ background: '#FFF200', color: '#09090e' }}
+            >
+              Comenzar proyecto
+            </button>
+          </div>
+        </motion.div>
+      )}
+    </AnimatePresence>,
     document.body,
   );
 }
@@ -152,6 +333,7 @@ function ListItem({ title, description, icon: Icon, href, className }: LinkItem 
 
 export function SiteHeader() {
   const [open, setOpen] = React.useState(false);
+  const [activeTab, setActiveTab] = React.useState<Tab>('Servicios');
   const scrolled = useScroll(10);
   const [isDesktop, setIsDesktop] = React.useState(false);
 
@@ -327,81 +509,12 @@ export function SiteHeader() {
         </div>
       </nav>
 
-      {/* Mobile menu */}
-      <MobileMenu open={open} className="flex flex-col justify-between gap-4">
-        <div className="flex flex-col gap-1">
-          <p className="mb-1 px-2 text-xs font-bold uppercase tracking-widest" style={{ color: '#a78bfa' }}>
-            Servicios
-          </p>
-          {serviciosLinks.map((link) => (
-            <a
-              key={link.title}
-              href={link.href}
-              onClick={() => setOpen(false)}
-              className="flex flex-row gap-3 rounded-lg p-2.5 transition-colors duration-150 hover:bg-white/6 cursor-pointer"
-            >
-              <div className="flex aspect-square size-10 shrink-0 items-center justify-center rounded-md"
-                style={{ background: 'rgba(124,58,237,0.12)', border: '1px solid rgba(124,58,237,0.2)' }}>
-                <link.icon className="size-4" style={{ color: '#a78bfa' }} />
-              </div>
-              <div className="flex flex-col justify-center">
-                <span className="text-sm font-semibold text-white">{link.title}</span>
-                {link.description && <span className="text-xs text-white/45 leading-tight mt-0.5">{link.description}</span>}
-              </div>
-            </a>
-          ))}
-          <div className="my-2 h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
-          <p className="mb-1 px-2 text-xs font-bold uppercase tracking-widest" style={{ color: '#a78bfa' }}>
-            NexTechnology
-          </p>
-          {techGroups.map((group) => (
-            <div key={group.category}>
-              <p className="px-3 py-1 text-[10px] font-bold uppercase tracking-widest" style={{ color: '#a78bfa' }}>
-                {group.category}
-              </p>
-              <div className="grid grid-cols-2 gap-1">
-                {group.items.map((tech) => (
-                  <div key={tech.label} className="flex items-center gap-2 rounded-lg px-3 py-2 transition-colors hover:bg-white/6">
-                    <span className="text-base" style={{ color: tech.color }}>{tech.icon}</span>
-                    <span className="text-sm font-medium text-white/70">{tech.label}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          ))}
-          <a
-            href="/tecnologias"
-            onClick={() => setOpen(false)}
-            className="flex items-center justify-between rounded-lg px-3 py-2.5 text-sm font-semibold transition-colors hover:bg-white/6"
-            style={{ color: '#ffffff' }}
-          >
-            <span>Ver todas las tecnologías</span>
-            <span>→</span>
-          </a>
-          <div className="my-2 h-px" style={{ background: 'rgba(255,255,255,0.07)' }} />
-          <a
-            href="#nosotros"
-            onClick={() => setOpen(false)}
-            className="flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-semibold text-white/70 transition-colors hover:bg-white/6 hover:text-white"
-          >
-            <div className="flex size-10 items-center justify-center rounded-md" style={{ background: 'rgba(124,58,237,0.12)', border: '1px solid rgba(124,58,237,0.2)' }}>
-              <Users className="size-4" style={{ color: '#a78bfa' }} />
-            </div>
-            Nosotros
-          </a>
-        </div>
-
-        <div className="flex flex-col gap-2">
-          <button className="w-full rounded-full border py-3 text-sm font-semibold text-white/70 transition-colors hover:text-white cursor-pointer"
-            style={{ borderColor: 'rgba(255,255,255,0.12)', background: 'transparent' }}>
-            Log in
-          </button>
-          <button className="w-full rounded-full py-3 text-sm font-bold text-white cursor-pointer"
-            style={{ background: '#FFF200', color: '#09090e' }}>
-            Sign up
-          </button>
-        </div>
-      </MobileMenu>
+      <MobileMenuPortal
+        open={open}
+        activeTab={activeTab}
+        setActiveTab={setActiveTab}
+        onClose={() => setOpen(false)}
+      />
     </header>
   );
 }

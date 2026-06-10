@@ -1,8 +1,7 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef } from "react";
 import { useInView, motion } from "framer-motion";
-import Image from "next/image";
 import {
   Monitor,
   Smartphone,
@@ -72,18 +71,7 @@ const SERVICES: CardItem[] = [
 
 export const ServicesSection = () => {
   const ref = useRef(null);
-  const desktopRef = useRef<HTMLDivElement>(null);
-  const [desktopH, setDesktopH] = useState(0);
   const inView = useInView(ref, { once: true, margin: "-60px" });
-
-  useEffect(() => {
-    function updateH() {
-      if (desktopRef.current) setDesktopH(desktopRef.current.offsetHeight);
-    }
-    updateH();
-    window.addEventListener("resize", updateH);
-    return () => window.removeEventListener("resize", updateH);
-  }, []);
 
   return (
     <section ref={ref} id="servicios" className="py-24 bg-white">
@@ -115,25 +103,6 @@ export const ServicesSection = () => {
           <ExpandingCards items={SERVICES} defaultActiveIndex={0} />
         </motion.div>
 
-        {/* Showcase */}
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          animate={inView ? { opacity: 1, y: 0 } : {}}
-          transition={{ duration: 0.7, delay: 0.4 }}
-          className="showcase-wrap relative mt-14 flex items-start"
-        >
-          <div ref={desktopRef} className="relative w-[62%] rounded-2xl overflow-hidden p-3 md:p-5"
-            style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.1)", zIndex: 2, background: "#f5f5f5" }}>
-            <Image src="/showcase-desktop.webp" alt="Proyecto versión escritorio" width={800} height={500}
-              className="w-full h-auto rounded-lg"
-              onLoad={() => { if (desktopRef.current) setDesktopH(desktopRef.current.offsetHeight); }} />
-          </div>
-          <div className="relative ml-4 md:ml-6 rounded-xl overflow-hidden"
-            style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.15)", zIndex: 1, maxHeight: desktopH || "none" }}>
-            <Image src="/showcase-mobile.png" alt="Proyecto versión móvil" width={600} height={500}
-              className="h-auto w-auto" style={{ maxHeight: desktopH || "none" }} />
-          </div>
-        </motion.div>
       </div>
 
     </section>

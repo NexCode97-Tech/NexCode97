@@ -153,11 +153,20 @@ function ListItem({ title, description, icon: Icon, href, className }: LinkItem 
 export function SiteHeader() {
   const [open, setOpen] = React.useState(false);
   const scrolled = useScroll(10);
+  const [isDesktop, setIsDesktop] = React.useState(false);
 
   React.useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
     return () => { document.body.style.overflow = ''; };
   }, [open]);
+
+  React.useEffect(() => {
+    const mq = window.matchMedia('(min-width: 768px)');
+    setIsDesktop(mq.matches);
+    const handler = (e: MediaQueryListEvent) => setIsDesktop(e.matches);
+    mq.addEventListener('change', handler);
+    return () => mq.removeEventListener('change', handler);
+  }, []);
 
   return (
     <header
@@ -184,8 +193,8 @@ export function SiteHeader() {
           />
         </a>
 
-        {/* Nav desktop */}
-        <NavigationMenu className="hidden md:flex">
+        {/* Nav desktop — solo se monta en pantallas md+ para evitar conflicto de foco en móvil */}
+        {isDesktop && <NavigationMenu className="flex">
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuTrigger>
@@ -291,7 +300,7 @@ export function SiteHeader() {
               </NavigationMenuLink>
             </NavigationMenuItem>
           </NavigationMenuList>
-        </NavigationMenu>
+        </NavigationMenu>}
 
         {/* Auth + hamburger */}
         <div className="flex items-center gap-2">

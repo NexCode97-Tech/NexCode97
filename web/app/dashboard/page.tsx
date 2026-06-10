@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
 import Image from "next/image";
+import { StatusSelector } from "./status-selector";
 
 export const dynamic = "force-dynamic";
 
@@ -42,14 +43,6 @@ function PriorityBadge({ priority }: { priority: string | null }) {
     </span>
   );
 }
-
-const STATUS_OPTIONS = ["nuevo", "contactado", "ganado", "perdido"];
-const STATUS_COLORS: Record<string, string> = {
-  nuevo: "#FFF200",
-  contactado: "#60a5fa",
-  ganado: "#4ade80",
-  perdido: "#f87171",
-};
 
 export default async function DashboardPage() {
   const session = await auth();
@@ -131,24 +124,7 @@ export default async function DashboardPage() {
 
                   {/* Estado + fecha */}
                   <div className="flex flex-col items-end gap-2 justify-center">
-                    <form action={updateLeadStatus}>
-                      <input type="hidden" name="id" value={lead.id} />
-                      <select
-                        name="status"
-                        defaultValue={lead.status}
-                        onChange={(e) => e.currentTarget.form?.requestSubmit()}
-                        className="rounded-full px-3 py-1 text-xs font-semibold cursor-pointer outline-none"
-                        style={{
-                          background: `${STATUS_COLORS[lead.status] ?? "#64748b"}22`,
-                          color: STATUS_COLORS[lead.status] ?? "#64748b",
-                          border: `1px solid ${STATUS_COLORS[lead.status] ?? "#64748b"}44`,
-                        }}
-                      >
-                        {STATUS_OPTIONS.map((s) => (
-                          <option key={s} value={s} style={{ background: "#09090e", color: "#ffffff" }}>{s}</option>
-                        ))}
-                      </select>
-                    </form>
+                    <StatusSelector id={lead.id} status={lead.status} action={updateLeadStatus} />
                     <p className="text-xs" style={{ color: "#475569" }}>
                       {new Date(lead.createdAt).toLocaleDateString("es-CO")}
                     </p>

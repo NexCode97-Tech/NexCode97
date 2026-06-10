@@ -34,7 +34,7 @@ const iconsPerOrbit = Math.ceil(iconConfigs.length / ORBIT_COUNT);
 export default function StackFeatureSection() {
   return (
     <section className="relative max-w-6xl mx-auto my-24 px-4">
-      <div className="relative flex items-center justify-between border overflow-hidden rounded-3xl px-6 md:pl-10 md:pr-0 py-6 md:py-0 md:min-h-[22rem]"
+      <div className="relative flex items-center justify-between border overflow-hidden rounded-3xl px-6 md:pl-10 md:pr-0 h-[13rem] md:h-auto md:py-10 md:min-h-[16rem]"
         style={{ borderColor: "rgba(124,58,237,0.25)", background: "#09090e" }}>
 
         {/* Texto */}
@@ -58,8 +58,8 @@ export default function StackFeatureSection() {
           </div>
         </div>
 
-        {/* Órbitas — contenedor con altura fija en móvil para evitar layout expand */}
-        <div className="relative w-1/2 h-[180px] md:h-full flex items-center justify-start overflow-hidden">
+        {/* Órbitas */}
+        <div className="relative w-1/2 self-stretch flex items-center justify-start overflow-hidden">
           <div className="absolute w-[50rem] h-[50rem] left-0 top-1/2 -translate-y-1/2 flex items-center justify-center scale-[0.38] md:scale-100 origin-left md:translate-x-[50%] md:left-auto md:top-auto md:relative md:-translate-y-0">
 
             {/* Centro */}

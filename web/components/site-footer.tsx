@@ -71,11 +71,11 @@ export function SiteFooter() {
           </div>
 
           {/* Links */}
-          <div className="grid grid-cols-2 gap-8 sm:grid-cols-3 lg:col-span-2">
+          <div className="grid grid-cols-3 gap-3 sm:gap-8 lg:col-span-2">
 
             {/* Servicios */}
             <div>
-              <p className="text-sm font-bold uppercase tracking-widest mb-5" style={{ color: "#ffffff" }}>
+              <p className="text-[10px] sm:text-sm font-bold uppercase tracking-widest mb-4" style={{ color: "#ffffff" }}>
                 Servicios
               </p>
               <ul className="space-y-3">
@@ -83,7 +83,7 @@ export function SiteFooter() {
                   <li key={text}>
                     <a
                       href={href}
-                      className="text-sm text-white/40 transition-colors duration-150 hover:text-white"
+                      className="text-[10px] sm:text-sm text-white/40 transition-colors duration-150 hover:text-white"
                     >
                       {text}
                     </a>
@@ -94,7 +94,7 @@ export function SiteFooter() {
 
             {/* Empresa */}
             <div>
-              <p className="text-sm font-bold uppercase tracking-widest mb-5" style={{ color: "#ffffff" }}>
+              <p className="text-[10px] sm:text-sm font-bold uppercase tracking-widest mb-4" style={{ color: "#ffffff" }}>
                 Empresa
               </p>
               <ul className="space-y-3">
@@ -102,7 +102,7 @@ export function SiteFooter() {
                   <li key={text}>
                     <a
                       href={href}
-                      className="text-sm text-white/40 transition-colors duration-150 hover:text-white"
+                      className="text-[10px] sm:text-sm text-white/40 transition-colors duration-150 hover:text-white"
                     >
                       {text}
                     </a>
@@ -113,7 +113,7 @@ export function SiteFooter() {
 
             {/* Contacto */}
             <div>
-              <p className="text-sm font-bold uppercase tracking-widest mb-5" style={{ color: "#ffffff" }}>
+              <p className="text-[10px] sm:text-sm font-bold uppercase tracking-widest mb-4" style={{ color: "#ffffff" }}>
                 Contacto
               </p>
               <ul className="space-y-3">
@@ -121,7 +121,7 @@ export function SiteFooter() {
                   <li key={text}>
                     <a
                       href={href}
-                      className="flex items-start gap-2.5 text-sm text-white/40 transition-colors duration-150 hover:text-white"
+                      className="flex items-start gap-1.5 text-[10px] sm:text-sm text-white/40 transition-colors duration-150 hover:text-white"
                     >
                       <Icon className="size-4 shrink-0 mt-0.5" style={{ color: "#ffffff" }} />
                       {isAddress ? (

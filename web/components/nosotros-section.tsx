@@ -142,7 +142,7 @@ export function NosotrosSection() {
           className="grid gap-6 lg:grid-cols-3"
         >
           {/* Imagen principal */}
-          <div className="relative overflow-hidden rounded-2xl lg:col-span-2" style={{ minHeight: "320px", maxHeight: "560px" }}>
+          <div className="relative overflow-hidden rounded-2xl lg:col-span-2" style={{ minHeight: "480px", maxHeight: "640px" }}>
             <video
               src="/video equipo de trabajo.mp4"
               autoPlay

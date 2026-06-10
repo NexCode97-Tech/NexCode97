@@ -61,9 +61,9 @@ const SERVICES: CardItem[] = [
   },
   {
     id: "integraciones",
-    title: "Integraciones y PWA",
+    title: "Integraciones y automatizaciones",
     description:
-      "Conectamos tu sistema con pagos, WhatsApp, correo y APIs externas. También desarrollamos PWAs instalables sin tienda de apps.",
+      "Conectamos tu sistema con pagos, WhatsApp, correo y APIs externas. Automatizamos procesos repetitivos para que tu equipo se enfoque en lo que importa.",
     imgSrc: "https://images.unsplash.com/photo-1558494949-ef010cbdcc31?auto=format&fit=crop&w=1200&q=80",
     icon: <Zap size={22} />,
     linkHref: "#contacto",

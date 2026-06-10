@@ -495,7 +495,7 @@ export function SiteHeader() {
 
           <a
             href="/login"
-            className="md:hidden flex items-center justify-center w-11 h-11 rounded-full transition-all duration-200 hover:opacity-90 cursor-pointer"
+            className="md:hidden flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-200 hover:opacity-90 cursor-pointer"
             style={{ background: '#FFF200', color: '#09090e' }}
             aria-label="Iniciar sesión"
           >

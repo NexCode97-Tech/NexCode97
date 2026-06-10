@@ -138,7 +138,7 @@ export const ServicesSection = () => {
 
       <style>{`
         .showcase-img {
-          transition: width 0.6s cubic-bezier(0.23,1,0.32,1), z-index 0s;
+          transition: z-index 0s;
           mask-image: linear-gradient(to right, black 85%, transparent 100%);
           -webkit-mask-image: linear-gradient(to right, black 85%, transparent 100%);
         }
@@ -148,16 +148,6 @@ export const ServicesSection = () => {
         }
         .showcase-img:hover {
           z-index: 10 !important;
-        }
-        .showcase-wrap:has(.img-desktop:hover) .img-desktop {
-          width: 85% !important;
-          mask-image: linear-gradient(to right, black 90%, transparent 100%);
-          -webkit-mask-image: linear-gradient(to right, black 90%, transparent 100%);
-        }
-        .showcase-wrap:has(.img-mobile:hover) .img-mobile {
-          width: 55% !important;
-          mask-image: linear-gradient(to left, black 90%, transparent 100%);
-          -webkit-mask-image: linear-gradient(to left, black 90%, transparent 100%);
         }
       `}</style>
     </section>

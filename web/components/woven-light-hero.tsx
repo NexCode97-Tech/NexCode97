@@ -149,8 +149,8 @@ const WovenCanvas = () => {
     }
 
     const scene = new THREE.Scene();
-    const W = mountRef.current.clientWidth;
-    const H = mountRef.current.clientHeight;
+    const W = window.innerWidth;
+    const H = mountRef.current.clientHeight || window.innerHeight;
     const camera = new THREE.PerspectiveCamera(75, W / H, 0.1, 1000);
     camera.position.z = 5;
     renderer.setSize(W, H, false); // false = no sobreescribir CSS (evita expansión en scroll móvil)
@@ -269,13 +269,16 @@ const WovenCanvas = () => {
     };
     animate();
 
+    let lastW = window.innerWidth;
     const handleResize = () => {
+        const newW = window.innerWidth;
+        if (newW === lastW) return; // ignorar cambios solo de altura (scroll móvil)
+        lastW = newW;
         if (!mountRef.current) return;
-        const w = mountRef.current.clientWidth;
-        const h = mountRef.current.clientHeight;
-        camera.aspect = w / h;
+        const newH = mountRef.current.clientHeight || window.innerHeight;
+        camera.aspect = newW / newH;
         camera.updateProjectionMatrix();
-        renderer.setSize(w, h, false);
+        renderer.setSize(newW, newH, false);
     };
     window.addEventListener('resize', handleResize);
 

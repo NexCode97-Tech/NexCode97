@@ -33,33 +33,29 @@ const iconsPerOrbit = Math.ceil(iconConfigs.length / ORBIT_COUNT);
 export default function StackFeatureSection() {
   return (
     <section className="relative max-w-6xl mx-auto my-24 px-4">
-      <div className="relative flex items-center justify-between min-h-[30rem] border overflow-hidden rounded-3xl px-6 md:pl-10 md:pr-0 py-10 md:py-0"
+      <div className="relative flex flex-col md:flex-row md:items-center md:justify-between border overflow-hidden rounded-3xl px-6 md:pl-10 md:pr-0 pt-8 pb-0 md:py-0 md:min-h-[30rem]"
         style={{ borderColor: "rgba(124,58,237,0.25)", background: "#09090e" }}>
 
-        {/* Left: texto */}
-        <div className="w-full md:w-1/2 z-10 relative">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 leading-tight"
+        {/* Texto */}
+        <div className="w-full md:w-1/2 z-10 relative pb-8 md:pb-0">
+          <h2 className="text-4xl sm:text-5xl md:text-5xl font-extrabold mb-6 leading-tight"
             style={{ color: "#fff", letterSpacing: "-0.04em" }}>
             <span className="md:hidden">Construye<br />tu <span style={{ color: "#FFF200" }}>idea con<br />nosotros</span></span>
             <span className="hidden md:inline">Construye tu<br /><span style={{ color: "#FFF200" }}>idea con nosotros</span></span>
           </h2>
-          <p className="mb-8 max-w-sm text-sm leading-relaxed"
-            style={{ color: "#888ca4" }}>
-            Usamos el stack más moderno y probado para que tu producto sea rápido, escalable y fácil de mantener.
-          </p>
           <div className="flex items-center gap-3">
             <button
               onClick={() => window.dispatchEvent(new Event("open:contact-form"))}
-              className="inline-block whitespace-nowrap rounded-full bg-violet-600/80 border-2 border-violet-400/30 px-6 py-3 md:px-8 font-semibold text-white backdrop-blur-sm transition-all hover:bg-violet-600 cursor-pointer"
+              className="w-full md:w-auto inline-block whitespace-nowrap rounded-full bg-violet-600/80 border-2 border-violet-400/30 px-6 py-3 md:px-8 font-semibold text-white backdrop-blur-sm transition-all hover:bg-violet-600 cursor-pointer text-center"
             >
               Comenzar proyecto
             </button>
           </div>
         </div>
 
-        {/* Right: órbitas */}
-        <div className="relative w-1/2 h-full flex items-center justify-start overflow-hidden">
-          <div className="relative w-[50rem] h-[50rem] translate-x-[50%] flex items-center justify-center">
+        {/* Órbitas: desktop → derecha | mobile → emerge desde abajo */}
+        <div className="relative w-full md:w-1/2 h-[13rem] md:h-full flex items-end md:items-center justify-center md:justify-start overflow-hidden">
+          <div className="relative w-[50rem] h-[50rem] translate-y-1/2 md:translate-y-0 md:translate-x-[50%] flex items-center justify-center">
 
             {/* Centro */}
             <div className="w-20 h-20 rounded-full flex items-center justify-center z-10"

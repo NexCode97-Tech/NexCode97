@@ -45,7 +45,7 @@ function StatsBlock() {
       initial={{ opacity: 0, y: 30 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.7 }}
-      className="relative mt-6 overflow-hidden rounded-2xl p-10 md:p-14"
+      className="relative mt-6 overflow-hidden rounded-2xl p-6 md:p-14"
       style={{
         background: "#f8f7ff",
         border: "1px solid rgba(124,58,237,0.12)",

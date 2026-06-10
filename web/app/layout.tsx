@@ -20,6 +20,10 @@ const playfair = Playfair_Display({
 });
 
 export const metadata: Metadata = {
+  icons: {
+    apple: "/apple-touch-icon.png",
+    icon: "/favicon.png",
+  },
   title: "NexCode97 | Cada negocio merece su propio sistema",
   description:
     "Desarrollo de software a la medida. Apps web, móviles, sistemas de gestión y más. Sin mensualidades.",

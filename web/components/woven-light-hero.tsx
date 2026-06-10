@@ -48,7 +48,7 @@ export const WovenLightHero = () => {
   const headline = "Cada negocio merece su propio sistema.";
 
   return (
-    <div className="relative flex h-[100svh] w-full flex-col items-center justify-center overflow-hidden bg-black">
+    <div className="relative flex w-full flex-col items-center justify-center overflow-hidden bg-black" style={{ height: 'calc(100svh - 56px)', touchAction: 'pan-y' }}>
       <WovenCanvas />
       <div className="relative z-10 text-center px-6 max-w-4xl mx-auto">
         {/* Animación de letras por CSS: corre en el compositor (GPU), no se

@@ -109,41 +109,46 @@ export const ServicesSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, delay: 0.4 }}
-          className="showcase-wrap relative mt-14 h-[200px] md:h-[350px] rounded-xl overflow-hidden"
+          className="showcase-wrap relative mt-14 flex items-start"
         >
-          <div className="showcase-img img-desktop absolute top-0 left-0 h-full w-[65%] rounded-xl overflow-hidden cursor-pointer"
+          <div className="showcase-img img-desktop relative w-[62%] rounded-xl overflow-hidden cursor-pointer"
             style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.15)", zIndex: 2 }}>
             <Image src="/showcase-desktop.png" alt="Proyecto versión escritorio" width={800} height={500}
-              className="h-full w-full object-cover object-left-top" />
-            <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to right, transparent 70%, white)" }} />
+              className="w-full h-auto" />
           </div>
-          <div className="showcase-img img-mobile absolute top-0 right-0 h-full w-[45%] rounded-xl overflow-hidden cursor-pointer"
+          <div className="showcase-img img-mobile relative w-[42%] -ml-[4%] rounded-xl overflow-hidden cursor-pointer"
             style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.15)", zIndex: 1 }}>
             <Image src="/showcase-mobile.png" alt="Proyecto versión móvil" width={600} height={500}
-              className="h-full w-full object-cover object-top" />
-            <div className="absolute inset-0 pointer-events-none" style={{ background: "linear-gradient(to left, transparent 70%, white)" }} />
+              className="w-full h-auto" />
+            <div className="showcase-fade-left absolute inset-0 pointer-events-none" style={{
+              background: "linear-gradient(to right, white 0%, transparent 15%)"
+            }} />
           </div>
         </motion.div>
       </div>
 
       <style>{`
         .showcase-img {
-          transition: width 0.5s cubic-bezier(0.23,1,0.32,1), opacity 0.4s ease;
-        }
-        .showcase-img:hover {
-          z-index: 10 !important;
+          transition: opacity 0.5s cubic-bezier(0.23,1,0.32,1);
         }
         .showcase-wrap:has(.img-desktop:hover) .img-desktop {
-          width: 90% !important;
+          z-index: 10 !important;
         }
-        .showcase-wrap:has(.img-desktop:hover) .img-mobile {
-          opacity: 0.4;
+        .showcase-wrap:has(.img-desktop:hover) .img-mobile .showcase-fade-left {
+          background: linear-gradient(to right, white 0%, transparent 30%) !important;
         }
         .showcase-wrap:has(.img-mobile:hover) .img-mobile {
-          width: 75% !important;
+          z-index: 10 !important;
         }
-        .showcase-wrap:has(.img-mobile:hover) .img-desktop {
-          opacity: 0.4;
+        .showcase-wrap:has(.img-mobile:hover) .img-mobile .showcase-fade-left {
+          background: transparent !important;
+        }
+        .showcase-wrap:has(.img-mobile:hover) .img-desktop::after {
+          content: '';
+          position: absolute;
+          inset: 0;
+          background: linear-gradient(to left, white 0%, transparent 15%);
+          pointer-events: none;
         }
       `}</style>
     </section>

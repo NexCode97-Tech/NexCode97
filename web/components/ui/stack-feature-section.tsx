@@ -141,19 +141,22 @@ export default function StackFeatureSection() {
         .counter-ccw { animation: counter-ccw linear infinite; }
         .counter-cw  { animation: counter-cw  linear infinite; }
         .showcase-img {
-          transition: transform 0.4s cubic-bezier(0.23,1,0.32,1), opacity 0.4s ease;
+          transition: width 0.5s cubic-bezier(0.23,1,0.32,1), opacity 0.4s ease;
         }
         .showcase-img:hover {
-          transform: scale(1.06);
           z-index: 10 !important;
         }
+        .showcase-wrap:has(.img-desktop:hover) .img-desktop {
+          width: 90% !important;
+        }
         .showcase-wrap:has(.img-desktop:hover) .img-mobile {
-          transform: scale(0.96);
-          opacity: 0.5;
+          opacity: 0.4;
+        }
+        .showcase-wrap:has(.img-mobile:hover) .img-mobile {
+          width: 75% !important;
         }
         .showcase-wrap:has(.img-mobile:hover) .img-desktop {
-          transform: scale(0.96);
-          opacity: 0.5;
+          opacity: 0.4;
         }
       `}</style>
     </section>

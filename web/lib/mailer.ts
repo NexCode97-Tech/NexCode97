@@ -1,7 +1,9 @@
 import { Resend } from "resend";
 import type { AgentResult } from "@/lib/agent";
 
-const resend = new Resend(process.env.RESEND_API_KEY);
+function getResend() {
+  return new Resend(process.env.RESEND_API_KEY);
+}
 
 function scoreBar(score: number): string {
   const filled = Math.round(score / 10);
@@ -84,7 +86,7 @@ export async function sendLeadNotification(lead: {
 </body>
 </html>`;
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: process.env.RESEND_FROM_EMAIL ?? "NexCode97 <hola@nexcode97.com>",
     to: "nexcode97@gmail.com",
     subject: `Lead nuevo [${result.score}/100] — ${lead.name} · ${result.serviceType.replace("_", " ")}`,
@@ -129,7 +131,7 @@ export async function sendFollowUpReminder(lead: {
 </body>
 </html>`;
 
-  await resend.emails.send({
+  await getResend().emails.send({
     from: process.env.RESEND_FROM_EMAIL ?? "NexCode97 <hola@nexcode97.com>",
     to: "nexcode97@gmail.com",
     subject: `⏰ Seguimiento — ${lead.name} lleva ${hoursAgo}h sin respuesta`,

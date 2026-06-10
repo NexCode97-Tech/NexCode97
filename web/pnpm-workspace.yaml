@@ -1,8 +1,10 @@
 allowBuilds:
-  '@tsparticles/engine': set this to true or false
-  msw: set this to true or false
-  sharp: set this to true or false
-  unrs-resolver: set this to true or false
+  '@prisma/engines': true
+  '@tsparticles/engine': true
+  msw: false
+  prisma: true
+  sharp: true
+  unrs-resolver: true
 minimumReleaseAgeExclude:
   - '@next/env@16.2.7'
   - '@next/eslint-plugin-next@16.2.7'

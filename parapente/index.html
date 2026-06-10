@@ -1164,50 +1164,121 @@ section{padding:120px 24px;}
 }
 .gal-item:hover .gal-overlay span{transform:translateY(0);}
 
-/* ════════════════════
-   TESTIMONIOS
-════════════════════ */
+/* ════════════════════════════════
+   TESTIMONIOS — 3D Marquee
+════════════════════════════════ */
+@keyframes marqueeY{from{transform:translateY(0);}to{transform:translateY(calc(-100% - 16px));}}
+
 #testimonios{
   background:
-    radial-gradient(ellipse 40% 40% at 20% 50%,rgba(245,166,35,.07),transparent),
+    radial-gradient(ellipse 40% 40% at 50% 50%,rgba(245,166,35,.06),transparent 70%),
     var(--dark);
+  overflow:hidden;
 }
 
-.test-grid{
-  display:grid;grid-template-columns:repeat(3,1fr);
-  gap:16px;margin-top:64px;
+.test-3d-wrap{
+  position:relative;
+  width:100%;
+  height:560px;
+  margin-top:64px;
+  perspective:380px;
+  overflow:hidden;
+  border-radius:24px;
+  border:1px solid rgba(255,255,255,.06);
 }
+
+.test-3d-inner{
+  position:absolute;inset:0;
+  display:flex;flex-direction:row;
+  align-items:flex-start;justify-content:center;
+  gap:18px;
+  padding:20px;
+  transform:translateX(-60px) translateY(-40px) translateZ(-100px) rotateX(15deg) rotateY(-8deg) rotateZ(15deg);
+  transform-origin:center;
+}
+
+.test-col{
+  display:flex;flex-direction:column;
+  gap:16px;
+  height:max-content;
+  animation:marqueeY 38s linear infinite;
+  will-change:transform;
+}
+.test-col.reverse{animation-direction:reverse;}
+.test-3d-wrap:hover .test-col{animation-play-state:paused;}
 
 .test-card{
-  background:rgba(255,255,255,.03);
-  border:1px solid rgba(255,255,255,.06);
-  border-radius:18px;padding:28px;
-  transition:border-color 200ms ease-out,transform 200ms ease-out;
+  width:240px;flex-shrink:0;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:14px;
+  padding:18px 18px 16px;
+  backdrop-filter:blur(8px);
 }
-.test-card:hover{border-color:rgba(255,255,255,.1);transform:translateY(-3px);}
 
-.test-stars{
-  display:flex;gap:3px;margin-bottom:16px;
+.test-card-head{
+  display:flex;align-items:center;gap:10px;
+  margin-bottom:12px;
 }
-.test-stars span{color:var(--sunset);font-size:.85rem;}
 
-.test-text{
-  font-size:.92rem;color:var(--t2);line-height:1.75;
-  margin-bottom:20px;font-style:italic;
-}
-.test-text::before{content:'"';}
-.test-text::after{content:'"';}
-
-.test-author{display:flex;align-items:center;gap:12px;}
 .test-avatar{
-  width:40px;height:40px;border-radius:50%;
-  background:var(--grad);
+  width:36px;height:36px;border-radius:50%;
   display:flex;align-items:center;justify-content:center;
-  font-family:var(--sans);font-size:.8rem;font-weight:800;color:#fff;
+  font-family:var(--sans);font-size:.78rem;font-weight:800;color:#fff;
   flex-shrink:0;
 }
-.test-name{font-family:var(--sans);font-size:.88rem;font-weight:700;color:var(--white);}
-.test-role{font-size:.75rem;color:var(--t2);}
+
+.test-info{display:flex;flex-direction:column;line-height:1.2;}
+.test-name{
+  font-family:var(--sans);font-size:.82rem;font-weight:700;
+  color:#fff;display:flex;align-items:center;gap:4px;
+}
+.test-name .flag{font-size:.85rem;}
+.test-handle{font-size:.7rem;color:rgba(255,255,255,.45);font-weight:500;}
+
+.test-text{
+  font-family:var(--body);font-size:.8rem;
+  color:rgba(255,255,255,.75);line-height:1.55;
+}
+
+/* Gradient overlays para fade en los bordes */
+.test-3d-wrap::before,
+.test-3d-wrap::after{
+  content:'';position:absolute;left:0;right:0;
+  height:25%;z-index:10;pointer-events:none;
+}
+.test-3d-wrap::before{
+  top:0;
+  background:linear-gradient(to bottom, var(--dark) 0%, transparent 100%);
+}
+.test-3d-wrap::after{
+  bottom:0;
+  background:linear-gradient(to top, var(--dark) 0%, transparent 100%);
+}
+.test-fade-left,
+.test-fade-right{
+  position:absolute;top:0;bottom:0;
+  width:25%;z-index:10;pointer-events:none;
+}
+.test-fade-left{
+  left:0;
+  background:linear-gradient(to right, var(--dark) 0%, transparent 100%);
+}
+.test-fade-right{
+  right:0;
+  background:linear-gradient(to left, var(--dark) 0%, transparent 100%);
+}
+
+/* Colores para avatares — varios tonos */
+.av-1{background:linear-gradient(135deg,#F5A623,#D88C12);}
+.av-2{background:linear-gradient(135deg,#22C55E,#15803D);}
+.av-3{background:linear-gradient(135deg,#A855F7,#6B21A8);}
+.av-4{background:linear-gradient(135deg,#EF4444,#991B1B);}
+.av-5{background:linear-gradient(135deg,#06B6D4,#0E7490);}
+.av-6{background:linear-gradient(135deg,#FBBF24,#92400E);}
+.av-7{background:linear-gradient(135deg,#EC4899,#9D174D);}
+.av-8{background:linear-gradient(135deg,#3B82F6,#1E40AF);}
+.av-9{background:linear-gradient(135deg,#10B981,#064E3B);}
 
 /* ════════════════════
    CTA / RESERVAR

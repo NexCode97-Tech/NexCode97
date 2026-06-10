@@ -43,11 +43,39 @@ body{font-family:var(--sans);background:var(--bg);color:var(--text);overflow-x:h
 ::-webkit-scrollbar-track{background:transparent;}
 ::-webkit-scrollbar-thumb{background:rgba(124,58,237,.4);border-radius:99px;}
 
-@keyframes pageIn{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:translateY(0);}}
+/* ── Keyframes — emilkowal: transform+opacity only, ease-out ── */
+@keyframes pageIn{
+  from{opacity:0;transform:translateY(10px);}
+  to{opacity:1;transform:translateY(0);}
+}
 @keyframes fadeIn{from{opacity:0;}to{opacity:1;}}
-@keyframes modalIn{from{opacity:0;transform:scale(.95) translateY(12px);}to{opacity:1;transform:none;}}
+@keyframes modalIn{
+  from{opacity:0;transform:scale(.96) translateY(10px);}
+  to{opacity:1;transform:none;}
+}
 @keyframes spin{to{transform:rotate(360deg);}}
-@keyframes slideIn{from{opacity:0;transform:translateX(-8px);}to{opacity:1;transform:none;}}
+
+/* Stat card entrance — stagger via delay */
+@keyframes statIn{
+  from{opacity:0;transform:translateY(14px);}
+  to{opacity:1;transform:translateY(0);}
+}
+/* Kanban card entrance */
+@keyframes cardIn{
+  from{opacity:0;transform:translateY(10px);}
+  to{opacity:1;transform:translateY(0);}
+}
+/* Column header entrance */
+@keyframes colIn{
+  from{opacity:0;transform:translateX(-6px);}
+  to{opacity:1;transform:translateX(0);}
+}
+/* Number count shimmer */
+@keyframes numPop{
+  0%{opacity:0;transform:scale(.85);}
+  60%{transform:scale(1.05);}
+  100%{opacity:1;transform:scale(1);}
+}
 
 /* ════════════════════════════════
    LOGIN

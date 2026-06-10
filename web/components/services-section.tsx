@@ -109,7 +109,7 @@ export const ServicesSection = () => {
           initial={{ opacity: 0, y: 30 }}
           animate={inView ? { opacity: 1, y: 0 } : {}}
           transition={{ duration: 0.7, delay: 0.4 }}
-          className="showcase-wrap relative mt-14 flex items-start"
+          className="showcase-wrap relative mt-14 flex items-stretch"
         >
           <div className="showcase-img img-desktop relative w-[62%] rounded-xl overflow-hidden cursor-pointer"
             style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.15)", zIndex: 2 }}>
@@ -120,8 +120,8 @@ export const ServicesSection = () => {
             style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.15)", zIndex: 1 }}>
             <Image src="/showcase-mobile.png" alt="Proyecto versión móvil" width={600} height={500}
               className="w-full h-auto" />
-            <div className="showcase-fade-left absolute inset-0 pointer-events-none" style={{
-              background: "linear-gradient(to right, white 0%, transparent 15%)"
+            <div className="absolute inset-0 pointer-events-none" style={{
+              background: "linear-gradient(to right, rgba(255,255,255,0.6) 0%, transparent 8%)"
             }} />
           </div>
         </motion.div>
@@ -129,26 +129,11 @@ export const ServicesSection = () => {
 
       <style>{`
         .showcase-img {
-          transition: opacity 0.5s cubic-bezier(0.23,1,0.32,1);
+          transition: transform 0.5s cubic-bezier(0.23,1,0.32,1), z-index 0s;
         }
-        .showcase-wrap:has(.img-desktop:hover) .img-desktop {
+        .showcase-img:hover {
           z-index: 10 !important;
-        }
-        .showcase-wrap:has(.img-desktop:hover) .img-mobile .showcase-fade-left {
-          background: linear-gradient(to right, white 0%, transparent 30%) !important;
-        }
-        .showcase-wrap:has(.img-mobile:hover) .img-mobile {
-          z-index: 10 !important;
-        }
-        .showcase-wrap:has(.img-mobile:hover) .img-mobile .showcase-fade-left {
-          background: transparent !important;
-        }
-        .showcase-wrap:has(.img-mobile:hover) .img-desktop::after {
-          content: '';
-          position: absolute;
-          inset: 0;
-          background: linear-gradient(to left, white 0%, transparent 15%);
-          pointer-events: none;
+          transform: translateY(-4px);
         }
       `}</style>
     </section>

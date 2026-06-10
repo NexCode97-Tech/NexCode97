@@ -487,15 +487,16 @@ export function SiteHeader() {
         {/* Auth + hamburger */}
         <div className="flex items-center gap-2">
           <div className="hidden md:flex items-center gap-2">
-            <a href="/login" className="rounded-full px-4 py-2 text-sm font-semibold text-white/70 transition-colors hover:text-white hover:bg-white/8 cursor-pointer">
+            <a href="/login" className="rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200 hover:opacity-90 cursor-pointer"
+              style={{ background: '#FFF200', color: '#09090e' }}>
               Ingresar
             </a>
           </div>
 
           <a
             href="/login"
-            className="md:hidden flex items-center justify-center w-11 h-11 rounded-xl border transition-colors hover:bg-white/8 cursor-pointer"
-            style={{ borderColor: 'rgba(255,255,255,0.15)', color: 'white' }}
+            className="md:hidden flex items-center justify-center w-11 h-11 rounded-full transition-all duration-200 hover:opacity-90 cursor-pointer"
+            style={{ background: '#FFF200', color: '#09090e' }}
             aria-label="Iniciar sesión"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

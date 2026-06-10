@@ -40,7 +40,7 @@ export default function StackFeatureSection() {
         <div className="w-full md:w-1/2 z-10 relative">
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 leading-tight"
             style={{ color: "#fff", letterSpacing: "-0.04em" }}>
-            Construye tu <span style={{ color: "#FFF200" }}>idea con nosotros</span>
+            Construye<br />tu <span style={{ color: "#FFF200" }}>idea con<br />nosotros</span>
           </h2>
           <p className="mb-8 max-w-sm text-sm leading-relaxed"
             style={{ color: "#888ca4" }}>
@@ -51,7 +51,7 @@ export default function StackFeatureSection() {
               href="https://wa.me/573006359008"
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-block whitespace-nowrap rounded-full bg-violet-600/80 border-2 border-violet-400/30 px-8 py-3 font-semibold text-white backdrop-blur-sm transition-all hover:bg-violet-600"
+              className="inline-block whitespace-nowrap rounded-full bg-violet-600/80 border-2 border-violet-400/30 px-6 py-3 md:px-8 font-semibold text-white backdrop-blur-sm transition-all hover:bg-violet-600"
             >
               Comenzar proyecto
             </a>

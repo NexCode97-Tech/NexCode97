@@ -34,33 +34,33 @@ const iconsPerOrbit = Math.ceil(iconConfigs.length / ORBIT_COUNT);
 export default function StackFeatureSection() {
   return (
     <section className="relative max-w-6xl mx-auto my-24 px-4">
-      <div className="relative flex items-center justify-between border overflow-hidden rounded-3xl px-6 md:pl-10 md:pr-0 py-8 md:py-0 md:min-h-[30rem] min-h-[12rem]"
+      <div className="relative flex items-center justify-between border overflow-hidden rounded-3xl px-6 md:pl-10 md:pr-0 py-6 md:py-0 md:min-h-[22rem]"
         style={{ borderColor: "rgba(124,58,237,0.25)", background: "#09090e" }}>
 
         {/* Texto */}
         <div className="w-1/2 md:w-1/2 z-10 relative">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-3 md:mb-4 leading-tight"
+          <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-2 md:mb-4 leading-tight"
             style={{ color: "#fff", letterSpacing: "-0.04em" }}>
             <span className="md:hidden">Construye<br />tu <span style={{ color: "#FFF200" }}>idea con<br />nosotros</span></span>
             <span className="hidden md:inline">Construye tu<br /><span style={{ color: "#FFF200" }}>idea con nosotros</span></span>
           </h2>
-          <p className="hidden md:block mb-8 max-w-sm text-sm leading-relaxed"
+          <p className="mb-4 md:mb-8 text-xs md:text-sm leading-relaxed"
             style={{ color: "#888ca4" }}>
             Usamos el stack más moderno y probado para que tu producto sea rápido, escalable y fácil de mantener.
           </p>
           <div className="flex items-center gap-3">
             <button
               onClick={() => window.dispatchEvent(new Event("open:contact-form"))}
-              className="whitespace-nowrap rounded-full bg-violet-600/80 border-2 border-violet-400/30 px-4 py-2.5 md:px-8 md:py-3 text-sm md:text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-violet-600 cursor-pointer"
+              className="whitespace-nowrap rounded-full bg-violet-600/80 border-2 border-violet-400/30 px-4 py-2 md:px-8 md:py-3 text-xs md:text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-violet-600 cursor-pointer"
             >
               Comenzar proyecto
             </button>
           </div>
         </div>
 
-        {/* Órbitas — siempre a la derecha, escala menor en móvil */}
-        <div className="relative w-1/2 h-full flex items-center justify-start overflow-hidden">
-          <div className="relative w-[50rem] h-[50rem] translate-x-[50%] flex items-center justify-center scale-[0.6] md:scale-100 origin-center">
+        {/* Órbitas — contenedor con altura fija en móvil para evitar layout expand */}
+        <div className="relative w-1/2 h-[180px] md:h-full flex items-center justify-start overflow-hidden">
+          <div className="absolute w-[50rem] h-[50rem] left-0 top-1/2 -translate-y-1/2 flex items-center justify-center scale-[0.38] md:scale-100 origin-left md:translate-x-[50%] md:left-auto md:top-auto md:relative md:-translate-y-0">
 
             {/* Centro */}
             <div className="w-20 h-20 rounded-full flex items-center justify-center z-10"

@@ -119,7 +119,7 @@ export const ServicesSection = () => {
           <div className="showcase-img img-mobile relative w-[42%] -ml-[4%] rounded-xl overflow-hidden cursor-pointer"
             style={{ boxShadow: "0 4px 24px rgba(0,0,0,0.15)", zIndex: 1 }}>
             <Image src="/showcase-mobile.png" alt="Proyecto versión móvil" width={600} height={500}
-              className="w-full h-auto" />
+              className="w-full h-full object-cover object-top" />
             <div className="absolute inset-0 pointer-events-none" style={{
               background: "linear-gradient(to right, rgba(255,255,255,0.6) 0%, transparent 8%)"
             }} />

@@ -1,7 +1,6 @@
 "use client";
 
-import Link from "next/link";
-import { Button } from "@/components/ui/button";
+import Image from "next/image";
 import {
   FaReact, FaNodeJs, FaDocker, FaGitAlt, FaWhatsapp,
 } from "react-icons/fa";
@@ -34,87 +33,94 @@ const iconsPerOrbit = Math.ceil(iconConfigs.length / ORBIT_COUNT);
 export default function StackFeatureSection() {
   return (
     <section className="relative max-w-6xl mx-auto my-24 px-4">
-      <div className="relative flex items-center justify-between border overflow-hidden rounded-3xl px-6 md:pl-10 md:pr-0 py-8 md:py-6 md:min-h-[12rem]"
+      <div className="relative border overflow-hidden rounded-3xl"
         style={{ borderColor: "rgba(124,58,237,0.25)", background: "#09090e" }}>
 
-        {/* Texto */}
-        <div className="w-1/2 md:w-1/2 z-10 relative">
-          <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-2 md:mb-4 leading-tight"
-            style={{ color: "#fff", letterSpacing: "-0.04em" }}>
-            <span className="md:hidden">Construye<br />tu <span style={{ color: "#FFF200" }}>idea con<br />nosotros</span></span>
-            <span className="hidden md:inline">Construye tu<br /><span style={{ color: "#FFF200" }}>idea con nosotros</span></span>
-          </h2>
-          <p className="mb-4 md:mb-8 text-xs md:text-sm leading-relaxed"
-            style={{ color: "#888ca4" }}>
-            Usamos el stack más moderno y probado para que tu producto sea rápido, escalable y fácil de mantener.
-          </p>
-          <div className="flex items-center gap-3">
-            <button
-              onClick={() => window.dispatchEvent(new Event("open:contact-form"))}
-              className="whitespace-nowrap rounded-full bg-violet-600/80 border-2 border-violet-400/30 px-4 py-2 md:px-8 md:py-3 text-xs md:text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-violet-600 cursor-pointer"
-            >
-              Comenzar proyecto
-            </button>
+        {/* Fila superior: Texto + Órbitas */}
+        <div className="relative flex items-center justify-between px-6 md:pl-10 md:pr-0 py-8 md:py-6 md:min-h-[12rem]">
+          {/* Texto */}
+          <div className="w-1/2 md:w-1/2 z-10 relative">
+            <h2 className="text-2xl sm:text-3xl md:text-5xl font-extrabold mb-2 md:mb-4 leading-tight"
+              style={{ color: "#fff", letterSpacing: "-0.04em" }}>
+              <span className="md:hidden">Construye<br />tu <span style={{ color: "#FFF200" }}>idea con<br />nosotros</span></span>
+              <span className="hidden md:inline">Construye tu<br /><span style={{ color: "#FFF200" }}>idea con nosotros</span></span>
+            </h2>
+            <p className="mb-4 md:mb-8 text-xs md:text-sm leading-relaxed"
+              style={{ color: "#888ca4" }}>
+              Usamos el stack más moderno y probado para que tu producto sea rápido, escalable y fácil de mantener.
+            </p>
+            <div className="flex items-center gap-3">
+              <button
+                onClick={() => window.dispatchEvent(new Event("open:contact-form"))}
+                className="whitespace-nowrap rounded-full bg-violet-600/80 border-2 border-violet-400/30 px-4 py-2 md:px-8 md:py-3 text-xs md:text-base font-semibold text-white backdrop-blur-sm transition-all hover:bg-violet-600 cursor-pointer"
+              >
+                Comenzar proyecto
+              </button>
+            </div>
+          </div>
+
+          {/* Órbitas */}
+          <div className="relative w-1/2 self-stretch flex items-center justify-start overflow-hidden">
+            <div className="absolute w-[50rem] h-[50rem] flex items-center justify-center right-0 top-1/2 -translate-y-1/2 translate-x-[50%] scale-[0.6] md:scale-100">
+              <div className="w-20 h-20 rounded-full flex items-center justify-center z-10"
+                style={{ background: "rgba(124,58,237,0.15)", border: "1px solid rgba(124,58,237,0.4)", boxShadow: "0 0 32px rgba(124,58,237,0.3)" }}>
+                <FaReact className="w-10 h-10" style={{ color: "#61DAFB" }} />
+              </div>
+              {[...Array(ORBIT_COUNT)].map((_, orbitIdx) => {
+                const size = `${12 + ORBIT_GAP_DESKTOP * (orbitIdx + 1)}rem`;
+                const angleStep = (2 * Math.PI) / iconsPerOrbit;
+                const duration = 18 + orbitIdx * 8;
+                const dir = orbitIdx % 2 === 0 ? "orbit-cw" : "orbit-ccw";
+                return (
+                  <div
+                    key={orbitIdx}
+                    className={`absolute rounded-full ${dir}`}
+                    style={{
+                      width: size,
+                      height: size,
+                      border: "1px dashed rgba(124,58,237,0.25)",
+                      animationDuration: `${duration}s`,
+                    }}
+                  >
+                    {iconConfigs
+                      .slice(orbitIdx * iconsPerOrbit, orbitIdx * iconsPerOrbit + iconsPerOrbit)
+                      .map((cfg, iconIdx) => {
+                        const angle = iconIdx * angleStep;
+                        const x = 50 + 50 * Math.cos(angle);
+                        const y = 50 + 50 * Math.sin(angle);
+                        const counterClass = orbitIdx % 2 === 0 ? "counter-ccw" : "counter-cw";
+                        return (
+                          <div
+                            key={iconIdx}
+                            className={`absolute rounded-full p-2 ${counterClass}`}
+                            style={{
+                              left: `${x}%`,
+                              top: `${y}%`,
+                              transform: "translate(-50%, -50%)",
+                              background: "rgba(13,13,20,0.9)",
+                              border: "1px solid rgba(255,255,255,0.08)",
+                              boxShadow: "0 4px 16px rgba(0,0,0,0.4)",
+                              animationDuration: `${duration}s`,
+                            }}
+                          >
+                            <cfg.Icon className="w-7 h-7" style={{ color: cfg.color }} />
+                          </div>
+                        );
+                      })}
+                  </div>
+                );
+              })}
+            </div>
           </div>
         </div>
 
-        {/* Órbitas */}
-        <div className="relative w-1/2 self-stretch flex items-center justify-start overflow-hidden">
-          <div className="absolute w-[50rem] h-[50rem] flex items-center justify-center right-0 top-1/2 -translate-y-1/2 translate-x-[50%] scale-[0.6] md:scale-100">
-
-            {/* Centro */}
-            <div className="w-20 h-20 rounded-full flex items-center justify-center z-10"
-              style={{ background: "rgba(124,58,237,0.15)", border: "1px solid rgba(124,58,237,0.4)", boxShadow: "0 0 32px rgba(124,58,237,0.3)" }}>
-              <FaReact className="w-10 h-10" style={{ color: "#61DAFB" }} />
-            </div>
-
-            {/* Órbitas */}
-            {[...Array(ORBIT_COUNT)].map((_, orbitIdx) => {
-              const size = `${12 + ORBIT_GAP_DESKTOP * (orbitIdx + 1)}rem`;
-              const angleStep = (2 * Math.PI) / iconsPerOrbit;
-              const duration = 18 + orbitIdx * 8;
-              const dir = orbitIdx % 2 === 0 ? "orbit-cw" : "orbit-ccw";
-
-              return (
-                <div
-                  key={orbitIdx}
-                  className={`absolute rounded-full ${dir}`}
-                  style={{
-                    width: size,
-                    height: size,
-                    border: "1px dashed rgba(124,58,237,0.25)",
-                    animationDuration: `${duration}s`,
-                  }}
-                >
-                  {iconConfigs
-                    .slice(orbitIdx * iconsPerOrbit, orbitIdx * iconsPerOrbit + iconsPerOrbit)
-                    .map((cfg, iconIdx) => {
-                      const angle = iconIdx * angleStep;
-                      const x = 50 + 50 * Math.cos(angle);
-                      const y = 50 + 50 * Math.sin(angle);
-                      const counterClass = orbitIdx % 2 === 0 ? "counter-ccw" : "counter-cw";
-
-                      return (
-                        <div
-                          key={iconIdx}
-                          className={`absolute rounded-full p-2 ${counterClass}`}
-                          style={{
-                            left: `${x}%`,
-                            top: `${y}%`,
-                            transform: "translate(-50%, -50%)",
-                            background: "rgba(13,13,20,0.9)",
-                            border: "1px solid rgba(255,255,255,0.08)",
-                            boxShadow: "0 4px 16px rgba(0,0,0,0.4)",
-                            animationDuration: `${duration}s`,
-                          }}
-                        >
-                          <cfg.Icon className="w-7 h-7" style={{ color: cfg.color }} />
-                        </div>
-                      );
-                    })}
-                </div>
-              );
-            })}
+        {/* Showcase de proyectos */}
+        <div className="relative z-10 px-6 md:px-10 pb-8 flex items-end gap-4 md:gap-6 justify-center">
+          <div className="relative flex-[2] rounded-xl overflow-hidden" style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.4)" }}>
+            <Image src="/showcase-desktop.png" alt="Proyecto versión escritorio" width={800} height={500} className="w-full h-auto" />
+          </div>
+          <div className="relative flex-[1] max-w-[30%] rounded-xl overflow-hidden" style={{ boxShadow: "0 8px 40px rgba(0,0,0,0.4)" }}>
+            <Image src="/showcase-mobile.png" alt="Proyecto versión móvil" width={300} height={600} className="w-full h-auto" />
           </div>
         </div>
       </div>

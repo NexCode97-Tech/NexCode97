@@ -34,7 +34,7 @@ const iconsPerOrbit = Math.ceil(iconConfigs.length / ORBIT_COUNT);
 export default function StackFeatureSection() {
   return (
     <section className="relative max-w-6xl mx-auto my-24 px-4">
-      <div className="relative flex items-center justify-between border overflow-hidden rounded-3xl px-6 md:pl-10 md:pr-0 py-8 md:py-10 md:min-h-[16rem]"
+      <div className="relative flex items-center justify-between border overflow-hidden rounded-3xl px-6 md:pl-10 md:pr-0 py-8 md:py-6 md:min-h-[12rem]"
         style={{ borderColor: "rgba(124,58,237,0.25)", background: "#09090e" }}>
 
         {/* Texto */}

@@ -58,8 +58,8 @@ export default function StackFeatureSection() {
           </div>
         </div>
 
-        {/* Right: órbitas */}
-        <div className="relative w-1/2 h-full flex items-center justify-start overflow-hidden">
+        {/* Right: órbitas — oculto en móvil */}
+        <div className="hidden md:flex relative w-1/2 h-full items-center justify-start overflow-hidden">
           <div className="relative w-[50rem] h-[50rem] translate-x-[50%] flex items-center justify-center">
 
             {/* Centro */}

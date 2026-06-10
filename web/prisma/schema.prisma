@@ -15,14 +15,21 @@ model User {
 }
 
 model Lead {
-  id          String   @id @default(cuid())
-  name        String
-  email       String?
-  whatsapp    String
-  company     String?
-  description String
-  status      String   @default("nuevo")
-  notes       String?
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id           String   @id @default(cuid())
+  name         String
+  email        String?
+  whatsapp     String
+  company      String?
+  description  String
+  status       String   @default("nuevo")
+  notes        String?
+  serviceType  String?
+  priority     String?
+  score        Int?
+  scoreReason  String?
+  enriched     Json?
+  suggestedMsg String?
+  agentVersion String?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }

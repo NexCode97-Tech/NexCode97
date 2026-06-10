@@ -1,7 +1,7 @@
 packages: []
 allowBuilds:
   '@prisma/engines': true
-  '@tsparticles/engine': true
+  '@tsparticles/engine': false
   msw: false
   prisma: true
   sharp: true

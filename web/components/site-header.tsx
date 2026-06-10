@@ -487,13 +487,9 @@ export function SiteHeader() {
         {/* Auth + hamburger */}
         <div className="flex items-center gap-2">
           <div className="hidden md:flex items-center gap-2">
-            <button className="rounded-full px-4 py-2 text-sm font-semibold text-white/70 transition-colors hover:text-white hover:bg-white/8 cursor-pointer">
-              Log in
-            </button>
-            <button className="rounded-full px-4 py-2 text-sm font-semibold text-white transition-all duration-200 hover:opacity-90 cursor-pointer"
-              style={{ background: '#FFF200', color: '#09090e' }}>
-              Sign up
-            </button>
+            <a href="/login" className="rounded-full px-4 py-2 text-sm font-semibold text-white/70 transition-colors hover:text-white hover:bg-white/8 cursor-pointer">
+              Ingresar
+            </a>
           </div>
 
           <a

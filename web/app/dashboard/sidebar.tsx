@@ -116,10 +116,16 @@ export function Sidebar({
   const pathname = usePathname();
   const [collapsed, setCollapsed] = useState(false);
 
+  // Navegación optimista: el indicador se mueve al hacer clic,
+  // sin esperar a que el servidor termine de renderizar la ruta
+  const [pendingHref, setPendingHref] = useState<string | null>(null);
+  useEffect(() => { setPendingHref(null); }, [pathname]);
+  const effectivePath = pendingHref ?? pathname;
+
   const width = collapsed ? 60 : 230;
 
   // Ítem activo
-  const activeItem = navItems.find((it) => isActiveHref(pathname, it.href));
+  const activeItem = navItems.find((it) => isActiveHref(effectivePath, it.href));
   const ActiveIcon = activeItem?.icon;
 
   // ── Íconos fijos; el indicador (círculo + curva) se desliza al activo ──
@@ -163,7 +169,7 @@ export function Sidebar({
     else animarA(to);
   }, [collapsed, animarA, setCyNow]);
 
-  useEffect(() => { medir(true); }, [pathname]);   // eslint-disable-line react-hooks/exhaustive-deps
+  useEffect(() => { medir(true); }, [effectivePath]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => { medir(false); }, [collapsed]); // eslint-disable-line react-hooks/exhaustive-deps
   useEffect(() => {
     const onResize = () => medir(false);
@@ -246,7 +252,7 @@ export function Sidebar({
           </button>
 
           {navItems.map(({ href, label, icon: Icon }) => {
-            const isActive = isActiveHref(pathname, href);
+            const isActive = isActiveHref(effectivePath, href);
 
             // ── Activo + colapsado: placeholder (el círculo se dibuja aparte) ──
             if (isActive && collapsed) {
@@ -281,6 +287,7 @@ export function Sidebar({
               <Link
                 key={href}
                 href={href}
+                onClick={() => setPendingHref(href)}
                 title={collapsed ? label : undefined}
                 className={cn(
                   "relative flex items-center rounded-md text-[13px] font-medium transition-colors duration-150 group",

@@ -1,7 +1,12 @@
 import Groq from "groq-sdk";
 import { prisma } from "@/lib/prisma";
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+// Lazy: evita instanciar el cliente en build time cuando la env var no existe
+let _groq: Groq | null = null;
+function getGroq() {
+  if (!_groq) _groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+  return _groq;
+}
 
 export const AGENT_VERSION = "1.0.0";
 
@@ -87,7 +92,7 @@ Empresa: ${lead.company ?? "No especificada"}
 WhatsApp: ${lead.whatsapp}
 Mensaje: ${lead.description}`;
 
-  const completion = await groq.chat.completions.create({
+  const completion = await getGroq().chat.completions.create({
     model: "llama-3.3-70b-versatile",
     messages: [
       { role: "system", content: systemPrompt },

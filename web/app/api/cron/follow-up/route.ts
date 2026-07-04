@@ -3,13 +3,19 @@ import { prisma } from "@/lib/prisma";
 import Groq from "groq-sdk";
 import { sendFollowUpReminder } from "@/lib/mailer";
 
-const groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+// Lazy: evita instanciar el cliente en build time cuando la env var no existe
+let _groq: Groq | null = null;
+function getGroq() {
+  if (!_groq) _groq = new Groq({ apiKey: process.env.GROQ_API_KEY });
+  return _groq;
+}
 
 export async function GET(req: NextRequest) {
   const secret = req.headers.get("authorization");
   if (secret !== `Bearer ${process.env.CRON_SECRET}`) {
     return NextResponse.json({ error: "No autorizado." }, { status: 401 });
   }
+  const groq = getGroq();
 
   const cutoff = new Date(Date.now() - 48 * 60 * 60 * 1000);
 

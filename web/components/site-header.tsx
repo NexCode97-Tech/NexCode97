@@ -1,5 +1,6 @@
 'use client';
 import React from 'react';
+import { usePathname } from 'next/navigation';
 import { cn } from '@/lib/utils';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
@@ -332,10 +333,14 @@ function ListItem({ title, description, icon: Icon, href, className }: LinkItem 
 }
 
 export function SiteHeader() {
+  const pathname = usePathname();
   const [open, setOpen] = React.useState(false);
   const [activeTab, setActiveTab] = React.useState<Tab>('Servicios');
   const scrolled = useScroll(10);
   const [isDesktop, setIsDesktop] = React.useState(false);
+
+  // Ocultar el header en el panel administrativo y login
+  const hidden = pathname?.startsWith('/dashboard') || pathname?.startsWith('/login');
 
   React.useEffect(() => {
     document.body.style.overflow = open ? 'hidden' : '';
@@ -349,6 +354,8 @@ export function SiteHeader() {
     mq.addEventListener('change', handler);
     return () => mq.removeEventListener('change', handler);
   }, []);
+
+  if (hidden) return null;
 
   return (
     <header

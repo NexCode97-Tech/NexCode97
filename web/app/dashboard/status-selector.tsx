@@ -3,11 +3,11 @@
 import { useTransition } from "react";
 
 const STATUS_OPTIONS = ["nuevo", "contactado", "ganado", "perdido"];
-const STATUS_COLORS: Record<string, string> = {
-  nuevo: "#FFF200",
-  contactado: "#60a5fa",
-  ganado: "#4ade80",
-  perdido: "#f87171",
+const STATUS_COLORS: Record<string, { bg: string; text: string; border: string }> = {
+  nuevo:      { bg: "#fef9c3", text: "#a16207", border: "#fde68a" },
+  contactado: { bg: "#dbeafe", text: "#1d4ed8", border: "#bfdbfe" },
+  ganado:     { bg: "#dcfce7", text: "#15803d", border: "#bbf7d0" },
+  perdido:    { bg: "#fee2e2", text: "#b91c1c", border: "#fecaca" },
 };
 
 export function StatusSelector({
@@ -28,22 +28,22 @@ export function StatusSelector({
     startTransition(() => action(formData));
   }
 
-  const color = STATUS_COLORS[status] ?? "#64748b";
+  const c = STATUS_COLORS[status] ?? { bg: "#f1f5f9", text: "#64748b", border: "#e2e8f0" };
 
   return (
     <select
       defaultValue={status}
       onChange={handleChange}
       disabled={pending}
-      className="rounded-full px-3 py-1 text-xs font-semibold cursor-pointer outline-none disabled:opacity-50"
+      className="rounded-full px-3 py-1 text-xs font-bold cursor-pointer outline-none disabled:opacity-50"
       style={{
-        background: `${color}22`,
-        color,
-        border: `1px solid ${color}44`,
+        background: c.bg,
+        color: c.text,
+        border: `1px solid ${c.border}`,
       }}
     >
       {STATUS_OPTIONS.map((s) => (
-        <option key={s} value={s} style={{ background: "#09090e", color: "#ffffff" }}>
+        <option key={s} value={s} style={{ background: "#ffffff", color: "#1a1c1e" }}>
           {s}
         </option>
       ))}

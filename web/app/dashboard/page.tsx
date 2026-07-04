@@ -1,8 +1,7 @@
-import { auth, signOut } from "@/auth";
+import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/prisma";
 import { revalidatePath } from "next/cache";
-import Image from "next/image";
 import { DashboardClient } from "./dashboard-client";
 
 export const dynamic = "force-dynamic";
@@ -36,41 +35,35 @@ export default async function DashboardPage() {
   ];
 
   return (
-    <main className="min-h-screen px-4 py-10" style={{ background: "#09090e" }}>
-      <div className="max-w-6xl mx-auto">
+    <div className="max-w-5xl">
 
-        {/* Header */}
-        <div className="mb-10 flex items-center justify-between">
-          <div>
-            <Image src="/logo-nuevo.png" alt="NexCode97" width={140} height={36} className="h-8 w-auto object-contain mb-1" />
-            <p className="text-sm" style={{ color: "#475569" }}>{session.user.email}</p>
-          </div>
-          <form action={async () => { "use server"; await signOut({ redirectTo: "/" }); }}>
-            <button type="submit" className="rounded-lg px-4 py-2 text-sm font-medium cursor-pointer transition-opacity hover:opacity-70"
-              style={{ background: "rgba(255,255,255,0.06)", color: "#94a3b8", border: "1px solid rgba(255,255,255,0.08)" }}>
-              Cerrar sesión
-            </button>
-          </form>
-        </div>
-
-        {/* Stats */}
-        <div className="mb-8 grid grid-cols-2 md:grid-cols-4 gap-4">
-          {stats.map((stat) => (
-            <div key={stat.label} className="rounded-xl p-5"
-              style={{ background: "rgba(255,255,255,0.04)", border: "1px solid rgba(255,255,255,0.07)" }}>
-              <p className="text-3xl font-bold" style={{ color: "#ffffff" }}>{stat.value}</p>
-              <p className="text-sm mt-1" style={{ color: "#64748b" }}>{stat.label}</p>
-            </div>
-          ))}
-        </div>
-
-        {/* Dashboard interactivo */}
-        <DashboardClient
-          leads={leads}
-          updateStatus={updateLeadStatus}
-          deleteLead={deleteLead}
-        />
+      {/* Header de página */}
+      <div className="mb-8">
+        <h1 className="text-2xl font-black tracking-tight" style={{ color: "#1a1c1e", letterSpacing: "-0.03em" }}>
+          Gestión de Leads
+        </h1>
+        <p className="text-sm mt-1" style={{ color: "#475569" }}>
+          Administra tus prospectos y haz seguimiento de cada oportunidad.
+        </p>
       </div>
-    </main>
+
+      {/* Stats */}
+      <div className="mb-8 grid grid-cols-2 md:grid-cols-4 gap-4">
+        {stats.map((stat) => (
+          <div key={stat.label} className="rounded-2xl p-5"
+            style={{ background: "#ffffff", border: "1px solid #edf2f7", boxShadow: "0 1px 3px rgba(0,0,0,0.04)" }}>
+            <p className="text-3xl font-black" style={{ color: "#1a1c1e", letterSpacing: "-0.03em" }}>{stat.value}</p>
+            <p className="text-xs mt-1 font-semibold uppercase tracking-wide" style={{ color: "#94a3b8" }}>{stat.label}</p>
+          </div>
+        ))}
+      </div>
+
+      {/* Dashboard interactivo */}
+      <DashboardClient
+        leads={leads}
+        updateStatus={updateLeadStatus}
+        deleteLead={deleteLead}
+      />
+    </div>
   );
 }

@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<title>Publicitaria — NexCode97 1440×1080</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap');
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --ink:#09090e;--y:#FFF200;--t2:#9a9eb0;
+  --sans:'Inter',system-ui,-apple-system,sans-serif;
+  --mono:'JetBrains Mono',ui-monospace,monospace;
+}
+body{background:#0b0b10;color:#fff;font-family:var(--sans);min-height:100vh;
+  padding:40px;display:flex;flex-direction:column;align-items:center;gap:22px;}
+body{justify-content:center;}
+
+/* ── Lienzo real 1440 × 1080 ── */
+.canvas{width:1440px;height:1080px;position:relative;overflow:hidden;background:var(--y);color:var(--ink);}
+.inner{position:relative;height:100%;padding:78px 88px 0;display:flex;flex-direction:column;}
+
+/* Cabecera: logo a la derecha — arriba a la izquierda va el sello "Publicidad" */
+.head{display:flex;align-items:center;justify-content:flex-end;}
+.logo-plate{display:inline-flex;align-items:center;background:var(--ink);padding:16px 30px;border-radius:14px;}
+.logo{height:52px;width:auto;display:block;}
+
+/* Titular: arranca por debajo de la banda superior reservada */
+.hero{margin-top:112px;}
+h1{font-size:6.4rem;line-height:.98;font-weight:800;letter-spacing:-.05em;max-width:1180px;}
+.sub{margin-top:28px;font-size:1.86rem;line-height:1.35;font-weight:500;max-width:1000px;}
+
+/* Gancho de IA */
+.ai{margin-top:36px;display:inline-flex;align-items:center;gap:18px;padding:16px 30px 16px 18px;
+  border-radius:16px;background:var(--ink);color:#fff;}
+.ai-ico{width:52px;height:52px;border-radius:12px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:var(--y);}
+.ai-ico svg{width:29px;height:29px;stroke:var(--ink);stroke-width:1.9;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.ai-txt{font-size:1.62rem;font-weight:800;letter-spacing:-.025em;line-height:1.15;}
+.ai-txt b{color:var(--y);}
+
+/* Zócalo negro inferior */
+.slab{margin-top:auto;margin-left:-88px;margin-right:-88px;background:var(--ink);color:#fff;
+  padding:40px 88px 0;border-radius:36px 36px 0 0;display:flex;flex-direction:column;}
+.svcs{display:flex;flex-wrap:wrap;gap:12px;}
+.pill{font-size:1.14rem;font-weight:600;color:#fff;background:rgba(255,255,255,.07);
+  border:1px solid rgba(255,255,255,.15);padding:13px 24px;border-radius:99px;}
+/* Franja inferior: solo el dominio, a la derecha. La izquierda queda para el botón "Contactar" */
+.foot{height:152px;display:flex;align-items:center;justify-content:flex-end;}
+.web{font-family:var(--mono);font-size:1.18rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--y);}
+
+/* Overlays simulados de la plataforma (no van en el PNG) */
+.sim{position:absolute;z-index:6;display:flex;align-items:center;gap:9px;border-radius:99px;
+  font-size:1.05rem;font-weight:700;color:#fff;background:rgba(20,20,26,.92);border:1px solid rgba(255,255,255,.16);
+  padding:14px 26px;}
+.sim.ad{top:44px;left:44px;}
+.sim.contact{bottom:44px;left:44px;}
+.sim svg{width:18px;height:18px;stroke:#fff;stroke-width:2;fill:none;stroke-linecap:round;stroke-linejoin:round;}
+.zone{position:absolute;z-index:5;border:1px dashed rgba(9,9,14,.38);border-radius:16px;pointer-events:none;}
+.zone.t{top:26px;left:26px;width:440px;height:118px;}
+.zone.b{bottom:26px;left:26px;width:440px;height:118px;border-color:rgba(255,255,255,.32);}
+</style>
+</head>
+<body>
+
+
+    <div class="canvas">
+      
+      <div class="inner">
+
+        <div class="head">
+          <div class="logo-plate"><img class="logo" src="../assets/logo-nuevo.png" alt="NexCode97"/></div>
+        </div>
+
+        <div class="hero">
+          <h1>Construye tu idea<br/>con nosotros.</h1>
+          <p class="sub">Apps, sitios web y sistemas hechos para tu negocio. Sin plantillas, sin mensualidades.</p>
+          <div class="ai">
+            <div class="ai-ico"><svg viewBox="0 0 24 24"><rect x="4" y="7" width="16" height="12" rx="3"/><path d="M12 3v4M9 12h.01M15 12h.01M9.5 16h5"/><path d="M2 12v3M22 12v3"/></svg></div>
+            <div class="ai-txt">Agentes de IA que trabajan <b>24/7</b></div>
+          </div>
+        </div>
+
+        <div class="slab">
+          <div class="svcs">
+            <div class="pill">Apps web</div>
+            <div class="pill">Apps móviles</div>
+            <div class="pill">Páginas web</div>
+            <div class="pill">Sistemas de gestión</div>
+            <div class="pill">Tiendas en línea</div>
+            <div class="pill">Automatizaciones</div>
+          </div>
+          <div class="foot"><div class="web">nexcode97.com</div></div>
+        </div>
+
+      </div>
+    </div>
+
+
+</body>
+</html>

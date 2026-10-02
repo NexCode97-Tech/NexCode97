@@ -4,21 +4,19 @@
 Repositorio principal de NexCode97, agencia de desarrollo de software fundada por un desarrollador fullstack colombiano. Contiene el sitio principal y los portafolios de productos.
 
 ## Stack
-- HTML + CSS + JavaScript puro (sin frameworks)
-- Supabase (auth + base de datos) — proyecto: `eshdkxfalahxoudedogh`
-- Hosting: GitHub Pages / Vercel (dominio: nexcode97.com)
+- Sitio: Next.js en `web/` (Vercel, proyecto `nex-code97`, www.nexcode97.com), despliega desde GitHub en cada push a `main`
+- CRM: repo aparte `NexCode97/crm` en Railway (proyecto "NexCode97 CRM"), servido en `/crm` por rewrite en `web/next.config.ts`
+- No se usa Supabase. Toda base de datos va en PostgreSQL de Railway
 - Repo: github.com/NexCode97/NexCode97
 
 ## Estructura del proyecto
 ```
 NexCode97/
-├── index.html          ← Sitio principal nexcode97.com
+├── web/                ← Sitio principal nexcode97.com (Next.js)
 ├── assets/             ← Imágenes, videos, favicon
-├── admin/              ← Panel CRM (Supabase Auth requerida)
 ├── appntrl/            ← Portafolio producto APP NTRL
 ├── veloclub/           ← Portafolio producto VeloClub
-├── supabase/           ← Migraciones y config
-└── vercel.json         ← Headers de seguridad HTTP
+└── vercel.json
 ```
 
 ## Preferencias de trabajo
@@ -28,20 +26,17 @@ NexCode97/
 - Actualizar memoria cuando haya cambios importantes de contexto
 - Mensajes de commit en inglés, concisos
 
-## Supabase
-- URL: `https://eshdkxfalahxoudedogh.supabase.co`
-- Anon key en `admin/index.html` (pública por diseño, segura con RLS)
-- Tablas: `leads`, `proyectos`, `finanzas`
-- RLS activo en todas las tablas
-- Signup deshabilitado — solo acceso manual desde dashboard de Supabase
-- Site URL: `https://nexcode97.com`
+## CRM (/crm)
+- Código en el repo `NexCode97/crm` (Express + Prisma + PostgreSQL), desplegado en Railway desde GitHub
+- `web/next.config.ts` reenvía `/crm` y `/crm/*` a `crm-production-9b97.up.railway.app` quitando el prefijo
+- En Railway el CRM corre con `CRM_BASE=/crm` y `TRUST_PROXY=2`
+- Las cabeceras de seguridad del sitio excluyen `/crm`: el CRM manda las suyas. Con dos CSP el navegador aplica ambas y rompe el CRM
+- El botón "Ingresar" del header (escritorio y móvil) lleva a `/crm/`
+- El formulario de contacto sigue guardando leads y avisando por correo (Resend); no hay panel de leads en el sitio
 
 ## Seguridad implementada
-- HTTP security headers en `vercel.json` (CSP, HSTS, X-Frame-Options, etc.)
-- XSS sanitizado con función `s()` en admin/index.html
-- Event delegation reemplaza onclick inline con datos externos
+- HTTP security headers en `web/next.config.ts` (CSP, HSTS, X-Frame-Options, etc.)
 - `noopener noreferrer` en todos los links externos
-- RLS policies verificadas en las 3 tablas
 
 ## Grids responsive (estándar en todo el proyecto)
 - Desktop: `repeat(4, 1fr)`

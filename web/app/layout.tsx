@@ -3,7 +3,6 @@ import { Inter, Playfair_Display } from "next/font/google";
 import "./globals.css";
 import { SiteHeader } from "@/components/site-header";
 import { Analytics } from "@vercel/analytics/next";
-import { Providers } from "./providers";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -62,11 +61,9 @@ export default function RootLayout({
         <link rel="preload" href="/intro.mp4" as="video" type="video/mp4" />
       </head>
       <body className="min-h-full flex flex-col">
-        <Providers>
-          <SiteHeader />
-          {children}
-          <Analytics />
-        </Providers>
+        <SiteHeader />
+        {children}
+        <Analytics />
       </body>
     </html>
   );

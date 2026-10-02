@@ -30,6 +30,8 @@ const securityHeaders = [
   },
 ];
 
+const CRM_ORIGEN = "https://crm-production-9b97.up.railway.app";
+
 const nextConfig: NextConfig = {
   compress: true,
 
@@ -46,11 +48,21 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ["framer-motion", "lucide-react", "three"],
   },
 
+  // El CRM vive en Railway (repo NexCode97/crm) y se sirve en /crm: se reenvía quitando el prefijo, que el CRM
+  // vuelve a poner en sus enlaces (CRM_BASE=/crm).
+  async rewrites() {
+    return [
+      { source: "/crm", destination: `${CRM_ORIGEN}/` },
+      { source: "/crm/:path*", destination: `${CRM_ORIGEN}/:path*` },
+    ];
+  },
+
   async headers() {
     return [
-      // Seguridad en todas las rutas
+      // Seguridad en todas las rutas menos /crm: el CRM manda sus propias cabeceras, y con dos CSP el navegador
+      // aplicaría ambas y lo rompería.
       {
-        source: "/(.*)",
+        source: "/((?!crm$|crm/).*)",
         headers: securityHeaders,
       },
       // Caché máximo para assets estáticos de Next.js (ya son inmutables por hash)

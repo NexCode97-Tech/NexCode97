@@ -4,12 +4,12 @@
   "private": true,
   "description": "CRM de conversaciones multicanal (WhatsApp, Instagram, Messenger, Telegram, TikTok, correo y chat web)",
   "scripts": {
-    "dev": "tsx watch src/index.ts",
+    "dev": "tsx watch --env-file=.env src/index.ts",
     "build": "prisma generate && tsc",
     "start": "node dist/index.js",
     "db:migrate": "prisma migrate deploy",
     "db:generate": "prisma generate",
-    "crear-espacio": "tsx scripts/crear-espacio.ts",
+    "crear-espacio": "tsx --env-file=.env scripts/crear-espacio.ts",
     "typecheck": "tsc --noEmit"
   },
   "dependencies": {

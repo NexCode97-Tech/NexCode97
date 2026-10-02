@@ -3,6 +3,10 @@
   "version": "0.1.0",
   "private": true,
   "description": "CRM de conversaciones multicanal (WhatsApp, Instagram, Messenger, Telegram, TikTok, correo y chat web)",
+  "packageManager": "pnpm@10.34.6",
+  "engines": {
+    "node": ">=20.6"
+  },
   "scripts": {
     "dev": "tsx watch --env-file=.env src/index.ts",
     "build": "prisma generate && tsc",

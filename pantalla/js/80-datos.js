@@ -16,7 +16,7 @@ function crmToken(nuevo){
   const s = crmToken;
   if (!nuevo && s.v && Date.now() - s.en < 50 * 60e3) return Promise.resolve(s.v);
   if (s.p) return s.p;
-  s.p = fetch('/api/auth/token', {credentials:'same-origin', cache:'no-store'})
+  s.p = fetch('__BASE__/api/auth/token', {credentials:'same-origin', cache:'no-store'})
     .then(async r => {
       if (!r.ok) throw Object.assign(new Error(r.status === 401 ? 'Tu sesión se cerró. Recarga la página para volver a entrar.' : 'No se pudo validar tu sesión. Recarga la página.'), {status:r.status});
       const j = await r.json(); if (!j || !j.token) throw new Error('No se pudo validar tu sesión. Recarga la página.');

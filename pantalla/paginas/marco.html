@@ -81,14 +81,14 @@ iframe{position:absolute;left:0;top:0;display:block;border:0;transform-origin:to
   <div class="dd">
     <button type="button" class="yo" id="b-yo" aria-haspopup="menu" aria-expanded="false"><span class="av" id="yo-av"></span><b id="yo-n"></b></button>
     <div class="menu" id="m-yo" role="menu" hidden>
-      <a href="/usuarios" id="ir-usuarios" role="menuitem" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.3a6.5 6.5 0 0 1 3.5 5.7"/></svg>Usuarios</a>
+      <a href="__BASE__/usuarios" id="ir-usuarios" role="menuitem" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.3a6.5 6.5 0 0 1 3.5 5.7"/></svg>Usuarios</a>
       <button type="button" id="b-clave" role="menuitem"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Cambiar la contraseña</button>
       <hr>
       <button type="button" id="b-salir" role="menuitem"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>Cerrar sesión</button>
     </div>
   </div>
 </header>
-<main id="caja"><iframe id="marco" src="/app" title="CRM" allow="microphone; clipboard-write"></iframe></main>
+<main id="caja"><iframe id="marco" src="__BASE__/app" title="CRM" allow="microphone; clipboard-write"></iframe></main>
 <div class="ov" id="ov-clave" hidden>
   <form class="dlg" id="f-clave" role="dialog" aria-labelledby="t-clave" novalidate>
     <h2 id="t-clave">Cambiar la contraseña</h2>
@@ -118,15 +118,15 @@ const tk = {v: null, en: 0, p: null};
 function token(fresco){
   if (!fresco && tk.v && Date.now() - tk.en < 50 * 60_000) return Promise.resolve(tk.v);
   if (tk.p) return tk.p;
-  tk.p = fetch('/api/auth/token', {credentials: 'same-origin', cache: 'no-store'}).then(async r => {
-    if (r.status === 401 || r.status === 403) { location.href = '/entrar'; throw new Error('Tu sesión venció'); }
+  tk.p = fetch('__BASE__/api/auth/token', {credentials: 'same-origin', cache: 'no-store'}).then(async r => {
+    if (r.status === 401 || r.status === 403) { location.href = '__BASE__/entrar'; throw new Error('Tu sesión venció'); }
     const j = await r.json(); tk.v = j.token; tk.en = Date.now(); return tk.v;
   }).finally(() => { tk.p = null; });
   return tk.p;
 }
 async function api(metodo, ruta, cuerpo){
   for (let i = 0; i < 2; i++) {
-    const r = await fetch('/api' + ruta, {method: metodo, cache: 'no-store', headers: {Authorization: 'Bearer ' + await token(i > 0), ...(cuerpo ? {'Content-Type': 'application/json'} : {})}, body: cuerpo ? JSON.stringify(cuerpo) : undefined});
+    const r = await fetch('__BASE__/api' + ruta, {method: metodo, cache: 'no-store', headers: {Authorization: 'Bearer ' + await token(i > 0), ...(cuerpo ? {'Content-Type': 'application/json'} : {})}, body: cuerpo ? JSON.stringify(cuerpo) : undefined});
     if (r.status === 401 && i === 0) continue;
     const j = await r.json().catch(() => ({}));
     if (!r.ok) throw new Error(j.error || 'No se pudo completar. Intenta de nuevo.');
@@ -188,7 +188,7 @@ let fuente = null;
 async function conectar(){
   try {
     const d = await api('POST', '/eventos/ticket');
-    fuente = new EventSource('/api/eventos?ticket=' + encodeURIComponent(d.ticket));
+    fuente = new EventSource('__BASE__/api/eventos?ticket=' + encodeURIComponent(d.ticket));
     fuente.addEventListener('notificacion-nueva', contarAvisos);
     fuente.onerror = () => { fuente.close(); setTimeout(conectar, 5000); };
   } catch { setTimeout(conectar, 15000); }
@@ -209,7 +209,7 @@ $('f-clave').addEventListener('submit', async e => {
   catch (err) { error.textContent = err.message; error.classList.add('ver'); }
   finally { $('c-guardar').disabled = false; }
 });
-$('b-salir').addEventListener('click', async () => { try { await fetch('/api/auth/logout', {method: 'POST', credentials: 'same-origin'}); } finally { location.href = '/entrar'; } });
+$('b-salir').addEventListener('click', async () => { try { await fetch('__BASE__/api/auth/logout', {method: 'POST', credentials: 'same-origin'}); } finally { location.href = '__BASE__/entrar'; } });
 </script>
 </body>
 </html>

@@ -13,6 +13,7 @@ import { logger, logSecurityEvent } from '../utils/logger'
 import { enEspacio, espacioDeUsuario } from '../services/crm/espacio'
 import { usuariosCrm } from '../services/crm/usuarios'
 import { emitirCrm } from '../services/crm/tiempoReal'
+import { BASE } from '../utils/base'
 
 /**
  * La cuenta de cada persona: entrar, salir, el token del API y su perfil.
@@ -24,11 +25,13 @@ import { emitirCrm } from '../services/crm/tiempoReal'
 const router = Router()
 
 const DIAS_SESION = 30
+/** La cookie solo viaja a las direcciones del CRM: si vive en /crm de otro sitio, el resto del sitio no la recibe. */
+const RUTA_COOKIE = BASE || '/'
 const cookieOpts = () => ({
   httpOnly: true,
   sameSite: 'lax' as const,
   secure: process.env.NODE_ENV === 'production',
-  path: '/',
+  path: RUTA_COOKIE,
   maxAge: DIAS_SESION * 864e5,
 })
 
@@ -62,7 +65,7 @@ router.post('/login', limiteEntrar, asyncHandler(async (req: Request, res: Respo
 }))
 
 router.post('/logout', (_req: Request, res: Response) => {
-  res.clearCookie(COOKIE_SESION, { path: '/' })
+  res.clearCookie(COOKIE_SESION, { path: RUTA_COOKIE })
   return ApiResponse.success(res, { ok: true })
 })
 
@@ -72,7 +75,7 @@ router.get('/token', asyncHandler(async (req: Request, res: Response) => {
   if (!cookie) throw new UnauthorizedError('Inicia sesión')
   let user
   try { user = await usuarioDeToken(cookie) } catch (e) {
-    res.clearCookie(COOKIE_SESION, { path: '/' })
+    res.clearCookie(COOKIE_SESION, { path: RUTA_COOKIE })
     if (e instanceof ForbiddenError) throw e
     throw new UnauthorizedError('Tu sesión venció. Vuelve a entrar.')
   }

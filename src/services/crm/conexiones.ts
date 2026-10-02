@@ -9,6 +9,7 @@ import { telDigitos, telVisible } from './formas'
 import { emitirConv, emitirCrm } from './tiempoReal'
 import { AppError, ConflictError, NotFoundError, ValidationError } from '../../utils/errors'
 import { logger } from '../../utils/logger'
+import { BASE } from '../../utils/base'
 
 /**
  * Conexiones de WhatsApp que cada espacio hace desde el propio CRM. Dos caminos:
@@ -52,7 +53,7 @@ export interface DatosWhatsapp {
 /** La dirección pública de este API: API_PUBLIC_URL si existe, o la de la petición (detrás del proxy de Railway). */
 export function urlApi(req: Request): string {
   const propia = (process.env.API_PUBLIC_URL ?? '').trim().replace(/\/+$/, '')
-  return propia || `${req.protocol}://${req.get('host')}`
+  return propia || `${req.protocol}://${req.get('host')}${BASE}`
 }
 export const urlAvisosConexion = (baseApi: string, clave: string) => `${baseApi}/api/crm/whatsapp/webhook/${clave}`
 export const urlAvisosGeneral = (baseApi: string) => `${baseApi}/api/crm/whatsapp/webhook`

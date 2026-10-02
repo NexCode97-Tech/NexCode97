@@ -7,6 +7,7 @@ import { prisma } from './config/prisma'
 import { espacioDeUsuario } from './services/crm/espacio'
 import { configura } from './utils/roles'
 import { PAISES } from './data/paises'
+import { BASE } from './utils/base'
 
 /**
  * Las pantallas. Todas son HTML con su CSS y su código dentro, servidas por aquí (y no como archivos sueltos)
@@ -32,7 +33,8 @@ function leer(ruta: string, armar?: (texto: string) => string): string {
   const guardado = cache.get(ruta)
   if (guardado && enProduccion()) return guardado
   const crudo = readFileSync(join(PANTALLA, ruta), 'utf8')
-  const texto = armar ? armar(crudo) : crudo
+  // `__BASE__` marca en las pantallas las direcciones propias (/api, /entrar…): lleva el prefijo de CRM_BASE.
+  const texto = (armar ? armar(crudo) : crudo).replace(/__BASE__/g, BASE)
   cache.set(ruta, texto)
   return texto
 }
@@ -55,14 +57,14 @@ function html(res: Response, cuerpo: string) {
 const router = Router()
 
 router.get('/entrar', asyncHandler(async (req: Request, res: Response) => {
-  if (await sesionDePagina(req)) return res.redirect('/')
+  if (await sesionDePagina(req)) return res.redirect(BASE + '/')
   html(res, leer('paginas/entrar.html').replace(/__MARCA__/g, escapar(MARCA())))
 }))
 
 /** La persona de la sesión con su espacio, o la redirección al inicio de sesión. */
 async function sesion(req: Request, res: Response) {
   const u = await sesionDePagina(req)
-  if (!u) { res.redirect('/entrar'); return null }
+  if (!u) { res.redirect(BASE + '/entrar'); return null }
   const espacioId = await espacioDeUsuario(u.id)
   if (!espacioId) { res.status(403).send('Tu cuenta no pertenece a ningún espacio de trabajo. Habla con el administrador.'); return null }
   const espacio = await prisma.crmEspacio.findUnique({ where: { id: espacioId }, select: { id: true, nombre: true } })
@@ -77,7 +79,7 @@ const yoDe = (u: { id: string; nombre: string | null; email: string; role: strin
 
 router.get(['/', '/crm'], asyncHandler(async (req: Request, res: Response) => {
   // Los avisos viejos apuntan a /crm?conv=…: el marco vive en la raíz.
-  if (req.path === '/crm') return res.redirect('/' + (req.originalUrl.includes('?') ? req.originalUrl.slice(req.originalUrl.indexOf('?')) : ''))
+  if (req.path === '/crm') return res.redirect(BASE + '/' + (req.originalUrl.includes('?') ? req.originalUrl.slice(req.originalUrl.indexOf('?')) : ''))
   const s = await sesion(req, res); if (!s) return
   const inicio = { marca: MARCA(), espacio: s.espacio, yo: { ...yoDe(s.u), admin: s.u.role === 'ADMIN' } }
   html(res, leer('paginas/marco.html').replace(/__MARCA__/g, escapar(MARCA())).replace('/*MARCO_INICIO*/', () => `window.MARCO = ${enScript(inicio)};`))
@@ -86,7 +88,7 @@ router.get(['/', '/crm'], asyncHandler(async (req: Request, res: Response) => {
 router.get('/app', asyncHandler(async (req: Request, res: Response) => {
   const s = await sesion(req, res); if (!s) return
   const inicio = {
-    api: '/api',
+    api: BASE + '/api',
     yo: yoDe(s.u),
     espacio: s.espacio,
     // Los países con su indicativo, para los teléfonos con bandera.
@@ -97,14 +99,14 @@ router.get('/app', asyncHandler(async (req: Request, res: Response) => {
 
 router.get('/usuarios', asyncHandler(async (req: Request, res: Response) => {
   const s = await sesion(req, res); if (!s) return
-  if (s.u.role !== 'ADMIN') return res.redirect('/')
+  if (s.u.role !== 'ADMIN') return res.redirect(BASE + '/')
   const inicio = { marca: MARCA(), espacio: s.espacio, yo: { id: s.u.id, nombre: s.u.nombre ?? s.u.email } }
   html(res, leer('paginas/usuarios.html').replace(/__MARCA__/g, escapar(MARCA())).replace('/*USUARIOS_INICIO*/', () => `window.INICIO = ${enScript(inicio)};`))
 }))
 
 /** La burbuja del chat web: pública y cargable desde otro dominio. La dirección del API es la de este servidor. */
 router.get('/chat.js', (req: Request, res: Response) => {
-  const propia = (process.env.API_PUBLIC_URL ?? '').trim().replace(/\/+$/, '') || `${req.protocol}://${req.get('host')}`
+  const propia = (process.env.API_PUBLIC_URL ?? '').trim().replace(/\/+$/, '') || `${req.protocol}://${req.get('host')}${BASE}`
   res.setHeader('Content-Type', 'application/javascript; charset=utf-8')
   res.setHeader('Cache-Control', 'public, max-age=300')
   res.setHeader('Access-Control-Allow-Origin', '*')

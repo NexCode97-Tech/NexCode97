@@ -28,8 +28,10 @@ import paginas from './paginas'
 const app = express()
 const PORT = process.env.PORT || 3000
 
-// Detrás de un proxy inverso: la IP real y el HTTPS llegan en las cabeceras X-Forwarded-*.
-app.set('trust proxy', 1)
+// Detrás de un proxy inverso: la IP real y el HTTPS llegan en las cabeceras X-Forwarded-*. TRUST_PROXY dice cuántos
+// proxies hay delante: 1 con Railway solo; 2 si además el sitio de la empresa reenvía /crm (Vercel → Railway), para
+// que el límite de peticiones cuente por visitante y no por la IP del proxy.
+app.set('trust proxy', Math.max(1, Number(process.env.TRUST_PROXY) || 1))
 app.disable('x-powered-by')
 
 // Un id por petición, para seguirla en los registros.

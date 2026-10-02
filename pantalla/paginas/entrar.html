@@ -46,10 +46,10 @@ f.addEventListener('submit', async e => {
   if (!email || !password) { error.textContent = 'Escribe tu correo y tu contraseña.'; error.classList.add('ver'); return; }
   b.disabled = true; b.textContent = 'Entrando'; error.classList.remove('ver');
   try {
-    const r = await fetch('/api/auth/login', {method: 'POST', headers: {'Content-Type': 'application/json'}, credentials: 'same-origin', body: JSON.stringify({email, password})});
+    const r = await fetch('__BASE__/api/auth/login', {method: 'POST', headers: {'Content-Type': 'application/json'}, credentials: 'same-origin', body: JSON.stringify({email, password})});
     const j = await r.json().catch(() => ({}));
     if (!r.ok) throw new Error(j.error || 'No se pudo entrar. Intenta de nuevo.');
-    location.href = '/' + location.search;
+    location.href = '__BASE__/' + location.search;
   } catch (err) {
     error.textContent = err.message; error.classList.add('ver');
     b.disabled = false; b.textContent = 'Entrar';

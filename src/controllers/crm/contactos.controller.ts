@@ -9,7 +9,7 @@ import { auditLog } from '../../utils/auditLogger'
 import { contactoAFront, mapaNombres, telVisible } from '../../services/crm/formas'
 import { idDeNombre } from '../../services/crm/usuarios'
 import { emitirCrm } from '../../services/crm/tiempoReal'
-import { fichaDeContacto } from '../../services/crm/estudiante'
+import { fichaDeContacto } from '../../services/crm/fichaExterna'
 import { contactoVisible, exigirContactoCompleto, exigirEscritura, exigirLider, idNum, mezclaProfunda, nombreArchivo, obj, txt, type Json } from './_comun'
 import { alcanceDe, equiposDeReq, filtroContactos, genteQueLidera, reservaDeContacto, veContacto } from '../../services/crm/alcance'
 import { actualizarContacto, correoValido, datosDeContacto, emitirContacto, exigirTelefonoLibre, telefonoValido } from './_contacto'
@@ -84,7 +84,7 @@ const plano = (t: string) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g
 
 /** Nombres de columna aceptados (sin tildes ni mayúsculas) → campo. */
 const COLUMNAS: [string, string[]][] = [
-  ['nombre', ['nombre', 'nombre completo', 'name', 'full name', 'contacto', 'cliente', 'estudiante']],
+  ['nombre', ['nombre', 'nombre completo', 'name', 'full name', 'contacto', 'cliente', 'nombre del cliente']],
   ['nombres', ['nombres', 'primer nombre', 'first name']],
   ['apellidos', ['apellidos', 'apellido', 'last name']],
   ['tel', ['telefono', 'tel', 'celular', 'whatsapp', 'movil', 'numero', 'phone', 'telefono celular', 'numero de whatsapp', 'numero de celular', 'mobile']],
@@ -266,9 +266,9 @@ export async function exportarContactos(req: Request, res: Response) {
 
 // ─── Cruce con la plataforma ─────────────────────────────────────────────────
 
-export async function estudianteDeContacto(req: Request, res: Response) {
+export async function fichaExternaDeContacto(req: Request, res: Response) {
   const id = idNum(req.params.contactoId, 'el contacto')
-  // Cursos, pagos y casos de recuperación: de un contacto reservado, solo los líderes.
+  // Compras, pagos y casos de recuperación: de un contacto reservado, solo los líderes.
   await contactoVisible(req, id)
   const r = await fichaDeContacto(id)
   if (!r) throw new NotFoundError('Ese contacto ya no existe. Recarga la bandeja.')

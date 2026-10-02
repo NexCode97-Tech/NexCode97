@@ -14,7 +14,7 @@ import { convVigente, mezclaProfunda, obj, txt, type Json } from './_comun'
 export const CANALES = ['wa', 'ig', 'fb', 'web', 'mail'] as const
 
 /** Claves de la pantalla que son del contacto (contrato §4, PATCH de conversación). */
-export const CLAVES_CONTACTO = new Set(['n', 'tel', 'ficha', 'campos', 'tags', 'etq', 'etapa', 'menor', 'aut', 'acud', 'rne', 'noContactar', 'permisoLlamada', 'guardado', 'correo', 'pauta'])
+export const CLAVES_CONTACTO = new Set(['n', 'tel', 'ficha', 'campos', 'tags', 'etq', 'etapa', 'menor', 'aut', 'rep', 'rne', 'noContactar', 'permisoLlamada', 'guardado', 'correo', 'pauta'])
 
 const json = (v: unknown) => (v === null || v === undefined ? null : v) as Prisma.InputJsonValue
 
@@ -95,7 +95,7 @@ export async function datosDeContacto(cambios: Json, actual: CrmContacto | null,
       case 'menor': d.menor = Boolean(v); break
       case 'guardado': d.guardado = Boolean(v); break
       case 'aut': d.autorizacion = json(v); break
-      case 'acud': d.acudiente = json(v); break
+      case 'rep': d.representante = json(v); break
       case 'rne': d.rne = json(v); break
       case 'noContactar': d.noContactar = v === false || v === '' ? json(null) : json(v); break
       case 'permisoLlamada': d.permisoLlamada = json(v); break

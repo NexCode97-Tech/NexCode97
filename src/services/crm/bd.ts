@@ -11,7 +11,7 @@ import { espacioActual } from './espacio'
  * $executeRaw), que llevan su propio `espacio_id` cuando recorren tablas
  * enteras; `crm_webhook_eventos`, que se guarda antes de saber de qué espacio es
  * el aviso; y `crm_espacios` y `crm_miembros`, que son justo los que dicen quién
- * entra a dónde. Las otras tablas de la plataforma (estudiantes, usuarios…) no
+ * entra a dónde. Las otras tablas de la plataforma (clientes, usuarios…) no
  * se tocan.
  */
 const CON_FILTRO = new Set([

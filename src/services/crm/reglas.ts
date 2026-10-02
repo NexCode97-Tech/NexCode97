@@ -13,7 +13,7 @@ import { archivosDe, guardarMensaje, mensajeDeArchivo } from './salientes'
 import { configReparto, miembrosDe, repartirA } from './reparto'
 import { equipoDeConv, leerEquipos } from './equipos'
 import { alcanceDePersona } from './alcance'
-import { fichaDeContacto } from './estudiante'
+import { fichaDeContacto } from './fichaExterna'
 import { buscarPlantilla, variablesDe } from './plantillas'
 import { waConfigurado } from './whatsapp'
 import { agenteIniciar } from './agenteIA'
@@ -294,7 +294,7 @@ async function esACuotas(c: Conv, datos: Json): Promise<boolean | null> {
   if (Number.isFinite(n) && n > 0) return n > 1
   const f = await fichaDeContacto(c.contactoId).catch(e => { logger.warn(`[CRM reglas] ficha del contacto ${c.contactoId}: ${(e as Error).message}`); return null })
   if (f?.cambio) await emitirContacto(c.contactoId)
-  if (!f || !f.ficha.estudianteId) return null
+  if (!f || !f.ficha.externoId) return null
   return !!f.ficha.compras && f.ficha.compras.total > 1
 }
 
@@ -1136,7 +1136,7 @@ async function disparar(eventoRegla: EventoRegla, convId: number, datos: Record<
 // ─── Pagos de Hotmart ────────────────────────────────────────────────────────
 
 export interface PagoHotmart {
-  correo?: string | null; telefono?: string | null; estudianteId?: string | null
+  correo?: string | null; telefono?: string | null; externoId?: string | null
   producto?: string | null; valor?: number | null; transaccion?: string | null
   /** payment_mode MULTIPLE_PAYMENTS: el producto se vendió a cuotas. */
   enPartes?: boolean; cuotas?: number | null; cuotaNumero?: number | null
@@ -1144,7 +1144,7 @@ export interface PagoHotmart {
 
 /**
  * «Se confirma un pago» (hoy, los pagos de Hotmart de la plataforma): busca los contactos del CRM del comprador (por
- * estudiante vinculado, por los últimos 10 dígitos del celular o por correo)
+ * cliente vinculado, por los últimos 10 dígitos del celular o por correo)
  * y corre las reglas sobre la conversación más reciente de cada uno (la
  * abierta, si hay). Una misma transacción no corre dos veces en la misma
  * conversación. Devuelve en cuántas conversaciones corrió. Nunca lanza.
@@ -1159,7 +1159,7 @@ async function reglasPorPagoEnEspacio(p: PagoHotmart): Promise<number> {
     const tel = String(p.telefono ?? '').replace(/\D/g, '').slice(-10)
     const correo = txt(p.correo).toLowerCase()
     const ids = new Set<number>()
-    if (p.estudianteId) for (const k of await prisma.crmContacto.findMany({ where: { estudianteId: p.estudianteId }, select: { id: true } })) ids.add(k.id)
+    if (p.externoId) for (const k of await prisma.crmContacto.findMany({ where: { externoId: p.externoId }, select: { id: true } })) ids.add(k.id)
     if (tel.length === 10) {
       const filas = await prisma.$queryRaw<{ id: number }[]>`SELECT id FROM crm_contactos WHERE espacio_id = ${espacioActual()} AND telefono IS NOT NULL AND right(regexp_replace(telefono, '\\D', '', 'g'), 10) = ${tel} LIMIT 5`
       for (const f of filas) ids.add(Number(f.id))

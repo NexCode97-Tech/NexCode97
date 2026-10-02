@@ -289,7 +289,7 @@
     for (const n of a.getAttributeNames()) if (n.startsWith('data-')) return `[${n}="${CSS.escape(a.getAttribute(n))}"]`;
     return a.classList.contains('cch-volver') ? '.cch-volver' : null;
   }
-  // Resumen a la derecha del título de una sección (el producto, la carrera): se crea, se cambia o se quita.
+  // Resumen a la derecha del título de una sección (el producto, el interés): se crea, se cambia o se quita.
   function resumen(s, t){
     const b = s && s.querySelector(':scope > button'); if (!b) return;
     let r = b.querySelector('.src');
@@ -313,10 +313,10 @@
     for (const [id, d] of [['acc', ICO.ajustes], ['rec', ICO.campana], ['campos', ICO.persona], ['compra', ICO.carrito], ['guia', ICO.brujula], ['prev', ICO.historial]]) {
       const s0 = sec(id) && sec(id).querySelector(':scope > button > svg:first-child'); if (s0) s0.outerHTML = svg(d);
     }
-    // Resúmenes de las plegadas: el producto comprado y la carrera que busca.
-    const est = c.contactoId ? crmEstudiante(c.contactoId) : null, cp = (est && est.datos && est.datos.compras) || c.ficha.compras;
+    // Resúmenes de las plegadas: el producto comprado y lo que busca.
+    const est = c.contactoId ? crmFichaExterna(c.contactoId) : null, cp = (est && est.datos && est.datos.compras) || c.ficha.compras;
     if (cp && cp.p) resumen(sec('compra'), cp.p);
-    resumen(sec('guia'), c.ficha.carrera || '');
+    resumen(sec('guia'), c.ficha.interes || '');
     // «Conversación» y «Recordatorios de seguimiento» abiertas; lo que la persona abra o cierre se sigue recordando.
     const r = sec('rec');
     if (r && !('rec' in SEC_CERRADA)) { r.removeAttribute('data-closed'); r.querySelector(':scope > button').setAttribute('aria-expanded', 'true'); }
@@ -347,13 +347,13 @@
       const t = h.textContent.trim(), s0 = h.querySelector('svg');
       if (ICONOS[t] && s0) s0.outerHTML = svg(ICONOS[t]);
       if (t === 'En la plataforma') {
-        // Las fechas de los cursos como en la maqueta: «12 ago 2026».
-        const est = crmEstudiante(c.contactoId), cursos = (est && est.datos && est.datos.cursos) || [];
-        card.querySelectorAll('.hist > div').forEach((fila, i) => { const x = cursos[i], sp = fila.lastElementChild; if (x && x.fecha && sp) sp.textContent = fechaCorta(x.fecha, true); });
+        // Las fechas de los productos como en la maqueta: «12 ago 2026».
+        const est = crmFichaExterna(c.contactoId), productos = (est && est.datos && est.datos.productos) || [];
+        card.querySelectorAll('.hist > div').forEach((fila, i) => { const x = productos[i], sp = fila.lastElementChild; if (x && x.fecha && sp) sp.textContent = fechaCorta(x.fecha, true); });
       }
       if (t === 'Compras') {
         // La próxima cuota con su fecha, como en la maqueta («15 oct 2026»); sin fecha (pagado completo) queda el texto.
-        const est = crmEstudiante(c.contactoId), cp = (est && est.datos && est.datos.compras) || c.ficha.compras;
+        const est = crmFichaExterna(c.contactoId), cp = (est && est.datos && est.datos.compras) || c.ficha.compras;
         const dt = [...card.querySelectorAll('.kv dt')].find(x => x.textContent === 'Próxima');
         if (cp && cp.proxFecha && dt && dt.nextElementSibling) dt.nextElementSibling.textContent = fechaCorta(cp.proxFecha, true);
       }

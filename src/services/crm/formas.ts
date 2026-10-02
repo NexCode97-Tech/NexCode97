@@ -32,7 +32,7 @@ export async function mapaNombres(): Promise<Map<string, string>> {
   return new Map((await usuariosCrm()).map(u => [u.id, u.nombre]))
 }
 
-const FICHA_VACIA = { origen: '', carrera: '', ciudad: '', puntaje: '', colegio: '', compras: null, previas: [] }
+const FICHA_VACIA = { origen: '', interes: '', ciudad: '', nota: '', compras: null, previas: [] }
 const iso = (d: Date | null | undefined) => (d ? d.toISOString() : null)
 
 /**
@@ -111,7 +111,7 @@ export function convAFront(c: ConvFila, nombres: Map<string, string>) {
     recs: Array.isArray(c.recs) ? c.recs : [],
     menor: k.menor,
     aut: k.autorizacion ?? null,
-    acud: k.acudiente ?? null,
+    rep: k.representante ?? null,
     rne: k.rne ?? null,
     noContactar: k.noContactar ?? null,
     permisoLlamada: k.permisoLlamada ?? null,
@@ -148,7 +148,7 @@ export function contactoAFront(k: CrmContacto, nombres: Map<string, string>) {
     pauta: k.pauta ?? null,
     menor: k.menor,
     aut: k.autorizacion ?? null,
-    acud: k.acudiente ?? null,
+    rep: k.representante ?? null,
     rne: k.rne ?? null,
     noContactar: k.noContactar ?? null,
     guardado: k.guardado,

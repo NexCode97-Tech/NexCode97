@@ -20,8 +20,8 @@ const txt = (v: unknown) => (typeof v === 'string' ? v.trim() : '')
 const ultimos10 = (t: string | null | undefined) => (t ?? '').replace(/\D/g, '').slice(-10)
 const sinTildes = (t: string) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
 
-/** La plantilla con que se le pide al representante legal (TPL_ACUD en 30-legal.js). */
-export const PLANTILLA_ACUDIENTE = 'Autorización del representante legal'
+/** La plantilla con que se le pide al representante legal (TPL_REP en 30-legal.js). */
+export const PLANTILLA_REPRESENTANTE = 'Autorización del representante legal'
 /** El mismo texto por defecto de la pantalla (PD en 30-legal.js), si el equipo no lo cambió. */
 const TEXTO_PD = 'Autorizo a tratar mis datos personales para contactarme por WhatsApp, llamadas y correo con información de sus productos y servicios, y a grabar las llamadas para mejorar la atención, según su política de tratamiento de datos.'
 const DIAS = 30
@@ -32,8 +32,8 @@ export function esAutorizo(texto: string): boolean {
   return /\bautorizo\b/.test(t) && !/\bno\s+(lo\s+|la\s+)?autorizo\b/.test(t)
 }
 
-const esPedidoEstudiante = (d: Json) => /responde «autorizo»/i.test(txt(d.out))
-const esPedidoAcudiente = (d: Json) => txt(d.plantilla) === PLANTILLA_ACUDIENTE
+const esPedidoCliente = (d: Json) => /responde «autorizo»/i.test(txt(d.out))
+const esPedidoRepresentante = (d: Json) => txt(d.plantilla) === PLANTILLA_REPRESENTANTE
 
 async function evento(convId: number, t: string) {
   const m: CrmMensaje = await prisma.crmMensaje.create({ data: { conversacionId: convId, tipo: 'ev', datos: { ev: 'lock', t } } })
@@ -53,7 +53,7 @@ export async function autorizacionPorRespuesta(convId: number, k: CrmContacto, t
       where: { conversacionId: convId, tipo: 'out', createdAt: { gte: new Date(cuando.getTime() - DIAS * 86_400_000) } },
       orderBy: { createdAt: 'desc' }, take: 40, select: { datos: true },
     })
-    const pedido = pedidos.map(m => obj(m.datos)).find(d => esPedidoEstudiante(d) || esPedidoAcudiente(d))
+    const pedido = pedidos.map(m => obj(m.datos)).find(d => esPedidoCliente(d) || esPedidoRepresentante(d))
     if (!pedido) return false
     const reg = {
       via: 'Respondió por WhatsApp', fecha: cuando.toISOString(),
@@ -61,7 +61,7 @@ export async function autorizacionPorRespuesta(convId: number, k: CrmContacto, t
       respuesta: texto.trim().slice(0, 200), por: 'Automático al responder',
     }
 
-    if (esPedidoEstudiante(pedido)) {
+    if (esPedidoCliente(pedido)) {
       if (k.autorizacion) return false
       await prisma.crmContacto.update({ where: { id: k.id }, data: { autorizacion: reg as Prisma.InputJsonValue } })
       await evento(convId, `Respondió «${reg.respuesta}»: la autorización de datos quedó marcada · Respondió por WhatsApp`)
@@ -70,17 +70,17 @@ export async function autorizacionPorRespuesta(convId: number, k: CrmContacto, t
       return true
     }
 
-    // Acudiente: el menor es quien tiene este número como teléfono del representante legal.
+    // Representante: el menor es quien tiene este número como teléfono del representante legal.
     const tel = ultimos10(k.telefono)
     if (tel.length !== 10) return false
-    const candidatos = await prisma.crmContacto.findMany({ where: { campos: { path: ['telAcudiente'], string_contains: tel.slice(-4) } }, take: 50 })
-    const menores = candidatos.filter(m => m.id !== k.id && ultimos10(txt(obj(m.campos).telAcudiente)) === tel && !m.acudiente)
+    const candidatos = await prisma.crmContacto.findMany({ where: { campos: { path: ['telRepresentante'], string_contains: tel.slice(-4) } }, take: 50 })
+    const menores = candidatos.filter(m => m.id !== k.id && ultimos10(txt(obj(m.campos).telRepresentante)) === tel && !m.representante)
     for (const m of menores) {
-      await prisma.crmContacto.update({ where: { id: m.id }, data: { acudiente: reg as Prisma.InputJsonValue, ...(m.autorizacion ? {} : { autorizacion: reg as Prisma.InputJsonValue }) } })
+      await prisma.crmContacto.update({ where: { id: m.id }, data: { representante: reg as Prisma.InputJsonValue, ...(m.autorizacion ? {} : { autorizacion: reg as Prisma.InputJsonValue }) } })
       const suya = await prisma.crmConversacion.findFirst({ where: { contactoId: m.id }, orderBy: { ultimoMensajeAt: { sort: 'desc', nulls: 'last' } }, select: { id: true } })
       if (suya) await evento(suya.id, `Su representante legal respondió «${reg.respuesta}»: la autorización del representante legal quedó marcada · Respondió por WhatsApp`)
       await repintar(m.id)
-      logger.info(`[CRM autorización] acudiente de ${m.id} autorizó al responder (conversación ${convId})`)
+      logger.info(`[CRM autorización] representante de ${m.id} autorizó al responder (conversación ${convId})`)
     }
     if (menores.length) await evento(convId, `Respondió «${reg.respuesta}»: la autorización quedó marcada en la ficha de ${menores.map(m => m.nombre || 'su acudido').join(', ')}`)
     return menores.length > 0

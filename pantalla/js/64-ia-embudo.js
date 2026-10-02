@@ -111,7 +111,7 @@
     document.querySelectorAll('#page .kc[data-kc]').forEach(k => {
       const c = CONV.find(x => x.id === +k.dataset.kc); if (!c) return;
       const p = k.querySelector(':scope > p');
-      // «· Hotmart» en su propio trozo, que nunca se recorta: si no cabe, se recorta la carrera o la ciudad.
+      // «· Hotmart» en su propio trozo, que nunca se recorta: si no cabe, se recorta el interés o la ciudad.
       if (p && porHotmart(c) && !p.dataset.iaeHm) {
         p.innerHTML = `<span class="iae-pt">${esc(p.textContent)}</span><span class="iae-hm"> · Hotmart</span>`;
         p.dataset.iaeHm = '1'; p.classList.add('iae-p');

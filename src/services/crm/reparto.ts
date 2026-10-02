@@ -133,7 +133,7 @@ async function disponibles(personas: UsuarioCrm[], cfg: CfgReparto, excluir: Set
 const ultimos10 = (t: string | null | undefined) => (t ?? '').replace(/\D/g, '').slice(-10)
 
 /** El asesor que ya conoce a este contacto: su dueño, el de su compra o el de su familia. */
-async function duenoConocido(contacto: { id: number; asignadoId: string | null; telefono: string | null; estudianteId: string | null }, cfg: CfgReparto): Promise<string[]> {
+async function duenoConocido(contacto: { id: number; asignadoId: string | null; telefono: string | null; externoId: string | null }, cfg: CfgReparto): Promise<string[]> {
   const ids: string[] = []
   if (cfg.conocido) {
     if (contacto.asignadoId) ids.push(contacto.asignadoId)
@@ -144,7 +144,7 @@ async function duenoConocido(contacto: { id: number; asignadoId: string | null; 
     const otros = await prisma.$queryRaw<{ asignado_id: string }[]>`
       SELECT asignado_id FROM crm_contactos
       WHERE espacio_id = ${espacioActual()} AND id <> ${contacto.id} AND asignado_id IS NOT NULL
-        AND right(regexp_replace(coalesce(campos->>'telAcudiente', ''), '\\D', '', 'g'), 10) = ${tel}
+        AND right(regexp_replace(coalesce(campos->>'telRepresentante', ''), '\\D', '', 'g'), 10) = ${tel}
       LIMIT 3`
     ids.push(...otros.map(o => o.asignado_id))
   }

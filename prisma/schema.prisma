@@ -22,23 +22,22 @@ enum Role {
 
 /// Persona que entra al CRM. A qué espacio pertenece lo dice `crm_miembros`.
 model User {
-  id           String    @id @default(cuid())
-  email        String    @unique
-  nombre       String?
-  telefono     String?
-  image        String?
-  passwordHash String    @map("password_hash")
-  role         Role      @default(AGENTE)
-  suspendido   Boolean   @default(false)
+  id            String    @id @default(cuid())
+  email         String    @unique
+  nombre        String?
+  telefono      String?
+  image         String?
+  passwordHash  String    @map("password_hash")
+  role          Role      @default(AGENTE)
+  suspendido    Boolean   @default(false)
   /// Operador de la plataforma: configura lo común a todos los espacios (apps de Meta, Instagram y TikTok).
-  operador     Boolean   @default(false)
+  operador      Boolean   @default(false)
   ultimoIngreso DateTime? @map("ultimo_ingreso")
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   @@map("usuarios")
 }
-
 
 // ── CRM propio ─────────────────────────────────────────
 // La bandeja de WhatsApp de Ventas, con el diseño de la maqueta aprobada. La
@@ -47,7 +46,7 @@ model User {
 // docs/crm/CONTRATO-CRM.md. Los usuarios se guardan por id sin llave foránea:
 // una cuenta se suspende, no se borra.
 
-/// Una persona que escribe o a quien se le escribe (lead, estudiante, acudiente).
+/// Una persona que escribe o a quien se le escribe (lead, cliente, representante).
 model CrmContacto {
   id             Int               @id @default(autoincrement())
   espacioId      String            @default("") @map("espacio_id")
@@ -72,19 +71,19 @@ model CrmContacto {
   asignadoId     String?           @map("asignado_id")
   tags           String[]          @default([])
   campos         Json              @default("{}")
-  /// origen, carrera, ciudad, puntaje, colegio, correo, compras, previas.
+  /// origen, interes, ciudad, nota, correo, compras, previas.
   ficha          Json              @default("{}")
   pauta          Json?
   menor          Boolean           @default(false)
   /// Autorización de datos (Ley 1581): {via, fecha, texto}.
   autorizacion   Json?
-  acudiente      Json?
+  representante  Json?
   rne            Json?
   noContactar    Json?             @map("no_contactar")
   permisoLlamada Json?             @map("permiso_llamada")
   /// Agregado a Contactos a propósito (no solo porque escribió).
   guardado       Boolean           @default(false)
-  estudianteId   String?           @map("estudiante_id")
+  externoId      String?           @map("externo_id")
   /// Lo demás que la pantalla guarde del contacto.
   extra          Json              @default("{}")
   conversaciones CrmConversacion[]

@@ -89,7 +89,7 @@ if (process.env.CRM_IA_PRUEBAS === '1') {
       case 'pago': {
         const p = obj(b.pago)
         const t = (v: unknown) => (typeof v === 'string' && v.trim() ? v.trim() : null)
-        resultado = await reglasPorPago({ telefono: t(p.telefono), correo: t(p.correo), transaccion: t(p.transaccion), producto: t(p.producto), estudianteId: t(p.estudianteId) })
+        resultado = await reglasPorPago({ telefono: t(p.telefono), correo: t(p.correo), transaccion: t(p.transaccion), producto: t(p.producto), externoId: t(p.externoId) })
         break
       }
       case 'llamar': {

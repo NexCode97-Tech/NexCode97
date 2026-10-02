@@ -13,7 +13,7 @@ import { guardarMensaje } from './salientes'
 import { transcribirPendientes } from './transcripciones'
 import { enviarPorWhatsapp } from './whatsapp'
 import { repartir } from './reparto'
-import { FICHA_EXTERNA, fichaDeContacto, type FichaEstudiante } from './estudiante'
+import { FICHA_EXTERNA, fichaDeContacto, type FichaExterna } from './fichaExterna'
 import { emitirConv } from './tiempoReal'
 import { nombreDe } from './usuarios'
 import { esFestivo } from './difusiones'
@@ -102,7 +102,7 @@ interface Agente extends AgenteMaqueta {
 }
 
 /** Lo que se sabe del contacto en la plataforma, resumido para el modelo. */
-interface EnPlataforma { es: boolean; nombre?: string; via?: string | null; cursos?: string[]; pagos?: string; asesor?: string }
+interface EnPlataforma { es: boolean; nombre?: string; via?: string | null; productos?: string[]; pagos?: string; asesor?: string }
 
 interface EstadoAgente {
   id: string
@@ -267,7 +267,7 @@ async function etapasValidas(): Promise<string[]> {
 }
 // ─── Estado en conversacion.extra._agente ────────────────────────────────────
 
-class Carrera extends Error {}
+class CambioConcurrente extends Error {}
 
 function leerEstado(extra: unknown): EstadoAgente | null {
   const e = obj(obj(extra)._agente)
@@ -287,7 +287,7 @@ async function guardarEstado(convId: number, est: EstadoAgente): Promise<EstadoA
   const json = JSON.stringify(nuevo)
   const n = await prisma.$executeRaw`UPDATE crm_conversaciones SET extra = jsonb_set(extra, '{_agente}', ${json}::jsonb), "updatedAt" = ${new Date()}
     WHERE id = ${convId} AND (extra->'_agente'->>'v')::int = ${est.v}::int`
-  if (!n) throw new Carrera(`el agente de la conversación ${convId} cambió mientras respondía`)
+  if (!n) throw new CambioConcurrente(`el agente de la conversación ${convId} cambió mientras respondía`)
   return nuevo
 }
 
@@ -397,20 +397,20 @@ function limpiarNombre(v: string): string {
     .join(' ').slice(0, 80)
 }
 
-function resumenPlataforma(f: FichaEstudiante): EnPlataforma {
-  if (!f.estudianteId) return { es: false }
-  const cursos = f.cursos.filter(c => !c.historico).map(c => c.p).slice(0, 6)
+function resumenPlataforma(f: FichaExterna): EnPlataforma {
+  if (!f.externoId) return { es: false }
+  const productos = f.productos.filter(c => !c.historico).map(c => c.p).slice(0, 6)
   const c = f.compras
   // Hallado por un correo que dio la persona: pudo dar el de otra. Sus pagos no pasan al modelo.
   const pagos = c && f.via !== 'correo' ? `${c.p}: ${c.medio}, ${c.pagadas} de ${c.total} cuotas, ${c.prox}, ${c.estado}` : undefined
-  return { es: true, nombre: f.nombre ?? undefined, via: f.via, cursos, ...(pagos ? { pagos } : {}), ...(f.asesor ? { asesor: f.asesor } : {}) }
+  return { es: true, nombre: f.nombre ?? undefined, via: f.via, productos, ...(pagos ? { pagos } : {}), ...(f.asesor ? { asesor: f.asesor } : {}) }
 }
 
 const ultimos10 = (t: string | null | undefined) => (t ?? '').replace(/\D/g, '').slice(-10)
 
 /**
  * Lo que sabe la plataforma de este contacto. Si el contacto ya estaba
- * vinculado a un cliente, estudiante.ts no dice por qué (via null): se
+ * vinculado a un cliente, fichaExterna.ts no dice por qué (via null): se
  * revisa si el número de WhatsApp es el del cliente o el de su representante legal.
  * Si no es ninguno (se vinculó por un correo que alguien escribió), cuenta
  * como hallado por correo y el modelo no ve sus pagos.
@@ -420,7 +420,7 @@ async function plataformaDe(contacto: CrmContacto): Promise<{ p: EnPlataforma; c
   if (!r) return null
   const f = r.ficha
   // La ficha externa debe decir por dónde halló a la persona; si no lo dice, se toma lo más prudente: el modelo no ve sus pagos.
-  if (f.estudianteId && f.via === null) f.via = 'correo'
+  if (f.externoId && f.via === null) f.via = 'correo'
   return { p: resumenPlataforma(f), cambio: r.cambio }
 }
 
@@ -428,10 +428,10 @@ function lineaPlataforma(p: EnPlataforma | null): string {
   if (!p) return 'No se pudo revisar en el sistema de la empresa: no afirmes si es o no cliente; si hace falta, usa buscar_cliente.'
   if (!p.es) return 'No aparece como cliente en el sistema de la empresa con este número de WhatsApp.'
   if (p.via === 'correo') return 'Aparece un cliente con un correo que dio la persona, pero su número de WhatsApp no es el del cliente: no digas su nombre ni des detalles de compras o pagos; eso lo confirma el asesor.'
-  const quien = p.via === 'acudiente' ? `El número es del representante legal o de un familiar del cliente ${p.nombre ?? ''}` : `Es cliente: ${p.nombre ?? ''}`
+  const quien = p.via === 'representante' ? `El número es del representante legal o de un familiar del cliente ${p.nombre ?? ''}` : `Es cliente: ${p.nombre ?? ''}`
   return [
     `${quien}.`,
-    p.cursos?.length ? `Compras: ${p.cursos.join(', ')}.` : '',
+    p.productos?.length ? `Compras: ${p.productos.join(', ')}.` : '',
     p.pagos ? `Pagos: ${p.pagos}.` : '',
     p.asesor ? `Su asesor: ${p.asesor}.` : '',
   ].filter(Boolean).join(' ')
@@ -776,7 +776,7 @@ async function turno(convId: number): Promise<void> {
   // Si la consulta falla, queda sin revisar (null) y se intenta de nuevo en el turno siguiente:
   // el modelo no debe oír «no es cliente» cuando en realidad no se pudo saber.
   if (!est.plataforma) {
-    const r = await plataformaDe(conv.contacto).catch(e => { logger.warn(`[CRM agente] estudiante de ${conv.contactoId}: ${(e as Error).message}`); return null })
+    const r = await plataformaDe(conv.contacto).catch(e => { logger.warn(`[CRM agente] ficha externa de ${conv.contactoId}: ${(e as Error).message}`); return null })
     const p = r ? r.p : null
     let nombreOk = est.nombreOk
     let cambioNombre = false
@@ -930,7 +930,7 @@ async function turno(convId: number): Promise<void> {
     return
   }
   try { est = await guardarEstado(convId, { ...est, turnos: est.turnos + 1, vistos: ins, recordado: null }) } catch (e) {
-    if (e instanceof Carrera) return
+    if (e instanceof CambioConcurrente) return
     throw e
   }
 
@@ -946,7 +946,7 @@ function notaAutomatica(conv: ConvCompleta, est: EstadoAgente, msgs: CrmMensaje[
   const p = est.plataforma
   return [
     `Nombre: ${txt(conv.contacto.nombre) || 'sin nombre'}${est.nombreOk ? '' : ' (el de su perfil de WhatsApp)'}.`,
-    p ? (p.es ? `${p.via === 'acudiente' ? 'Representante de' : 'Cliente:'} ${p.nombre ?? ''}${p.cursos?.length ? ` (${p.cursos.join(', ')})` : ''}.` : 'No aparece como cliente en el sistema de la empresa.') : '',
+    p ? (p.es ? `${p.via === 'representante' ? 'Representante de' : 'Cliente:'} ${p.nombre ?? ''}${p.productos?.length ? ` (${p.productos.join(', ')})` : ''}.` : 'No aparece como cliente en el sistema de la empresa.') : '',
     ult ? `Su último mensaje: «${textoIn(obj(ult.datos)).slice(0, 300)}».` : '',
   ].filter(Boolean).join('\n')
 }
@@ -1069,7 +1069,7 @@ async function recordar(conv: ConvCompleta, est: EstadoAgente, a: Agente, msgs: 
   const m = await guardarMensaje(conv.id, { ia: texto.slice(0, 4000), ag: a.id, agente: txt(a.nombre) || est.n, recordatorio: true }, { autorId: null, por: null })
   const sal = await salir(m)
   if (sal.estado === 'fallido') return false
-  try { await guardarEstado(conv.id, { ...est, turnos: est.turnos + 1, recordado: new Date().toISOString() }) } catch (e) { if (!(e instanceof Carrera)) throw e }
+  try { await guardarEstado(conv.id, { ...est, turnos: est.turnos + 1, recordado: new Date().toISOString() }) } catch (e) { if (!(e instanceof CambioConcurrente)) throw e }
   return true
 }
 
@@ -1106,7 +1106,7 @@ function programarTurno(convId: number) {
         e.otra = false
         await dormir(esperaAgrupar)
         try { await turno(convId) } catch (err) {
-          if (err instanceof Carrera) { logger.info(`[CRM agente] ${err.message}`); continue }
+          if (err instanceof CambioConcurrente) { logger.info(`[CRM agente] ${err.message}`); continue }
           logger.error(`[CRM agente] turno ${convId}: ${(err as Error)?.message ?? err}`)
           await abortar(convId, err)
         }

@@ -143,7 +143,7 @@ const FLUJOS = [
      {t:'asignar', a:'Reparto automático · equipo Ventas'},
    ]},
 ];
-const CAMPOS = [{k:'producto', n:'Producto', t:'Texto'}, {k:'empresa', n:'Empresa', t:'Texto'}, {k:'acudiente', n:'Representante legal', t:'Texto'}, {k:'telAcudiente', n:'Teléfono del representante legal', t:'Teléfono'}];
+const CAMPOS = [{k:'producto', n:'Producto', t:'Texto'}, {k:'empresa', n:'Empresa', t:'Texto'}, {k:'representante', n:'Representante legal', t:'Texto'}, {k:'telRepresentante', n:'Teléfono del representante legal', t:'Teléfono'}];
 // «Número de cliente» no es un campo: lo pone el CRM a cada cliente que llega (crm_contactos.numero), único en todo el CRM.
 const REGLAS = [
   {n:'El agente IA responde de noche', on:false, cuando:'Llega un mensaje nuevo', si:['Fuera del horario de atención'], ent:['Responde el agente IA', 'Dejar resumen en nota privada']},
@@ -609,8 +609,8 @@ document.getElementById('panel').addEventListener('input', e => {
 });
 function panel(c){
   const f = c.ficha, cv = I('chev','i cv'), eq = equipoConv(c), sil = silenciado(c);
-  // Las compras salen de la plataforma (GET …/estudiante); mientras llega la respuesta no se afirma nada.
-  const est = c.contactoId ? crmEstudiante(c.contactoId) : null, cp = (est && est.datos && est.datos.compras) || f.compras;
+  // Las compras salen de la plataforma (GET …/ficha-externa); mientras llega la respuesta no se afirma nada.
+  const est = c.contactoId ? crmFichaExterna(c.contactoId) : null, cp = (est && est.datos && est.datos.compras) || f.compras;
   const buscando = est && !est.datos && !est.error;
   const compra = cp
     ? `<div class="pc-buy"><b>${esc(cp.p)}</b><span class="pc-fila">${esc(cp.medio || '')}<span class="pc-chip ${cp.estado === 'Al día' ? '' : 'bad'}">${esc(cp.estado)}</span></span>${cp.total ? `<span class="pc-barra"><i style="width:${Math.round(cp.pagadas / cp.total * 100)}%"></i></span><span class="pc-fila">${cp.pagadas} de ${cp.total} cuotas pagadas</span>` : ''}${cp.prox ? `<span class="pc-fila">${esc(cp.prox)}</span>` : ''}</div>`
@@ -622,7 +622,6 @@ function panel(c){
     c.tel && !esMail ? `<span class="ln">${I('phone')}<span class="pc-num">${esc(c.tel)}</span></span>` : '',
     correo ? `<span class="ln">${I('mail')}<span>${esc(correo)}</span></span>` : '',
     f.ciudad ? `<span class="ln">${I('compass')}<span>${esc(f.ciudad)}, Colombia</span></span>` : '',
-    f.colegio ? `<span class="ln">${I('cap')}<span>${esc(f.colegio)}</span></span>` : '',
     f.origen ? `<span class="ln">${I('chat')}<span>Llegó por ${esc(f.origen)}</span></span>` : '',
   ].join('');
   const h = historial(c), recs = (c.recs || []).filter(r => !r.hecho).length;
@@ -641,7 +640,7 @@ function panel(c){
       <div class="pc-pr"><span>Etapa</span><div class="dd" id="dd-etq"><button type="button" class="pc-ps" id="etq-b" aria-haspopup="listbox" aria-expanded="false"><i class="pc-dot" style="background:${COL[c.etq[0]] || '#cbd5e1'}"></i><span class="t">${esc(c.etq[0] || 'Sin etapa')}</span>${cv}</button><div class="menu" id="etq-m" role="listbox" hidden></div></div></div>
       <div class="pc-pr top"><span>Etiquetas</span><div class="tagsel">${c.tags.map(t => `<span class="tagx"><i style="background:${ETIQ_COL[t]}"></i>${esc(t)}<button type="button" data-tag-del="${esc(t)}" aria-label="Quitar ${esc(t)}">${I('x')}</button></span>`).join('')}<div class="dd" id="dd-tag"><button type="button" class="tg-add" id="tag-b">${I('plus')}Agregar</button><div class="menu tg-menu" id="tag-m" hidden><label class="tg-q">${I('search')}<input id="tag-q" placeholder="Buscar o crear etiqueta" autocomplete="off" aria-label="Buscar o crear etiqueta"></label><div id="tag-l">${listaTags(c, '')}</div></div></div></div></div>`)}
     ${c.pauta ? sec('pauta','megaphone','Anuncio de origen', `<dl class="kv">${[['Plataforma', c.pauta.plataforma], ['Campaña', c.pauta.campana], ['Conjunto', c.pauta.conjunto], ['Anuncio', c.pauta.anuncio], ['Palabra clave', c.pauta.termino], ['Formato', c.pauta.formato], ['Cómo se supo', c.pauta.como]].filter(([, v]) => v).map(([t, v]) => `<dt>${t}</dt><dd>${esc(v)}</dd>`).join('')}</dl>`, esc(pautaNombre), true) : ''}
-    ${!(f.carrera || f.puntaje) ? '' : sec('guia','compass','Lo que busca', `<dl class="kv"><dt>Interés</dt><dd>${esc(f.carrera || 'Sin dato')}</dd></dl>${f.puntaje ? `<p class="pc-nota">${esc(f.puntaje)}</p>` : ''}`, 'Formulario web', true)}
+    ${!(f.interes || f.nota) ? '' : sec('guia','compass','Lo que busca', `<dl class="kv"><dt>Interés</dt><dd>${esc(f.interes || 'Sin dato')}</dd></dl>${f.nota ? `<p class="pc-nota">${esc(f.nota)}</p>` : ''}`, 'Formulario web', true)}
     ${sec('compra','cart','Compras', compra, cp ? '1' : buscando || (est && est.error) ? '' : 'Ninguna', true)}
     ${sec('campos','user','Datos del cliente', `<div class="frm">${CAMPOS.map(fd => fd.ops ? `<div class="fld">${esc(fd.n)}${ddSel('data-cop', opsDe(fd).map(([v, l]) => [fd.k + '::' + v, l]), fd.k + '::' + (c.campos[fd.k] || ''), fd.ph || 'Elige una opción')}</div>` : `<label>${esc(fd.n)}<input data-campo="${esc(fd.k)}" value="${esc(c.campos[fd.k] || '')}" placeholder="${fd.trengo ? 'Viene de Trengo' : 'Sin dato'}"></label>`).join('')}<div style="display:flex;justify-content:flex-end"><button type="button" class="btn" data-guardar-campos="1">${I('check')}Guardar</button></div></div>`, '', true)}
     ${sec('prev','history','Conversaciones anteriores', h.length ? `<div class="pc-hist">${h.join('')}</div>` : '<p class="muted">Es su primera conversación.</p>', h.length ? String(h.length) : 'Primera', true)}
@@ -671,7 +670,7 @@ function pagina(){
       <div class="ksum"><span><b>${vis.length}</b> en el embudo</span>${tiene('Caliente') ? `<span><b>${vis.filter(c => c.etq[0] === 'Caliente').length}</b> calientes</span>` : ''}${tiene('Pagado') ? `<span><b>${vis.filter(c => c.etq[0] === 'Pagado').length}</b> pagadas</span><span>tasa de cierre <b>${vis.length ? Math.round(vis.filter(c => c.etq[0] === 'Pagado').length / vis.length * 100) : 0} %</b></span>` : ''}</div>
       ${COLS.length ? '' : `<p class="muted">${esc(eq)} todavía no tiene etapas. ${st.rol === 'l' ? 'Créalas en Etapas del embudo.' : 'Las crea su líder.'}</p>`}
       <div class="kb">${COLS.map(col => `<div class="kcol" data-col="${esc(col)}"><div class="kh"><span class="dot" style="background:${COL[col]}"></span>${esc(col)}<span class="n">${vis.filter(c => c.etq[0] === col).length}</span></div>
-        ${vis.filter(c => c.etq[0] === col).map(c => `<div class="kc" draggable="true" data-kc="${c.id}" data-open="${c.id}" title="Abrir la conversación"><div class="t"><span class="av" style="background:${AVC[c.id % AVC.length]}">${esc(ini(c.n))}</span><b>${esc(c.n)}</b></div><p>${esc([c.ficha.carrera, c.ficha.ciudad].filter(Boolean).join(' · ') || c.tel)}</p><div class="f"><span>${c.hora}${c.espera ? ' · espera ' + c.espera : ''}</span>${c.asig ? `<span class="mini av" title="${esc(c.asig)}" style="background:${colorPersona(c.asig)}">${fotoAv(fotoDe(c.asig), c.asig)}</span>` : '<span class="mini" title="Sin asignar">–</span>'}</div></div>`).join('')}
+        ${vis.filter(c => c.etq[0] === col).map(c => `<div class="kc" draggable="true" data-kc="${c.id}" data-open="${c.id}" title="Abrir la conversación"><div class="t"><span class="av" style="background:${AVC[c.id % AVC.length]}">${esc(ini(c.n))}</span><b>${esc(c.n)}</b></div><p>${esc([c.ficha.interes, c.ficha.ciudad].filter(Boolean).join(' · ') || c.tel)}</p><div class="f"><span>${c.hora}${c.espera ? ' · espera ' + c.espera : ''}</span>${c.asig ? `<span class="mini av" title="${esc(c.asig)}" style="background:${colorPersona(c.asig)}">${fotoAv(fotoDe(c.asig), c.asig)}</span>` : '<span class="mini" title="Sin asignar">–</span>'}</div></div>`).join('')}
       </div>`).join('')}</div>`;
     kanban();
   } else if (st.pagina === 'difusiones') {
@@ -1200,19 +1199,19 @@ document.getElementById('nm-send').addEventListener('click', async ev => {
 /* ── Arreglos de la auditoría de botones (25-sep) ── */
 function pintarFicha(){
   const c = CONV.find(x => x.id === st.sel); if (!c) return; const f = c.ficha;
-  const est = crmEstudiante(c.contactoId), d = est && est.datos;
+  const est = crmFichaExterna(c.contactoId), d = est && est.datos;
   const kv = (k, v) => v ? `<dt>${k}</dt><dd>${esc(v)}</dd>` : '';
   const compras = (d && d.compras) || f.compras;
   const comprasHtml = compras ? `<dl class="kv">${kv('Producto', compras.p)}${kv('Medio', compras.medio)}${compras.total ? kv('Cuotas', `${compras.pagadas} de ${compras.total}`) : ''}${kv('Estado', compras.estado)}${kv('Próxima', compras.prox)}</dl>` : `<p class="muted" style="margin:0">${!est || est.error ? 'No se pudieron consultar sus compras.' : !est.datos ? 'Buscando sus compras…' : 'Todavía no ha comprado.'}</p>`;
-  const cursos = d && d.cursos && d.cursos.length ? `<div class="hist" style="margin-top:8px">${d.cursos.map(x => `<div><span>${esc(x.p)}${x.historico ? ' · anterior' : ''}</span><span>${esc(hcDia(x.fecha))}</span></div>`).join('')}</div>` : '';
+  const productos = d && d.productos && d.productos.length ? `<div class="hist" style="margin-top:8px">${d.productos.map(x => `<div><span>${esc(x.p)}${x.historico ? ' · anterior' : ''}</span><span>${esc(hcDia(x.fecha))}</span></div>`).join('')}</div>` : '';
   const plataforma = !est || est.cargando ? '<p class="muted" style="margin:0">Buscando en la plataforma…</p>'
     : est.error ? `<p class="muted" style="margin:0">${esc(est.error)}</p>`
-    : d.estudianteId ? `<dl class="kv">${kv('Cliente', d.nombre)}${kv('Asesor', d.asesor)}${kv('Lo encontró por', {telefono:'su teléfono', correo:'su correo', acudiente:'el representante legal'}[d.via] || '')}</dl>${cursos}`
+    : d.externoId ? `<dl class="kv">${kv('Cliente', d.nombre)}${kv('Asesor', d.asesor)}${kv('Lo encontró por', {telefono:'su teléfono', correo:'su correo', representante:'el representante legal'}[d.via] || '')}</dl>${productos}`
     : '<p class="muted" style="margin:0">No aparece como cliente en la plataforma.</p>';
   const recup = d && d.recuperacion && d.recuperacion.length ? `<div class="fcard"><h4>${I('cart')}Recuperación de ventas</h4><div class="hist">${d.recuperacion.map(x => `<div><span>${esc(x.tipo)} · ${esc(x.producto)}</span><span>${esc(x.estado)}</span></div>`).join('')}</div></div>` : '';
   document.getElementById('ficha').innerHTML = `
     <div class="fcard"><h4>${I('user')}Datos</h4><dl class="kv">${kv('Ciudad', f.ciudad)}${kv(CANALES[c.canal] ? (c.canal === 'wa' ? 'WhatsApp' : CANALES[c.canal].n) : 'Contacto', c.tel)}${kv('Correo', f.correo)}${kv('Llegó por', f.origen)}</dl></div>
-    <div class="fcard"><h4>${I('compass')}Lo que busca</h4><dl class="kv"><dt>Interés</dt><dd>${esc(f.carrera || 'Sin dato')}</dd></dl>${f.puntaje ? `<p class="muted" style="margin:0">${esc(f.puntaje)}</p>` : ''}</div>
+    <div class="fcard"><h4>${I('compass')}Lo que busca</h4><dl class="kv"><dt>Interés</dt><dd>${esc(f.interes || 'Sin dato')}</dd></dl>${f.nota ? `<p class="muted" style="margin:0">${esc(f.nota)}</p>` : ''}</div>
     ${c.pauta ? `<div class="fcard"><h4>${I('ad')}Anuncio de origen</h4><dl class="kv"><dt>Plataforma</dt><dd>${esc(c.pauta.plataforma)}</dd><dt>Campaña</dt><dd>${esc(c.pauta.campana)}</dd><dt>Anuncio</dt><dd>${esc(c.pauta.anuncio)}</dd></dl></div>` : ''}
     <div class="fcard"><h4>${I('user')}En la plataforma</h4>${plataforma}</div>
     <div class="fcard"><h4>${I('cart')}Compras</h4>${comprasHtml}</div>${recup}
@@ -2111,7 +2110,7 @@ EQUIPOS.push({id:'soporte-ventas', n:'Soporte de ventas', f:c => c.equipo === 'S
         {t:'mensaje', txt:'Perfecto. Alguien de soporte te escribe en unos minutos.'}],
     },
   }];
-  f.atajos = {anuncio:true, estudiante:true, intentos:1};
+  f.atajos = {anuncio:true, registrado:true, intentos:1};
 })();
 const NOMBRE_SUBPASO = {mensaje:'Mensaje', pregunta:'Pregunta', lista:'Lista de opciones'};
 const ICONO_SUBPASO = {mensaje:'chat', pregunta:'pen', lista:'template'};
@@ -2157,17 +2156,17 @@ function atajosHTML(f){
   const a = f.atajos, tg = (k, t, s) => `<div class="row2"><span>${t}<small>${s}</small></span><button type="button" class="tg" role="switch" data-fl-atajo="${k}" aria-checked="${a[k]}"></button></div>`;
   return `<div class="atj"><b>Reglas del reparto</b>
     ${tg('anuncio', 'Si llega de un anuncio, pasa directo a Ventas', 'Después del nombre no se le hace ninguna pregunta')}
-    ${tg('estudiante', 'Si el número ya es de un cliente, va directo a la lista', 'No se le pregunta el nombre ni si ya es cliente, y tampoco el correo')}
+    ${tg('registrado', 'Si el número ya es de un cliente, va directo a la lista', 'No se le pregunta el nombre ni si ya es cliente, y tampoco el correo')}
     <div class="two3" style="grid-template-columns:1fr 1fr;align-items:end"><div class="fld">Si escribe en vez de elegir${ddSel('data-fl-intentos', [['1', 'Se le repiten las opciones 1 vez'], ['2', 'Se le repiten las opciones 2 veces']], String(a.intentos))}</div>
     <p class="muted" style="margin:0 0 8px">Si sigue sin elegir, queda sin asignar para que el líder la reparta.</p></div></div>`;
 }
-const ESCENARIOS = [['nuevo', 'Lead nuevo'], ['anuncio', 'Llega de un anuncio'], ['estudiante', 'Ya es cliente']];
+const ESCENARIOS = [['nuevo', 'Lead nuevo'], ['anuncio', 'Llega de un anuncio'], ['registrado', 'Ya es cliente']];
 
 /* Prueba en el teléfono de la derecha */
 function chatRamas(f){
   const pr = st.prueba, escn = st.pruebaEsc || 'nuevo', at = f.atajos || {}, out = [];
   const R = f.pasos.findIndex(p => p.t === 'ramas'), rp = f.pasos[R], L = rp.lista;
-  const conocido = escn === 'estudiante' && at.estudiante, anuncio = escn === 'anuncio' && at.anuncio;
+  const conocido = escn === 'registrado' && at.registrado, anuncio = escn === 'anuncio' && at.anuncio;
   const nombre = () => pr && pr.nombre ? pr.nombre.split(' ')[0] : yo.split(' ')[0];
   const tx = t => esc(t.replace(/\{\{nombre\}\}/g, nombre()));
   const msg = t => `<div class="bb">${tx(t)}</div>`, yoB = t => `<div class="bb yo">${esc(t)}</div>`, ev = t => `<div class="bb ev">${esc(t)}</div>`;
@@ -2178,7 +2177,7 @@ function chatRamas(f){
   const asignar = eq => ev(`Pasa al reparto automático del equipo ${eq}, con su nombre y lo que eligió. Fin del flujo.`);
 
   if (escn === 'anuncio') { out.push(ev('Prueba: llegó desde un anuncio de Instagram')); out.push(yoB('Hola, quiero información')); }
-  else if (escn === 'estudiante') { out.push(ev('Prueba: el número es de un cliente que ya compró')); out.push(yoB('Hola, necesito ayuda')); }
+  else if (escn === 'registrado') { out.push(ev('Prueba: el número es de un cliente que ya compró')); out.push(yoB('Hola, necesito ayuda')); }
   else out.push(yoB('Hola, quiero información'));
 
   // Vista sin probar: el recorrido de ejemplo, sin tocar nada.
@@ -2256,7 +2255,7 @@ chatPrueba = function(f){ return f.pasos.some(p => p.t === 'ramas') ? chatRamas(
 function enfocar(id){ const n = document.getElementById(id); if (n) n.focus(); }
 function rpEscribir(f, v){
   v = v.trim(); if (!v) return;
-  const r = st.prueba.rp, conocido = (st.pruebaEsc || 'nuevo') === 'estudiante' && f.atajos.estudiante;
+  const r = st.prueba.rp, conocido = (st.pruebaEsc || 'nuevo') === 'registrado' && f.atajos.registrado;
   if (!conocido && r.op == null) r.esc1.push(v); else r.esc2.push(v);
   render(); enfocar('rp-in');
 }

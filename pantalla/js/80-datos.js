@@ -150,7 +150,7 @@ const crmDatos = (() => {
   function prepararMensajes(c){ if (c && Array.isArray(c.msgs)) c.msgs = separar(c.msgs); }
 
   /* ── Formas: del API a la maqueta ── */
-  const FICHA0 = {origen:'', carrera:'', ciudad:'', puntaje:'', colegio:'', correo:'', compras:null, previas:[]};
+  const FICHA0 = {origen:'', interes:'', ciudad:'', nota:'', correo:'', compras:null, previas:[]};
   function convLocal(r){
     r.msgs = Array.isArray(r.msgs) ? r.msgs.map(msgLocal) : [];
     r.canal = r.canal || 'wa'; r.etq = Array.isArray(r.etq) ? r.etq : []; r.tags = Array.isArray(r.tags) ? r.tags : [];
@@ -709,12 +709,12 @@ const crmDatos = (() => {
     return inf.datos;
   }
   const fichas = new Map();
-  function estudiante(id){
+  function fichaExterna(id){
     if (!id) return {error: 'Este contacto todavía no está guardado en el CRM.'};
     let e = fichas.get(id);
     if (!e || (!e.pidiendo && Date.now() - e.en > 60e3)) {
       e = {...(e || {cargando: true}), pidiendo: true, en: Date.now()}; fichas.set(id, e);
-      crmApi('GET', `/crm/contactos/${id}/estudiante`).then(d => fichas.set(id, {en: Date.now(), datos: d || {}}), err => fichas.set(id, {en: Date.now(), error: err.message}))
+      crmApi('GET', `/crm/contactos/${id}/ficha-externa`).then(d => fichas.set(id, {en: Date.now(), datos: d || {}}), err => fichas.set(id, {en: Date.now(), error: err.message}))
         .finally(() => { const c = CONV.find(x => x.id === st.sel); if (c && c.contactoId === id) { repintarPronto(); if (document.getElementById('app').classList.contains('verficha')) pintarFicha(); } });
     }
     return e;
@@ -772,7 +772,7 @@ const crmDatos = (() => {
   const chatBase = chat;
   chat = function(){ if (!listo) return; tiempos(); const c = CONV.find(x => x.id === st.sel); if (c) prepararMensajes(c); chatBase(); const s = CONV.find(x => x.id === st.sel); if (s && !s._cargada) cargarMensajes(s); };
 
-  return {cargar, revisar, programarRevision, guardarYa, informes, estudiante, mensajesDe, conversacionNueva, unirConv, borrarDatos, agregarContacto, exportarContactos, cambiarNombre, cargarMensajes, renombrarEquipo};
+  return {cargar, revisar, programarRevision, guardarYa, informes, fichaExterna, mensajesDe, conversacionNueva, unirConv, borrarDatos, agregarContacto, exportarContactos, cambiarNombre, cargarMensajes, renombrarEquipo};
 })();
 
 // Lo que usan 10-nucleo.js y los módulos.
@@ -780,7 +780,7 @@ function crmSincronizar(){ crmDatos.programarRevision(0); }
 function crmRenombrarEquipo(viejo, nuevo){ crmDatos.renombrarEquipo(viejo, nuevo); }
 function crmGuardarYa(...claves){ return crmDatos.guardarYa(claves).catch(() => {}); }
 function crmInformes(){ return crmDatos.informes(); }
-function crmEstudiante(contactoId){ return crmDatos.estudiante(contactoId); }
+function crmFichaExterna(contactoId){ return crmDatos.fichaExterna(contactoId); }
 function crmMensajesDe(id){ return crmDatos.mensajesDe(id); }
 function crmConversacionNueva(cuerpo){ return crmDatos.conversacionNueva(cuerpo); }
 function crmUnir(principal, otra){ return crmDatos.unirConv(principal, otra); }

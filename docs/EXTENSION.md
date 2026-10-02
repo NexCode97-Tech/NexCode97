@@ -4,14 +4,14 @@ El CRM funciona solo. Estos son los sitios previstos para conectarlo con los sis
 
 ## Ficha externa del contacto
 
-`src/services/crm/estudiante.ts`, función `fichaDeContacto(contactoId)`.
+`src/services/crm/fichaExterna.ts`, función `fichaDeContacto(contactoId)`.
 
 Devuelve lo que otro sistema sabe de la persona (qué compró, cómo va con sus pagos, quién la atiende). De fábrica
 devuelve `null`. Al implementarla:
 
 - Buscar a la persona por `telefono` o `correo` del contacto.
-- Devolver la ficha con la forma `FichaEstudiante` y decir en `via` por dónde se halló.
-- Guardar `contacto.estudianteId` (el id en ese sistema) y `ficha.compras`: los usan los filtros de la bandeja.
+- Devolver la ficha con la forma `FichaExterna` y decir en `via` por dónde se halló.
+- Guardar `contacto.externoId` (el id en ese sistema) y `ficha.compras`: los usan los filtros de la bandeja.
 - Poner `FICHA_EXTERNA = true` para que los agentes IA reciban la herramienta de búsqueda.
 
 La pantalla la muestra en la pestaña de la ficha y en el panel del contacto.
@@ -34,10 +34,3 @@ disparador «Se confirma un pago» sobre la conversación del comprador.
 
 `src/services/crm/integraciones.ts`. Cada integración declara sus consultas y los agentes las reciben como
 herramientas de solo lectura. Viene una de ejemplo (Hotmart, por credenciales del espacio).
-
-## Nombres internos
-
-Las pantallas y los agentes IA hablan de «cliente» y «representante legal». Por dentro, algunos nombres del código
-vienen de su primer uso en una academia y se conservaron para no romper nada: `estudianteId`, `FichaEstudiante`,
-la ruta `/crm/contactos/:id/estudiante`, y los campos `acudiente` y `telAcudiente` (el representante legal de un
-menor de edad, para la autorización de datos). No se ven en ninguna pantalla.

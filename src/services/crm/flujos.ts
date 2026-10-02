@@ -8,7 +8,7 @@ import { leerAjuste, leerPreferencias } from './ajustes'
 import { guardarMensaje } from './salientes'
 import { enviarPorWhatsapp, idDeOpcion, recortar } from './whatsapp'
 import { repartir } from './reparto'
-import { fichaDeContacto } from './estudiante'
+import { fichaDeContacto } from './fichaExterna'
 import { emitirConv } from './tiempoReal'
 import { idDeNombre, nombreDe } from './usuarios'
 import { esFestivo } from './difusiones'
@@ -23,7 +23,7 @@ import { tieneSalida } from './formas'
  * - flujoIniciar: primer contacto (conversación nueva, o reabierta sin
  *   asesor). Si el agente IA no la tomó, arranca el primer flujo encendido del
  *   canal cuyo «Cuándo» se cumple. «Saltar si ya es un contacto conocido»:
- *   con conversaciones anteriores, dueño o estudiante de la plataforma no
+ *   con conversaciones anteriores, dueño o cliente de la plataforma no
  *   corre (salvo el cliente cuando el flujo tiene la ramificación con el
  *   atajo de clientes, que tiene su propio saludo y va directo a la lista).
  * - flujoContinuar: la conversación está en un flujo y el cliente respondió.
@@ -81,7 +81,7 @@ interface Flujo {
   saltarConocidos?: boolean
   espera?: number | string
   pasos: Paso[]
-  atajos?: { anuncio?: boolean; estudiante?: boolean; intentos?: number | string }
+  atajos?: { anuncio?: boolean; registrado?: boolean; intentos?: number | string }
 }
 
 // Los mismos valores por defecto que la pantalla: si el ajuste `flujos` nunca
@@ -122,7 +122,7 @@ export const FLUJOS_DEFECTO: Flujo[] = [
         },
       } as Paso,
     ],
-    atajos: { anuncio: true, estudiante: true, intentos: 1 },
+    atajos: { anuncio: true, registrado: true, intentos: 1 },
   },
   {
     id: 'interes', n: 'Interés por producto', on: false, cuando: CUANDO_PRIMER, canales: ['wa'], saltarConocidos: true, espera: 10,
@@ -137,7 +137,7 @@ export const FLUJOS_DEFECTO: Flujo[] = [
 /** Los campos personalizados por defecto de la pantalla (CAMPOS): nombre visible → clave. */
 const CAMPOS_DEFECTO = [
   { k: 'producto', n: 'Producto' }, { k: 'empresa', n: 'Empresa' },
-  { k: 'acudiente', n: 'Representante legal' }, { k: 'telAcudiente', n: 'Teléfono del representante legal' }, { k: 'numCliente', n: 'Número de cliente' },
+  { k: 'representante', n: 'Representante legal' }, { k: 'telRepresentante', n: 'Teléfono del representante legal' }, { k: 'numCliente', n: 'Número de cliente' },
 ]
 
 /** Horario por defecto de la pantalla (CFG.horario): todos los días de 7 a. m. a 10 p. m. */
@@ -196,9 +196,9 @@ const RELLENO_FIN = new Set(['gracias', 'muchas', 'porfa', 'porfavor', 'please',
 // Palabras que no van en un nombre: si aparecen, lo que escribió es una pregunta o un pedido, no su nombre.
 const NO_NOMBRE = new Set(['quiero', 'quisiera', 'queria', 'info', 'informacion', 'informes', 'precio', 'precios', 'valor', 'costo', 'cuanto', 'cuantos',
   'interesa', 'interesado', 'interesada', 'necesito', 'ayuda', 'gracias', 'favor', 'porfa',
-  'si', 'no', 'ok', 'okey', 'listo', 'bien', 'claro', 'estoy', 'tengo', 'hijo', 'hija', 'mama', 'papa', 'acudiente', 'grado', 'decimo',
-  'universidad', 'examen', 'clase', 'clases', 'pago', 'pagos', 'cuota', 'cuotas', 'inscribir', 'inscribirme', 'inscripcion', 'matricula',
-  'estudiante', 'estudiar', 'comprar', 'saber', 'pregunta', 'preguntar', 'duda', 'dudas', 'hola', 'buenas', 'buenos', 'dias', 'tardes', 'noches',
+  'si', 'no', 'ok', 'okey', 'listo', 'bien', 'claro', 'estoy', 'tengo', 'hijo', 'hija', 'mama', 'papa',
+  'pago', 'pagos', 'cuota', 'cuotas', 'pedido', 'compra',
+  'comprar', 'saber', 'pregunta', 'preguntar', 'duda', 'dudas', 'hola', 'buenas', 'buenos', 'dias', 'tardes', 'noches',
   'que', 'como', 'donde', 'cuando', 'cual', 'para', 'sobre', 'por', 'un', 'una', 'unos', 'mas', 'asesor', 'asesora', 'whatsapp', 'anuncio',
   'ver', 'vi', 'sticker', 'imagen', 'audio', 'video', 'mensaje', 'llego', 'puedo', 'puede', 'quien', 'porque', 'pero', 'tambien', 'aqui', 'hay',
   'esta', 'este', 'esto', 'eso', 'ese', 'perfecto', 'nada', 'gratis', 'descuento', 'promo', 'promocion', 'horario', 'horarios', 'plataforma',
@@ -247,33 +247,15 @@ function valida(validar: string | undefined, v: string): boolean {
   }
 }
 
-/**
- * «Estoy en 11°» → grado 11; «Soy papá o mamá» → etiqueta Acudiente (como los
- * valores de CAMPOS). Si no se reconoce: con `libre` queda el texto tal cual
- * (la persona eligió esa opción de la lista); si no, nada.
- */
-function gradoDe(v: string, libre: boolean): { grado?: string; tag?: string } {
-  const p = plano(v)
-  if (/\b(papa|mama|padre|madre|acudiente|mi hij)/.test(p)) return { tag: 'Representante' }
-  if (/gradu/.test(p)) return { grado: 'Graduado' }
-  const m = p.match(/\b(9|10|11)\b/)
-  if (m) return { grado: m[1] }
-  if (/\bnoveno\b/.test(p)) return { grado: '9' }
-  if (/\bdecimo\b/.test(p)) return { grado: '10' }
-  if (/\b(once|undecimo)\b/.test(p)) return { grado: '11' }
-  return libre ? { grado: v.trim().slice(0, 40) } : {}
-}
-
 // Palabras sueltas que no alcanzan para elegir una opción («de», «la»…).
 const MUY_CORTAS = new Set(['de', 'la', 'el', 'y', 'a', 'o', 'en', 'que', 'con', 'por', 'los', 'las', 'un', 'una', 'mi', 'me', 'se', 'no', 'si', 'es', 'lo'])
 
 /**
  * Elige una opción por el id del botón o fila, por el título, por lo que
  * escribió si nombra una sola opción («tengo un problema con pagos y
- * cuotas»), o si lo que escribió está dentro de una sola opción («11» →
- * «Estoy en 11°»). En una lista de grados también por el grado («once»).
+ * cuotas»), o si lo que escribió está dentro de una sola opción.
  */
-function elegir(ctx: Pick<CtxEntrante, 'respuestaId'>, texto: string, titulos: string[], maxTitulo: number, guardar?: string): number {
+function elegir(ctx: Pick<CtxEntrante, 'respuestaId'>, texto: string, titulos: string[], maxTitulo: number, _guardar?: string): number {
   if (ctx.respuestaId) {
     const i = titulos.findIndex((o, j) => idDeOpcion(j, o) === ctx.respuestaId)
     if (i >= 0) return i
@@ -290,12 +272,6 @@ function elegir(ctx: Pick<CtxEntrante, 'respuestaId'>, texto: string, titulos: s
   if (t.length >= 2 && !MUY_CORTAS.has(t)) {
     const dentro = unica(planos.map((p, j) => (conEspacios(p).includes(conEspacios(t)) ? j : -1)).filter(j => j >= 0))
     if (dentro >= 0) return dentro
-  }
-  if (plano(guardar ?? '') === 'grado') {
-    const g = gradoDe(texto, false)
-    if (g.grado || g.tag) {
-      return unica(titulos.map((o, j) => { const x = gradoDe(o, false); return (g.tag ? x.tag === g.tag : x.grado === g.grado) ? j : -1 }).filter(j => j >= 0))
-    }
   }
   return -1
 }
@@ -347,9 +323,9 @@ interface Estado {
   desde: string
   inicio: string
   v: number
-  estudiante: boolean
+  registrado: boolean
   anuncio: boolean
-  nombreEst: string | null
+  nombreRegistrado: string | null
   equipo: string | null
   resumen: string[]
   /** Lo que dio como nombre en el primer intento si le faltó el apellido («Valentina»): se junta con el reintento («Ruiz»). */
@@ -379,7 +355,7 @@ function leerEstado(extra: unknown): Estado | null {
   return {
     id: e.id, n: txt(e.n) || 'Flujo', ruta: txt(e.ruta), espera: (['texto', 'boton', 'lista'].includes(e.espera) ? e.espera : null) as Espera | null,
     intentos: Number(e.intentos) || 0, desde: txt(e.desde) || new Date(0).toISOString(), inicio: txt(e.inicio) || new Date(0).toISOString(), v: e.v,
-    estudiante: !!e.estudiante, anuncio: !!e.anuncio, nombreEst: txt(e.nombreEst) || null, equipo: txt(e.equipo) || null,
+    registrado: !!e.registrado, anuncio: !!e.anuncio, nombreRegistrado: txt(e.nombreRegistrado) || null, equipo: txt(e.equipo) || null,
     resumen: Array.isArray(e.resumen) ? e.resumen.map(String) : [], previo: txt(e.previo) || null,
   }
 }
@@ -394,7 +370,7 @@ export function retenidaPorFlujo(extra: unknown): boolean {
 }
 
 /** Otro proceso cambió el flujo mientras este lo corría: se deja de hacer. */
-class Carrera extends Error {}
+class CambioConcurrente extends Error {}
 
 type Fin =
   | { tipo: 'equipo'; equipo: string }
@@ -434,7 +410,7 @@ class Corrida {
           WHERE id = ${this.id} AND extra->'_flujo' IS NULL`
       : await prisma.$executeRaw`UPDATE crm_conversaciones SET extra = jsonb_set(extra, '{_flujo}', ${json}::jsonb), espera_desde = NULL, "updatedAt" = ${ahora}
           WHERE id = ${this.id} AND (extra->'_flujo'->>'v')::int = ${this.vBase}::int`
-    if (!n) throw new Carrera(`el flujo de la conversación ${this.id} cambió mientras corría`)
+    if (!n) throw new CambioConcurrente(`el flujo de la conversación ${this.id} cambió mientras corría`)
     this.vBase = nuevo.v
     this.est = nuevo
   }
@@ -464,7 +440,7 @@ class Corrida {
    * perfil de WhatsApp puede ser «🙂» o «Mamá»), se quita con su coma.
    */
   private texto(t: string | undefined): string {
-    const completo = this.est.estudiante && this.est.nombreEst ? this.est.nombreEst : (this.conv.contacto.nombre ?? '')
+    const completo = this.est.registrado && this.est.nombreRegistrado ? this.est.nombreRegistrado : (this.conv.contacto.nombre ?? '')
     const p = limpiarNombre(completo).split(' ')[0] ?? ''
     const primero = esNombre(p, 1) ? p : ''
     const s = String(t ?? '')
@@ -574,26 +550,18 @@ class Corrida {
       await this.cambiarContacto({ correo })
       this.est.resumen.push(`correo ${correo}`)
       // Con el correo se vuelve a buscar la compra en la plataforma (para Soporte de ventas).
-      if (!this.est.estudiante) {
+      if (!this.est.registrado) {
         const r = await fichaDeContacto(this.conv.contactoId).catch(() => null)
-        if (r?.ficha.estudianteId) { this.est.resumen.push('su compra está en la plataforma'); await emitirConv(this.id, null) }
+        if (r?.ficha.externoId) { this.est.resumen.push('su compra está en la plataforma'); await emitirConv(this.id, null) }
       }
       return
     }
     if (d === 'etiqueta') return this.ponerEtiqueta(v)
     const k = await this.contacto()
-    if (d === 'ciudad' || d === 'carrera que busca' || d === 'carrera') {
-      const clave = d === 'ciudad' ? 'ciudad' : 'carrera'
+    if (d === 'ciudad' || d === 'interes' || d === 'interés') {
+      const clave = d === 'ciudad' ? 'ciudad' : 'interes'
       await this.cambiarContacto({ ficha: { ...obj(k.ficha), [clave]: v.slice(0, 120) } as Prisma.InputJsonValue })
       this.est.resumen.push(`${destino.toLowerCase()} ${v.slice(0, 60)}`)
-      return
-    }
-    if (d === 'grado') {
-      const g = gradoDe(v, esValida)
-      if (!g.grado && !g.tag) return
-      if (g.tag) { await this.ponerEtiqueta(g.tag); return }
-      await this.cambiarContacto({ campos: { ...obj(k.campos), grado: g.grado } as Prisma.InputJsonValue })
-      this.est.resumen.push(`grado ${g.grado}`)
       return
     }
     if (d === 'producto' && plano(v) === 'otro') return
@@ -639,7 +607,7 @@ class Corrida {
       const p = this.paso(c)
       if (!p) { c = this.siguiente(c); continue }
       // Lo que solo se le pregunta a quien todavía no es cliente.
-      if (enRama && p.soloNuevos && this.est.estudiante) { c = this.siguiente(c); continue }
+      if (enRama && p.soloNuevos && this.est.registrado) { c = this.siguiente(c); continue }
       switch (p.t) {
         case 'ramas':
           if (enRama) { c = this.siguiente(c); continue }
@@ -682,13 +650,13 @@ class Corrida {
     return this.terminar({ tipo: 'error', error: 'el flujo tiene demasiados pasos seguidos sin pregunta' })
   }
 
-  /** La Bienvenida aprobada: anuncio → Ventas; estudiante → saludo y lista; si no, la pregunta con los dos botones. */
+  /** La Bienvenida aprobada: anuncio → Ventas; cliente → saludo y lista; si no, la pregunta con los dos botones. */
   private async entrarRamas(i: number): Promise<void> {
     const rp = this.f.pasos[i]
     const at = this.f.atajos ?? {}
     const L = rp.lista ?? {}
-    if (this.est.estudiante && at.estudiante) {
-      this.est.resumen.push(`cliente registrado${this.est.nombreEst ? ` (${limpiarNombre(this.est.nombreEst)})` : ''}`)
+    if (this.est.registrado && at.registrado) {
+      this.est.resumen.push(`cliente registrado${this.est.nombreRegistrado ? ` (${limpiarNombre(this.est.nombreRegistrado)})` : ''}`)
       return this.mostrarLista(i, `${this.texto(rp.saludoConocido)} ${this.texto(L.txt)}`.trim())
     }
     if (this.est.anuncio && at.anuncio) {
@@ -934,9 +902,9 @@ async function tomadaPor(conv: CrmConversacion, est: Estado): Promise<string | n
  * dónde): es el cliente si el número o el correo son los suyos; si no,
  * es alguien de su familia y no se le saluda con el nombre del cliente.
  */
-async function viaDelVinculo(_k: CrmContacto, _estudianteId: string): Promise<'telefono' | 'correo' | 'acudiente'> {
+async function viaDelVinculo(_k: CrmContacto, _externoId: string): Promise<'telefono' | 'correo' | 'representante'> {
   // La ficha externa debe decir por dónde halló a la persona; si no lo dice, se toma lo más prudente.
-  return 'acudiente'
+  return 'representante'
 }
 
 /** Qué flujo corre: los de un «Cuándo» específico que se cumple primero; si no, el del primer mensaje. En cada grupo, el de arriba. */
@@ -990,7 +958,7 @@ export async function flujoContinuar(ctx: CtxEntrante): Promise<boolean> {
     await corrida.responder(ctx)
     return true
   } catch (e) {
-    if (e instanceof Carrera) { logger.info(`[CRM flujos] ${e.message}`); return true }
+    if (e instanceof CambioConcurrente) { logger.info(`[CRM flujos] ${e.message}`); return true }
     logger.error(`[CRM flujos] conversación ${ctx.convId}: ${(e as Error)?.message ?? e}`)
     if (corrida) { await corrida.abortar(e); return true }
     return false
@@ -1010,37 +978,37 @@ export async function flujoIniciar(ctx: CtxEntrante): Promise<boolean> {
     const f = await elegirFlujo(await leerFlujos(), conv)
     if (!f) return false
 
-    // ¿Ya lo conocemos? Estudiante de la plataforma, conversaciones anteriores o dueño.
+    // ¿Ya lo conocemos? Cliente registrado, conversaciones anteriores o dueño.
     const k = conv.contacto
-    const ficha = (await fichaDeContacto(k.id).catch(e => { logger.warn(`[CRM flujos] estudiante de ${k.id}: ${(e as Error).message}`); return null }))?.ficha ?? null
-    const estudiante = !!ficha?.estudianteId
+    const ficha = (await fichaDeContacto(k.id).catch(e => { logger.warn(`[CRM flujos] ficha externa de ${k.id}: ${(e as Error).message}`); return null }))?.ficha ?? null
+    const registrado = !!ficha?.externoId
     const previas = await prisma.crmConversacion.count({ where: { contactoId: k.id, id: { not: conv.id } } })
-    const conocido = estudiante || previas > 0 || ctx.reabierta || !!k.asignadoId
+    const conocido = registrado || previas > 0 || ctx.reabierta || !!k.asignadoId
     const rp = f.pasos.find(p => p.t === 'ramas')
-    const atajoEstudiante = !!(rp && f.atajos?.estudiante && estudiante)
-    if (f.saltarConocidos !== false && conocido && !atajoEstudiante) {
-      await guardarMensaje(conv.id, { ev: 'flow', t: `No corre el flujo ${f.n}: ${estudiante ? 'el número es de un cliente registrado' : 'ya es un contacto conocido'}. Pasa al reparto.` }, { autorId: null, por: null })
+    const atajoRegistrado = !!(rp && f.atajos?.registrado && registrado)
+    if (f.saltarConocidos !== false && conocido && !atajoRegistrado) {
+      await guardarMensaje(conv.id, { ev: 'flow', t: `No corre el flujo ${f.n}: ${registrado ? 'el número es de un cliente registrado' : 'ya es un contacto conocido'}. Pasa al reparto.` }, { autorId: null, por: null })
       return false
     }
 
     // El nombre de la plataforma es más confiable que el del perfil de WhatsApp (no si el número es del representante legal).
-    const via = estudiante ? (ficha?.via ?? await viaDelVinculo(k, ficha!.estudianteId!)) : null
-    const nombreEst = estudiante && via !== 'acudiente' ? txt(ficha?.nombre) || null : null
-    if (nombreEst && ctx.contactoNuevo) conv.contacto = await prisma.crmContacto.update({ where: { id: k.id }, data: { nombre: limpiarNombre(nombreEst) } })
+    const via = registrado ? (ficha?.via ?? await viaDelVinculo(k, ficha!.externoId!)) : null
+    const nombreRegistrado = registrado && via !== 'representante' ? txt(ficha?.nombre) || null : null
+    if (nombreRegistrado && ctx.contactoNuevo) conv.contacto = await prisma.crmContacto.update({ where: { id: k.id }, data: { nombre: limpiarNombre(nombreRegistrado) } })
 
     const ahora = new Date().toISOString()
     const est: Estado = {
       id: f.id, n: f.n, ruta: 'pasos.0', espera: null, intentos: 0, desde: ahora, inicio: ahora, v: 0,
-      estudiante, anuncio: !!k.pauta, nombreEst, equipo: null, resumen: [], previo: null,
+      registrado, anuncio: !!k.pauta, nombreRegistrado, equipo: null, resumen: [], previo: null,
     }
     corrida = new Corrida(conv, f, est, null)
-    try { await corrida.guardar() } catch (e) { if (e instanceof Carrera) return true; throw e }
+    try { await corrida.guardar() } catch (e) { if (e instanceof CambioConcurrente) return true; throw e }
     guardada = true
     // El cliente conocido salta el saludo y el nombre: va directo a la ramificación.
-    await corrida.avanzar(atajoEstudiante && rp ? { i: f.pasos.indexOf(rp) } : { i: 0 })
+    await corrida.avanzar(atajoRegistrado && rp ? { i: f.pasos.indexOf(rp) } : { i: 0 })
     return true
   } catch (e) {
-    if (e instanceof Carrera) { logger.info(`[CRM flujos] ${e.message}`); return true }
+    if (e instanceof CambioConcurrente) { logger.info(`[CRM flujos] ${e.message}`); return true }
     logger.error(`[CRM flujos] al iniciar en ${ctx.convId}: ${(e as Error)?.message ?? e}`)
     if (corrida && guardada) { await corrida.abortar(e); return true }
     return false

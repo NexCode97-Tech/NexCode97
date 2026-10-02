@@ -365,7 +365,7 @@
     const filtrada = INF.equipo || INF.asesor || INF.resp !== 'todas';
     const respuestas = `<div class="card"><h3>Respuestas<small>${total.toLocaleString('es-CO')} ${total === 1 ? 'respuesta' : 'respuestas'}</small></h3><table class="tb3 enc-tb"><thead><tr><th>Fecha</th><th>Cliente</th><th>Asesor</th><th>Atención</th><th>Recomienda</th><th>Comentario</th><th></th></tr></thead><tbody>`
       + (lista.length ? lista.map(r => { const com = typeof r.com === 'string' ? r.com.trim() : '', n = Math.round(num(r.nps));
-          return `<tr><td>${esc(r.t ? fechaInf(r.t) : '')}</td><td>${esc(r.estudiante || '')}</td><td>${esc(r.asesor || '')}</td><td>${r.aten != null ? estrellasEnc(Math.round(num(r.aten))) : '—'}</td><td>${r.nps != null ? `<span class="nps ${npsCls(n)}">${n}</span>` : '—'}</td>`
+          return `<tr><td>${esc(r.t ? fechaInf(r.t) : '')}</td><td>${esc(r.cliente || '')}</td><td>${esc(r.asesor || '')}</td><td>${r.aten != null ? estrellasEnc(Math.round(num(r.aten))) : '—'}</td><td>${r.nps != null ? `<span class="nps ${npsCls(n)}">${n}</span>` : '—'}</td>`
             + `<td class="com">${com ? `«${esc(com)}»` : '<span class="muted">Sin comentario</span>'}</td><td>${r.convId != null ? `<button type="button" class="enc-ver" data-enc-ver="${esc(r.convId)}">Ver conversación${SVG(SALIR)}</button>` : ''}</td></tr>`; }).join('')
         : `<tr><td colspan="7" class="vacia">${!hay ? 'Cargando…' : filtrada ? 'Ninguna respuesta con estos filtros.' : 'Todavía no hay encuestas respondidas.'}</td></tr>`)
       + `</tbody></table>${faltan ? `<div class="enc-mas"><button type="button" class="btn" data-enc-mas="1">Mostrar ${Math.min(20, faltan)} más</button></div>` : ''}</div>`;

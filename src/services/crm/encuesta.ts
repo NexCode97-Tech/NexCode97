@@ -1050,7 +1050,7 @@ interface Fila {
   /** Una encuesta enviada en el periodo (false: una respuesta de antes sin su envío enlazado, cuenta por su fecha). */
   enviada: boolean
   conv: { id: number; equipo: string | null; asignadoId: string | null; soloLider: boolean }
-  estudiante: string
+  cliente: string
   asesorId: string | null
   asesor: string | null
   equipo: string
@@ -1092,7 +1092,7 @@ export async function informeEncuestas(a: Alcance, eqs: EquiposNorm, f: FiltrosI
   ])
   const nombreDe = new Map(usuarios.map(u => [u.id, u.nombre]))
   const idDe = new Map(usuarios.map(u => [u.nombre.toLowerCase(), u.id]))
-  const estudiante = (k: { nombre: string | null; telefono: string | null }) => txt(k.nombre) || telVisible(k.telefono) || 'Sin nombre'
+  const nombreContacto = (k: { nombre: string | null; telefono: string | null }) => txt(k.nombre) || telVisible(k.telefono) || 'Sin nombre'
   const convDe = (c: { id: number; equipo: string | null; asignadoId: string | null; soloLider: boolean }) => ({ id: c.id, equipo: c.equipo, asignadoId: c.asignadoId, soloLider: c.soloLider })
 
   const csatIds = eventos.map(e => txt(obj(obj(e.datos).encuesta).csatId)).filter(Boolean)
@@ -1112,13 +1112,13 @@ export async function informeEncuestas(a: Alcance, eqs: EquiposNorm, f: FiltrosI
       const csat = csatPorId.get(txt(enc.csatId))
       const asesorId = txt(enc.asesorId) || null
       filas.push({
-        enviada: true, conv, estudiante: estudiante(e.conversacion.contacto), asesorId,
+        enviada: true, conv, cliente: nombreContacto(e.conversacion.contacto), asesorId,
         asesor: (asesorId ? nombreDe.get(asesorId) : null) ?? (txt(enc.asesor) || null),
         equipo: txt(enc.equipo) || equipoDeConv(conv), resp: csat ? respuestaDe(csat) : null,
       })
     } else {
       // Encuesta de texto de antes: el asesor es quien finalizó (una aproximación) y el equipo, el de la conversación.
-      filas.push({ enviada: true, conv, estudiante: estudiante(e.conversacion.contacto), asesorId: e.autorId, asesor: e.autorId ? nombreDe.get(e.autorId) ?? null : null, equipo: equipoDeConv(conv), resp: null })
+      filas.push({ enviada: true, conv, cliente: nombreContacto(e.conversacion.contacto), asesorId: e.autorId, asesor: e.autorId ? nombreDe.get(e.autorId) ?? null : null, equipo: equipoDeConv(conv), resp: null })
     }
   }
   for (const m of viejos) {
@@ -1127,7 +1127,7 @@ export async function informeEncuestas(a: Alcance, eqs: EquiposNorm, f: FiltrosI
     const conv = convDe(m.conversacion)
     const porNombre = txt(c.asesor) ? idDe.get(txt(c.asesor).toLowerCase()) ?? null : null
     const asesorId = porNombre ?? conv.asignadoId
-    filas.push({ enviada: false, conv, estudiante: estudiante(m.conversacion.contacto), asesorId, asesor: txt(c.asesor) || (asesorId ? nombreDe.get(asesorId) ?? null : null), equipo: equipoDeConv(conv), resp: respuestaDe(m) })
+    filas.push({ enviada: false, conv, cliente: nombreContacto(m.conversacion.contacto), asesorId, asesor: txt(c.asesor) || (asesorId ? nombreDe.get(asesorId) ?? null : null), equipo: equipoDeConv(conv), resp: respuestaDe(m) })
   }
 
   // Alcance.
@@ -1185,7 +1185,7 @@ export async function informeEncuestas(a: Alcance, eqs: EquiposNorm, f: FiltrosI
     .sort((x, y) => y.resp!.t.getTime() - x.resp!.t.getTime())
   const respuestas = lista.slice(0, f.limite).map(x => ({
     id: x.resp!.id, t: x.resp!.t.toISOString(), convId: veConv(a, x.conv) ? x.conv.id : null,
-    estudiante: x.estudiante, asesor: x.asesor, asesorId: x.asesorId, equipo: x.equipo,
+    cliente: x.cliente, asesor: x.asesor, asesorId: x.asesorId, equipo: x.equipo,
     aten: x.resp!.aten, nps: x.resp!.nps, com: x.resp!.com,
   }))
 

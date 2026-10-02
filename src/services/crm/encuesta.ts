@@ -763,7 +763,7 @@ async function salir(ev: CrmMensaje, c: ConvEncuesta, cfg: CfgEncuesta, token: s
     return
   }
 
-  // 2. Meta lo aceptó: al estudiante ya le llegó. Desde aquí nada suelta la reserva ni dice «no salió»; si la base falla,
+  // 2. Meta lo aceptó: al cliente ya le llegó. Desde aquí nada suelta la reserva ni dice «no salió»; si la base falla,
   // se reintenta y, si no, queda en el registro.
   const { wamid, waIdCliente, flowId } = enviado
   const enc = { ...obj(datos.encuesta), flowId }

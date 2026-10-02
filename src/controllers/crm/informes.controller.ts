@@ -78,7 +78,7 @@ export async function informes(req: Request, res: Response) {
   const conIa = ids.length ? await prisma.crmMensaje.groupBy({ by: ['conversacionId'], where: { conversacionId: { in: ids }, tipo: { in: ['ia', 'recepcion'] } } }) : []
 
   // Encuestas: enviadas = evento «star»; respondidas = mensajes csat. Un csat solo cuenta si lo
-  // guardó el servidor con la respuesta del estudiante (autorId null): la ruta de mensajes no deja crearlos.
+  // guardó el servidor con la respuesta del cliente (autorId null): la ruta de mensajes no deja crearlos.
   // Cada respuesta es de la asesora que nombra la encuesta (la que atendía cuando se envió); si ese
   // nombre ya no es de nadie del equipo, de la asignada a la conversación.
   const nombreDe = new Map(usuarios.map(u => [u.id, u.nombre]))

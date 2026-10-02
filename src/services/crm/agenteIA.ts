@@ -410,8 +410,8 @@ const ultimos10 = (t: string | null | undefined) => (t ?? '').replace(/\D/g, '')
 
 /**
  * Lo que sabe la plataforma de este contacto. Si el contacto ya estaba
- * vinculado a un estudiante, estudiante.ts no dice por qué (via null): se
- * revisa si el número de WhatsApp es el del estudiante o el de su acudiente.
+ * vinculado a un cliente, estudiante.ts no dice por qué (via null): se
+ * revisa si el número de WhatsApp es el del cliente o el de su representante legal.
  * Si no es ninguno (se vinculó por un correo que alguien escribió), cuenta
  * como hallado por correo y el modelo no ve sus pagos.
  */
@@ -425,13 +425,13 @@ async function plataformaDe(contacto: CrmContacto): Promise<{ p: EnPlataforma; c
 }
 
 function lineaPlataforma(p: EnPlataforma | null): string {
-  if (!p) return 'No se pudo revisar en la plataforma: no afirmes si es o no estudiante; si hace falta, usa buscar_estudiante.'
-  if (!p.es) return 'No aparece como estudiante en la plataforma con este número de WhatsApp.'
-  if (p.via === 'correo') return 'Aparece un estudiante con un correo que dio la persona, pero su número de WhatsApp no es el del estudiante: no digas su nombre ni des detalles de cursos o pagos; eso lo confirma el asesor.'
-  const quien = p.via === 'acudiente' ? `El número es de un acudiente del estudiante ${p.nombre ?? ''}` : `Es estudiante: ${p.nombre ?? ''}`
+  if (!p) return 'No se pudo revisar en el sistema de la empresa: no afirmes si es o no cliente; si hace falta, usa buscar_cliente.'
+  if (!p.es) return 'No aparece como cliente en el sistema de la empresa con este número de WhatsApp.'
+  if (p.via === 'correo') return 'Aparece un cliente con un correo que dio la persona, pero su número de WhatsApp no es el del cliente: no digas su nombre ni des detalles de compras o pagos; eso lo confirma el asesor.'
+  const quien = p.via === 'acudiente' ? `El número es del representante legal o de un familiar del cliente ${p.nombre ?? ''}` : `Es cliente: ${p.nombre ?? ''}`
   return [
     `${quien}.`,
-    p.cursos?.length ? `Cursos: ${p.cursos.join(', ')}.` : '',
+    p.cursos?.length ? `Compras: ${p.cursos.join(', ')}.` : '',
     p.pagos ? `Pagos: ${p.pagos}.` : '',
     p.asesor ? `Su asesor: ${p.asesor}.` : '',
   ].filter(Boolean).join(' ')
@@ -470,7 +470,7 @@ function formatoWhatsapp(a: Agente, pedir: DatoRecopilar[] = []): string[] {
   const otros = pedir.filter(d => d.k !== 'nombre')
   return [
     'Escribes directamente el mensaje de WhatsApp para la persona: texto plano, sin JSON, sin títulos ni formato markdown.',
-    `Para actuar usas las herramientas: pasar_a_equipo para pasar la conversación con la nota interna${a.acc?.datos !== false ? ', guardar_nombre cuando te dé su nombre y apellido' : ''}${FICHA_EXTERNA ? ', buscar_estudiante si te da el correo con el que compró' : ''}${a.acc?.etapa && !esRecep(a) ? ', cambiar_etapa cuando cambie en qué va el lead' : ''}${a.acc?.finalizar && !esRecep(a) ? ', finalizar_conversacion cuando la persona quedó resuelta y se despide' : ''}.`,
+    `Para actuar usas las herramientas: pasar_a_equipo para pasar la conversación con la nota interna${a.acc?.datos !== false ? ', guardar_nombre cuando te dé su nombre y apellido' : ''}${FICHA_EXTERNA ? ', buscar_cliente si te da el correo con el que compró' : ''}${a.acc?.etapa && !esRecep(a) ? ', cambiar_etapa cuando cambie en qué va el lead' : ''}${a.acc?.finalizar && !esRecep(a) ? ', finalizar_conversacion cuando la persona quedó resuelta y se despide' : ''}.`,
     ...(otros.length && a.acc?.datos !== false ? [`Con guardar_dato guardas en el CRM, apenas te los dé, estos datos: ${otros.map(d => d.n).join(', ')}.`] : []),
     ...(habilidadesDe(a).some(h => txt(h.etiqueta) || txt(h.etapa)) ? ['Cuando una habilidad lo pide al terminar, usas poner_etiqueta y cambiar_etapa antes de escribir tu mensaje.'] : []),
     a.silencioso
@@ -496,10 +496,10 @@ function herramientas(a: Agente, equipos: string[], etapas: string[], conDocumen
       input_schema: {
         type: 'object',
         properties: {
-          nota: { type: 'string', description: 'Nota interna para el asesor: quién es, si es estudiante, qué necesita y los datos útiles. Dos a cuatro líneas.' },
+          nota: { type: 'string', description: 'Nota interna para el asesor: quién es, si es cliente, qué necesita y los datos útiles. Dos a cuatro líneas.' },
           sugerencia: { type: 'string', enum: ['Ninguna', ...sugeribles(a)], description: 'Si el tema parece de otro equipo, cuál. Si no, Ninguna.' },
           por_que: { type: 'string', description: 'Si hay sugerencia, el porqué en pocas palabras y en minúscula (por ejemplo: pregunta por una cuota que no le pasó). Si no, vacío.' },
-          sin_respuesta: { type: 'string', description: 'Si pasas porque la respuesta no está en tu base de conocimiento: la pregunta de la persona, corta y clara (por ejemplo: ¿tienen clases los domingos?). Si pasas por otra razón, vacío.' },
+          sin_respuesta: { type: 'string', description: 'Si pasas porque la respuesta no está en tu base de conocimiento: la pregunta de la persona, corta y clara (por ejemplo: ¿atienden los domingos?). Si pasas por otra razón, vacío.' },
           ...(h.equipos.length ? { equipo: { type: 'string', enum: [destinoDe(a), ...h.equipos.filter(e => e !== destinoDe(a))], description: `A quién pasa: ${destinoDe(a)}, salvo que una habilidad diga otro equipo.` } } : {}),
         },
         required: ['nota', 'sugerencia', 'por_que', 'sin_respuesta', ...(h.equipos.length ? ['equipo'] : [])],
@@ -516,7 +516,7 @@ function herramientas(a: Agente, equipos: string[], etapas: string[], conDocumen
         properties: {
           equipo: { type: 'string', enum: a.acc?.equipo === false ? [...new Set([destinoDe(a), ...h.equipos])] : equipos },
           nota: { type: 'string', description: 'Nota interna para el asesor: quién es, qué necesita y lo que ya se sabe. Dos a cuatro líneas.' },
-          sin_respuesta: { type: 'string', description: 'Si pasas porque la respuesta no está en tu base de conocimiento: la pregunta de la persona, corta y clara (por ejemplo: ¿tienen clases los domingos?). Si pasas por otra razón, vacío.' },
+          sin_respuesta: { type: 'string', description: 'Si pasas porque la respuesta no está en tu base de conocimiento: la pregunta de la persona, corta y clara (por ejemplo: ¿atienden los domingos?). Si pasas por otra razón, vacío.' },
         },
         required: ['equipo', 'nota', 'sin_respuesta'],
         additionalProperties: false,
@@ -541,7 +541,7 @@ function herramientas(a: Agente, equipos: string[], etapas: string[], conDocumen
     })
   }
   if (FICHA_EXTERNA) lista.push({
-    name: 'buscar_estudiante',
+    name: 'buscar_cliente',
     description: 'Busca en el sistema de la empresa si la persona ya es cliente: por su número de WhatsApp y, si te dio el correo con el que compró, también por ese correo.',
     strict: true,
     input_schema: { type: 'object', properties: { correo: { type: 'string', description: 'El correo que dio la persona, o vacío si no dio ninguno.' } }, required: ['correo'], additionalProperties: false },
@@ -628,7 +628,7 @@ async function usarHerramienta(u: Anthropic.ToolUseBlock, conv: ConvCompleta, es
       await emitirConv(conv.id, null)
       return { ok: true, guardado: `${dato.n}: ${valor}` }
     }
-    case 'buscar_estudiante': {
+    case 'buscar_cliente': {
       const correo = txt(input.correo).toLowerCase()
       const valido = !!correo && RE_CORREO.test(correo)
       if (valido && a.acc?.datos !== false && !conv.contacto.correo) {
@@ -692,7 +692,7 @@ function presentarse(texto: string, soy: string): string {
   return `¡Hola! ${soy} ${conMayuscula(suelto ? t.slice(suelto[0].length) : t)}`.trim()
 }
 
-const HERRAMIENTAS = ['pasar_a_equipo', 'guardar_nombre', 'buscar_estudiante', 'cambiar_etapa', 'finalizar_conversacion']
+const HERRAMIENTAS = ['pasar_a_equipo', 'guardar_nombre', 'buscar_cliente', 'cambiar_etapa', 'finalizar_conversacion']
 const ETIQUETA_INTERNA = /<\/?(?:thinking|reflection|scratchpad|function_calls|invoke|parameter|tool_use|tool_call|tool_result|system)\b[^>]*>/i
 
 /**
@@ -774,13 +774,13 @@ async function turno(convId: number): Promise<void> {
 
   // Primer turno: lo que sabe la plataforma de este número (y el nombre, si el contacto es nuevo).
   // Si la consulta falla, queda sin revisar (null) y se intenta de nuevo en el turno siguiente:
-  // el modelo no debe oír «no es estudiante» cuando en realidad no se pudo saber.
+  // el modelo no debe oír «no es cliente» cuando en realidad no se pudo saber.
   if (!est.plataforma) {
     const r = await plataformaDe(conv.contacto).catch(e => { logger.warn(`[CRM agente] estudiante de ${conv.contactoId}: ${(e as Error).message}`); return null })
     const p = r ? r.p : null
     let nombreOk = est.nombreOk
     let cambioNombre = false
-    // Solo si el número de WhatsApp es el del estudiante: el de un acudiente o un correo no dicen quién escribe.
+    // Solo si el número de WhatsApp es el del cliente: el de un representante legal o un correo no dicen quién escribe.
     if (p?.es && p.nombre && p.via === 'telefono') {
       nombreOk = true
       if (est.contactoNuevo && a.acc?.datos !== false && limpiarNombre(p.nombre)) {
@@ -946,7 +946,7 @@ function notaAutomatica(conv: ConvCompleta, est: EstadoAgente, msgs: CrmMensaje[
   const p = est.plataforma
   return [
     `Nombre: ${txt(conv.contacto.nombre) || 'sin nombre'}${est.nombreOk ? '' : ' (el de su perfil de WhatsApp)'}.`,
-    p ? (p.es ? `${p.via === 'acudiente' ? 'Acudiente de' : 'Estudiante:'} ${p.nombre ?? ''}${p.cursos?.length ? ` (${p.cursos.join(', ')})` : ''}.` : 'No aparece como estudiante en la plataforma.') : '',
+    p ? (p.es ? `${p.via === 'acudiente' ? 'Representante de' : 'Cliente:'} ${p.nombre ?? ''}${p.cursos?.length ? ` (${p.cursos.join(', ')})` : ''}.` : 'No aparece como cliente en el sistema de la empresa.') : '',
     ult ? `Su último mensaje: «${textoIn(obj(ult.datos)).slice(0, 300)}».` : '',
   ].filter(Boolean).join('\n')
 }

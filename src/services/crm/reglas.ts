@@ -72,7 +72,7 @@ const CUANDO: Record<string, EventoRegla> = {
   'se confirma un pago': 'pago',
   // Nombre anterior del disparador: las reglas guardadas antes del 28-sep lo traen así.
   'hotmart confirma un pago': 'pago',
-  'pasan 48 horas sin respuesta del estudiante': 'sinRespuesta',
+  'pasan 48 horas sin respuesta del cliente': 'sinRespuesta',
   'se finaliza la conversacion': 'finalizada',
   // Lote 6b (1-oct): escribe a una conversación finalizada, ya sea que se reabra o que empiece otra.
   'la persona vuelve a escribir despues de finalizar': 'vuelve',
@@ -85,7 +85,7 @@ export interface Regla { n: string; on: boolean; cuando: string; si: string[]; e
 export const REGLAS_DEFECTO: Regla[] = [
   { n: 'El agente IA responde de noche', on: false, cuando: 'Llega un mensaje nuevo', si: ['Fuera del horario de atención'], ent: ['Responde el agente IA', 'Dejar resumen en nota privada'] },
   { n: 'Pago confirmado', on: true, cuando: 'Se confirma un pago', si: [], ent: ['Cambiar etapa a Pagado', 'Pasar al equipo Recuperación de ventas si es a cuotas'] },
-  { n: 'Sin respuesta 48 horas', on: true, cuando: 'Pasan 48 horas sin respuesta del estudiante', si: ['Etapa es Contactado o En seguimiento'], ent: ['Cambiar etapa a Sin respuesta', 'Crear recordatorio para el asesor'] },
+  { n: 'Sin respuesta 48 horas', on: true, cuando: 'Pasan 48 horas sin respuesta del cliente', si: ['Etapa es Contactado o En seguimiento'], ent: ['Cambiar etapa a Sin respuesta', 'Crear recordatorio para el asesor'] },
 ]
 
 export async function reglasGuardadas(): Promise<Regla[]> {
@@ -886,7 +886,7 @@ async function accionResumen(origen: string, c: Conv): Promise<Resultado> {
   if (!ultimoIn) return {}
   if (previo && previo.createdAt >= ultimoIn.createdAt) return {} // nada nuevo desde el último resumen
   const nombres = new Map((await usuariosCrm()).map(u => [u.id, u.nombre]))
-  const quien = c.contacto.nombre || 'Estudiante'
+  const quien = c.contacto.nombre || 'Cliente'
   const lineas = msgs.filter(m => !(m.tipo === 'note' && obj(m.datos).resumen === true)).reverse().map(m => {
     const t = textoDeMensaje(m).slice(0, 1500)
     if (!t) return ''

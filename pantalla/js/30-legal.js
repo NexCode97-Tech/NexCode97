@@ -1,6 +1,6 @@
 
 /* ── Protección de datos y reglas de contacto (25-sep), verificadas con las fuentes oficiales:
-   Ley 1581 de 2012 y Decreto 1377 de 2013: autorización previa, expresa e informada; el silencio no cuenta; con menores autoriza el acudiente.
+   Ley 1581 de 2012 y Decreto 1377 de 2013: autorización previa, expresa e informada; el silencio no cuenta; con menores autoriza el representante legal.
    Ley 2300 de 2023, art. 5 par. 3: llamadas y mensajes comerciales de lunes a viernes de 7 a. m. a 7 p. m. y sábados de 8 a. m. a 3 p. m.
    Registro de Números Excluidos de la CRC: consultarlo antes de un contacto comercial, salvo que la persona haya autorizado a la empresa.
    26-sep: la hora es la real de Colombia y los festivos se calculan para cualquier año. La autorización se pide por WhatsApp
@@ -71,14 +71,14 @@ function menorDeEdad(c){
   const g = String(gradoDe(c)).trim(); if (g) return /^\d+$/.test(g) && +g <= 11;
   return !!c.menor;
 }
-// Si «Menores de edad: pedirla al acudiente» está encendido (Protección de datos), el menor necesita la autorización del acudiente.
+// Si «Menores de edad: pedirla al representante legal» está encendido (Protección de datos), el menor necesita la autorización del representante legal.
 const pideAcudiente = c => PD.menores !== false && menorDeEdad(c);
 const nombrePila = c => /^\+?\d/.test(c.n || '') ? '' : String(c.n || '').split(' ')[0];
 function puedeGrabar(c){
   const L = LLAM.lineas[c.linea] || {};
   if (!L.grabar) return {ok:false, motivo:'la grabación está apagada en esta línea'};
   if (!c.aut) return {ok:false, motivo:'no ha autorizado sus datos', pedir:true};
-  if (pideAcudiente(c) && !c.acud) return {ok:false, motivo:'es menor de edad y falta la autorización de su acudiente', pedir:true};
+  if (pideAcudiente(c) && !c.acud) return {ok:false, motivo:'es menor de edad y falta la autorización de su representante legal', pedir:true};
   return {ok:true};
 }
 function filaGrabacion(c){
@@ -93,18 +93,18 @@ function marcarDatosFicha(){
   const caja = (cls, ic, t, pedir) => `<div class="pc-aut pc-dat ${cls}"><span class="h">${I(ic)}${t}</span><span class="bt"><button type="button" class="pc-sb" data-ll-aut="1">${pedir}</button><button type="button" class="pc-sb" data-aut-marcar="1">Ya autorizó</button></span></div>`;
   const h = c.rne && !c.aut ? caja('rojo', 'block', 'En el Registro de Números Excluidos', 'Pedir')
     : !c.aut ? caja('', 'lock', 'Sin autorización de datos', 'Pedir')
-    : menor && !c.acud ? caja('', 'lock', 'Menor de edad · falta el acudiente', 'Pedir al acudiente')
-    : `<span class="pc-ok pc-dat">${I('shield-ok')}Datos autorizados${c.aut.via ? ' · ' + esc(c.aut.via) : ''}${menor ? ' · acudiente' : ''}</span>`;
+    : menor && !c.acud ? caja('', 'lock', 'Menor de edad · falta el representante legal', 'Pedir al representante legal')
+    : `<span class="pc-ok pc-dat">${I('shield-ok')}Datos autorizados${c.aut.via ? ' · ' + esc(c.aut.via) : ''}${menor ? ' · representante legal' : ''}</span>`;
   cont.insertAdjacentHTML('beforeend', h);
 }
 const repintarDatosFicha = () => { const p = document.getElementById('panel'), v = p && p.querySelector('.pc-dat'); if (v) v.remove(); marcarDatosFicha(); };
 new MutationObserver(marcarDatosFicha).observe(document.getElementById('panel'), {childList:true, subtree:true});
 
-/* Pedir la autorización por WhatsApp (al estudiante o a su acudiente). Queda pendiente hasta que alguien del equipo la marque. */
+/* Pedir la autorización por WhatsApp (al cliente o a su representante legal). Queda pendiente hasta que alguien del equipo la marque. */
 function textoAutorizacion(c, acud){
   const n1 = nombrePila(c);
   return acud
-    ? `Hola. Te escribimos de ${ESPACIO.nombre || 'nuestra empresa'} porque ${n1 || 'tu hijo o tu hija'} es menor de edad y, para grabar sus llamadas, necesitamos la autorización de su papá, su mamá o su acudiente.\n\n${PD.texto}\n\nSi estás de acuerdo, responde «Autorizo» a este mensaje.`
+    ? `Hola. Te escribimos de ${ESPACIO.nombre || 'nuestra empresa'} porque ${n1 || 'tu hijo o tu hija'} es menor de edad y, para grabar sus llamadas, necesitamos la autorización de su papá, su mamá o su representante legal.\n\n${PD.texto}\n\nSi estás de acuerdo, responde «Autorizo» a este mensaje.`
     : `Hola${n1 ? ', ' + n1 : ''}. Para seguir atendiéndote necesitamos tu autorización para el tratamiento de tus datos.\n\n${PD.texto}\n\nSi estás de acuerdo, responde «Autorizo» a este mensaje.`;
 }
 const ventanaAut = c => !c._t || (!!c._t.entrante && Date.now() - Date.parse(c._t.entrante) < 864e5);
@@ -115,22 +115,22 @@ function pedirAutorizacion(c, tel){
     c.msgs.push({ev:'lock', t:`Se le pidió la autorización de datos a ${nombrePila(c) || c.n} por WhatsApp. Si responde «Autorizo», queda marcada sola.`});
     chat(); toast('Solicitud de autorización enviada'); return;
   }
-  // El acudiente nunca le ha escrito a la línea: WhatsApp solo deja empezar con una plantilla aprobada.
+  // El representante legal nunca le ha escrito a la línea: WhatsApp solo deja empezar con una plantilla aprobada.
   const tpl = TPL.find(t => t.n === TPL_ACUD);
   if (!tpl) { toast(`Falta la plantilla «${TPL_ACUD}» aprobada por Meta. Créala en Plantillas con el texto de la autorización.`); return; }
-  const vars = {estudiante: nombrePila(c) || c.n.split(' ')[0]};
-  toast('Enviando la solicitud al acudiente…');
-  crmApi('POST', '/crm/conversaciones', {tel, n:`Acudiente de ${c.n}`, linea:c.linea, canal:'wa', datos:[{out:llenarVars(tpl.x, vars), plantilla:tpl.n, vars, by:yo}]})
+  const vars = {menor: nombrePila(c) || c.n.split(' ')[0]};
+  toast('Enviando la solicitud al representante legal…');
+  crmApi('POST', '/crm/conversaciones', {tel, n:`Representante de ${c.n}`, linea:c.linea, canal:'wa', datos:[{out:llenarVars(tpl.x, vars), plantilla:tpl.n, vars, by:yo}]})
     .then(esperarEnvio)
     .then(m => {
-      if (!m || m._estado === 'fallido') { toast(`No le llegó al acudiente: ${(m && m._error) || 'WhatsApp no confirmó el envío'}`); return; }
-      c.msgs.push({ev:'lock', t:`Se le pidió la autorización de datos a su acudiente (${tel}) por WhatsApp. Si responde «Autorizo», queda marcada sola.`});
+      if (!m || m._estado === 'fallido') { toast(`No le llegó al representante legal: ${(m && m._error) || 'WhatsApp no confirmó el envío'}`); return; }
+      c.msgs.push({ev:'lock', t:`Se le pidió la autorización de datos a su representante legal (${tel}) por WhatsApp. Si responde «Autorizo», queda marcada sola.`});
       if (st.sel === c.id && !st.pagina) chat();
-      toast(m._estado === 'enviando' ? 'La solicitud sigue saliendo: revisa la conversación del acudiente' : 'Solicitud enviada al acudiente');
+      toast(m._estado === 'enviando' ? 'La solicitud sigue saliendo: revisa la conversación del representante legal' : 'Solicitud enviada al representante legal');
     })
-    .catch(err => toast(`No se pudo enviar al acudiente: ${err.message}`));
+    .catch(err => toast(`No se pudo enviar al representante legal: ${err.message}`));
 }
-const TPL_ACUD = 'Autorización del acudiente';
+const TPL_ACUD = 'Autorización del representante legal';
 // El envío por WhatsApp corre aparte: se espera (hasta ~20 s) a que el mensaje quede enviado o fallido.
 async function esperarEnvio(conv){
   let m = conv && (conv.msgs || []).filter(x => x.out != null).slice(-1)[0];
@@ -142,11 +142,11 @@ async function esperarEnvio(conv){
   return m;
 }
 // Marcar la autorización cuando llega la respuesta: queda con la fecha, el medio y el texto que se autorizó.
-const VIAS_AUT = ['Respondió por WhatsApp', 'Formulario de inscripción', 'Formulario web', 'Por escrito'];
+const VIAS_AUT = ['Respondió por WhatsApp', 'Formulario web', 'Formulario impreso', 'Por escrito'];
 function dlgMarcarAut(c){
   const x = st.autMarca, menor = pideAcudiente(c);
   return `<h3>Marcar la autorización de datos</h3><p>Márcala solo cuando la persona haya respondido que autoriza. Queda guardada con la fecha y el texto de la autorización.</p>
-    <div class="cx-f">${menor ? `<div class="fld">Quién autorizó${ddSel('data-aut-quien', [['estudiante', nombrePila(c) || 'El estudiante'], ['acudiente', 'Su acudiente']], x.quien)}</div>` : ''}
+    <div class="cx-f">${menor ? `<div class="fld">Quién autorizó${ddSel('data-aut-quien', [['estudiante', nombrePila(c) || 'El cliente'], ['acudiente', 'Su representante legal']], x.quien)}</div>` : ''}
       <div class="fld">Cómo autorizó${ddSel('data-aut-via', VIAS_AUT, x.via)}</div></div>
     <div class="ft2"><button type="button" class="btn" data-cerrar-dlg="1">Cancelar</button><button type="button" class="btn pri" data-aut-ok="1">${I('check')}Marcar</button></div>`;
 }
@@ -157,9 +157,9 @@ document.addEventListener('click', e => {
     const c = CONV.find(x => x.id === st.sel); if (!c) return;
     const necesitaAcud = pideAcudiente(c) && c.aut, tel = c.campos && c.campos.telAcudiente;
     if (necesitaAcud && !tel) {
-      abrirDialogo(`<h3>Autorización del acudiente</h3><p>${esc(c.n)} es menor de edad. Para grabar sus llamadas, la autorización la tiene que dar su papá, su mamá o su acudiente.</p>
-        <label class="fld">WhatsApp del acudiente<input id="aut-tel" inputmode="tel" placeholder="Ej. +57 310 555 0199"></label>
-        <p class="muted">Le llega por WhatsApp la plantilla «${TPL_ACUD}» para que responda; donde diga {{estudiante}} va el nombre del menor. El número queda guardado en «Datos del estudiante».</p>
+      abrirDialogo(`<h3>Autorización del representante legal</h3><p>${esc(c.n)} es menor de edad. Para grabar sus llamadas, la autorización la tiene que dar su papá, su mamá o su representante legal.</p>
+        <label class="fld">WhatsApp del representante legal<input id="aut-tel" inputmode="tel" placeholder="Ej. +57 310 555 0199"></label>
+        <p class="muted">Le llega por WhatsApp la plantilla «${TPL_ACUD}» para que responda; donde diga {{menor}} va el nombre del menor. El número queda guardado en «Datos del cliente».</p>
         <div class="ft2"><button type="button" class="btn" data-cerrar-dlg="1">Cancelar</button><button type="button" class="btn pri" data-aut-enviar="1">${I('send')}Enviar</button></div>`);
       return;
     }
@@ -169,7 +169,7 @@ document.addEventListener('click', e => {
   if (env) {
     e.stopPropagation();
     const c = CONV.find(x => x.id === st.sel), tel = document.getElementById('aut-tel').value.trim(); if (!c) return;
-    if (tel.replace(/\D/g, '').length < 10) { toast('Escribe el WhatsApp completo del acudiente'); return; }
+    if (tel.replace(/\D/g, '').length < 10) { toast('Escribe el WhatsApp completo del representante legal'); return; }
     c.campos = c.campos || {}; c.campos.telAcudiente = tel; cerrarDialogo(); pedirAutorizacion(c, tel); return;
   }
   if (e.target.closest('[data-aut-marcar]')) {
@@ -191,7 +191,7 @@ document.addEventListener('click', e => {
     const x = st.autMarca, reg = {via:x.via, fecha:new Date().toISOString(), texto:PD.texto, por:yo};
     const acud = pideAcudiente(c) && x.quien === 'acudiente';
     if (acud) { c.acud = reg; if (!c.aut) c.aut = reg; } else c.aut = reg;
-    c.msgs.push({ev:'lock', t:`${yo} marcó la autorización de datos${acud ? ' del acudiente' : ''} · ${x.via}`});
+    c.msgs.push({ev:'lock', t:`${yo} marcó la autorización de datos${acud ? ' del representante legal' : ''} · ${x.via}`});
     st.autMarca = null; cerrarDialogo();
     if (st.sel === c.id && !st.pagina) { chat(); repintarDatosFicha(); }
     toast('Autorización marcada'); return;
@@ -212,19 +212,19 @@ function paginaDatos(){
   const con = CONV.filter(c => c.canal === 'wa' || c.canal === 'ig' || c.canal === 'fb');
   const sinAut = con.filter(c => !c.aut).length, menSin = con.filter(c => pideAcudiente(c) && c.aut && !c.acud).length, rne = CONV.filter(c => c.rne);
   const hoy = ahoraCO(), prox = [...festivosCO(hoy.y), ...festivosCO(hoy.y + 1)].filter(f => f >= isoF(hoy.y, hoy.m, hoy.d)).slice(0, 5).map(f => { const [, m, d] = f.split('-').map(Number); return `${d} ${MESES_C[m - 1]}`; });
-  return `<div class="ajw ancho">${volver}<h2>Protección de datos</h2><p class="sub">Lo que exige la ley colombiana para contactar, llamar y grabar a los estudiantes. El CRM lo aplica solo.</p>
+  return `<div class="ajw ancho">${volver}<h2>Protección de datos</h2><p class="sub">Lo que exige la ley colombiana para contactar, llamar y grabar a los clientes. El CRM lo aplica solo.</p>
     <div class="two3" style="align-items:start"><div class="cfg">
       <div class="box2"><h4>${I('lock')}Autorización de datos</h4>
         <label class="fld">Texto de la autorización<textarea data-pd-texto="1" rows="4">${esc(PD.texto)}</textarea></label>
         ${fila('Dónde se pide', 'En los formularios de la empresa y por WhatsApp cuando falta', '')}
-        ${fila('Menores de edad: pedirla al acudiente', 'La ley exige que autorice el papá, la mamá o el acudiente', `<button type="button" class="tg" role="switch" data-pd-tg="menores" aria-checked="${PD.menores}" aria-label="Pedir al acudiente"></button>`)}
+        ${fila('Menores de edad: pedirla al representante legal', 'La ley exige que autorice el papá, la mamá o el representante legal', `<button type="button" class="tg" role="switch" data-pd-tg="menores" aria-checked="${PD.menores}" aria-label="Pedir al representante legal"></button>`)}
         ${fila('Contactos sin autorización', 'No se les graba ninguna llamada', `<b>${sinAut}</b>`)}
-        ${fila('Menores sin autorización del acudiente', 'Se les puede atender, pero no se graba', `<b>${menSin}</b>`)}
+        ${fila('Menores sin autorización del representante legal', 'Se les puede atender, pero no se graba', `<b>${menSin}</b>`)}
         <p class="muted" style="margin:0">La política de tratamiento de datos de la empresa tiene que mencionar la grabación de llamadas y su propósito.</p></div>
       <div class="box2"><h4>${I('clock')}Horario para contactar con fines comerciales</h4>
         ${fila('Lunes a viernes', '', '7 a. m. a 7 p. m.')}${fila('Sábados', '', '8 a. m. a 3 p. m.')}${fila('Domingos y festivos', '', 'No se contacta')}
         <div class="fld">Próximos festivos<div class="pd-fest">${prox.map(x => `<span>${x}</span>`).join('')}</div></div>
-        <p class="muted" style="margin:0">Lo fija la Ley 2300 de 2023 y no se puede cambiar. Aplica a las llamadas que hace el asesor y a las difusiones. No aplica cuando el estudiante escribe o llama.</p></div>
+        <p class="muted" style="margin:0">Lo fija la Ley 2300 de 2023 y no se puede cambiar. Aplica a las llamadas que hace el asesor y a las difusiones. No aplica cuando el cliente escribe o llama.</p></div>
     </div><div class="cfg">
       <div class="box2"><h4>${I('block')}Registro de Números Excluidos</h4>
         <p class="muted" style="margin:0">Es el registro de la CRC donde las personas inscriben su número para no recibir mensajes ni llamadas comerciales. Desde abril de 2024 hay que consultarlo antes de contactar, también por WhatsApp.</p>

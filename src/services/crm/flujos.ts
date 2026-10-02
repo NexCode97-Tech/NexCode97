@@ -24,8 +24,8 @@ import { tieneSalida } from './formas'
  *   asesor). Si el agente IA no la tomó, arranca el primer flujo encendido del
  *   canal cuyo «Cuándo» se cumple. «Saltar si ya es un contacto conocido»:
  *   con conversaciones anteriores, dueño o estudiante de la plataforma no
- *   corre (salvo el estudiante cuando el flujo tiene la ramificación con el
- *   atajo de estudiantes, que tiene su propio saludo y va directo a la lista).
+ *   corre (salvo el cliente cuando el flujo tiene la ramificación con el
+ *   atajo de clientes, que tiene su propio saludo y va directo a la lista).
  * - flujoContinuar: la conversación está en un flujo y el cliente respondió.
  * - flujosVencidos: el cliente no respondió en «espera» minutos: el flujo
  *   termina y la conversación pasa al reparto.
@@ -136,8 +136,8 @@ export const FLUJOS_DEFECTO: Flujo[] = [
 
 /** Los campos personalizados por defecto de la pantalla (CAMPOS): nombre visible → clave. */
 const CAMPOS_DEFECTO = [
-  { k: 'grado', n: 'Grado' }, { k: 'colegio', n: 'Colegio' }, { k: 'producto', n: 'Producto' },
-  { k: 'acudiente', n: 'Acudiente' }, { k: 'telAcudiente', n: 'Teléfono del acudiente' }, { k: 'numCliente', n: 'Número de cliente' },
+  { k: 'producto', n: 'Producto' }, { k: 'empresa', n: 'Empresa' },
+  { k: 'acudiente', n: 'Representante legal' }, { k: 'telAcudiente', n: 'Teléfono del representante legal' }, { k: 'numCliente', n: 'Número de cliente' },
 ]
 
 /** Horario por defecto de la pantalla (CFG.horario): todos los días de 7 a. m. a 10 p. m. */
@@ -254,7 +254,7 @@ function valida(validar: string | undefined, v: string): boolean {
  */
 function gradoDe(v: string, libre: boolean): { grado?: string; tag?: string } {
   const p = plano(v)
-  if (/\b(papa|mama|padre|madre|acudiente|mi hij)/.test(p)) return { tag: 'Acudiente' }
+  if (/\b(papa|mama|padre|madre|acudiente|mi hij)/.test(p)) return { tag: 'Representante' }
   if (/gradu/.test(p)) return { grado: 'Graduado' }
   const m = p.match(/\b(9|10|11)\b/)
   if (m) return { grado: m[1] }
@@ -481,8 +481,8 @@ class Corrida {
     const g = plano(txt(p.guardar) || txt(p.validar))
     return ({
       'nombre del contacto': '¿Cómo te llamas? Escríbenos tu nombre y apellido.', 'nombre y apellido': '¿Cómo te llamas? Escríbenos tu nombre y apellido.',
-      correo: '¿Cuál es tu correo?', ciudad: '¿En qué ciudad vives?', grado: '¿En qué grado estás?', colegio: '¿En qué colegio estudias?',
-      'carrera que busca': '¿Qué carrera te gustaría estudiar?', telefono: '¿Cuál es tu número de teléfono?', numero: '¿Nos escribes el número, por favor?',
+      correo: '¿Cuál es tu correo?', ciudad: '¿En qué ciudad vives?', producto: '¿Qué producto te interesa?',
+      telefono: '¿Cuál es tu número de teléfono?', numero: '¿Nos escribes el número, por favor?',
     } as Record<string, string>)[g] ?? '¿Nos cuentas un poco más, por favor?'
   }
 
@@ -638,7 +638,7 @@ class Corrida {
       }
       const p = this.paso(c)
       if (!p) { c = this.siguiente(c); continue }
-      // Lo que solo se le pregunta a quien todavía no es estudiante.
+      // Lo que solo se le pregunta a quien todavía no es cliente.
       if (enRama && p.soloNuevos && this.est.estudiante) { c = this.siguiente(c); continue }
       switch (p.t) {
         case 'ramas':
@@ -688,7 +688,7 @@ class Corrida {
     const at = this.f.atajos ?? {}
     const L = rp.lista ?? {}
     if (this.est.estudiante && at.estudiante) {
-      this.est.resumen.push(`estudiante de la plataforma${this.est.nombreEst ? ` (${limpiarNombre(this.est.nombreEst)})` : ''}`)
+      this.est.resumen.push(`cliente registrado${this.est.nombreEst ? ` (${limpiarNombre(this.est.nombreEst)})` : ''}`)
       return this.mostrarLista(i, `${this.texto(rp.saludoConocido)} ${this.texto(L.txt)}`.trim())
     }
     if (this.est.anuncio && at.anuncio) {
@@ -930,9 +930,9 @@ async function tomadaPor(conv: CrmConversacion, est: Estado): Promise<string | n
 }
 
 /**
- * El contacto ya estaba vinculado al estudiante (fichaDeContacto no dice por
- * dónde): es el estudiante si el número o el correo son los suyos; si no,
- * es alguien de su familia y no se le saluda con el nombre del estudiante.
+ * El contacto ya estaba vinculado al cliente (fichaDeContacto no dice por
+ * dónde): es el cliente si el número o el correo son los suyos; si no,
+ * es alguien de su familia y no se le saluda con el nombre del cliente.
  */
 async function viaDelVinculo(_k: CrmContacto, _estudianteId: string): Promise<'telefono' | 'correo' | 'acudiente'> {
   // La ficha externa debe decir por dónde halló a la persona; si no lo dice, se toma lo más prudente.
@@ -1019,11 +1019,11 @@ export async function flujoIniciar(ctx: CtxEntrante): Promise<boolean> {
     const rp = f.pasos.find(p => p.t === 'ramas')
     const atajoEstudiante = !!(rp && f.atajos?.estudiante && estudiante)
     if (f.saltarConocidos !== false && conocido && !atajoEstudiante) {
-      await guardarMensaje(conv.id, { ev: 'flow', t: `No corre el flujo ${f.n}: ${estudiante ? 'el número es de un estudiante de la plataforma' : 'ya es un contacto conocido'}. Pasa al reparto.` }, { autorId: null, por: null })
+      await guardarMensaje(conv.id, { ev: 'flow', t: `No corre el flujo ${f.n}: ${estudiante ? 'el número es de un cliente registrado' : 'ya es un contacto conocido'}. Pasa al reparto.` }, { autorId: null, por: null })
       return false
     }
 
-    // El nombre de la plataforma es más confiable que el del perfil de WhatsApp (no si el número es del acudiente).
+    // El nombre de la plataforma es más confiable que el del perfil de WhatsApp (no si el número es del representante legal).
     const via = estudiante ? (ficha?.via ?? await viaDelVinculo(k, ficha!.estudianteId!)) : null
     const nombreEst = estudiante && via !== 'acudiente' ? txt(ficha?.nombre) || null : null
     if (nombreEst && ctx.contactoNuevo) conv.contacto = await prisma.crmContacto.update({ where: { id: k.id }, data: { nombre: limpiarNombre(nombreEst) } })
@@ -1036,7 +1036,7 @@ export async function flujoIniciar(ctx: CtxEntrante): Promise<boolean> {
     corrida = new Corrida(conv, f, est, null)
     try { await corrida.guardar() } catch (e) { if (e instanceof Carrera) return true; throw e }
     guardada = true
-    // El estudiante conocido salta el saludo y el nombre: va directo a la ramificación.
+    // El cliente conocido salta el saludo y el nombre: va directo a la ramificación.
     await corrida.avanzar(atajoEstudiante && rp ? { i: f.pasos.indexOf(rp) } : { i: 0 })
     return true
   } catch (e) {

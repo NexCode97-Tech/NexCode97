@@ -121,24 +121,24 @@ function paginaLlamadas(){
       <label class="fld">Propósito de la grabación<textarea data-ll-in="proposito" rows="2" maxlength="250">${esc(LLAM.proposito)}</textarea><small class="muted" id="ll-prop-c">${LLAM.proposito.length}/250</small></label>
       <p class="muted" style="margin:0">Antes de grabar, WhatsApp dice en voz alta a las dos personas: «El audio de esta llamada se grabará con el siguiente propósito: ${esc(LLAM.proposito)}».</p>
       ${fila('Guardar las grabaciones durante', 'Meta las borra a los 7 días; el CRM guarda la copia', ddSel('data-ll-guardar', ['6 meses', '1 año', '2 años'], LLCFG.guardar))}
-      ${fila('Solo con autorización de datos', 'Si es menor de edad, la da su acudiente. Sin autorización la llamada sigue, pero no se graba', `<button type="button" class="btn" data-ir="cfg-datos">Ver</button>`)}</div>
+      ${fila('Solo con autorización de datos', 'Si es menor de edad, la da su representante legal. Sin autorización la llamada sigue, pero no se graba', `<button type="button" class="btn" data-ir="cfg-datos">Ver</button>`)}</div>
     </div><div class="cfg">
     <div class="box2"><h4>${I('clock')}Horario</h4>
       ${fila('Para recibir llamadas', 'El horario de atención del CRM', `<button type="button" class="btn" data-ir="cfg-horario">Cambiar</button>`)}
-      ${fila('Para llamar a estudiantes', 'Lunes a viernes de 7 a. m. a 7 p. m. y sábados de 8 a. m. a 3 p. m. Lo fija la Ley 2300', `<span class="ll-ok">${I('lock')}Fijo por ley</span>`)}</div>
+      ${fila('Para llamar a clientes', 'Lunes a viernes de 7 a. m. a 7 p. m. y sábados de 8 a. m. a 3 p. m. Lo fija la Ley 2300', `<span class="ll-ok">${I('lock')}Fijo por ley</span>`)}</div>
     <div class="box2"><h4>${I('moon')}Buzón de voz</h4><label class="fld">Saludo<textarea data-ll-in="saludo" rows="3">${esc(LLAM.saludo)}</textarea></label></div>
     <div class="box2"><h4>${I('play')}Últimas llamadas</h4>${llamadas.length ? llamadas.map(({c, m}) => fila(esc(c.n), `${m.call.dir === 'in' ? 'Entrante' : 'Saliente'} · ${m.call.estado === 'ok' ? mmss(m.call.dur || 0) : m.call.estado === 'buzon' ? 'buzón de voz' : 'sin contestar'}${m.h ? ' · ' + m.h : ''}`, m.call.audio ? '<span class="ll-ok">Grabada</span>' : '<span class="muted">Sin grabación</span>')).join('') : '<p class="muted" style="margin:0">Todavía no hay llamadas.</p>'}</div>
     </div></div></div>`;
 }
 
 /* Página «Conversaciones» */
-const CVCFG = {auto:true, n:'3', u:'días', motivo:true, resumen:false, motivos:['Compró', 'Soporte atendido', 'Duda de clases atendida', 'No le interesa', 'Ya es estudiante', 'Número equivocado', 'No volvió a responder'], mismo:true, diasMismo:'30', sinAsesor:false};
+const CVCFG = {auto:true, n:'3', u:'días', motivo:true, resumen:false, motivos:['Compró', 'Soporte atendido', 'Duda atendida', 'No le interesa', 'Ya es cliente', 'Número equivocado', 'No volvió a responder'], mismo:true, diasMismo:'30', sinAsesor:false};
 function paginaConversaciones(){
   const volver = `<button type="button" class="volver" data-ir="ajustes-crm">${I('back')}Ajustes del CRM</button>`;
   const tg = (k, on, lab) => `<button type="button" class="tg" role="switch" data-cv-tg="${k}" aria-checked="${on}" aria-label="${lab}"></button>`;
   return `<div class="ajw ancho">${volver}<h2>Conversaciones</h2><p class="sub">Cómo se finalizan y se organizan las conversaciones.</p>
     <div class="cv-grid"><div class="cfg">
-      <div class="box2">${fila('<b>Finalizar automáticamente las conversaciones</b>', 'Se finalizan solas después de un tiempo sin mensajes. Si el estudiante vuelve a escribir, se reabre.', tg('auto', CVCFG.auto, 'Finalizar automáticamente'))}
+      <div class="box2">${fila('<b>Finalizar automáticamente las conversaciones</b>', 'Se finalizan solas después de un tiempo sin mensajes. Si el cliente vuelve a escribir, se reabre.', tg('auto', CVCFG.auto, 'Finalizar automáticamente'))}
         ${CVCFG.auto ? `<div class="cv-inl"><span class="muted">Finalizar después de</span><input data-cv-n="1" value="${esc(CVCFG.n)}" inputmode="numeric" aria-label="Cantidad">${ddSel('data-cv-u', ['horas', 'días'], CVCFG.u)}</div>` : ''}</div>
       <div class="box2">${fila('<b>Pedir el motivo al finalizar</b>', 'El asesor elige un motivo de la lista. Así Informes muestra por qué se cierra cada conversación.', tg('motivo', CVCFG.motivo, 'Pedir el motivo'))}
         <div class="fld">Motivos de finalización<div class="mt-chips">${CVCFG.motivos.map((m, i) => `<span>${esc(m)}<button type="button" data-cv-mdel="${i}" aria-label="Quitar ${esc(m)}">${I('x')}</button></span>`).join('')}</div></div>
@@ -149,7 +149,7 @@ function paginaConversaciones(){
         ${fila('Finalizar también las que no tienen asesor', 'Por ejemplo, las que quedaron en el flujo sin responder', tg('sinAsesor', CVCFG.sinAsesor, 'Finalizar sin asesor'))}</div></details>
     </div>
     <div class="box2 cv-info">
-      <div>${I('chat')}<span>Una conversación se abre cuando el estudiante escribe o cuando el asesor le escribe.</span></div>
+      <div>${I('chat')}<span>Una conversación se abre cuando el cliente escribe o cuando el asesor le escribe.</span></div>
       <div>${I('check')}<span>Se finaliza cuando ya se atendió lo que necesitaba o cuando no hay más mensajes.</span></div>
       <div>${I('chart')}<span>Las conversaciones finalizadas y sus motivos alimentan los informes.</span></div></div></div></div>`;
 }
@@ -252,7 +252,7 @@ document.getElementById('ov-res').addEventListener('click', e => {
 }, true);
 
 /* Editar los equipos (Equipos y reparto): nombre e integrantes, que son personas reales del CRM (USUARIOS) */
-const MIEMBROS = {'Ventas':[], 'Recuperación de ventas':[], 'Soporte de ventas':[], 'Soporte de clases':[]};
+const MIEMBROS = {'Ventas':[], 'Recuperación de ventas':[], 'Soporte de ventas':[], 'Soporte':[]};
 // Los equipos creados en el CRM viven en MIEMBROS (clave `equipos`): se agregan a EQUIPOS al cargar y cuando otro líder los cambia.
 function sincronizarEquipos(){
   let n = 0;
@@ -341,7 +341,7 @@ const ALCANCE = {on:false, equipos:[]};
 const PERSONAS_EXTRA = {};
 const ROL_NOMBRE = {ADMIN:'Administrador', LIDER_VENTAS:'Líder de ventas', VENDEDOR:'Asesor de ventas', MARKETING:'Marketing', EDITOR:'Editor de video', COMMUNITY:'Community manager', LIDER_EDICION:'Líder de edición', LIDER_CREADORES:'Líder de creadores', SOCIAL_MEDIA:'Social media', LIDER_DISENO:'Líder de diseño', DISENADOR:'Diseñador', AUDITOR:'Auditor', VISITANTE:'Visitante', COLABORADOR:'Colaborador'};
 const METODOS_EQ = [['turnos', 'Por turnos', 'Una conversación para cada persona conectada del equipo, en orden.'], ['menos', 'A quien tenga menos conversaciones', 'Le llega a la persona conectada con menos conversaciones abiertas.'], ['todos', 'Todos ven y cualquiera la toma', 'La conversación les aparece a todas las personas del equipo. La primera que responde se la queda.'], ['lider', 'Solo un líder la asigna', 'Nadie la recibe sola: queda sin asignar hasta que un líder o administrador la entrega.']];
-// Sin color elegido, cada equipo toma uno por su posición: Ventas azul, Soporte de clases morado, Soporte de ventas cian, Recuperación naranja.
+// Sin color elegido, cada equipo toma uno por su posición: Ventas azul, Soporte morado, Soporte de ventas cian, Recuperación naranja.
 const COLORES_EQ = [['#1f93ff', 'Azul'], ['#7c3aed', 'Morado'], ['#0891b2', 'Cian'], ['#ea580c', 'Naranja'], ['#db2777', 'Rosado'], ['#0d9488', 'Verde azulado']];
 document.head.insertAdjacentHTML('beforeend', `<style>
 .rq-bar{display:flex;align-items:center;gap:10px;margin:0 0 14px;flex-wrap:wrap}
@@ -496,7 +496,7 @@ function tabReglas(){
         ${fila('Si no responde a tiempo, pasa a otra persona', 'Minutos que espera la conversación antes de pasar a la siguiente persona del mismo equipo.', `<span style="display:flex;align-items:center;gap:6px"><input class="inl" data-cfg-in="reparto.minutos" value="${r.minutos}">min</span>`)}</div>
       <div class="box2"><h4>${I('flow')}Excepciones</h4>
         ${fila('No asignar a quien está ausente', 'Si la persona marcó «Ausente» en su estado, el reparto la salta.', sw('rep-ausente', r.ausente))}
-        ${fila('Familiares con la misma persona', 'Mamá, papá o hermanos van con quien ya atiende al estudiante.', sw('rep-familiares', r.familiares))}
+        ${fila('Familiares con la misma persona', 'Mamá, papá o hermanos van con quien ya atiende al cliente.', sw('rep-familiares', r.familiares))}
         ${fila('El cliente conocido vuelve con quien lo atendió', 'Si ya compró o ya habló con alguien, le llega a esa persona.', sw('rep-conocido', r.conocido))}</div></div>
     <div class="cfg"><div class="box2"><h4>${I('swap')}Formas de repartir</h4><p class="muted" style="margin:0">Cada equipo elige la suya al editarlo.</p>
       ${METODOS_EQ.map(([k, n, d]) => `<div class="rq-forma"><b>${n}</b><p>${d}</p><small>${esc(usan(k))}</small></div>`).join('')}</div></div></div>`;
@@ -803,7 +803,7 @@ function dlgEtiqueta(){
   const dotEq = eq => eq ? `<span class="et-dot" style="background:${colorOk(colorDe(eq, EQUIPOS.findIndex(x => x.n === eq)))}"></span>` : `<span class="et-ic sm">${icUsuarios}</span>`;
   const usos = d.viejo ? CONV.filter(c => c.tags.includes(d.viejo)).length : 0;
   return `<div class="et-dcab"><h3>${d.viejo ? 'Editar etiqueta' : 'Nueva etiqueta'}</h3></div>
-    <label class="et-lab">Nombre<input id="et-dn" value="${esc(d.n)}" placeholder="Ej. Queja de una clase" maxlength="60" autocomplete="off"></label>
+    <label class="et-lab">Nombre<input id="et-dn" value="${esc(d.n)}" placeholder="Ej. Queja de un pedido" maxlength="60" autocomplete="off"></label>
     <div class="et-lab">Equipo
       <div class="et-sel-w"><button type="button" class="et-sel" data-et-abrir="1" aria-haspopup="listbox" aria-expanded="${!!d.abierto}">${dotEq(d.eq)}<span class="t">${esc(d.eq || 'Todos los equipos')}</span>${I('chev')}</button>
       ${d.abierto ? `<div class="et-menu" role="listbox">${[['', 'Todos los equipos'], ...EQUIPOS.map(e => [e.n, e.n])].map(([v, n]) => `<button type="button" role="option" aria-selected="${v === d.eq}" data-et-eq="${esc(v)}">${dotEq(v)}<span>${esc(n)}</span>${v === d.eq ? I('check') : ''}</button>`).join('')}</div>` : ''}</div>

@@ -72,7 +72,7 @@ function recDias(n = 60){ const p = hcPartes(Date.now()), out = []; for (let i =
 function recPorDefecto(){ const p = hcPartes(Date.now()), dias = recDias(2); let min = Math.ceil((p.h * 60 + p.mi + 30) / 30) * 30, dia = dias[0][0]; if (min < 6 * 60) min = 9 * 60; if (min >= 22 * 60) { min = 9 * 60; dia = dias[1][0]; } return {dia, hora:String(min)}; }
 function recOpciones(){ const p = hcPartes(Date.now()); return [['1h','En 1 hora'], ...(p.h < 15 ? [['tarde','Hoy en la tarde']] : []), ['manana','Mañana 9 a. m.'], ['lunes','El lunes'], ['otra','Elegir fecha']]; }
 function recFecha(k){ const n = Date.now(), p = hcPartes(n); if (k === '1h') return new Date(n + 3600e3); if (k === 'tarde') return hcFecha(p.y, p.m, p.d, 16); if (k === 'manana') return hcFecha(p.y, p.m, p.d + 1, 9); if (k === 'lunes') return hcFecha(p.y, p.m, p.d + ((8 - p.w) % 7 || 7), 9); return null; }
-// Si el estudiante dijo un día («el viernes pago»), el CRM propone el recordatorio.
+// Si el cliente dijo un día («el viernes pago»), el CRM propone el recordatorio.
 function sugerenciaRec(c){
   const ult = [...c.msgs].reverse().find(m => typeof m.in === 'string');
   if (!ult) return null;
@@ -143,14 +143,14 @@ const FLUJOS = [
      {t:'asignar', a:'Reparto automático · equipo Ventas'},
    ]},
 ];
-const CAMPOS = [{k:'grado', n:'Grado', t:'Lista', ops:[['9','Noveno'],['10','Décimo'],['11','Once'],['Graduado','Ya se graduó']], ph:'Elige el grado'}, {k:'colegio', n:'Colegio', t:'Texto'}, {k:'producto', n:'Producto', t:'Lista', ops:'catalogo', ph:'Elige un producto'}, {k:'acudiente', n:'Acudiente', t:'Texto'}, {k:'telAcudiente', n:'Teléfono del acudiente', t:'Teléfono'}];
+const CAMPOS = [{k:'producto', n:'Producto', t:'Texto'}, {k:'empresa', n:'Empresa', t:'Texto'}, {k:'acudiente', n:'Representante legal', t:'Texto'}, {k:'telAcudiente', n:'Teléfono del representante legal', t:'Teléfono'}];
 // «Número de cliente» no es un campo: lo pone el CRM a cada cliente que llega (crm_contactos.numero), único en todo el CRM.
 const REGLAS = [
   {n:'El agente IA responde de noche', on:false, cuando:'Llega un mensaje nuevo', si:['Fuera del horario de atención'], ent:['Responde el agente IA', 'Dejar resumen en nota privada']},
   {n:'Pago confirmado', on:true, cuando:'Se confirma un pago', si:[], ent:['Cambiar etapa a Pagado', 'Pasar al equipo Recuperación de ventas si es a cuotas']},
-  {n:'Sin respuesta 48 horas', on:true, cuando:'Pasan 48 horas sin respuesta del estudiante', si:['Etapa es Contactado o En seguimiento'], ent:['Cambiar etapa a Sin respuesta', 'Crear recordatorio para el asesor']},
+  {n:'Sin respuesta 48 horas', on:true, cuando:'Pasan 48 horas sin respuesta del cliente', si:['Etapa es Contactado o En seguimiento'], ent:['Cambiar etapa a Sin respuesta', 'Crear recordatorio para el asesor']},
 ];
-const R_CUANDO = ['Llega un mensaje nuevo','Se asigna una conversación','Cambia la etapa','Se confirma un pago','Pasan 48 horas sin respuesta del estudiante','Se finaliza la conversación'];
+const R_CUANDO = ['Llega un mensaje nuevo','Se asigna una conversación','Cambia la etapa','Se confirma un pago','Pasan 48 horas sin respuesta del cliente','Se finaliza la conversación'];
 // Condiciones y acciones de las reglas: [tipo, opciones, texto]. El texto es el que entiende services/crm/reglas.ts.
 function reglaTipos(q){
   if (q === 'si') return [
@@ -310,7 +310,7 @@ function difusion(){
         <div class="aud"><b>${total.toLocaleString('es-CO')} personas</b><span>Se descuentan las que pidieron no recibir mensajes y las que ya recibieron esta plantilla en los últimos 7 días.</span></div>`
       : d.paso === 2 ? `<div class="fld">Plantilla aprobada${TPL.length ? ddSel('data-tpl', TPL.map(t => [t.n, t.n]), d.tpl) : '<p class="muted" style="margin:0">Todavía no hay plantillas aprobadas por Meta. Créalas en Plantillas.</p>'}</div>
         <div class="fld">Variables<div class="vars">${['nombre → Nombre del contacto','producto → Último producto de interés','fecha → Fecha de la cuota'].map(v => `<span class="vb">{{${esc(v.split(' → ')[0])}}} = ${esc(v.split(' → ')[1])}</span>`).join('')}</div></div>
-        <p class="muted">Solo se pueden enviar plantillas aprobadas por Meta. Para escribir texto libre, el estudiante debe haber escrito en las últimas 24 horas.</p>`
+        <p class="muted">Solo se pueden enviar plantillas aprobadas por Meta. Para escribir texto libre, el cliente debe haber escrito en las últimas 24 horas.</p>`
       : `<div class="fld">Línea de salida${ddSel('data-lin', LINEAS.map(l => [l.id, `${esc(l.n)} · ${esc(l.tel)}`]), d.linea)}</div>
         <div class="fld">Cuándo<div class="chips2"><button type="button" data-cuando="ahora" aria-pressed="${d.cuando === 'ahora'}">Ahora</button><button type="button" data-cuando="prog" aria-pressed="${d.cuando === 'prog'}">Programar</button></div></div>
         ${d.cuando === 'prog' ? `<label>Fecha y hora<input type="datetime-local" value="2026-10-01T09:00"></label>` : ''}
@@ -319,7 +319,7 @@ function difusion(){
         <p class="muted">Cuando alguien responda, la conversación se abre en la bandeja y el reparto se la entrega a su asesor o al siguiente del turno.</p>`}
       <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px">${d.paso > 1 ? `<button type="button" class="btn atras" data-paso="${d.paso - 1}">Atrás</button>` : ''}${d.paso < 3 ? `<button type="button" class="btn pri" data-paso="${d.paso + 1}">Siguiente</button>` : `<button type="button" class="btn pri" id="d-go">${I('send')}${d.cuando === 'ahora' ? 'Enviar a ' + total.toLocaleString('es-CO') + ' personas' : 'Programar difusión'}</button>`}</div>
     </div>
-    <div class="phone"><div class="hd">Así lo ve el estudiante</div><div class="bub">${esc(tpl.x)}<div class="tm">${hcHora(Date.now())}</div>${tpl.boton ? `<span class="btn2">${esc(tpl.boton)}</span>` : ''}</div></div></div>`;
+    <div class="phone"><div class="hd">Así lo ve el cliente</div><div class="bub">${esc(tpl.x)}<div class="tm">${hcHora(Date.now())}</div>${tpl.boton ? `<span class="btn2">${esc(tpl.boton)}</span>` : ''}</div></div></div>`;
   el.querySelectorAll('[data-paso]').forEach(b => b.addEventListener('click', () => { d.paso = +b.dataset.paso; render(); }));
   el.querySelectorAll('[data-aud]').forEach(b => b.addEventListener('click', () => { d.aud.has(b.dataset.aud) ? d.aud.delete(b.dataset.aud) : d.aud.add(b.dataset.aud); render(); }));
   el.querySelectorAll('[data-dpub]').forEach(b => b.addEventListener('click', () => { d.publico = b.dataset.dpub; render(); }));
@@ -350,13 +350,13 @@ function plantillaNueva(){
       <div class="vars"><span style="font-size:11.5px;color:var(--ink3);align-self:center">Insertar variable:</span>${['nombre','producto','fecha','asesor','enlace'].map(v => `<button type="button" data-var="${v}">{{${v}}}</button>`).join('')}</div>
       <label>Pie, opcional<input id="t-f" value="${esc(t.foot)}"></label>
       <div class="fld">Botón, opcional${ddSel('data-btn', [['','Sin botón'],['Respuesta rápida','Respuesta rápida'],['Enlace','Enlace'],['Llamar','Llamar']], t.btn)}</div>
-      ${t.btn ? `<label>Texto del botón<input id="t-bt" value="${esc(t.btnTxt)}" placeholder="${t.btn === 'Enlace' ? 'Ver el curso' : t.btn === 'Llamar' ? 'Llamar a mi asesor' : 'Sí, quiero información'}"></label>` : ''}
+      ${t.btn ? `<label>Texto del botón<input id="t-bt" value="${esc(t.btnTxt)}" placeholder="${t.btn === 'Enlace' ? 'Ver más' : t.btn === 'Llamar' ? 'Llamar a mi asesor' : 'Sí, quiero información'}"></label>` : ''}
       ${t.btn === 'Enlace' ? `<label>Enlace del botón<input id="t-bu" value="${esc(t.btnUrl || '')}" placeholder="https://www.tuempresa.com"></label>` : ''}
       ${t.btn === 'Llamar' ? `<label>Número a llamar<input id="t-bl" value="${esc(t.btnTel || '')}" placeholder="+57 300 123 4567" inputmode="tel"></label>` : ''}
       <p class="muted">Meta rechaza plantillas con promesas sin condiciones, mayúsculas sostenidas o variables sin ejemplo. Antes de enviarla se revisan esas reglas aquí.</p>
       <div style="display:flex;gap:8px;justify-content:flex-end"><button type="button" class="btn" id="t-guardar">Guardar borrador</button><button type="button" class="btn pri" id="t-meta">${I('send')}Enviar a Meta</button></div>
     </div>
-    <div class="phone"><div class="hd">Así lo ve el estudiante</div><div class="bub">${t.headTipo === 'video' ? `<div class="mj-vid"><span>${I('play')}</span></div>` : ''}${t.head && t.headTipo !== 'video' ? `<div class="h">${esc(t.head)}</div>` : ''}${esc(cuerpo)}${t.foot ? `<div class="ft">${esc(t.foot)}</div>` : ''}<div class="tm">${hcHora(Date.now())}</div>${t.btn ? `<span class="btn2">${esc(t.btnTxt || (t.btn === 'Enlace' ? 'Ver el curso' : t.btn === 'Llamar' ? 'Llamar a mi asesor' : 'Sí, quiero información'))}</span>` : ''}</div></div></div>`;
+    <div class="phone"><div class="hd">Así lo ve el cliente</div><div class="bub">${t.headTipo === 'video' ? `<div class="mj-vid"><span>${I('play')}</span></div>` : ''}${t.head && t.headTipo !== 'video' ? `<div class="h">${esc(t.head)}</div>` : ''}${esc(cuerpo)}${t.foot ? `<div class="ft">${esc(t.foot)}</div>` : ''}<div class="tm">${hcHora(Date.now())}</div>${t.btn ? `<span class="btn2">${esc(t.btnTxt || (t.btn === 'Enlace' ? 'Ver más' : t.btn === 'Llamar' ? 'Llamar a mi asesor' : 'Sí, quiero información'))}</span>` : ''}</div></div></div>`;
   const bind = (id, k) => { const x = el.querySelector(id); if (x) x.addEventListener('input', () => { t[k] = x.value; if (k !== 'body' && k !== 'nombre' && k !== 'btnTxt') return; const pv = el.querySelector('.bub'); if (k === 'body') pv.childNodes[t.headTipo === 'video' || t.head ? 1 : 0].textContent = x.value; }); };
   bind('#t-n', 'nombre'); bind('#t-b', 'body'); bind('#t-bt', 'btnTxt'); bind('#t-bu', 'btnUrl'); bind('#t-bl', 'btnTel');
   const btx = el.querySelector('#t-bt'); if (btx) btx.addEventListener('input', () => { const b2 = el.querySelector('.bub .btn2'); if (b2) b2.textContent = btx.value || b2.textContent; });
@@ -463,7 +463,7 @@ function burbuja(m){
   if (m.ev) return `<span class="ev">${I(m.ev)}${esc(m.t)}</span>`;
   if (m.note) return `<div class="m note"><span class="by">${I('note')}Nota privada · ${esc(m.by)}</span>${esc(m.note)}<div class="ft">${esc(m.h || '')}</div></div>`;
   if (m.bot) {
-    // Lo que manda un flujo: su nombre, el texto y las opciones que vio el estudiante.
+    // Lo que manda un flujo: su nombre, el texto y las opciones que vio el cliente.
     const ops = Array.isArray(m.botones) ? m.botones.map(x => typeof x === 'string' ? x : x && x.t).filter(Boolean) : [];
     const filas = m.lista && Array.isArray(m.lista.ops) ? m.lista.ops.map(x => typeof x === 'string' ? x : x && x.t).filter(Boolean) : [];
     const extra = ops.length ? `<div style="display:flex;flex-wrap:wrap;gap:4px;margin-top:6px">${ops.map(o => `<span style="border:1px solid #cfe4ff;border-radius:6px;padding:2px 8px;font-size:12px;color:var(--blue-ink);background:#fff">${esc(o)}</span>`).join('')}</div>`
@@ -641,9 +641,9 @@ function panel(c){
       <div class="pc-pr"><span>Etapa</span><div class="dd" id="dd-etq"><button type="button" class="pc-ps" id="etq-b" aria-haspopup="listbox" aria-expanded="false"><i class="pc-dot" style="background:${COL[c.etq[0]] || '#cbd5e1'}"></i><span class="t">${esc(c.etq[0] || 'Sin etapa')}</span>${cv}</button><div class="menu" id="etq-m" role="listbox" hidden></div></div></div>
       <div class="pc-pr top"><span>Etiquetas</span><div class="tagsel">${c.tags.map(t => `<span class="tagx"><i style="background:${ETIQ_COL[t]}"></i>${esc(t)}<button type="button" data-tag-del="${esc(t)}" aria-label="Quitar ${esc(t)}">${I('x')}</button></span>`).join('')}<div class="dd" id="dd-tag"><button type="button" class="tg-add" id="tag-b">${I('plus')}Agregar</button><div class="menu tg-menu" id="tag-m" hidden><label class="tg-q">${I('search')}<input id="tag-q" placeholder="Buscar o crear etiqueta" autocomplete="off" aria-label="Buscar o crear etiqueta"></label><div id="tag-l">${listaTags(c, '')}</div></div></div></div></div>`)}
     ${c.pauta ? sec('pauta','megaphone','Anuncio de origen', `<dl class="kv">${[['Plataforma', c.pauta.plataforma], ['Campaña', c.pauta.campana], ['Conjunto', c.pauta.conjunto], ['Anuncio', c.pauta.anuncio], ['Palabra clave', c.pauta.termino], ['Formato', c.pauta.formato], ['Cómo se supo', c.pauta.como]].filter(([, v]) => v).map(([t, v]) => `<dt>${t}</dt><dd>${esc(v)}</dd>`).join('')}</dl>`, esc(pautaNombre), true) : ''}
-    ${sec('guia','compass','Lo que busca', `<dl class="kv"><dt>Carrera</dt><dd>${esc(f.carrera || 'Sin dato')}</dd></dl>${f.puntaje ? `<p class="pc-nota">${esc(f.puntaje)}</p>` : ''}`, 'Formulario web', true)}
+    ${!(f.carrera || f.puntaje) ? '' : sec('guia','compass','Lo que busca', `<dl class="kv"><dt>Interés</dt><dd>${esc(f.carrera || 'Sin dato')}</dd></dl>${f.puntaje ? `<p class="pc-nota">${esc(f.puntaje)}</p>` : ''}`, 'Formulario web', true)}
     ${sec('compra','cart','Compras', compra, cp ? '1' : buscando || (est && est.error) ? '' : 'Ninguna', true)}
-    ${sec('campos','user','Datos del estudiante', `<div class="frm">${CAMPOS.map(fd => fd.ops ? `<div class="fld">${esc(fd.n)}${ddSel('data-cop', opsDe(fd).map(([v, l]) => [fd.k + '::' + v, l]), fd.k + '::' + (c.campos[fd.k] || ''), fd.ph || 'Elige una opción')}</div>` : `<label>${esc(fd.n)}<input data-campo="${esc(fd.k)}" value="${esc(c.campos[fd.k] || '')}" placeholder="${fd.trengo ? 'Viene de Trengo' : 'Sin dato'}"></label>`).join('')}<div style="display:flex;justify-content:flex-end"><button type="button" class="btn" data-guardar-campos="1">${I('check')}Guardar</button></div></div>`, '', true)}
+    ${sec('campos','user','Datos del cliente', `<div class="frm">${CAMPOS.map(fd => fd.ops ? `<div class="fld">${esc(fd.n)}${ddSel('data-cop', opsDe(fd).map(([v, l]) => [fd.k + '::' + v, l]), fd.k + '::' + (c.campos[fd.k] || ''), fd.ph || 'Elige una opción')}</div>` : `<label>${esc(fd.n)}<input data-campo="${esc(fd.k)}" value="${esc(c.campos[fd.k] || '')}" placeholder="${fd.trengo ? 'Viene de Trengo' : 'Sin dato'}"></label>`).join('')}<div style="display:flex;justify-content:flex-end"><button type="button" class="btn" data-guardar-campos="1">${I('check')}Guardar</button></div></div>`, '', true)}
     ${sec('prev','history','Conversaciones anteriores', h.length ? `<div class="pc-hist">${h.join('')}</div>` : '<p class="muted">Es su primera conversación.</p>', h.length ? String(h.length) : 'Primera', true)}
     ${sec('rec','bell','Recordatorios de seguimiento', recHtml(c), recs ? recs + ' pendiente' + (recs > 1 ? 's' : '') : '', true)}`;
 }
@@ -677,7 +677,7 @@ function pagina(){
   } else if (st.pagina === 'difusiones') {
 
     if (st.dif) { difusion(); return; }
-    el.innerHTML = `<div class="pg-h"><div><h2>Difusiones</h2><p class="sub">Envíos masivos por WhatsApp con plantillas aprobadas. Cada envío queda como conversación y se reparte a los asesores cuando el estudiante responde.</p></div><button type="button" class="btn pri" id="b-dif">${I('plus')}Nueva difusión</button></div>
+    el.innerHTML = `<div class="pg-h"><div><h2>Difusiones</h2><p class="sub">Envíos masivos por WhatsApp con plantillas aprobadas. Cada envío queda como conversación y se reparte a los asesores cuando el cliente responde.</p></div><button type="button" class="btn pri" id="b-dif">${I('plus')}Nueva difusión</button></div>
       <table class="tb2"><thead><tr><th>Difusión</th><th>Plantilla</th><th>Audiencia</th><th>Enviados</th><th>Entregados</th><th>Leídos</th><th>Respondieron</th><th>Fecha</th><th>Estado</th></tr></thead><tbody>
       ${DIFUSIONES.length ? '' : '<tr><td colspan="9" class="muted" style="padding:18px 10px">Todavía no hay difusiones. Crea la primera con «Nueva difusión».</td></tr>'}${DIFUSIONES.map(d => { const v = difVista(d), num = x => x.toLocaleString('es-CO'), pct = x => v.ent ? ' · ' + Math.round(x / v.ent * 100) + ' %' : '';
         return `<tr><td><b style="font-weight:500">${esc(d.n)}</b></td><td>${esc(d.t)}</td><td style="color:var(--ink3)">${esc(d.a)}</td><td>${v.env || v.curso ? num(v.env) + (v.curso && v.total ? ' de ' + num(v.total) : '') : '—'}${v.fal ? `<div class="muted" style="font-size:12px">${num(v.fal)} ${v.fal === 1 ? 'fallido' : 'fallidos'}</div>` : ''}</td><td>${v.ent ? num(v.ent) : '—'}</td><td>${v.le ? num(v.le) + pct(v.le) : '—'}</td><td>${v.resp ? num(v.resp) + pct(v.resp) : '—'}</td><td style="color:var(--ink3)">${esc(d.f || '—')}</td><td><span class="est ${v.est}"${v.motivo ? ` title="${esc(v.motivo)}"` : ''}>${esc(v.e)}</span></td></tr>`; }).join('')}
@@ -726,7 +726,7 @@ function pagina(){
   } else if (st.pagina === 'campos') {
     el.innerHTML = `<div class="ajw"><h2>Campos personalizados</h2><p class="sub">Los datos que se llenan en la ficha de cada cliente. El número de cliente lo pone el CRM solo, a cada cliente que llega: es único y nunca se repite.</p>
       <table class="tb3"><thead><tr><th>Campo</th><th>Tipo</th><th></th></tr></thead><tbody><tr><td>Número de cliente <span class="pill">Automático</span></td><td>Número</td><td></td></tr>${CAMPOS.map((f, i) => `<tr><td>${esc(f.n)}</td><td>${esc(f.t)}</td><td style="text-align:right"><button type="button" class="btn ic" data-campo-del="${i}" aria-label="Borrar campo">${I('x')}</button></td></tr>`).join('')}</tbody></table>
-      <div class="frm" style="margin-top:14px;grid-template-columns:1fr auto auto;align-items:end;display:grid;gap:10px"><label>Campo nuevo<input id="cf-n" placeholder="Ej. Universidad a la que aspira"></label><div class="fld">Tipo${ddSel('data-cf-t', ['Texto','Número','Fecha','Lista'], st.cfT || 'Texto')}</div><button type="button" class="btn pri" id="cf-add">${I('plus')}Agregar</button></div></div>`;
+      <div class="frm" style="margin-top:14px;grid-template-columns:1fr auto auto;align-items:end;display:grid;gap:10px"><label>Campo nuevo<input id="cf-n" placeholder="Ej. Fecha de cumpleaños"></label><div class="fld">Tipo${ddSel('data-cf-t', ['Texto','Número','Fecha','Lista'], st.cfT || 'Texto')}</div><button type="button" class="btn pri" id="cf-add">${I('plus')}Agregar</button></div></div>`;
   } else if (st.pagina === 'importar') {
     const im = st.imp || {fase:'lista'};
     el.innerHTML = `<div class="ajw"><h2>Importar contactos</h2><p class="sub">Sube el archivo de contactos exportado del CRM que usabas antes (Trengo, HubSpot u otro), en Excel o CSV. Cada contacto llega con su etapa, etiquetas y asesor; si el número ya existe, se actualiza en vez de duplicarse.</p>
@@ -748,7 +748,7 @@ function pagina(){
         ['users','Equipos y reparto','Quién recibe cada conversación y con qué tope','cfg-reparto'],
         ['kanban','Etapas del embudo',`${ETQ.length} etapas`,'cfg-etapas'],
         ['tag','Etiquetas',`${ETIQS.length} etiquetas, además de la etapa`,'etiquetas'],
-        ['user','Campos personalizados',`${CAMPOS.length} campos en la ficha del estudiante`,'campos'],
+        ['user','Campos personalizados',`${CAMPOS.length} campos en la ficha del cliente`,'campos'],
         ['clock','Horario de atención',horarioTxt(),'cfg-horario']]],
       ['Mensajes', [
         ['bolt','Respuestas rápidas del equipo',`${QR.length} ${QR.length === 1 ? 'respuesta' : 'respuestas'} para todo el equipo`,'cfg-qr'],
@@ -767,7 +767,7 @@ function pagina(){
     const cuenta = `<div class="acs">
       ${ac('perfil','user','Mi perfil', `${esc(AJ.nombre)} · ${esc(AJ.correo)}`, `
         ${perfilFotoHtml()}
-        <div class="two2"><label class="fl">Nombre completo<input id="aj-nombre" value="${esc(st.pfBorrador ? st.pfBorrador.nombre : AJ.nombre)}"></label><label class="fl">Cómo te ven los estudiantes<input id="aj-corto" value="${esc(st.pfBorrador ? st.pfBorrador.corto : AJ.corto)}"></label></div>
+        <div class="two2"><label class="fl">Nombre completo<input id="aj-nombre" value="${esc(st.pfBorrador ? st.pfBorrador.nombre : AJ.nombre)}"></label><label class="fl">Cómo te ven los clientes<input id="aj-corto" value="${esc(st.pfBorrador ? st.pfBorrador.corto : AJ.corto)}"></label></div>
         <div class="fl">Correo<span style="font-size:14px;color:var(--ink);font-weight:400">${esc(AJ.correo || 'Sin correo')}</span></div>
         <p class="hint">Entras a la plataforma con tu cuenta de Google; el correo y la contraseña se manejan allá.</p>
         <div class="ft2"><button type="button" class="btn pri" data-aj="guardar-perfil">${I('check')}Guardar</button></div>`)}
@@ -868,7 +868,7 @@ document.getElementById('page').addEventListener('click', e => {
     return;
   }
   const r = e.target.closest('[data-open]'); if (r) { st.sel = +r.dataset.open; st.vista = 'todas'; st.pagina = ''; st.carpeta = st.equipo = st.etq = st.linea = st.q = ''; st.menciones = false; st.est = 'abiertas'; document.getElementById('q').value = ''; render(); return; } });
-document.querySelector('.subtabs').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; document.querySelectorAll('.subtabs button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); document.getElementById('app').classList.toggle('verficha', b.textContent === 'Ficha del estudiante'); if (b.textContent === 'Ficha del estudiante') pintarFicha(); return; document.querySelectorAll('.subtabs button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); toast(b.textContent === 'Mensajes' ? 'Mensajes' : 'Ficha completa del estudiante'); });
+document.querySelector('.subtabs').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; document.querySelectorAll('.subtabs button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); document.getElementById('app').classList.toggle('verficha', b.textContent === 'Ficha del cliente'); if (b.textContent === 'Ficha del cliente') pintarFicha(); return; document.querySelectorAll('.subtabs button').forEach(x => x.setAttribute('aria-pressed', String(x === b))); toast(b.textContent === 'Mensajes' ? 'Mensajes' : 'Ficha completa del cliente'); });
 document.getElementById('back').addEventListener('click', () => document.getElementById('app').classList.remove('open'));
 
 function toast(t){ const el = document.getElementById('toast'); el.textContent = t; el.classList.add('on'); clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('on'), 1900); }
@@ -1036,7 +1036,7 @@ function elegirEnlace(pi, mi){
   adj.innerHTML = `${I('link')}<span>${esc(p.p)}<small>${esc(etiquetaPago(x))} · ${precio(x.pr)} · enlace de ${esc(yo)}</small></span><button type="button" id="adj-x" aria-label="Quitar enlace">${I('x')}</button>`;
   adj.hidden = false;
   document.getElementById('lk').hidden = true;
-  if (!ta.value.trim()) ta.value = `Aquí tienes el enlace para inscribirte en ${p.p}:`;
+  if (!ta.value.trim()) ta.value = `Aquí tienes el enlace de pago de ${p.p}:`;
   ta.focus();
   if (yaCompro(c, p)) toast(`${c.n.split(' ')[0]} ya compró este producto. Revisa antes de enviarlo.`);
 }
@@ -1045,7 +1045,7 @@ document.getElementById('adj').addEventListener('click', e => { if (e.target.clo
 document.getElementById('lk').addEventListener('click', e => { e.stopPropagation(); const b = e.target.closest('[data-pick]'); if (!b) return; const [pi, mi] = b.dataset.pick.split('-').map(Number); elegirEnlace(pi, mi); });
 document.addEventListener('click', e => { if (!e.target.closest('#lk') && !e.target.closest('#b-link') && !e.target.closest('[data-ver-enlaces]') && !e.target.closest('[data-pick]')) document.getElementById('lk').hidden = true; });
 document.getElementById('b-link').addEventListener('click', e => { e.stopPropagation(); const lk = document.getElementById('lk'); if (!lk.hidden) { lk.hidden = true; return; } document.getElementById('qr').hidden = true; abrirEnlaces(''); });
-/* Finalizar con encuesta: al cerrar, al estudiante le llega
+/* Finalizar con encuesta: al cerrar, al cliente le llega
    por WhatsApp un formulario de dos preguntas. La primera califica al asesor (de 1 a 5)
    y es la que sirve para el control del equipo; la segunda es el NPS de la empresa. */
 const ovRes = document.getElementById('ov-res');
@@ -1077,7 +1077,7 @@ ovRes.addEventListener('click', e => {
   const c = CONV.find(x => x.id === st.sel); ovRes.hidden = true;
   c.msgs.push({ev:'check', t:`Finalizada por ${yo} · ahora`});
   if (st.resEnc) {
-    // Sale por WhatsApp como mensaje; la respuesta del estudiante llega por el webhook y queda en la conversación.
+    // Sale por WhatsApp como mensaje; la respuesta del cliente llega por el webhook y queda en la conversación.
     c.msgs.push({out: encuestaTexto(c), by: yo, encuesta: {asesor: c.asig}}, {ev:'star', t:'Encuesta de satisfacción enviada por WhatsApp'});
     c.encuestada = true; chat(); toast('Conversación finalizada. La encuesta sale por WhatsApp.');
   } else { chat(); toast('Conversación finalizada'); }
@@ -1207,12 +1207,12 @@ function pintarFicha(){
   const cursos = d && d.cursos && d.cursos.length ? `<div class="hist" style="margin-top:8px">${d.cursos.map(x => `<div><span>${esc(x.p)}${x.historico ? ' · anterior' : ''}</span><span>${esc(hcDia(x.fecha))}</span></div>`).join('')}</div>` : '';
   const plataforma = !est || est.cargando ? '<p class="muted" style="margin:0">Buscando en la plataforma…</p>'
     : est.error ? `<p class="muted" style="margin:0">${esc(est.error)}</p>`
-    : d.estudianteId ? `<dl class="kv">${kv('Estudiante', d.nombre)}${kv('Asesor', d.asesor)}${kv('Lo encontró por', {telefono:'su teléfono', correo:'su correo', acudiente:'el acudiente'}[d.via] || '')}</dl>${cursos}`
-    : '<p class="muted" style="margin:0">No aparece como estudiante en la plataforma.</p>';
+    : d.estudianteId ? `<dl class="kv">${kv('Cliente', d.nombre)}${kv('Asesor', d.asesor)}${kv('Lo encontró por', {telefono:'su teléfono', correo:'su correo', acudiente:'el representante legal'}[d.via] || '')}</dl>${cursos}`
+    : '<p class="muted" style="margin:0">No aparece como cliente en la plataforma.</p>';
   const recup = d && d.recuperacion && d.recuperacion.length ? `<div class="fcard"><h4>${I('cart')}Recuperación de ventas</h4><div class="hist">${d.recuperacion.map(x => `<div><span>${esc(x.tipo)} · ${esc(x.producto)}</span><span>${esc(x.estado)}</span></div>`).join('')}</div></div>` : '';
   document.getElementById('ficha').innerHTML = `
-    <div class="fcard"><h4>${I('user')}Datos</h4><dl class="kv">${kv('Colegio', f.colegio)}${kv('Ciudad', f.ciudad)}${kv(CANALES[c.canal] ? (c.canal === 'wa' ? 'WhatsApp' : CANALES[c.canal].n) : 'Contacto', c.tel)}${kv('Correo', f.correo)}${kv('Llegó por', f.origen)}</dl></div>
-    <div class="fcard"><h4>${I('compass')}Lo que busca</h4><dl class="kv"><dt>Carrera</dt><dd>${esc(f.carrera || 'Sin dato')}</dd></dl>${f.puntaje ? `<p class="muted" style="margin:0">${esc(f.puntaje)}</p>` : ''}</div>
+    <div class="fcard"><h4>${I('user')}Datos</h4><dl class="kv">${kv('Ciudad', f.ciudad)}${kv(CANALES[c.canal] ? (c.canal === 'wa' ? 'WhatsApp' : CANALES[c.canal].n) : 'Contacto', c.tel)}${kv('Correo', f.correo)}${kv('Llegó por', f.origen)}</dl></div>
+    <div class="fcard"><h4>${I('compass')}Lo que busca</h4><dl class="kv"><dt>Interés</dt><dd>${esc(f.carrera || 'Sin dato')}</dd></dl>${f.puntaje ? `<p class="muted" style="margin:0">${esc(f.puntaje)}</p>` : ''}</div>
     ${c.pauta ? `<div class="fcard"><h4>${I('ad')}Anuncio de origen</h4><dl class="kv"><dt>Plataforma</dt><dd>${esc(c.pauta.plataforma)}</dd><dt>Campaña</dt><dd>${esc(c.pauta.campana)}</dd><dt>Anuncio</dt><dd>${esc(c.pauta.anuncio)}</dd></dl></div>` : ''}
     <div class="fcard"><h4>${I('user')}En la plataforma</h4>${plataforma}</div>
     <div class="fcard"><h4>${I('cart')}Compras</h4>${comprasHtml}</div>${recup}
@@ -1290,7 +1290,7 @@ document.getElementById('panel').addEventListener('click', e => {
   const ad = e.target.closest('[data-tag-add]'); if (ad) { c.tags.push(ad.dataset.tagAdd); render(); toast(`Etiqueta: ${ad.dataset.tagAdd}`); return; }
   const dl = e.target.closest('[data-tag-del]'); if (dl) { c.tags = c.tags.filter(t => t !== dl.dataset.tagDel); render(); toast(`Quitada: ${dl.dataset.tagDel}`); return; }
   const cop = e.target.closest('[data-cop]'); if (cop) { const [k, v] = cop.dataset.cop.split('::'); c.campos[k] = v; render(); toast(`${CAMPOS.find(f => f.k === k).n}: ${opsDe(CAMPOS.find(f => f.k === k)).find(([x]) => x === v)?.[1] ?? v}`); return; }
-  if (e.target.closest('[data-guardar-campos]')) { document.querySelectorAll('#panel [data-campo]').forEach(i => { c.campos[i.dataset.campo] = i.value.trim(); }); toast('Datos del estudiante guardados'); return; }
+  if (e.target.closest('[data-guardar-campos]')) { document.querySelectorAll('#panel [data-campo]').forEach(i => { c.campos[i.dataset.campo] = i.value.trim(); }); toast('Datos del cliente guardados'); return; }
 }, true);
 document.addEventListener('click', async e => {
   const b = e.target.closest('[data-prev-conv]'); if (!b) return;
@@ -1437,7 +1437,7 @@ document.getElementById('m-mas').addEventListener('click', e => {
   if (b.dataset.mas === 'unir') dlgUnir(c);
   if (b.dataset.mas === 'exportar') mjDlgExportar(c);
   if (b.dataset.mas === 'spam') mjDlgSpam(c);
-  if (b.dataset.mas === 'nocontactar') { if (c.noContactar) { c.noContactar = null; render(); toast('Ya se le puede escribir'); return; } st.nc = 'Lo pidió el estudiante'; dlgNoContactar(); }
+  if (b.dataset.mas === 'nocontactar') { if (c.noContactar) { c.noContactar = null; render(); toast('Ya se le puede escribir'); return; } st.nc = 'Lo pidió el cliente'; dlgNoContactar(); }
   if (b.dataset.mas === 'borrar') abrirDialogo(`<h3>Borrar los datos de ${esc(c.n)}</h3><p>Se borran su contacto, sus conversaciones y su ficha. Queda solo el registro de que pidió el borrado y la fecha, como exige la ley de protección de datos. No se puede deshacer.</p><div class="ft2"><button type="button" class="btn" data-cerrar-dlg="1">Cancelar</button><button type="button" class="btn pri" style="background:#dc2626;border-color:#dc2626" id="borrar-ok">${I('x')}Borrar sus datos</button></div>`);
 });
 function dlgTransferir(){
@@ -1448,7 +1448,7 @@ function dlgTransferir(){
 }
 function dlgNoContactar(){
   const c = conv();
-  abrirDialogo(`<h3>No contactar a ${esc(c.n)}</h3><p>No recibe difusiones, plantillas ni mensajes programados. Si escribe, la conversación llega y se le responde normal.</p><div class="fld">Motivo${chipsSel(['Lo pidió el estudiante','Número equivocado','Ya estudia en otro lado','Otro'], 'data-nc-m', st.nc)}</div>
+  abrirDialogo(`<h3>No contactar a ${esc(c.n)}</h3><p>No recibe difusiones, plantillas ni mensajes programados. Si escribe, la conversación llega y se le responde normal.</p><div class="fld">Motivo${chipsSel(['Lo pidió el cliente','Número equivocado','Ya compró en otro lado','Otro'], 'data-nc-m', st.nc)}</div>
     <div class="ft2"><button type="button" class="btn" data-cerrar-dlg="1">Cancelar</button><button type="button" class="btn pri" id="nc-guardar">${I('block')}Marcar no contactar</button></div>`);
 }
 document.getElementById('ov-x').addEventListener('click', e => {
@@ -1579,7 +1579,7 @@ function paginaCfg(k){
       ${fila('Si no responde en estos minutos, pasa al siguiente', '', `<input class="inl" data-cfg-in="reparto.minutos" value="${r.minutos}">`)}</div></div>
       <div class="cfg"><div class="box2"><h4>${I('flow')}Excepciones</h4>
       ${fila('No asignar a quien está ausente', '', sw('rep-ausente', r.ausente))}
-      ${fila('Familiares al mismo asesor', 'Mamá, papá o hermanos van con quien ya atiende al estudiante', sw('rep-familiares', r.familiares))}
+      ${fila('Familiares al mismo asesor', 'Mamá, papá o hermanos van con quien ya atiende al cliente', sw('rep-familiares', r.familiares))}
       ${fila('Cliente conocido vuelve a su asesor', 'Si ya compró o ya habló con alguien, le llega a esa persona', sw('rep-conocido', r.conocido))}</div>
       <div class="box2"><h4>${I('users')}Equipos</h4>${EQUIPOS.map((e, i) => fila(e.n, (MIEMBROS[e.n] || []).join(', ') || 'Falta elegir quién lo atiende', `<button type="button" class="btn" data-eq-edit="${i}">Editar</button>`)).join('')}<div><button type="button" class="btn" data-eq-edit="nuevo">${I('plus')}Crear equipo</button></div></div></div></div></div>`; }
   if (k === 'etapas') return paginaEtapas();
@@ -1673,7 +1673,7 @@ function paginaFlujos(){
     if (p.t === 'ramas') return campoRamas(p, i);
     if (p.t === 'mensaje') return `<textarea data-fl-txt="${i}">${esc(p.txt)}</textarea><p class="muted" style="margin:0">Puedes usar {{nombre}} si ya se lo preguntaste.</p>`;
     if (p.t === 'pregunta') return `<textarea data-fl-txt="${i}">${esc(p.txt)}</textarea>
-      <div class="two3" style="grid-template-columns:1fr 1fr"><div class="fld">Guardar la respuesta en${ddSel('data-fl-guardar', ['Nombre del contacto','Correo','Ciudad','Grado','Colegio','Carrera que busca'].map(x => [`${i}|${x}`, x]), `${i}|${esc(p.guardar)}`)}</div><div class="fld">Validar${ddSel('data-fl-validar', ['Nombre y apellido','Texto libre','Correo','Número'].map(x => [`${i}|${x}`, x]), `${i}|${esc(p.validar)}`)}</div></div>
+      <div class="two3" style="grid-template-columns:1fr 1fr"><div class="fld">Guardar la respuesta en${ddSel('data-fl-guardar', ['Nombre del contacto','Correo','Ciudad','Producto'].map(x => [`${i}|${x}`, x]), `${i}|${esc(p.guardar)}`)}</div><div class="fld">Validar${ddSel('data-fl-validar', ['Nombre y apellido','Texto libre','Correo','Número'].map(x => [`${i}|${x}`, x]), `${i}|${esc(p.validar)}`)}</div></div>
       ${p.validar !== 'Texto libre' ? `<label class="fld">Si la respuesta no sirve, pregunta de nuevo<input data-fl-reint="${i}" value="${esc(p.reintento || '')}"></label>` : ''}`;
     if (p.t === 'botones') return `<textarea data-fl-txt="${i}">${esc(p.txt)}</textarea><div class="ops">${p.ops.map((o, j) => `<input data-fl-op="${i}|${j}" value="${esc(o)}"><button type="button" class="btn ic" data-fl-opdel="${i}|${j}" aria-label="Quitar opción" style="width:28px;height:28px;padding:0">${I('x')}</button>`).join('')}${p.ops.length < 3 ? `<button type="button" class="btn" data-fl-opadd="${i}">${I('plus')}Opción</button>` : ''}</div><p class="muted" style="margin:0">WhatsApp permite hasta 3 botones por mensaje.</p>`;
     if (p.t === 'etiqueta') return `<div class="fld">Etiqueta${ddSel('data-fl-tag', ETIQS.map(([n]) => [`${i}|${n}`, n]), `${i}|${p.tag || ''}`)}</div>`;
@@ -1687,7 +1687,7 @@ function paginaFlujos(){
       <div class="box2" style="margin-bottom:14px">
         <div class="two3" style="grid-template-columns:1fr 1fr"><label class="fld">Nombre<input data-fl-nombre="1" value="${esc(f.n)}"></label><div class="fld">Cuándo se activa${ddSel('data-fl-cuando', ['Llega el primer mensaje de un número nuevo','Llega un mensaje fuera de horario','Llega desde un anuncio'], f.cuando)}</div></div>
         <div class="fld">Canales<div class="chips2">${Object.entries(CANALES).filter(([k]) => k !== 'mail').map(([k, v]) => `<button type="button" data-fl-canal="${k}" aria-pressed="${f.canales.includes(k)}">${v.n}</button>`).join('')}</div></div>
-        <div class="row2"><span>Saltar si ya es un contacto conocido<small>Si ya habló con un asesor y todavía no ha comprado, le llega directo a esa persona. Los estudiantes van a la lista de opciones.</small></span><button type="button" class="tg" role="switch" data-fl-saltar="1" aria-checked="${f.saltarConocidos}"></button></div>
+        <div class="row2"><span>Saltar si ya es un contacto conocido<small>Si ya habló con un asesor y todavía no ha comprado, le llega directo a esa persona. Los clientes van a la lista de opciones.</small></span><button type="button" class="tg" role="switch" data-fl-saltar="1" aria-checked="${f.saltarConocidos}"></button></div>
         <div class="row2"><span>Si no responde en estos minutos, pasarlo igual al asesor<small>Para que ningún lead quede esperando en el flujo</small></span><input class="inl" data-fl-espera="1" value="${f.espera}" style="width:80px;text-align:center;border:1px solid var(--line);border-radius:9px;padding:7px"></div>
         <div class="row2"><span>Flujo activo</span><button type="button" class="tg" role="switch" data-fl-on="${f.id}" aria-checked="${f.on}"></button></div>
         ${f.atajos ? atajosHTML(f) : ''}
@@ -1696,7 +1696,7 @@ function paginaFlujos(){
       <div class="conector"></div>
       <div style="display:flex;justify-content:center"><div class="fld" style="width:260px">${ddSel('data-fl-add', TIPOS_PASO, '', 'Agregar un paso')}</div></div>
     </div>
-    <div class="fprev">${f.atajos ? `<div class="fld">Probar como${ddSel('data-flr-esc', ESCENARIOS, st.pruebaEsc || 'nuevo')}</div>` : ''}<div class="phone"><div class="hd">Así lo vive el estudiante${st.prueba ? ' · prueba' : ''}</div><div class="chatp" id="fl-chat">${chatPrueba(f)}</div></div>
+    <div class="fprev">${f.atajos ? `<div class="fld">Probar como${ddSel('data-flr-esc', ESCENARIOS, st.pruebaEsc || 'nuevo')}</div>` : ''}<div class="phone"><div class="hd">Así lo vive el cliente${st.prueba ? ' · prueba' : ''}</div><div class="chatp" id="fl-chat">${chatPrueba(f)}</div></div>
       <button type="button" class="btn ${st.prueba ? '' : 'pri'}" data-fl-probar="1">${st.prueba ? 'Reiniciar la prueba' : 'Probar el flujo'}</button></div></div></div>`;
 }
 function textoNombre(t){ return (st.prueba && st.prueba.nombre ? st.prueba.nombre.split(' ')[0] : yo.split(' ')[0]); }
@@ -1726,7 +1726,7 @@ function chatPrueba(f){
       if (r && r.error) out.push(`<div class="bb yo">${esc(r.v)}</div>${msg(p.reintento || 'No te entendí, ¿me lo repites?')}`);
       if (r && r.ok) { out.push(`<div class="bb yo">${esc(r.v)}</div>`); continue; }
       if (p.t === 'botones') out.push(`<div class="opsb">${p.ops.map(o => `<button type="button" data-fl-resp="${i}|${esc(o)}">${esc(o)}</button>`).join('')}</div>`);
-      else out.push(`<div class="resp"><input id="fl-in" data-fl-paso="${i}" placeholder="Escribe como si fueras el estudiante"><button type="button" class="btn pri" data-fl-enviar="${i}">${I('send')}</button></div>`);
+      else out.push(`<div class="resp"><input id="fl-in" data-fl-paso="${i}" placeholder="Escribe como si fueras el cliente"><button type="button" class="btn pri" data-fl-enviar="${i}">${I('send')}</button></div>`);
       break;
     }
   }
@@ -1791,7 +1791,7 @@ const ctFecha = dias => { if (dias === 0) return 'Hoy'; if (dias === 1) return '
 // Personas sin conversación: llegan del API (contactos de GET /crm/inicio) con id = 1e9 + contactoId.
 const CT_EXTRA = [];
 function ctDe(c){
-  return {id:c.id, conv:true, contactoId:c.contactoId, n:c.n, tel:c.tel, correo:c.ficha.correo || '', canal:c.canal, etapa:c.etq[0], asig:c.asig, producto:(c.campos && c.campos.producto) || '', grado:(c.campos && c.campos.grado) || '',
+  return {id:c.id, conv:true, contactoId:c.contactoId, n:c.n, tel:c.tel, correo:c.ficha.correo || '', canal:c.canal, etapa:c.etq[0], asig:c.asig, producto:(c.campos && c.campos.producto) || '', empresa:(c.campos && c.campos.empresa) || '',
     ciudad:c.ficha.ciudad || '', origen:c.pauta ? `Anuncio de ${c.pauta.plataforma}` : c.ficha.origen, anuncio:!!c.pauta, tags:c.tags,
     cuotas:c.ficha.compras && c.ficha.compras.total ? [c.ficha.compras.pagadas, c.ficha.compras.total] : c.ficha.compras ? [1,1] : null,
     ultimoDias:c._t ? hcDias(c._t.ultimo || c._t.creado || Date.now()) : 0, agregadoDias:c._t ? hcDias(c._t.creado || Date.now()) : 0, guardado:c.guardado, noContactar:!!c.noContactar, spam:c.spam || null};
@@ -1811,10 +1811,9 @@ const CT_FILTROS = [
   ['origen','Origen', () => ['Anuncio', 'Enlace de venta de un asesor', 'Chat de la web', 'Correo', 'Otro']],
   ['canal','Canal', () => Object.keys(CANALES)],
   ['tag','Etiqueta', () => ETIQS.map(([n]) => n)],
-  ['grado','Grado', () => ['9','10','11','Graduado']],
   ['cuotas','Cuotas', () => ['Con cuotas pendientes','Al día','Sin compras']],
 ];
-const etiquetaFiltro = (k, v) => k === 'canal' ? CANALES[v].n : k === 'grado' ? ({'9':'Noveno','10':'Décimo','11':'Once','Graduado':'Ya se graduó'}[v] || v) : v;
+const etiquetaFiltro = (k, v) => k === 'canal' ? CANALES[v].n : v;
 const origenDe = c => c.anuncio ? 'Anuncio' : /enlace de venta/i.test(c.origen) ? 'Enlace de venta de un asesor' : /web/i.test(c.origen) ? 'Chat de la web' : /Correo/.test(c.origen) ? 'Correo' : 'Otro';
 function pasaFiltros(c, f){
   if (f.etapa && c.etapa !== f.etapa) return false;
@@ -1823,13 +1822,12 @@ function pasaFiltros(c, f){
   if (f.origen && origenDe(c) !== f.origen) return false;
   if (f.canal && c.canal !== f.canal) return false;
   if (f.tag && !c.tags.includes(f.tag)) return false;
-  if (f.grado && c.grado !== f.grado) return false;
   if (f.cuotas === 'Con cuotas pendientes' && !(c.cuotas && c.cuotas[0] < c.cuotas[1])) return false;
   if (f.cuotas === 'Al día' && !(c.cuotas && c.cuotas[0] >= c.cuotas[1])) return false;
   if (f.cuotas === 'Sin compras' && c.cuotas) return false;
   return true;
 }
-const CT_COLS = [['etapa','Etapa'],['asig','Asesor'],['producto','Producto'],['grado','Grado'],['ciudad','Ciudad'],['origen','Origen'],['tags','Etiquetas'],['cuotas','Cuotas'],['ultimo','Último mensaje'],['agregado','Agregado']];
+const CT_COLS = [['etapa','Etapa'],['asig','Asesor'],['producto','Producto'],['empresa','Empresa'],['ciudad','Ciudad'],['origen','Origen'],['tags','Etiquetas'],['cuotas','Cuotas'],['ultimo','Último mensaje'],['agregado','Agregado']];
 st.ct = {vista:'todos', q:'', f:{}, orden:{k:'ultimo', dir:1}, sel:new Set(), cols:new Set(CT_COLS.map(c => c[0])), filtrosAbiertos:false, propios:[]};
 const segDe = id => SEGMENTOS.find(s => s.id === id) || st.ct.propios.find(s => s.id === id);
 function ctVisibles(){
@@ -1905,7 +1903,7 @@ function paginaContactos(){
       <div class="ctt-w"><table class="ctt"><thead><tr>
         <th class="cb"><button type="button" class="chk ${todosSel ? 'on' : ''}" data-ct-todos="1" aria-label="Seleccionar todos">${todosSel ? I('check') : ''}</button></th>
         <th class="nm"><button type="button" data-ct-ord="n">Nombre ${flecha('n')}</button></th>
-        ${col('etapa') ? '<th>Etapa</th>' : ''}${col('asig') ? '<th>Asesor</th>' : ''}${col('producto') ? '<th>Producto</th>' : ''}${col('grado') ? '<th>Grado</th>' : ''}${col('ciudad') ? '<th>Ciudad</th>' : ''}${col('origen') ? '<th>Origen</th>' : ''}${col('tags') ? '<th>Etiquetas</th>' : ''}${col('cuotas') ? '<th>Cuotas</th>' : ''}
+        ${col('etapa') ? '<th>Etapa</th>' : ''}${col('asig') ? '<th>Asesor</th>' : ''}${col('producto') ? '<th>Producto</th>' : ''}${col('empresa') ? '<th>Empresa</th>' : ''}${col('ciudad') ? '<th>Ciudad</th>' : ''}${col('origen') ? '<th>Origen</th>' : ''}${col('tags') ? '<th>Etiquetas</th>' : ''}${col('cuotas') ? '<th>Cuotas</th>' : ''}
         ${col('ultimo') ? `<th><button type="button" data-ct-ord="ultimo">Último mensaje ${flecha('ultimo')}</button></th>` : ''}${col('agregado') ? `<th><button type="button" data-ct-ord="agregado">Agregado ${flecha('agregado')}</button></th>` : ''}
         <th class="ac"></th></tr></thead><tbody>
         ${L.length ? L.map(c => `<tr data-ct-fila="${c.id}" class="${ct.sel.has(c.id) ? 'sel' : ''}">
@@ -1914,7 +1912,7 @@ function paginaContactos(){
           ${col('etapa') ? `<td><span class="lbl"><i style="background:${COL[c.etapa]}"></i>${esc(c.etapa)}</span></td>` : ''}
           ${col('asig') ? `<td>${c.asig ? esc(c.asig) : '<span class="gris">Sin asignar</span>'}</td>` : ''}
           ${col('producto') ? `<td class="prod">${c.producto ? esc(c.producto) : '<span class="gris">—</span>'}</td>` : ''}
-          ${col('grado') ? `<td>${c.grado ? esc(etiquetaFiltro('grado', c.grado)) : '<span class="gris">—</span>'}</td>` : ''}
+          ${col('empresa') ? `<td>${c.empresa ? esc(c.empresa) : '<span class="gris">—</span>'}</td>` : ''}
           ${col('ciudad') ? `<td>${esc(c.ciudad)}</td>` : ''}
           ${col('origen') ? `<td>${esc(c.origen)}</td>` : ''}
           ${col('tags') ? `<td>${c.tags.length ? c.tags.map(t => `<span class="tagx"><i style="background:${ETIQ_COL[t]}"></i>${esc(t)}</span>`).join(' ') : '<span class="gris">—</span>'}</td>` : ''}
@@ -1940,14 +1938,14 @@ function ctCambiar(id, fn){
 }
 function descargarCsv(filas, nombre){
   const q = v => `"${String(v ?? '').replace(/"/g, '""')}"`;
-  const cols = ['Nombre','Teléfono','Correo','Etapa','Asesor','Producto','Grado','Ciudad','Origen','Etiquetas','No contactar'];
-  const csv = '﻿' + [cols.join(';'), ...filas.map(c => [c.n, c.tel, c.correo, c.etapa, c.asig || '', c.producto, c.grado, c.ciudad, c.origen, (c.tags || []).join(', '), c.noContactar ? 'Sí' : ''].map(q).join(';'))].join('\r\n');
+  const cols = ['Nombre','Teléfono','Correo','Etapa','Asesor','Producto','Empresa','Ciudad','Origen','Etiquetas','No contactar'];
+  const csv = '﻿' + [cols.join(';'), ...filas.map(c => [c.n, c.tel, c.correo, c.etapa, c.asig || '', c.producto, c.empresa, c.ciudad, c.origen, (c.tags || []).join(', '), c.noContactar ? 'Sí' : ''].map(q).join(';'))].join('\r\n');
   const url = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8'})); const a = document.createElement('a'); a.href = url; a.download = nombre; document.body.appendChild(a); a.click(); a.remove(); setTimeout(() => URL.revokeObjectURL(url), 5000);
 }
 function ctFicha(id){
   const c = ctTodos().find(x => x.id === id); if (!c) return;
   const fila = (k, v) => v ? `<div class="kvr"><span>${k}</span><b>${esc(v)}</b></div>` : '';
-  abrirDialogo(`<h3>${esc(c.n)}</h3><div class="kvl">${fila('Teléfono', c.tel)}${fila('Correo', c.correo)}${fila('Canal', CANALES[c.canal].n)}${fila('Etapa', c.etapa)}${fila('Asesor', c.asig || 'Sin asignar')}${fila('Producto', c.producto)}${fila('Grado', c.grado && etiquetaFiltro('grado', c.grado))}${fila('Ciudad', c.ciudad)}${fila('Origen', c.origen)}${fila('Cuotas', c.cuotas ? `${c.cuotas[0]} de ${c.cuotas[1]} pagadas` : 'Sin compras')}${fila('Último mensaje', ctFecha(c.ultimoDias))}</div>
+  abrirDialogo(`<h3>${esc(c.n)}</h3><div class="kvl">${fila('Teléfono', c.tel)}${fila('Correo', c.correo)}${fila('Canal', CANALES[c.canal].n)}${fila('Etapa', c.etapa)}${fila('Asesor', c.asig || 'Sin asignar')}${fila('Producto', c.producto)}${fila('Empresa', c.empresa)}${fila('Ciudad', c.ciudad)}${fila('Origen', c.origen)}${fila('Cuotas', c.cuotas ? `${c.cuotas[0]} de ${c.cuotas[1]} pagadas` : 'Sin compras')}${fila('Último mensaje', ctFecha(c.ultimoDias))}</div>
     <div class="ft2"><button type="button" class="btn" data-cerrar-dlg="1">Cerrar</button>${c.conv ? `<button type="button" class="btn pri" data-ct-abrir="${c.id}">${I('chat')}Abrir conversación</button>` : `<button type="button" class="btn pri" data-ct-escribir="${c.id}">${I('wa')}Escribir por WhatsApp</button>`}</div>`);
 }
 function ctAbrirConv(id){ cerrarDialogo(); st.sel = id; st.vista = 'todas'; st.pagina = ''; st.carpeta = st.equipo = st.etq = st.linea = st.q = ''; st.menciones = false; st.est = 'abiertas'; document.getElementById('q').value = ''; render(); }
@@ -2029,7 +2027,7 @@ document.getElementById('ov-x').addEventListener('click', e => {
     if (tel.replace(/\D/g, '').length < 10) { toast('Escribe un celular de 10 dígitos'); document.getElementById('ctn-tel').focus(); return; }
     const d10 = tel.replace(/\D/g, '').slice(-10), ya = ctTodos().find(x => String(x.tel || '').replace(/\D/g, '').slice(-10) === d10);
     if (ya) { toast(`Ese celular ya está en contactos: ${ya.n}`); document.getElementById('ctn-tel').focus(); return; }
-    CT_EXTRA.unshift({id:-Date.now(), n, tel, correo:document.getElementById('ctn-mail').value.trim(), canal:'wa', etapa:st.ctNuevo.etapa, asig:st.ctNuevo.asig || null, producto:st.ctNuevo.producto, grado:'', ciudad:document.getElementById('ctn-ciudad').value.trim(), origen:'Agregado a mano', tags:[], cuotas:null, ultimoDias:0, agregadoDias:0, recien:Date.now()});
+    CT_EXTRA.unshift({id:-Date.now(), n, tel, correo:document.getElementById('ctn-mail').value.trim(), canal:'wa', etapa:st.ctNuevo.etapa, asig:st.ctNuevo.asig || null, producto:st.ctNuevo.producto, empresa:'', ciudad:document.getElementById('ctn-ciudad').value.trim(), origen:'Agregado a mano', tags:[], cuotas:null, ultimoDias:0, agregadoDias:0, recien:Date.now()});
     cerrarDialogo(); st.ct.vista = 'todos'; st.ct.orden = {k:'agregado', dir:1}; render(); toast(`${n} quedó en contactos`); return;
   }
   if (t.closest('#ct-imp-go')) {
@@ -2056,7 +2054,7 @@ function guardarCamposNuevo(){ camposNuevo = Object.fromEntries(['ctn-n','ctn-te
 function restaurarCamposNuevo(){ Object.entries(camposNuevo).forEach(([id, v]) => { const el = document.getElementById(id); if (el) el.value = v; }); }
 
 
-/* ── Reparto por área en el flujo de bienvenida: Ventas, Soporte de ventas y Soporte de clases.
+/* ── Reparto por área en el flujo de bienvenida: Ventas, Soporte de ventas y Soporte.
    Sin IA en este flujo: se reparte con dos botones, una lista y reglas sobre datos. Lo que no queda claro va al líder. ── */
 document.head.insertAdjacentHTML('beforeend', `<style>
 .rp{display:grid;gap:14px}
@@ -2125,14 +2123,14 @@ function subpasosHTML(i, ruta, pasos){
     <textarea data-rp-set="${i}|${ruta}.${k}.txt" rows="2">${esc(sp.txt)}</textarea>
     ${sp.t === 'pregunta' ? '<small>Revisa que sea un correo; si no, lo vuelve a pedir una vez</small>' : ''}
     ${sp.t === 'lista' ? `<small>Lista de WhatsApp con ${sp.ops.length} opciones: ${esc(sp.ops.join(', '))}</small>` : ''}
-    ${sp.soloNuevos ? '<span class="solo">Solo si el número todavía no es de un estudiante</span>' : ''}</div>`).join('');
+    ${sp.soloNuevos ? '<span class="solo">Solo si el número todavía no es de un cliente</span>' : ''}</div>`).join('');
 }
 function campoRamas(p, i){
   const L = p.lista;
   return `<div class="rp">
-    <div class="rp-sec"><div class="rp-h"><b>Primero pregunta si ya es estudiante</b><small>Botones de WhatsApp de hasta 20 letras</small></div>
+    <div class="rp-sec"><div class="rp-h"><b>Primero pregunta si ya es cliente</b><small>Botones de WhatsApp de hasta 20 letras</small></div>
       <textarea data-rp-set="${i}|txt" rows="2">${esc(p.txt)}</textarea>
-      <div class="rp-bts">${p.ops.map((o, j) => `<div class="rp-bt"><span class="rbt" style="width:20px;height:20px;border-radius:50%;background:var(--blue);color:#fff;font-size:11px;font-weight:600;display:grid;place-items:center;flex:none">${j + 1}</span><input data-rp-op="${i}|${j}" value="${esc(o.op)}" maxlength="20" aria-label="Texto del botón ${j + 1}"><small class="cnt20" id="rpc-${i}-${j}">${o.op.length}/20</small><span class="rp-va">${o.va === 'ventas' ? 'Pasa a Ventas' : 'Le muestra la lista de estudiantes'}</span></div>`).join('')}</div>
+      <div class="rp-bts">${p.ops.map((o, j) => `<div class="rp-bt"><span class="rbt" style="width:20px;height:20px;border-radius:50%;background:var(--blue);color:#fff;font-size:11px;font-weight:600;display:grid;place-items:center;flex:none">${j + 1}</span><input data-rp-op="${i}|${j}" value="${esc(o.op)}" maxlength="20" aria-label="Texto del botón ${j + 1}"><small class="cnt20" id="rpc-${i}-${j}">${o.op.length}/20</small><span class="rp-va">${o.va === 'ventas' ? 'Pasa a Ventas' : 'Le muestra la lista de clientes'}</span></div>`).join('')}</div>
     </div>
     <div class="rp-cols">
       <div class="rama"><div class="rama-h"><span class="rbt">1</span><b>Si elige «${esc(p.ops[0].op)}»</b></div>
@@ -2159,11 +2157,11 @@ function atajosHTML(f){
   const a = f.atajos, tg = (k, t, s) => `<div class="row2"><span>${t}<small>${s}</small></span><button type="button" class="tg" role="switch" data-fl-atajo="${k}" aria-checked="${a[k]}"></button></div>`;
   return `<div class="atj"><b>Reglas del reparto</b>
     ${tg('anuncio', 'Si llega de un anuncio, pasa directo a Ventas', 'Después del nombre no se le hace ninguna pregunta')}
-    ${tg('estudiante', 'Si el número ya es de un estudiante, va directo a la lista', 'No se le pregunta el nombre ni si ya estudia, y tampoco el correo ni el curso')}
+    ${tg('estudiante', 'Si el número ya es de un cliente, va directo a la lista', 'No se le pregunta el nombre ni si ya es cliente, y tampoco el correo')}
     <div class="two3" style="grid-template-columns:1fr 1fr;align-items:end"><div class="fld">Si escribe en vez de elegir${ddSel('data-fl-intentos', [['1', 'Se le repiten las opciones 1 vez'], ['2', 'Se le repiten las opciones 2 veces']], String(a.intentos))}</div>
     <p class="muted" style="margin:0 0 8px">Si sigue sin elegir, queda sin asignar para que el líder la reparta.</p></div></div>`;
 }
-const ESCENARIOS = [['nuevo', 'Lead nuevo'], ['anuncio', 'Llega de un anuncio'], ['estudiante', 'Ya es estudiante']];
+const ESCENARIOS = [['nuevo', 'Lead nuevo'], ['anuncio', 'Llega de un anuncio'], ['estudiante', 'Ya es cliente']];
 
 /* Prueba en el teléfono de la derecha */
 function chatRamas(f){
@@ -2180,7 +2178,7 @@ function chatRamas(f){
   const asignar = eq => ev(`Pasa al reparto automático del equipo ${eq}, con su nombre y lo que eligió. Fin del flujo.`);
 
   if (escn === 'anuncio') { out.push(ev('Prueba: llegó desde un anuncio de Instagram')); out.push(yoB('Hola, quiero información')); }
-  else if (escn === 'estudiante') { out.push(ev('Prueba: el número es de un estudiante que ya compró')); out.push(yoB('Hola, necesito ayuda')); }
+  else if (escn === 'estudiante') { out.push(ev('Prueba: el número es de un cliente que ya compró')); out.push(yoB('Hola, necesito ayuda')); }
   else out.push(yoB('Hola, quiero información'));
 
   // Vista sin probar: el recorrido de ejemplo, sin tocar nada.
@@ -2195,8 +2193,8 @@ function chatRamas(f){
 
   pr.rp = pr.rp || {esc1:[], op:null, esc2:[], eleccion:null, sub:{}};
   const r = pr.rp;
-  // Saludo y nombre (se saltan si ya es estudiante).
-  if (conocido) out.push(ev('Ya es estudiante: no se le pregunta el nombre'));
+  // Saludo y nombre (se saltan si ya es cliente).
+  if (conocido) out.push(ev('Ya es cliente: no se le pregunta el nombre'));
   else for (let i = 0; i < R; i++) {
     const p = f.pasos[i];
     if (p.t === 'mensaje') { out.push(msg(p.txt)); continue; }
@@ -2204,7 +2202,7 @@ function chatRamas(f){
       out.push(msg(p.txt)); const x = pr.resp[i];
       if (x && x.error) out.push(yoB(x.v) + msg(p.reintento || 'No te entendí, ¿me lo repites?'));
       if (x && x.ok) { out.push(yoB(x.v)); continue; }
-      out.push(`<div class="resp"><input id="fl-in" data-fl-paso="${i}" placeholder="Escribe como si fueras el estudiante"><button type="button" class="btn pri" data-fl-enviar="${i}">${I('send')}</button></div>`);
+      out.push(`<div class="resp"><input id="fl-in" data-fl-paso="${i}" placeholder="Escribe como si fueras el cliente"><button type="button" class="btn pri" data-fl-enviar="${i}">${I('send')}</button></div>`);
       return out.join('');
     }
   }
@@ -2217,7 +2215,7 @@ function chatRamas(f){
         out.push(msg(p.txt));
         if (x && x.error) out.push(yoB(x.v) + msg(p.reintento));
         if (x && x.ok) { out.push(yoB(x.v)); continue; }
-        out.push(`<div class="resp"><input id="rp-sin" data-rp-sub="${clave + k}" placeholder="Escribe como si fueras el estudiante"><button type="button" class="btn pri" data-rp-subenv="${clave + k}">${I('send')}</button></div>`);
+        out.push(`<div class="resp"><input id="rp-sin" data-rp-sub="${clave + k}" placeholder="Escribe como si fueras el cliente"><button type="button" class="btn pri" data-rp-subenv="${clave + k}">${I('send')}</button></div>`);
         return false;
       }
       if (p.t === 'lista') { out.push(msg(p.txt)); if (x && x.ok) { out.push(yoB(x.v)); continue; } out.push(lista(p, clave + k)); return false; }
@@ -2242,7 +2240,7 @@ function chatRamas(f){
   if (!conocido) {
     out.push(msg(rp.txt));
     if (!escritos(r.esc1, () => out.push(botones(false)))) return out.join('');
-    if (r.op == null) { out.push(botones(true)); out.push(escribir('O escribe como si fueras el estudiante')); return out.join(''); }
+    if (r.op == null) { out.push(botones(true)); out.push(escribir('O escribe como si fueras el cliente')); return out.join(''); }
     out.push(yoB(rp.ops[r.op].op)); va = rp.ops[r.op].va;
   }
   if (va === 'ventas') { if (correr(rp.ventas, 'v')) out.push(asignar('Ventas')); return out.join(''); }
@@ -2268,7 +2266,7 @@ function rpResponder(f, clave, v){
   r.sub[clave] = (!ok && !(r.sub[clave] && r.sub[clave].error)) ? {v, error:true} : {v, ok:true};
   render(); enfocar('rp-sin');
 }
-// Cambia un texto del paso a partir de una ruta como «lista.txt» o «despues.Soporte de clases.1.txt».
+// Cambia un texto del paso a partir de una ruta como «lista.txt» o «despues.Soporte.1.txt».
 function rpSet(p, ruta, v){
   const partes = ruta.split('.'); let o = p;
   for (let k = 0; k < partes.length - 1; k++) o = o[partes[k]];
@@ -2351,7 +2349,7 @@ function paginaInformes(el){
   const pctP = e.promotores ?? e.promotoresPct, pctD = e.detractores ?? e.detractoresPct;
   el.innerHTML = `<h2>Informes</h2><p class="sub">Últimos 7 días${lider ? ', todo el equipo' : ', tus conversaciones'}.</p>
     <div class="kpis"><div class="kpi"><span>Conversaciones nuevas</span><b>${nNuevas}</b><small>${pico ? `${pico[1]} solo ${/^(Hoy|Ayer)$/.test(pico[0]) ? pico[0].toLowerCase() : 'el ' + pico[0].toLowerCase()}` : 'en los últimos 7 días'}</small></div><div class="kpi"><span>Primera respuesta</span><b>${inf.primeraRespuestaMin != null ? Math.round(inf.primeraRespuestaMin) + ' min' : '—'}</b><small>promedio</small></div><div class="kpi"><span>Finalizadas</span><b>${nFin}</b><small>${abiertas.length ? Math.round(nFin / abiertas.length * 100) : 0} % de las abiertas</small></div><div class="kpi"><span>Atendidas por el agente IA de noche</span><b>${inf.atendidasIa ?? inf.ia ?? 0}</b><small>${esc(horaCorta(CFG.recepcion.desde))} a ${esc(horaCorta(CFG.recepcion.hasta))}</small></div></div>
-    <div class="card" style="margin-bottom:16px"><h3 style="display:flex;align-items:center;gap:8px">${I('star')}Satisfacción de los estudiantes</h3>
+    <div class="card" style="margin-bottom:16px"><h3 style="display:flex;align-items:center;gap:8px">${I('star')}Satisfacción de los clientes</h3>
       <p class="sub" style="margin:2px 0 14px">Encuesta al finalizar cada conversación, en los mismos 7 días.</p>
       <div class="kpis"><div class="kpi"><span>NPS de ${esc(ESPACIO.nombre || 'la empresa')}</span><b>${e.nps != null ? (e.nps > 0 ? '+' : '') + Math.round(e.nps) : '—'}</b><small>${pctP != null && e.respondidas ? `${Math.round(pctP)} % promotores · ${Math.round(pctD || 0)} % detractores` : 'sin respuestas todavía'}</small></div><div class="kpi"><span>Atención de los asesores</span><b>${e.atencion != null ? coma(e.atencion) + ' de 5' : '—'}</b><small>${e.atencion != null ? estrellas(Math.round(e.atencion)) : 'sin respuestas todavía'}</small></div><div class="kpi"><span>Respondieron</span><b>${e.enviadas ? Math.round((e.respondidas || 0) / e.enviadas * 100) + ' %' : '—'}</b><small>${(e.respondidas || 0).toLocaleString('es-CO')} de ${(e.enviadas || 0).toLocaleString('es-CO')} encuestas</small></div><div class="kpi"><span>Calificaciones bajas</span><b>${e.bajas || 0}</b><small>2 de 5 o menos · revisar</small></div></div>
       <div class="two">

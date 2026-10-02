@@ -153,7 +153,7 @@
     const pagoHotmart = (etapas.find(([n]) => ES_PAGO.test(n)) || [])[0];
     const filas = etapas.map(([n, col]) => {
       const nm = `<span class="iae-nm"><i style="background:${colorOk(col)}"></i>${esc(n)}</span>`;
-      if (n === pagoHotmart) return `<div class="iae-eta">${nm}<div class="iae-fijo">${SVG(VISTO_CIRCULO, 'ok')}<span>Cuando Hotmart confirma el pago de ese estudiante</span>${SVG(CANDADO)}</div></div>`;
+      if (n === pagoHotmart) return `<div class="iae-eta">${nm}<div class="iae-fijo">${SVG(VISTO_CIRCULO, 'ok')}<span>Cuando se confirma el pago de ese cliente</span>${SVG(CANDADO)}</div></div>`;
       if (ES_PAGO.test(n)) return `<div class="iae-eta">${nm}<p class="iae-sin">Sin criterio, la IA no la pasa a esta etapa</p></div>`;
       const t = (cfg.criterios || {})[n] || '';
       return `<div class="iae-eta">${nm}<textarea class="iae-in" rows="1" data-iae-crit="${esc(n)}" maxlength="300" aria-label="Cuándo pasa a ${esc(n)}" placeholder="Sin criterio, la IA no la pasa a esta etapa">${esc(t)}</textarea></div>`;

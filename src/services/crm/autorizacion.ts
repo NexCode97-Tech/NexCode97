@@ -3,9 +3,9 @@
  * por WhatsApp y la persona responde «Autorizo», queda marcada sola, con la fecha, el texto que se autorizó
  * y la respuesta como constancia (Ley 1581: autorización previa, expresa e informada; el silencio no cuenta).
  *
- * - Al estudiante se le pide con un mensaje que termina en «responde «Autorizo» a este mensaje» (30-legal.js).
- * - Al acudiente, con la plantilla «Autorización del acudiente» en una conversación aparte: su «Autorizo»
- *   se marca en la ficha del menor que tiene ese número como teléfono del acudiente.
+ * - Al cliente se le pide con un mensaje que termina en «responde «Autorizo» a este mensaje» (30-legal.js).
+ * - Al representante legal, con la plantilla «Autorización del representante legal» en una conversación aparte: su «Autorizo»
+ *   se marca en la ficha del menor que tiene ese número como teléfono del representante legal.
  * Solo cuenta si la solicitud salió en esa misma conversación en los últimos 30 días. Nunca lanza.
  */
 import type { CrmContacto, CrmMensaje, Prisma } from '@prisma/client'
@@ -20,8 +20,8 @@ const txt = (v: unknown) => (typeof v === 'string' ? v.trim() : '')
 const ultimos10 = (t: string | null | undefined) => (t ?? '').replace(/\D/g, '').slice(-10)
 const sinTildes = (t: string) => t.toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
 
-/** La plantilla con que se le pide al acudiente (TPL_ACUD en 30-legal.js). */
-export const PLANTILLA_ACUDIENTE = 'Autorización del acudiente'
+/** La plantilla con que se le pide al representante legal (TPL_ACUD en 30-legal.js). */
+export const PLANTILLA_ACUDIENTE = 'Autorización del representante legal'
 /** El mismo texto por defecto de la pantalla (PD en 30-legal.js), si el equipo no lo cambió. */
 const TEXTO_PD = 'Autorizo a tratar mis datos personales para contactarme por WhatsApp, llamadas y correo con información de sus productos y servicios, y a grabar las llamadas para mejorar la atención, según su política de tratamiento de datos.'
 const DIAS = 30
@@ -70,7 +70,7 @@ export async function autorizacionPorRespuesta(convId: number, k: CrmContacto, t
       return true
     }
 
-    // Acudiente: el menor es quien tiene este número como teléfono del acudiente.
+    // Acudiente: el menor es quien tiene este número como teléfono del representante legal.
     const tel = ultimos10(k.telefono)
     if (tel.length !== 10) return false
     const candidatos = await prisma.crmContacto.findMany({ where: { campos: { path: ['telAcudiente'], string_contains: tel.slice(-4) } }, take: 50 })
@@ -78,7 +78,7 @@ export async function autorizacionPorRespuesta(convId: number, k: CrmContacto, t
     for (const m of menores) {
       await prisma.crmContacto.update({ where: { id: m.id }, data: { acudiente: reg as Prisma.InputJsonValue, ...(m.autorizacion ? {} : { autorizacion: reg as Prisma.InputJsonValue }) } })
       const suya = await prisma.crmConversacion.findFirst({ where: { contactoId: m.id }, orderBy: { ultimoMensajeAt: { sort: 'desc', nulls: 'last' } }, select: { id: true } })
-      if (suya) await evento(suya.id, `Su acudiente respondió «${reg.respuesta}»: la autorización del acudiente quedó marcada · Respondió por WhatsApp`)
+      if (suya) await evento(suya.id, `Su representante legal respondió «${reg.respuesta}»: la autorización del representante legal quedó marcada · Respondió por WhatsApp`)
       await repintar(m.id)
       logger.info(`[CRM autorización] acudiente de ${m.id} autorizó al responder (conversación ${convId})`)
     }

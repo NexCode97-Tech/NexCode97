@@ -19,9 +19,9 @@ import { leerEquipos, metodoValido, subequipoDe, type EquiposNorm, type Subequip
  *   «En línea», tienen el CRM abierto (si «No asignar a quien está ausente»
  *   está prendido) y no llegaron al tope de conversaciones abiertas.
  * - «Cliente conocido vuelve a su asesor»: el dueño del contacto, o el asesor
- *   del estudiante en la plataforma, si está disponible.
- * - «Familiares al mismo asesor»: si el número es el de un acudiente, va con
- *   quien atiende al estudiante.
+ *   del cliente en la plataforma, si está disponible.
+ * - «Familiares al mismo asesor»: si el número es el de un representante legal, va con
+ *   quien atiende al cliente.
  * - Método «Por turnos», «Al que tenga menos» o «Manual» (nadie la recibe sola).
  *   Desde el 28-sep cada equipo elige el suyo (ajuste `equipos`, `metodos`); sin elegir, el general.
  *   El máximo de conversaciones abiertas también puede ser por persona (`topes`).
@@ -140,7 +140,7 @@ async function duenoConocido(contacto: { id: number; asignadoId: string | null; 
   }
   const tel = ultimos10(contacto.telefono)
   if (cfg.familiares && tel.length === 10) {
-    // El número es el del acudiente guardado en otro contacto del CRM.
+    // El número es el del representante legal guardado en otro contacto del CRM.
     const otros = await prisma.$queryRaw<{ asignado_id: string }[]>`
       SELECT asignado_id FROM crm_contactos
       WHERE espacio_id = ${espacioActual()} AND id <> ${contacto.id} AND asignado_id IS NOT NULL

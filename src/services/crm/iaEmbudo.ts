@@ -60,7 +60,7 @@ const CRITERIOS_DEFECTO: Record<string, string> = {
   contactado: 'Alguien del equipo ya le respondió.',
   caliente: 'Pregunta precio, fechas o formas de pago, o pide el enlace para pagar.',
   'en seguimiento': 'Dice que lo va a pensar, que consulta con alguien o que paga después.',
-  'no interesado/perdido': 'Dice que no le interesa o que ya se inscribió en otro lado.',
+  'no interesado/perdido': 'Dice que no le interesa o que ya compró en otro lado.',
 }
 /** Conversaciones con mensajes en las últimas horas: las viejas no se tocan hasta que vuelvan a moverse. */
 const HORAS_RECIENTES = 6

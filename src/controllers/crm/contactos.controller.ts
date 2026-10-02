@@ -18,7 +18,7 @@ import { desbloquearEnWhatsapp } from './spam.controller'
 
 /**
  * Contactos del CRM: crear, editar, borrar, importar desde Excel o CSV,
- * exportar, y el cruce con la plataforma (¿es estudiante?, ¿cómo va con sus cuotas?).
+ * exportar, y el cruce con la plataforma (¿es cliente?, ¿cómo va con sus cuotas?).
  */
 
 const contactoSchema = z.object({ contacto: z.record(z.unknown()) })
@@ -93,10 +93,8 @@ const COLUMNAS: [string, string[]][] = [
   ['etapa', ['etapa', 'etapa del embudo']],
   ['etiquetas', ['etiquetas', 'etiqueta', 'tags', 'tag']],
   ['asesor', ['asesor', 'asesora', 'asignado', 'asignada', 'agente', 'vendedor']],
-  ['producto', ['producto', 'curso', 'producto de interes', 'curso de interes']],
-  ['grado', ['grado', 'curso escolar']],
-  ['colegio', ['colegio', 'institucion', 'institucion educativa']],
-  ['carrera', ['carrera', 'carrera de interes']],
+  ['producto', ['producto', 'producto de interes', 'servicio', 'interes']],
+  ['empresa', ['empresa', 'compania', 'organizacion', 'razon social']],
   ['origen', ['origen', 'fuente', 'como llego', 'canal de origen']],
 
 ]
@@ -158,9 +156,9 @@ export async function importarContactos(req: Request, res: Response) {
       }
       const tags = f.etiquetas ? [...new Set(String(f.etiquetas).split(/[,;|]/).map(t => corto(t, 60)).filter(Boolean))].slice(0, 50) : []
       const fichaNueva: Json = {}
-      for (const k of ['ciudad', 'colegio', 'carrera', 'origen']) if (f[k]) fichaNueva[k] = f[k]
+      for (const k of ['ciudad', 'origen']) if (f[k]) fichaNueva[k] = f[k]
       const camposNuevos: Json = {}
-      for (const k of ['producto', 'grado', 'colegio']) if (f[k]) camposNuevos[k] = f[k]
+      for (const k of ['producto', 'empresa']) if (f[k]) camposNuevos[k] = f[k]
 
       let existente = tel ? await prisma.crmContacto.findFirst({ where: { telefono: tel }, select: { id: true } }) : null
       if (!existente && correo) existente = await prisma.crmContacto.findFirst({ where: { correo: { equals: correo, mode: 'insensitive' } }, orderBy: { updatedAt: 'desc' }, select: { id: true } })
@@ -249,8 +247,7 @@ export async function exportarContactos(req: Request, res: Response) {
       Ciudad: txt(ficha.ciudad),
       Origen: txt(ficha.origen),
       Producto: txt(campos.producto),
-      Grado: txt(campos.grado),
-      Colegio: txt(campos.colegio) || txt(ficha.colegio),
+      Empresa: txt(campos.empresa),
       'No contactar': nc ? (typeof nc === 'string' ? nc : txt(obj(nc).motivo) || 'Sí') : '',
       Creado: fecha(k.createdAt),
       'Último mensaje': fecha(k.conversaciones[0]?.ultimoMensajeAt),

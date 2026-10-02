@@ -153,7 +153,7 @@ export function aQuienRecepcion(a: AgenteMaqueta, conDocumentos: boolean): strin
 export interface DatoRecopilar { k: string; n: string }
 
 /** Campos personalizados que trae el CRM si la empresa no los cambió (10-nucleo.js, CAMPOS). */
-const CAMPOS_BASE = [{ k: 'grado', n: 'Grado' }, { k: 'colegio', n: 'Colegio' }, { k: 'producto', n: 'Producto' }, { k: 'acudiente', n: 'Acudiente' }, { k: 'telAcudiente', n: 'Teléfono del acudiente' }]
+const CAMPOS_BASE = [{ k: 'producto', n: 'Producto' }, { k: 'empresa', n: 'Empresa' }, { k: 'acudiente', n: 'Representante legal' }, { k: 'telAcudiente', n: 'Teléfono del representante legal' }]
 /** Qué pide antes de pasar. Sin elegir nada (agentes de antes), el nombre si puede guardar datos. */
 export async function datosRecopilar(a: AgenteMaqueta): Promise<DatoRecopilar[]> {
   const pedir = Array.isArray(a.recopilar) ? a.recopilar.map(String) : (a.acc?.datos !== false ? ['nombre'] : [])
@@ -292,7 +292,7 @@ export async function probarAgente(agente: AgenteMaqueta, historial: TurnoPrueba
   }
   while (mensajes.length && mensajes[0].role !== 'user') mensajes.shift()
   if (!mensajes.length || mensajes[mensajes.length - 1].role !== 'user') {
-    throw new AppError('El último mensaje de la prueba debe ser del cliente. Escribe algo como si fueras el estudiante.', 400)
+    throw new AppError('El último mensaje de la prueba debe ser del cliente. Escribe algo como si fueras el cliente.', 400)
   }
 
   const tools: Anthropic.Tool[] = consultas.map(id => ({ ...HERRAMIENTA_CONSULTA[id], strict: true }))

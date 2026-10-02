@@ -35,8 +35,9 @@ disparador «Se confirma un pago» sobre la conversación del comprador.
 `src/services/crm/integraciones.ts`. Cada integración declara sus consultas y los agentes las reciben como
 herramientas de solo lectura. Viene una de ejemplo (Hotmart, por credenciales del espacio).
 
-## Vocabulario
+## Nombres internos
 
-Los campos base del contacto (`grado`, `colegio`, `acudiente`) y algunas pantallas (ficha del estudiante,
-autorización del acudiente para menores de edad) vienen del sector educativo. Los campos se cambian en Ajustes;
-los textos de las pantallas están en `pantalla/js/`.
+Las pantallas y los agentes IA hablan de «cliente» y «representante legal». Por dentro, algunos nombres del código
+vienen de su primer uso en una academia y se conservaron para no romper nada: `estudianteId`, `FichaEstudiante`,
+la ruta `/crm/contactos/:id/estudiante`, y los campos `acudiente` y `telAcudiente` (el representante legal de un
+menor de edad, para la autorización de datos). No se ven en ninguna pantalla.

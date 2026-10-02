@@ -1,4 +1,4 @@
-/* ── Celular: encabezado del chat (3B), ficha del estudiante y panel del contacto a pantalla completa (maqueta aprobada «CRM · menú en celular», 29-sep, tableros 3, 3.1 y 3.2). ── */
+/* ── Celular: encabezado del chat (3B), ficha del cliente y panel del contacto a pantalla completa (maqueta aprobada «CRM · menú en celular», 29-sep, tableros 3, 3.1 y 3.2). ── */
 // Todo esto vale solo por debajo de 760 px (CELULAR en puenteCrm.ts: ahí el marco no se escala). En escritorio el
 // encabezado, la ficha y el panel quedan como estaban: las envolturas de chat(), panel() y pintarFicha() solo actúan
 // en celular, y las reglas de estilo nuevas van dentro de la misma consulta de ancho. Va dentro de una función para
@@ -63,7 +63,7 @@
   #app .subtabs.cch-justo2{gap:12px;padding:0 12px}
   #app .subtabs.cch-justo3{gap:12px;padding:0 12px;overflow-x:auto;scrollbar-width:none}
   #app .subtabs.cch-justo3::-webkit-scrollbar{display:none}
-  /* 3.1 · Ficha del estudiante: tarjetas en una columna con filas de etiqueta y dato; se desliza con el dedo. */
+  /* 3.1 · Ficha del cliente: tarjetas en una columna con filas de etiqueta y dato; se desliza con el dedo. */
   #app .ficha{flex:1 1 auto;min-height:0;flex-direction:column;gap:12px;padding:14px 16px 16px;background:#f8fafc;line-height:normal;overscroll-behavior:contain;-webkit-overflow-scrolling:touch}
   /* Solo con la pestaña de la ficha: #app pesa más que «.app:not(.verficha) .ficha», y en Mensajes le quitaba el alto al chat. */
   #app.verficha .ficha{display:flex}
@@ -338,7 +338,7 @@
     if (foco) { const el = pnl.querySelector(foco); if (el && el !== document.activeElement) el.focus({preventScroll: true}); }
   };
 
-  /* ── Ficha del estudiante (3.1) ── */
+  /* ── Ficha del cliente (3.1) ── */
   function formaFicha(){
     const c = CONV.find(x => x.id === st.sel), f = document.getElementById('ficha'); if (!c || !f) return;
     const ICONOS = {'Datos': ICO.persona, 'Lo que busca': ICO.brujula, 'En la plataforma': ICO.persona, 'Compras': ICO.carrito, 'Conversaciones anteriores': ICO.globo};

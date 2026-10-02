@@ -425,7 +425,7 @@ export async function guardarMensaje(convId: number, crudo: Json, op: OpcionesGu
     data: { conversacionId: convId, tipo, datos: datos as Prisma.InputJsonValue, autorId: op.autorId, estado, error },
   })
 
-  // La encuesta de satisfacción queda pendiente en la conversación: la respuesta del estudiante
+  // La encuesta de satisfacción queda pendiente en la conversación: la respuesta del cliente
   // (dos números) se guarda como csat en entrantes.ts, sin reabrirla.
   if (tipo === 'out' && datos.encuesta && estado !== 'fallido') {
     await prisma.$executeRaw`UPDATE crm_conversaciones SET extra = jsonb_set(COALESCE(extra, '{}'::jsonb), '{_encuesta}', ${JSON.stringify({ en: ahora.toISOString(), asesor: obj(datos.encuesta).asesor ?? null, msgId: m.id })}::jsonb) WHERE id = ${convId}`

@@ -1,7 +1,7 @@
 
 /* ── Llamadas por WhatsApp (25-sep): conectar la línea desde el CRM, activar llamadas por línea, recibir y hacer llamadas.
    Reglas de Meta que se respetan aquí: la línea debe estar en la API oficial, la cuenta con límite de 2.000 y método de pago;
-   para llamar al estudiante hace falta su permiso (1 solicitud al día y 2 por semana, dura 7 días; 4 llamadas seguidas sin
+   para llamar al cliente hace falta su permiso (1 solicitud al día y 2 por semana, dura 7 días; 4 llamadas seguidas sin
    contestar lo quitan); las entrantes se contestan en menos de 30 segundos o van al buzón. Meta graba y transcribe si se pide
    en cada llamada, con un aviso hablado del propósito; el CRM guarda la copia porque Meta la borra a los 7 días.
    26-sep: conectar una línea es real (GET /crm/lineas/disponibles y POST /crm/lineas). Las llamadas no
@@ -71,7 +71,7 @@ document.head.insertAdjacentHTML('beforeend', `<style>
 const LLAM = {
   lineas: {},
   saludo:'Hola, gracias por llamar. En este momento no podemos contestar. Déjanos tu mensaje y te devolvemos la llamada.',
-  proposito:'mejorar la atención y dejar constancia de lo que acordemos sobre tus cursos',
+  proposito:'mejorar la atención y dejar constancia de lo que acordemos',
 };
 const mmss = s => `${Math.floor(s / 60)}:${String(s % 60).padStart(2, '0')}`;
 const lineaDe = id => LINEAS.find(l => l.id === id) || {id, n: id ? 'Línea desconectada' : 'Sin línea', tel: ''};
@@ -154,14 +154,14 @@ function paginaLineas(){
         ${fila('El agente IA responde de noche', noche, sw('linea-recepcion-' + i, x.recepcion))}
         ${fila('Calidad según Meta', 'Si baja, Meta limita cuántos mensajes se pueden enviar', calidadHTML(l.calidad))}
         <div class="ll-sec">
-          ${fila('<b>Llamadas por WhatsApp</b>', !meta ? 'Meta todavía no las tiene activadas en esta línea: nadie ve el botón de llamar' : on ? 'Los estudiantes pueden llamar a esta línea y los asesores pueden llamarlos' : 'Apagadas: nadie ve el botón de llamar y no se puede llamar desde esta línea', `<button type="button" class="tg" role="switch" data-ll-on="${l.id}" aria-checked="${on}" aria-label="Llamadas por WhatsApp en ${esc(l.n)}" ${meta && lim != null && lim >= 2000 ? '' : 'disabled'}></button>`)}
+          ${fila('<b>Llamadas por WhatsApp</b>', !meta ? 'Meta todavía no las tiene activadas en esta línea: nadie ve el botón de llamar' : on ? 'Los clientes pueden llamar a esta línea y los asesores pueden llamarlos' : 'Apagadas: nadie ve el botón de llamar y no se puede llamar desde esta línea', `<button type="button" class="tg" role="switch" data-ll-on="${l.id}" aria-checked="${on}" aria-label="Llamadas por WhatsApp en ${esc(l.n)}" ${meta && lim != null && lim >= 2000 ? '' : 'disabled'}></button>`)}
           ${nueva ? `<div class="ll-nota">Activadas hace poco. Meta puede tardar hasta 7 días en mostrar el botón de llamar en los teléfonos.</div>` : ''}
-          ${on ? `${fila('Mostrar el botón de llamar en WhatsApp', 'Si se oculta, el estudiante solo puede llamar desde un botón que le mande el asesor', `<button type="button" class="tg" role="switch" data-ll-tg="${l.id}|icono" aria-checked="${c.icono}" aria-label="Mostrar el botón de llamar"></button>`)}
+          ${on ? `${fila('Mostrar el botón de llamar en WhatsApp', 'Si se oculta, el cliente solo puede llamar desde un botón que le mande el asesor', `<button type="button" class="tg" role="switch" data-ll-tg="${l.id}|icono" aria-checked="${c.icono}" aria-label="Mostrar el botón de llamar"></button>`)}
           ${fila('Quién contesta', 'Suena a los asesores conectados de ese equipo y el primero que contesta se la queda', ddSel('data-ll-eq', EQUIPOS.map(e => [`${l.id}|${e.n}`, e.n]), `${l.id}|${c.eq}`))}
           ${fila('Horario para recibir llamadas', 'El mismo horario de atención del CRM', `<button type="button" class="btn" data-ir="cfg-horario">Cambiar</button>`)}
-          ${fila('Horario para llamar a estudiantes', 'Lunes a viernes de 7 a. m. a 7 p. m. y sábados de 8 a. m. a 3 p. m.; nunca domingos ni festivos. Lo fija la Ley 2300 y no se puede cambiar', `<span class="ll-ok">${I('lock')}Fijo por ley</span>`)}
+          ${fila('Horario para llamar a clientes', 'Lunes a viernes de 7 a. m. a 7 p. m. y sábados de 8 a. m. a 3 p. m.; nunca domingos ni festivos. Lo fija la Ley 2300 y no se puede cambiar', `<span class="ll-ok">${I('lock')}Fijo por ley</span>`)}
           ${fila('Buzón de voz si nadie contesta en 30 segundos', 'El mensaje de voz llega a la conversación, transcrito', `<button type="button" class="tg" role="switch" data-ll-tg="${l.id}|buzon" aria-checked="${c.buzon}" aria-label="Buzón de voz"></button>`)}
-          ${fila('Grabar y transcribir las llamadas', 'Solo si el contacto autorizó sus datos y, si es menor de edad, su acudiente', `<button type="button" class="tg" role="switch" data-ll-tg="${l.id}|grabar" aria-checked="${c.grabar}" aria-label="Grabar y transcribir"></button>`)}` : ''}
+          ${fila('Grabar y transcribir las llamadas', 'Solo si el contacto autorizó sus datos y, si es menor de edad, su representante legal', `<button type="button" class="tg" role="switch" data-ll-tg="${l.id}|grabar" aria-checked="${c.grabar}" aria-label="Grabar y transcribir"></button>`)}` : ''}
         </div></div>`; }).join('')
         : `<div class="box2"><div class="vacio">${I('wa')}<b>Ninguna línea conectada</b><p>Conecta la cuenta de WhatsApp Business de tu empresa y elige sus números.</p></div></div>`}
       <div class="box2">${fila('Grabaciones, buzón de voz y horario', 'Se configuran para todas las líneas en la página Llamadas', `<button type="button" class="btn" data-ir="cfg-llamadas">Abrir</button>`)}</div>
@@ -530,7 +530,7 @@ document.addEventListener('click', e => {
   const c = CONV.find(x => x.id === st.sel); if (!c) return;
   if (c.canal !== 'wa') { toast(`Las llamadas van por WhatsApp; ${(CANALES[c.canal] || {n:'este canal'}).n} no permite llamar`); return; }
   const hl = horarioLegal();
-  if (llamadasActivas(c.linea) && !hl.ok) { abrirDialogo(`<h3>Ahora no se puede llamar a ${esc(c.n)}</h3><p>${esc(hl.motivo)} La Ley 2300 solo permite llamadas de venta de lunes a viernes de 7 a. m. a 7 p. m. y los sábados de 8 a. m. a 3 p. m., nunca domingos ni festivos.</p><p class="muted">Si el estudiante te llama, sí puedes contestar: esa restricción es solo para las llamadas que hace el asesor.</p><div class="ft2"><button type="button" class="btn" data-cerrar-dlg="1">Cerrar</button><button type="button" class="btn pri" data-ll-recordar="${esc(hl.siguiente)}" data-para="${hl.para || ''}">${I('bell')}Recordarme ${esc(hl.siguiente)}</button></div>`); return; }
+  if (llamadasActivas(c.linea) && !hl.ok) { abrirDialogo(`<h3>Ahora no se puede llamar a ${esc(c.n)}</h3><p>${esc(hl.motivo)} La Ley 2300 solo permite llamadas de venta de lunes a viernes de 7 a. m. a 7 p. m. y los sábados de 8 a. m. a 3 p. m., nunca domingos ni festivos.</p><p class="muted">Si el cliente te llama, sí puedes contestar: esa restricción es solo para las llamadas que hace el asesor.</p><div class="ft2"><button type="button" class="btn" data-cerrar-dlg="1">Cerrar</button><button type="button" class="btn pri" data-ll-recordar="${esc(hl.siguiente)}" data-para="${hl.para || ''}">${I('bell')}Recordarme ${esc(hl.siguiente)}</button></div>`); return; }
   if (llamadasActivas(c.linea) && PD.rneOn && c.rne && !c.aut) { abrirDialogo(`<h3>No se puede llamar a ${esc(c.n)}</h3><p>Su número está en el Registro de Números Excluidos de la CRC y no ha autorizado a la empresa. No se le puede llamar ni incluir en difusiones.</p><p class="muted">Como escribió primero, sí le puedes responder por el chat. Si autoriza sus datos, se le puede llamar.</p><div class="ft2"><button type="button" class="btn" data-cerrar-dlg="1">Entendido</button><button type="button" class="btn pri" data-ll-aut="1">${I('send')}Pedirle autorización</button></div>`); return; }
   abrirDialogo(`<h3>Llamar a ${esc(c.n)}</h3><p>${esc(motivoSinLlamar(c))} Mientras tanto, escríbele por el chat.</p>${st.rol === 'l' ? '<p class="muted">Las llamadas de cada línea se ven en Ajustes del CRM, Líneas de WhatsApp.</p>' : ''}<div class="ft2"><button type="button" class="btn" data-cerrar-dlg="1">Entendido</button></div>`);
 }, true);

@@ -335,7 +335,7 @@ async function avisoFueraDeHorario(convId: number) {
 
 // ─── Encuesta de satisfacción ────────────────────────────────────────────────
 // La encuesta pide la atención (1 a 5) y la recomendación (0 a 10). Si en los 3
-// días siguientes el estudiante responde algo corto con esos números, se guarda
+// días siguientes el cliente responde algo corto con esos números, se guarda
 // como {csat} y la conversación no se reabre. Si escribe otra cosa, sigue como
 // un mensaje normal.
 

@@ -87,7 +87,7 @@ function perfilFotoHtml(){
     <div class="pf-tx"><b>Foto de perfil</b><span>La ven tus compañeros en el chat, en la lista de conversaciones y en Personas.</span>
     <div class="pf-bts"><button type="button" class="btn pri" data-pf-cambiar="1"${off}>${PF_SVG_SUBIR}${PF.subiendo === 'archivo' ? 'Subiendo…' : 'Cambiar foto'}</button>${google ? `<button type="button" class="btn lnk" data-pf-google="1"${off}>Usar la de Google</button>` : ''}<span class="pf-nota">JPG o PNG, hasta 5 MB</span></div></div></div>`;
 }
-// Solo se repinta el bloque de la foto. Lo escrito sin guardar en «Nombre completo» y «Cómo te ven los estudiantes»
+// Solo se repinta el bloque de la foto. Lo escrito sin guardar en «Nombre completo» y «Cómo te ven los clientes»
 // queda en st.pfBorrador y 10-nucleo.js lo vuelve a poner: el evento en vivo de la foto repinta la página entera.
 function pfRepintar(){ const el = document.querySelector('#page .pf-foto'); if (el) el.outerHTML = perfilFotoHtml(); }
 st.pfBorrador = null;

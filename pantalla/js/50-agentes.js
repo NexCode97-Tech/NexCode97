@@ -98,15 +98,15 @@ document.head.insertAdjacentHTML('beforeend', `<style>
 </style>`);
 
 const AG_TPL = {
-  recep:{n:'Recepcionista', c:'#7c5cff', ic:'users', d:'Identifica al cliente, sabe si ya es estudiante y qué necesita, y lo pasa de una a Ventas con una nota. Si es de soporte, Ventas lo transfiere. Reemplaza el flujo de botones del primer contacto.',
-    que:['Saluda y pregunta el nombre de forma natural, sin menús ni botones.', 'Revisa si el número ya es de un estudiante y entiende en una frase qué necesita.', 'Pasa la conversación de una a Ventas con una nota: quién es, qué necesita y si parece de soporte.'],
-    consejos:['Sin documentos solo identifica y pasa, así nadie espera. Con documentos también responde con ellos.', 'Si parece de Soporte de ventas o de clases, lo marca en la nota para que Ventas lo transfiera rápido.', 'Deja las respuestas cortas: en WhatsApp se leen mejor.']},
+  recep:{n:'Recepcionista', c:'#7c5cff', ic:'users', d:'Identifica a la persona, sabe si ya es cliente y qué necesita, y lo pasa de una a Ventas con una nota. Si es de soporte, Ventas lo transfiere. Reemplaza el flujo de botones del primer contacto.',
+    que:['Saluda y pregunta el nombre de forma natural, sin menús ni botones.', 'Revisa si el número ya es de un cliente y entiende en una frase qué necesita.', 'Pasa la conversación de una a Ventas con una nota: quién es, qué necesita y si parece de soporte.'],
+    consejos:['Sin documentos solo identifica y pasa, así nadie espera. Con documentos también responde con ellos.', 'Si parece de soporte, lo marca en la nota para que Ventas lo transfiera rápido.', 'Deja las respuestas cortas: en WhatsApp se leen mejor.']},
   ventas:{n:'Agente de ventas', c:'#16a34a', ic:'cart', d:'Conversa con los leads, resuelve dudas de productos, precios y pagos con la base de conocimiento y pasa al asesor cuando la persona está lista para pagar.',
-    que:['Descubre qué busca el lead: grado, carrera y curso de interés.', 'Recomienda el curso que le sirve según el catálogo.', 'Pasa al asesor cuando la persona pide el enlace de pago, para que la venta quede a su nombre.'],
-    consejos:['Incluye precios y cuotas actualizados en el catálogo.', 'Define en qué etapa del embudo queda cada conversación.', 'Elige el equipo que recibe a los leads listos para comprar.']},
-  soporte:{n:'Agente de soporte', c:'#0891b2', ic:'bolt', d:'Responde a los estudiantes sobre clases, simulacros y acceso con las fuentes de conocimiento y pasa a Soporte de ventas o de clases lo que no pueda resolver.',
-    que:['Resuelve dudas frecuentes de clases, horarios, simulacros y acceso.', 'Si no puede resolverlo, pasa a Soporte de ventas o a Soporte de clases con el caso resumido.'],
-    consejos:['Agrega las preguntas frecuentes de soporte y los horarios de clase.', 'Define cuántos intentos hace antes de pasar a una persona.']},
+    que:['Descubre qué busca el lead y qué producto le interesa.', 'Recomienda el producto que le sirve según la base de conocimiento.', 'Pasa al asesor cuando la persona pide el enlace de pago, para que la venta quede a su nombre.'],
+    consejos:['Incluye precios y formas de pago actualizados en la base de conocimiento.', 'Define en qué etapa del embudo queda cada conversación.', 'Elige el equipo que recibe a los leads listos para comprar.']},
+  soporte:{n:'Agente de soporte', c:'#0891b2', ic:'bolt', d:'Responde las dudas de los clientes sobre lo que compraron con las fuentes de conocimiento y pasa a Soporte lo que no pueda resolver.',
+    que:['Resuelve dudas frecuentes de uso, entregas, horarios y acceso.', 'Si no puede resolverlo, pasa a Soporte de ventas o a Soporte con el caso resumido.'],
+    consejos:['Agrega las preguntas frecuentes de soporte y los horarios de atención.', 'Define cuántos intentos hace antes de pasar a una persona.']},
   cero:{n:'Agente nuevo', c:'#64748b', ic:'bot', d:'Un agente sin instrucciones de base.', que:['Escribe aquí qué hace tu agente.'], consejos:['Empieza por decir qué hace y a quién pasa las conversaciones.']},
 };
 const AG_ACC = [['datos', 'user', 'Recopilar y actualizar los datos del contacto'], ['equipo', 'users', 'Asignar a un equipo o asesor'], ['etapa', 'kanban', 'Actualizar la etapa del embudo'], ['nota', 'note', 'Dejar una nota interna al pasar'], ['inactivas', 'clock', 'Retomar conversaciones sin respuesta'], ['finalizar', 'check', 'Finalizar y resumir la conversación']];
@@ -134,7 +134,7 @@ function nuevoAgente(tpl){
     acc:{datos:true, equipo:true, etapa:tpl === 'ventas', nota:true, inactivas:tpl === 'ventas', finalizar:tpl === 'soporte'}, destino:'Ventas',
     tono:AG_TONOS[0], largo:'Cortas, de 1 a 3 líneas', emojis:true,
     pasa:{listo:true, persona:true, molesto:true, mensajes:true, enlace:true}, nMsj:'6',
-    temas:[['Cursos, precios, horarios e inscripciones', 'Ventas'], ['Pagos, cuotas, reembolsos y acceso a lo que compró', 'Soporte de ventas'], ['Clases, simulacros, material y entrar a la plataforma', 'Soporte de clases']],
+    temas:[['Productos, precios y cómo comprar', 'Ventas'], ['Pagos, cuotas, reembolsos y entrega de lo que compró', 'Soporte de ventas'], ['Dudas de uso o algo que no funciona', 'Soporte']],
     canales:{wa:true, web:true}, cuando:'Siempre', kb:[],
     contexto: '', idioma:AG_IDIOMAS[0], criterios:'', adicionales:'', recopilar:['nombre'], silencioso:false};
 }
@@ -209,7 +209,7 @@ function editorAgente(a){
           : `<ul>${a.que.split('\n').filter(Boolean).map(x => `<li>${esc(x)}</li>`).join('')}</ul>`}
         <span class="lab">Consejos para configurarlo</span><ul>${t.consejos.map(x => `<li>${esc(x)}</li>`).join('')}</ul></div>
       <div class="ag-card"><h4>${I('folder')}Contexto de la empresa</h4>
-        <label class="fld">A qué se dedica, a quién le vende, qué ofrece y las reglas del negocio<textarea data-ag-in="contexto" rows="4" placeholder="Ej. Somos una academia virtual de inglés para adultos en Colombia. Todas las clases son en línea.">${esc(agContexto(a))}</textarea></label></div>
+        <label class="fld">A qué se dedica, a quién le vende, qué ofrece y las reglas del negocio<textarea data-ag-in="contexto" rows="4" placeholder="Ej. Somos una tienda de muebles en Bogotá. Vendemos por internet y entregamos en todo el país.">${esc(agContexto(a))}</textarea></label></div>
       <div class="ag-card"><h4>${I('chat')}Cómo habla</h4>
         <label class="fld">Se presenta como<input class="t" data-ag-in="presenta" value="${esc(a.presenta)}" placeholder="Ej. Sofía, del equipo de ${esc(ESPACIO.nombre || 'tu empresa')}"></label>
         ${fila('Tono', '', ddSel('data-ag-tono', [...AG_TONOS, AG_TONO_PROPIO], propio ? AG_TONO_PROPIO : a.tono))}
@@ -257,12 +257,12 @@ function chatPruebaAgente(a){
   if (st.agTab === 'datos') { const d = ch.datos;
     return `<aside class="ag-chat"><div class="hd">${tabs}</div><div class="ag-dat"><dl class="kv">${[['Nombre', d.nombre], ['Correo de la compra', d.correo], ['Equipo', d.equipo]].map(([k, v]) => `<dt>${k}</dt><dd class="${v ? '' : 'vacio'}">${esc(v || '—')}</dd>`).join('')}</dl>${d.nota ? `<div class="ag-nota"><b>Nota interna</b><br>${esc(d.nota)}</div>` : ''}</div></aside>`; }
   const cuerpo = ch.msgs.length ? ch.msgs.map(m => m.yo ? `<div class="ag-m yo">${esc(m.yo)}</div>` : m.ia ? `<div class="ag-m ia"><span class="lb">${esc(nom)} · IA</span>${esc(m.ia)}${m.fu ? `<span class="fu">Fuente: ${esc(m.fu)}</span>` : ''}</div>` : `<div class="ag-acn${m.mal ? ' mal' : ''}">${I(m.ic || 'check')}${esc(m.acn)}</div>`).join('') + (ch.escribiendo ? `<div class="ag-esc">${esc(nom)} está escribiendo…</div>` : '')
-    : `<div class="vacio">${I('bot')}<b>Prueba tu agente</b><p>Escríbele como si fueras un estudiante o un papá y mira cómo responde y a quién pasa la conversación.</p></div>`;
-  const sug = ch.msgs.length ? [] : a.tpl === 'recep' ? ['Hola, quiero información', 'No me llegó el acceso', 'No me carga el simulacro', '¿Eres un robot?'] : ['Hola, quiero información', 'No me llegó el acceso', 'No me carga el simulacro', 'Quiero hablar con una persona'];
+    : `<div class="vacio">${I('bot')}<b>Prueba tu agente</b><p>Escríbele como si fueras un cliente y mira cómo responde y a quién pasa la conversación.</p></div>`;
+  const sug = ch.msgs.length ? [] : a.tpl === 'recep' ? ['Hola, quiero información', 'No me ha llegado mi compra', 'Tengo un problema con mi pedido', '¿Eres un robot?'] : ['Hola, quiero información', 'No me ha llegado mi compra', 'Tengo un problema con mi pedido', 'Quiero hablar con una persona'];
   const cerrado = ch.fase === 'pasada';
   return `<aside class="ag-chat"><div class="hd">${tabs}</div><div class="ag-msgs" id="ag-msgs">${cuerpo}</div>
     ${sug.length ? `<div class="ag-sug">${sug.map(x => `<button type="button" data-ag-sug="${esc(x)}">${esc(x)}</button>`).join('')}</div>` : ''}
-    <form class="ag-in" id="ag-form"><input id="ag-in" placeholder="${cerrado ? 'La conversación ya la tiene un asesor' : 'Escribe como si fueras el estudiante'}" autocomplete="off" ${cerrado ? 'disabled' : ''} aria-label="Mensaje de prueba"><button type="submit" aria-label="Enviar" ${cerrado ? 'disabled' : ''}>${I('send')}</button></form>
+    <form class="ag-in" id="ag-form"><input id="ag-in" placeholder="${cerrado ? 'La conversación ya la tiene un asesor' : 'Escribe como si fueras el cliente'}" autocomplete="off" ${cerrado ? 'disabled' : ''} aria-label="Mensaje de prueba"><button type="submit" aria-label="Enviar" ${cerrado ? 'disabled' : ''}>${I('send')}</button></form>
     <p class="muted" style="margin:0 12px 10px;font-size:11.5px">Lo que pasa aquí es solo de prueba: no cambia contactos reales.</p></aside>`;
 }
 // Repinta solo el chat de prueba, para no borrar lo que se esté escribiendo en el resto del editor.

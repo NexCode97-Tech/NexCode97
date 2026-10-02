@@ -81,7 +81,7 @@ export async function datosDeContacto(cambios: Json, actual: CrmContacto | null,
       case 'etapa': d.etapa = txt(v) || null; break
       case 'tags': d.tags = etiquetas(v); break
       case 'campos':
-        if (v !== null && (typeof v !== 'object' || Array.isArray(v))) throw new ValidationError('«campos» debe ser un objeto con los datos del estudiante.')
+        if (v !== null && (typeof v !== 'object' || Array.isArray(v))) throw new ValidationError('«campos» debe ser un objeto con los datos del contacto.')
         d.campos = mezclaProfunda(actual?.campos, v) as Prisma.InputJsonValue
         break
       case 'ficha': {

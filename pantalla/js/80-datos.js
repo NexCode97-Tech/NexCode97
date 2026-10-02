@@ -162,7 +162,7 @@ const crmDatos = (() => {
   function ctLocal(k){
     const f = k.ficha || {}, cp = k.campos || {}, com = f.compras;
     return {id: 1e9 + k.contactoId, contactoId: k.contactoId, n: k.n || k.tel || 'Sin nombre', tel: k.tel || '', correo: k.correo || '', canal: k.canal || 'wa', etapa: k.etapa || '', asig: k.asig || null,
-      producto: cp.producto || '', grado: cp.grado || '', ciudad: f.ciudad || '', origen: k.pauta ? `Anuncio de ${k.pauta.plataforma}` : (f.origen || ''), anuncio: !!k.pauta,
+      producto: cp.producto || '', empresa: cp.empresa || '', ciudad: f.ciudad || '', origen: k.pauta ? `Anuncio de ${k.pauta.plataforma}` : (f.origen || ''), anuncio: !!k.pauta,
       tags: Array.isArray(k.tags) ? k.tags : [], cuotas: com && com.total ? [com.pagadas, com.total] : com ? [1, 1] : null, noContactar: k.noContactar ?? null, guardado: k.guardado !== false,
       ultimoDias: 0, agregadoDias: 0, _t: k._t || {}, _k: k};
   }
@@ -174,7 +174,7 @@ const crmDatos = (() => {
   const baseConv = new Map(), baseLeido = new Map(), baseProg = new Map(), baseCt = new Map(), baseAj = new Map();
   let basePref = null;
   function fijarConv(c){ const m = new Map(); for (const k of Object.keys(c)) if (!omitir(k)) m.set(k, J(c[k])); baseConv.set(c.id, m); baseLeido.set(c.id, c.unread || 0); if (!baseProg.has(c.id)) baseProg.set(c.id, new Set()); }
-  const CT_CLAVES = ['n','tel','correo','canal','etapa','asig','producto','grado','ciudad','origen','tags','noContactar','guardado'];
+  const CT_CLAVES = ['n','tel','correo','canal','etapa','asig','producto','empresa','ciudad','origen','tags','noContactar','guardado'];
   function fijarCt(x){ if (!x.contactoId) return; baseCt.set(x.contactoId, new Map(CT_CLAVES.map(k => [k, J(x[k])]))); }
   function marcarBase(c, claves){ const b = baseConv.get(c.id); if (b) for (const k of claves) b.set(k, J(c[k])); }
   /* Cambio de nombre o borrado de un equipo (solo el administrador sin equipo, 30-sep): sus conversaciones las pasa el
@@ -499,7 +499,7 @@ const crmDatos = (() => {
   function ctAServidor(x, cambios){
     const k = x._k || {}, out = {};
     for (const [key, v] of Object.entries(cambios)) {
-      if (key === 'producto' || key === 'grado') out.campos = {...(out.campos || k.campos || {}), [key]: v};
+      if (key === 'producto' || key === 'empresa') out.campos = {...(out.campos || k.campos || {}), [key]: v};
       else if (key === 'ciudad' || key === 'origen') out.ficha = {...(out.ficha || k.ficha || {}), [key]: v};
       else out[key] = key === 'noContactar' && v === false ? null : v;
     }
@@ -509,7 +509,7 @@ const crmDatos = (() => {
     for (const x of CT_EXTRA) {
       if (!x.contactoId) {
         if (x._creando) continue; x._creando = true;
-        crmApi('POST', '/crm/contactos', {contacto: {n: x.n, tel: x.tel, correo: x.correo, canal: x.canal || 'wa', etapa: x.etapa || null, asig: x.asig || null, tags: x.tags || [], campos: {producto: x.producto || '', grado: x.grado || ''}, ficha: {ciudad: x.ciudad || '', origen: x.origen || ''}, guardado: true}})
+        crmApi('POST', '/crm/contactos', {contacto: {n: x.n, tel: x.tel, correo: x.correo, canal: x.canal || 'wa', etapa: x.etapa || null, asig: x.asig || null, tags: x.tags || [], campos: {producto: x.producto || '', empresa: x.empresa || ''}, ficha: {ciudad: x.ciudad || '', origen: x.origen || ''}, guardado: true}})
           .then(k => { const n = ctLocal(k); if (CONV.some(c => c.contactoId === k.contactoId) || CT_EXTRA.some(y => y !== x && y.contactoId === k.contactoId)) { /* el evento del SSE llegó primero: esa fila ya está */ const i = CT_EXTRA.indexOf(x); if (i >= 0) CT_EXTRA.splice(i, 1); } else { const recien = x.recien; Object.assign(x, n, recien ? {recien} : {}); fijarCt(x); } delete x._creando; repintarPronto(); },
             err => { const i = CT_EXTRA.indexOf(x); if (i >= 0) CT_EXTRA.splice(i, 1); toast(err.message); repintarPronto(); });
         continue;
@@ -697,7 +697,7 @@ const crmDatos = (() => {
   }
   document.addEventListener('click', e => { if (e.target.closest('[data-aj-tg="navegador"]') && !AJ.navegador && window.Notification && Notification.permission === 'default') Notification.requestPermission(); }, true);
 
-  /* ── Informes y ficha del estudiante ── */
+  /* ── Informes y ficha del cliente ── */
   const inf = {en:0, datos:null, pidiendo:false, falla:0};
   function informes(){
     if (!inf.pidiendo && Date.now() - inf.en > 60e3 && Date.now() - inf.falla > 300e3) {

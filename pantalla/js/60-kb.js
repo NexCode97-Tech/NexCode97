@@ -168,7 +168,7 @@ function kbCuerpo(k){
       ${websNuevas.map(u => `<div class="kb-row">${I('web', 'i lead')}<span class="tx"><b>${esc(u)}</b><small>Leyendo el sitio…</small></span><span class="kb-st pr">Leyendo</span></div>`).join('')}
       ${k.webs.length || websNuevas.length ? '' : `<div class="kb-nada">${I('web')}<div><b>Sin sitios web aún</b><span>Por ejemplo, la página de tu empresa o la de un producto.</span></div></div>`}</section>`;
   const fragmentos = `<section class="kb-sec" aria-label="Fragmentos"><div class="hd"><span class="kb-ico">${I('note')}</span><b>Fragmentos${kbCon(k.frag.length)}</b><button type="button" class="btn" data-kb-frag="nuevo" aria-label="Añadir fragmento">${I('plus')}Añadir</button></div>
-      <p class="sub2">Textos cortos que el agente usa tal cual para responder siempre igual: qué incluye un curso, formas de pago, horarios.</p>
+      <p class="sub2">Textos cortos que el agente usa tal cual para responder siempre igual: qué incluye un producto, formas de pago, horarios.</p>
       ${k.frag.length ? k.frag.map((f, i) => `<div class="kb-row">${I('note', 'i lead')}<span class="tx"><b>${esc(f.t)}</b><small>${esc(f.x)}</small></span><button type="button" class="btn ic" data-kb-frag="${i}" aria-label="Editar ${esc(f.t)}">${I('pen')}</button><button type="button" class="btn ic" data-kb-fragdel="${i}" aria-label="Borrar ${esc(f.t)}">${I('x')}</button></div>`).join('')
         : `<div class="kb-nada">${I('note')}<div><b>Sin fragmentos aún</b><span>Por ejemplo, «Formas de pago» con los medios y las cuotas que aceptan.</span></div></div>`}</section>`;
   return `${documentos}<div class="kb-par">${sitios}${fragmentos}</div>`;

@@ -39,12 +39,12 @@ type LinkItem = {
 };
 
 const serviciosLinks: LinkItem[] = [
-  { title: 'Apps web a la medida', href: '#servicios', icon: Monitor,        description: 'Plataformas con roles, dashboards y lógica propia' },
-  { title: 'Apps móviles',         href: '#servicios', icon: Smartphone,     description: 'iOS y Android, nativas o multiplataforma' },
-  { title: 'Páginas y landings',   href: '#servicios', icon: Globe,          description: 'Sitios de alto impacto que convierten visitas' },
-  { title: 'Sistemas de gestión',  href: '#servicios', icon: LayoutDashboard,description: 'ERPs, CRMs y herramientas internas a tu medida' },
-  { title: 'Tiendas en línea',     href: '#servicios', icon: ShoppingCart,   description: 'E-commerce completo con pagos y administración' },
-  { title: 'Integraciones y PWA',  href: '#servicios', icon: Zap,            description: 'WhatsApp, pagos, APIs externas y apps instalables' },
+  { title: 'Apps web a la medida', href: '/#servicios', icon: Monitor,        description: 'Plataformas con roles, dashboards y lógica propia' },
+  { title: 'Apps móviles',         href: '/#servicios', icon: Smartphone,     description: 'iOS y Android, nativas o multiplataforma' },
+  { title: 'Páginas y landings',   href: '/#servicios', icon: Globe,          description: 'Sitios de alto impacto que convierten visitas' },
+  { title: 'Sistemas de gestión',  href: '/#servicios', icon: LayoutDashboard,description: 'ERPs, CRMs y herramientas internas a tu medida' },
+  { title: 'Tiendas en línea',     href: '/#servicios', icon: ShoppingCart,   description: 'E-commerce completo con pagos y administración' },
+  { title: 'Integraciones y PWA',  href: '/#servicios', icon: Zap,            description: 'WhatsApp, pagos, APIs externas y apps instalables' },
 ];
 
 type TechItem = {
@@ -272,7 +272,7 @@ function MobileMenuPortal({ open, activeTab, setActiveTab, onClose }: {
                     </div>
                     {/* Link nosotros */}
                     <a
-                      href="#nosotros"
+                      href="/#nosotros"
                       onClick={onClose}
                       className="flex items-center justify-between rounded-xl px-4 py-3 transition-colors duration-150 hover:bg-white/5 cursor-pointer"
                       style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}
@@ -474,7 +474,7 @@ export function SiteHeader() {
             <NavigationMenuItem>
               <NavigationMenuLink asChild>
                 <a
-                  href="#nosotros"
+                  href="/#nosotros"
                   className="inline-flex h-9 items-center rounded-md px-4 py-2 text-sm font-medium text-white/70 transition-colors hover:bg-white/8 hover:text-white"
                 >
                   Nosotros

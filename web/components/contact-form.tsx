@@ -109,6 +109,10 @@ function ContactFormContent({ onClose }: { onClose: () => void }) {
             >
               {status === "loading" ? "Enviando..." : "Enviar mensaje"}
             </button>
+            <p className="text-center text-xs leading-relaxed text-white/40">
+              Al enviar autorizas el tratamiento de tus datos para responderte, según nuestra{" "}
+              <a href="/privacidad" target="_blank" className="underline underline-offset-2 hover:text-white">política de privacidad</a>.
+            </p>
           </form>
         )}
       </div>

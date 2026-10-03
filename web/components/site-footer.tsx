@@ -2,6 +2,7 @@ import { Mail, MapPin } from "lucide-react";
 import { FaInstagram, FaWhatsapp } from "react-icons/fa";
 import Image from "next/image";
 import Link from "next/link";
+import { PAGINAS_LEGALES } from "@/lib/legal";
 
 const socialLinks = [
   { icon: FaInstagram, label: "Instagram", href: "https://www.instagram.com/nexcode97?igsh=enVnc2pqNTVra2Mw" },
@@ -9,17 +10,17 @@ const socialLinks = [
 ];
 
 const serviciosLinks = [
-  { text: "Apps web a la medida",  href: "#servicios" },
-  { text: "Apps móviles",          href: "#servicios" },
-  { text: "Páginas y landings",    href: "#servicios" },
-  { text: "Sistemas de gestión",   href: "#servicios" },
-  { text: "Tiendas en línea",      href: "#servicios" },
-  { text: "Integraciones y PWA",   href: "#servicios" },
+  { text: "Apps web a la medida",  href: "/#servicios" },
+  { text: "Apps móviles",          href: "/#servicios" },
+  { text: "Páginas y landings",    href: "/#servicios" },
+  { text: "Sistemas de gestión",   href: "/#servicios" },
+  { text: "Tiendas en línea",      href: "/#servicios" },
+  { text: "Integraciones y PWA",   href: "/#servicios" },
 ];
 
 const empresaLinks = [
-  { text: "Nosotros",      href: "#nosotros" },
-  { text: "Testimonios",   href: "#testimonios" },
+  { text: "Nosotros",      href: "/#nosotros" },
+  { text: "Testimonios",   href: "/#testimonios" },
   { text: "NexTechnology", href: "#" },
 ];
 
@@ -145,6 +146,13 @@ export function SiteFooter() {
           <p className="text-xs text-white/25">
             © {new Date().getFullYear()} NexCode97. Todos los derechos reservados.
           </p>
+          <nav aria-label="Documentos legales" className="flex flex-wrap justify-center gap-x-4 gap-y-2">
+            {PAGINAS_LEGALES.map(p => (
+              <Link key={p.href} href={p.href} className="text-xs text-white/40 transition-colors duration-150 hover:text-white">
+                {p.titulo}
+              </Link>
+            ))}
+          </nav>
           <p className="text-xs flex items-center gap-1.5 text-white/25">
             Hecho con
             <span className="text-red-500">❤</span>

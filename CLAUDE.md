@@ -1,18 +1,19 @@
 # NexCode97 — Instrucciones para Claude
 
 ## Contexto del proyecto
-Repositorio principal de NexCode97, agencia de desarrollo de software fundada por un desarrollador fullstack colombiano. Contiene solo el sitio principal (Next.js en `web/`). Los productos (APP NTRL, VeloClub, Parapente, el CRM) tienen sus propios repos.
+Repositorio principal de NexCode97, agencia de desarrollo de software fundada por un desarrollador fullstack colombiano. Contiene el sitio principal (Next.js en `web/`) y el CRM de NexCode97 (`crm/`). Los productos de clientes (APP NTRL, VeloClub, Parapente) tienen sus propios repos.
 
 ## Stack
 - Sitio: Next.js en `web/` (Vercel, proyecto `nex-code97`, www.nexcode97.com), despliega desde GitHub en cada push a `main`
-- CRM: repo aparte `NexCode97/crm` en Railway (proyecto "NexCode97 CRM"), servido en `/crm` por rewrite en `web/next.config.ts`
+- CRM: carpeta `crm/` (Express + Prisma + PostgreSQL), desplegada en Railway (proyecto "NexCode97 CRM", raíz `crm/`), servida en `/crm` por rewrite en `web/next.config.ts`
 - Toda base de datos va en PostgreSQL de Railway
 - Repo: github.com/NexCode97/NexCode97
 
 ## Estructura del proyecto
 ```
 NexCode97/
-├── web/                ← Sitio principal nexcode97.com (Next.js)
+├── web/                ← Sitio principal nexcode97.com (Next.js, Vercel)
+├── crm/                ← CRM de NexCode97 (Railway), servido en nexcode97.com/crm
 ├── assets/             ← Imágenes, videos, favicon
 └── vercel.json
 ```
@@ -25,7 +26,7 @@ NexCode97/
 - Mensajes de commit en inglés, concisos
 
 ## CRM (/crm)
-- Código en el repo `NexCode97/crm` (Express + Prisma + PostgreSQL), desplegado en Railway desde GitHub
+- Código en `crm/` (Express + Prisma + PostgreSQL), desplegado en Railway desde este repo (solo cuando cambia `crm/`)
 - `web/next.config.ts` reenvía `/crm` y `/crm/*` a `crm-production-9b97.up.railway.app` quitando el prefijo
 - En Railway el CRM corre con `CRM_BASE=/crm` y `TRUST_PROXY=2`
 - Las cabeceras de seguridad del sitio excluyen `/crm`: el CRM manda las suyas. Con dos CSP el navegador aplica ambas y rompe el CRM

@@ -6,7 +6,7 @@ Repositorio principal de NexCode97, agencia de desarrollo de software fundada po
 ## Stack
 - Sitio: Next.js en `web/` (Vercel, proyecto `nex-code97`, www.nexcode97.com), despliega desde GitHub en cada push a `main`
 - CRM: repo aparte `NexCode97/crm` en Railway (proyecto "NexCode97 CRM"), servido en `/crm` por rewrite en `web/next.config.ts`
-- No se usa Supabase. Toda base de datos va en PostgreSQL de Railway
+- Toda base de datos va en PostgreSQL de Railway
 - Repo: github.com/NexCode97/NexCode97
 
 ## Estructura del proyecto

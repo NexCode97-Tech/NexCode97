@@ -86,22 +86,10 @@ fondo de cada card de experiencia (reemplazando degradados sólidos).
 
 ---
 
-## 🔑 ADMIN PANEL (`admin/index.html`) — estado
+## 🔑 PANEL / CRM — estado
 
-- Usa **Supabase** (auth + 3 tablas: `leads`, `proyectos`, `finanzas`)
-  - URL: `https://eshdkxfalahxoudedogh.supabase.co`
-  - Proyecto se PAUSA solo (plan free) tras 1 semana inactivo → restaurar en supabase.com
-- Login con `nexcode97@gmail.com`. Se agregó botón "¿Olvidaste tu contraseña?"
-- Rediseñado con 7 skills: impeccable, ui-ux-pro-max, taste, emilkowal-animations,
-  micro-interactions, glassmorphism, page-transitions
-- **Modales → Drawers** laterales (panel desliza desde derecha)
-- **Leads → Kanban** board 5 columnas (Nuevo/Conversación/Propuesta/Cerrado/Perdido)
-- **Dashboard** con gráfica de línea tipo pulso (Chart.js) ingresos vs gastos
-- **Confirm-delete** personalizado (no browser dialog)
-- **Flatpickr** para fechas + **Custom Select propio** (se quitó Tom Select por conflictos CSS)
-- Paleta admin: púrpura `#7c3aed` + cyan `#06b6d4`
-- **Migración a Railway** quedó PENDIENTE (el usuario quería pasar de Supabase a Railway
-  para tener todo en un punto, pero primero recuperar contraseña)
+- El panel `admin/` se eliminó (2026-10-02). El panel de NexCode97 es ahora el CRM en `www.nexcode97.com/crm`
+  (repo `NexCode97/crm`, desplegado en Railway con su base PostgreSQL)
 
 ---
 

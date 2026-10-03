@@ -1,7 +1,7 @@
 # NexCode97 — Instrucciones para Claude
 
 ## Contexto del proyecto
-Repositorio principal de NexCode97, agencia de desarrollo de software fundada por un desarrollador fullstack colombiano. Contiene el sitio principal y los portafolios de productos.
+Repositorio principal de NexCode97, agencia de desarrollo de software fundada por un desarrollador fullstack colombiano. Contiene solo el sitio principal (Next.js en `web/`). Los productos (APP NTRL, VeloClub, Parapente, el CRM) tienen sus propios repos.
 
 ## Stack
 - Sitio: Next.js en `web/` (Vercel, proyecto `nex-code97`, www.nexcode97.com), despliega desde GitHub en cada push a `main`
@@ -14,8 +14,6 @@ Repositorio principal de NexCode97, agencia de desarrollo de software fundada po
 NexCode97/
 ├── web/                ← Sitio principal nexcode97.com (Next.js)
 ├── assets/             ← Imágenes, videos, favicon
-├── appntrl/            ← Portafolio producto APP NTRL
-├── veloclub/           ← Portafolio producto VeloClub
 └── vercel.json
 ```
 

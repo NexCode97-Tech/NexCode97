@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<title>Entrar · __MARCA__</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap">
+<style>
+*{box-sizing:border-box}
+html,body{height:100%}
+body{margin:0;font-family:Poppins,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;color:#1f2937;background:#f4f6fa;display:grid;place-items:center;padding:24px}
+.caja{width:100%;max-width:380px;background:#fff;border:1px solid #e5e9f0;border-radius:16px;padding:32px 28px;box-shadow:0 20px 40px -28px rgba(15,23,42,.35)}
+.marca{display:flex;align-items:center;gap:10px;font-size:17px;font-weight:600;margin-bottom:22px}
+.marca i{width:34px;height:34px;border-radius:10px;background:#1976d2;display:grid;place-items:center;color:#fff;flex:none}
+.marca svg{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round;stroke-linejoin:round}
+h1{font-size:20px;font-weight:600;margin:0 0 4px}
+p.sub{margin:0 0 22px;color:#6b7280}
+label{display:block;font-size:13px;font-weight:500;color:#374151;margin-bottom:14px}
+input{display:block;width:100%;height:42px;margin-top:6px;padding:0 12px;border:1px solid #d7dde7;border-radius:10px;font:inherit;color:inherit;background:#fff;outline:none}
+input:focus{border-color:#1976d2;box-shadow:0 0 0 3px rgba(25,118,210,.15)}
+button{width:100%;height:44px;margin-top:6px;border:0;border-radius:10px;background:#1976d2;color:#fff;font:inherit;font-weight:600;cursor:pointer}
+button:hover{background:#1565c0}
+button:disabled{opacity:.6;cursor:default}
+.error{display:none;margin:0 0 14px;padding:10px 12px;border-radius:10px;background:#fef2f2;color:#b91c1c;font-size:13px}
+.error.ver{display:block}
+</style>
+</head>
+<body>
+<main class="caja">
+  <div class="marca"><i><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.6 7.4L3 21l1.6-5.4A8.5 8.5 0 1 1 21 12Z"/></svg></i>__MARCA__</div>
+  <h1>Entrar</h1>
+  <p class="sub">Escribe tu correo y tu contraseña.</p>
+  <div class="error" id="error" role="alert"></div>
+  <form id="f" novalidate>
+    <label>Correo<input id="email" type="email" autocomplete="username" required autofocus></label>
+    <label>Contraseña<input id="password" type="password" autocomplete="current-password" required></label>
+    <button id="b" type="submit">Entrar</button>
+  </form>
+</main>
+<script>
+const f = document.getElementById('f'), b = document.getElementById('b'), error = document.getElementById('error');
+f.addEventListener('submit', async e => {
+  e.preventDefault();
+  const email = document.getElementById('email').value.trim(), password = document.getElementById('password').value;
+  if (!email || !password) { error.textContent = 'Escribe tu correo y tu contraseña.'; error.classList.add('ver'); return; }
+  b.disabled = true; b.textContent = 'Entrando'; error.classList.remove('ver');
+  try {
+    const r = await fetch('__BASE__/api/auth/login', {method: 'POST', headers: {'Content-Type': 'application/json'}, credentials: 'same-origin', body: JSON.stringify({email, password})});
+    const j = await r.json().catch(() => ({}));
+    if (!r.ok) throw new Error(j.error || 'No se pudo entrar. Intenta de nuevo.');
+    location.href = '__BASE__/' + location.search;
+  } catch (err) {
+    error.textContent = err.message; error.classList.add('ver');
+    b.disabled = false; b.textContent = 'Entrar';
+  }
+});
+</script>
+</body>
+</html>

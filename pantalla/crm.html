@@ -17,7 +17,7 @@
 }
 *{box-sizing:border-box}
 html,body{height:100%;background:var(--bg3)}
-body{margin:0;color:var(--ink);font:14px/1.5 Poppins,system-ui,-apple-system,"Segoe UI",sans-serif;padding-inline:16px;padding-block:12px}
+body{margin:0;color:var(--ink);font:14px/1.5 Poppins,system-ui,-apple-system,"Segoe UI",sans-serif;padding:0}
 button{font:inherit;color:inherit;cursor:pointer;background:none;border:0;padding:0}
 svg.i{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round}
 :focus-visible{outline:2px solid var(--blue);outline-offset:2px;border-radius:6px}
@@ -25,7 +25,7 @@ svg.i{width:18px;height:18px;flex:none;stroke:currentColor;fill:none;stroke-widt
 .seg button{padding:5px 12px;border-radius:6px;font-size:12.5px;font-weight:500;color:var(--ink2)}
 .seg button[aria-pressed="true"]{background:#fff;color:var(--ink);box-shadow:0 1px 2px rgba(15,23,42,.08)}
 
-.app{margin:0 auto;height:calc(100vh - 24px);min-height:0;display:grid;grid-template-columns:236px 380px minmax(0,1fr) 320px;background:var(--bg);border:1px solid var(--line);border-radius:14px;overflow:hidden}
+.app{height:100vh;height:100dvh;min-height:0;display:grid;grid-template-columns:236px 380px minmax(0,1fr) 320px;background:var(--bg);overflow:hidden}
 .page{display:none;grid-column:2 / -1;overflow-y:auto;padding:24px 28px;background:var(--bg)}
 .app.pg .list,.app.pg .chat,.app.pg .panel{display:none}
 .app.pg .page{display:block}

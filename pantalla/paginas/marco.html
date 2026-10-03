@@ -12,23 +12,7 @@ html,body{height:100%}
 body{margin:0;font-family:Poppins,system-ui,-apple-system,"Segoe UI",sans-serif;font-size:14px;color:#1f2937;background:#f4f6fa;display:flex;flex-direction:column;height:100dvh;overflow:hidden}
 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
 svg.i{width:18px;height:18px;fill:none;stroke:currentColor;stroke-width:1.75;stroke-linecap:round;stroke-linejoin:round;flex:none}
-.barra{flex:none;height:52px;display:flex;align-items:center;gap:10px;padding:0 16px;background:#fff;border-bottom:1px solid #e5e9f0}
-.marca{display:flex;align-items:center;gap:9px;font-size:15px;font-weight:600;min-width:0}
-.marca i{width:28px;height:28px;border-radius:8px;background:#1976d2;color:#fff;display:grid;place-items:center;flex:none}
-.marca i svg{width:15px;height:15px;stroke-width:2}
-.marca span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.marca small{font-size:12.5px;font-weight:400;color:#6b7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.sep{flex:1}
-.ic{position:relative;width:36px;height:36px;border-radius:10px;display:grid;place-items:center;color:#374151}
-.ic:hover,.ic[aria-expanded="true"]{background:#f1f4f9}
-.ic .n{position:absolute;top:3px;right:2px;min-width:16px;height:16px;padding:0 4px;border-radius:999px;background:#dc2626;color:#fff;font-size:10.5px;font-weight:600;line-height:16px;text-align:center}
-.yo{display:flex;align-items:center;gap:8px;height:36px;padding:0 8px 0 4px;border-radius:10px;min-width:0}
-.yo:hover,.yo[aria-expanded="true"]{background:#f1f4f9}
-.av{width:28px;height:28px;border-radius:50%;background:#e8f1fb;color:#1565c0;font-size:11.5px;font-weight:600;display:grid;place-items:center;flex:none;overflow:hidden}
-.av img{width:100%;height:100%;object-fit:cover}
-.yo b{font-weight:500;font-size:13.5px;max-width:160px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.dd{position:relative}
-.menu{position:absolute;right:0;top:calc(100% + 6px);z-index:50;min-width:220px;background:#fff;border:1px solid #e5e9f0;border-radius:12px;padding:6px;box-shadow:0 18px 40px -18px rgba(15,23,42,.35)}
+.menu{position:fixed;z-index:50;min-width:220px;background:#fff;border:1px solid #e5e9f0;border-radius:12px;padding:6px;box-shadow:0 18px 40px -18px rgba(15,23,42,.35)}
 .menu[hidden]{display:none}
 .menu a,.menu button{display:flex;align-items:center;gap:10px;width:100%;padding:9px 10px;border-radius:8px;font-size:13.5px;color:#1f2937;text-decoration:none;text-align:left}
 .menu a:hover,.menu button:hover{background:#f1f4f9}
@@ -64,30 +48,19 @@ iframe{position:absolute;left:0;top:0;display:block;border:0;transform-origin:to
 .dlg .error.ver{display:block}
 #toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);z-index:90;background:#1f2937;color:#fff;padding:10px 16px;border-radius:10px;font-size:13.5px;opacity:0;pointer-events:none;transition:opacity .2s}
 #toast.ver{opacity:1}
-@media (max-width:759.98px){.barra{height:46px;padding:0 10px}.yo b,.marca small{display:none}}
 </style>
 </head>
 <body>
-<header class="barra">
-  <div class="marca"><i><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12a8.5 8.5 0 0 1-12.6 7.4L3 21l1.6-5.4A8.5 8.5 0 1 1 21 12Z"/></svg></i><span id="marca"></span><small id="espacio"></small></div>
-  <div class="sep"></div>
-  <div class="dd">
-    <button type="button" class="ic" id="b-campana" aria-label="Avisos" aria-haspopup="true" aria-expanded="false"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 8 3 8H3s3-1 3-8"/><path d="M10 20a2 2 0 0 0 4 0"/></svg><span class="n" id="n-campana" hidden></span></button>
-    <div class="menu campana" id="m-campana" hidden>
-      <div class="cab"><b>Avisos</b><button type="button" id="b-leidas">Marcar todos como leídos</button></div>
-      <div class="lista" id="avisos"></div>
-    </div>
-  </div>
-  <div class="dd">
-    <button type="button" class="yo" id="b-yo" aria-haspopup="menu" aria-expanded="false"><span class="av" id="yo-av"></span><b id="yo-n"></b></button>
-    <div class="menu" id="m-yo" role="menu" hidden>
-      <a href="__BASE__/usuarios" id="ir-usuarios" role="menuitem" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.3a6.5 6.5 0 0 1 3.5 5.7"/></svg>Usuarios</a>
-      <button type="button" id="b-clave" role="menuitem"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Cambiar la contraseña</button>
-      <hr>
-      <button type="button" id="b-salir" role="menuitem"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>Cerrar sesión</button>
-    </div>
-  </div>
-</header>
+<div class="menu campana" id="m-campana" hidden>
+  <div class="cab"><b>Avisos</b><button type="button" id="b-leidas">Marcar todos como leídos</button></div>
+  <div class="lista" id="avisos"></div>
+</div>
+<div class="menu" id="m-yo" role="menu" hidden>
+  <a href="__BASE__/usuarios" id="ir-usuarios" role="menuitem" hidden><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.6a3.5 3.5 0 0 1 0 6.8"/><path d="M18 14.3a6.5 6.5 0 0 1 3.5 5.7"/></svg>Usuarios</a>
+  <button type="button" id="b-clave" role="menuitem"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg>Cambiar la contraseña</button>
+  <hr>
+  <button type="button" id="b-salir" role="menuitem"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><path d="M16 17l5-5-5-5"/><path d="M21 12H9"/></svg>Cerrar sesión</button>
+</div>
 <main id="caja"><iframe id="marco" src="__BASE__/app" title="CRM" allow="microphone; clipboard-write"></iframe></main>
 <div class="ov" id="ov-clave" hidden>
   <form class="dlg" id="f-clave" role="dialog" aria-labelledby="t-clave" novalidate>
@@ -106,11 +79,6 @@ const $ = id => document.getElementById(id);
 const esc = t => String(t ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
 function toast(t){ const el = $('toast'); el.textContent = t; el.classList.add('ver'); clearTimeout(toast.t); toast.t = setTimeout(() => el.classList.remove('ver'), 3200); }
 
-$('marca').textContent = M.marca || 'CRM';
-$('espacio').textContent = M.espacio && M.espacio.nombre && M.espacio.nombre !== M.marca ? M.espacio.nombre : '';
-$('yo-n').textContent = M.yo.nombre || '';
-const iniciales = n => String(n || '').trim().split(/\s+/).slice(0, 2).map(p => p[0] || '').join('').toUpperCase();
-$('yo-av').innerHTML = M.yo.foto ? `<img src="${esc(M.yo.foto)}" alt="">` : esc(iniciales(M.yo.nombre));
 if (M.yo.admin) $('ir-usuarios').hidden = false;
 
 /* ── Token del API: se pide con la cookie de la sesión y se guarda 50 minutos ── */
@@ -138,33 +106,41 @@ async function api(metodo, ruta, cuerpo){
       se ven sus cuatro columnas. En celular (menos de 760 px) no se escala: ahí tiene su diseño de una columna. ── */
 const ANCHO = 1600, MINIMO = 0.7, CELULAR = 760;
 const caja = $('caja'), marco = $('marco');
+let escala = 1;
 function medir(){
   const w = caja.clientWidth, h = caja.clientHeight;
-  const s = w < CELULAR ? 1 : Math.max(MINIMO, Math.min(1, w / ANCHO));
+  const s = escala = w < CELULAR ? 1 : Math.max(MINIMO, Math.min(1, w / ANCHO));
   marco.style.width = (w / s) + 'px'; marco.style.height = (h / s) + 'px'; marco.style.transform = s === 1 ? '' : `scale(${s})`;
 }
 medir(); new ResizeObserver(medir).observe(caja);
 
-/* ── Menús ── */
-function menu(boton, panel, alAbrir){
-  boton.addEventListener('click', e => {
-    e.stopPropagation();
-    const abrir = panel.hidden;
-    cerrarMenus();
-    if (abrir) { panel.hidden = false; boton.setAttribute('aria-expanded', 'true'); if (alAbrir) alAbrir(); }
-  });
-  panel.addEventListener('click', e => e.stopPropagation());
+/* ── Menús. No hay barra arriba: la campana y tu cuenta son botones de la barra lateral del CRM
+      (pantalla/js/68-marco.js), que llaman a CRM_MARCO con la posición de su botón. El CRM puede ir escalado, así que
+      esa posición se multiplica por la escala. Un clic dentro del CRM cierra los menús con CRM_MARCO.cerrar(). ── */
+const hijo = () => { try { return marco.contentWindow; } catch { return null; } };
+let abierto = null, sinLeer = 0;
+function cerrarMenus(){ $('m-campana').hidden = true; $('m-yo').hidden = true; abierto = null; hijo()?.crmMarcoAbierto?.(null); }
+function abrir(cual, panel, r, haciaAbajo){
+  if (abierto === cual) { cerrarMenus(); return false; }
+  cerrarMenus(); panel.hidden = false; abierto = cual; hijo()?.crmMarcoAbierto?.(cual);
+  panel.style.left = Math.max(8, Math.min(r.left * escala, innerWidth - panel.offsetWidth - 8)) + 'px';
+  if (haciaAbajo) { panel.style.bottom = ''; panel.style.top = (r.bottom * escala + 6) + 'px'; }
+  else { panel.style.top = ''; panel.style.bottom = (innerHeight - r.top * escala + 8) + 'px'; }
+  return true;
 }
-function cerrarMenus(){ for (const [b, p] of [['b-campana', 'm-campana'], ['b-yo', 'm-yo']]) { $(p).hidden = true; $(b).setAttribute('aria-expanded', 'false'); } }
+for (const p of ['m-campana', 'm-yo']) $(p).addEventListener('click', e => e.stopPropagation());
 document.addEventListener('click', cerrarMenus);
-window.addEventListener('blur', cerrarMenus);   // un clic dentro del CRM (el iframe) también los cierra
 document.addEventListener('keydown', e => { if (e.key === 'Escape') { cerrarMenus(); cerrarClave(); } });
-menu($('b-yo'), $('m-yo'));
-menu($('b-campana'), $('m-campana'), cargarAvisos);
+window.CRM_MARCO = {
+  campana: r => { if (abrir('campana', $('m-campana'), r, true)) cargarAvisos(); },
+  cuenta: r => { abrir('cuenta', $('m-yo'), r, false); },
+  cerrar: () => { if (abierto) cerrarMenus(); },
+  sinLeer: () => sinLeer,
+};
 
 /* ── Campana ── */
 const HORA = new Intl.DateTimeFormat('es-CO', {day: 'numeric', month: 'short', hour: 'numeric', minute: '2-digit'});
-function pintarGlobo(n){ const g = $('n-campana'); g.hidden = !n; g.textContent = n > 99 ? '99+' : String(n || ''); }
+function pintarGlobo(n){ sinLeer = n || 0; hijo()?.crmGloboAvisos?.(sinLeer); }
 async function cargarAvisos(){
   try {
     const d = await api('GET', '/notificaciones');

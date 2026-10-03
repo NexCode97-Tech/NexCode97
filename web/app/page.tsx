@@ -21,7 +21,7 @@ const DATOS_ESTRUCTURADOS = {
 export default function Home() {
   return (
     <main style={{ background: "#09090e" }}>
-      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(DATOS_ESTRUCTURADOS).replace(/</g, "\u003c") }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(DATOS_ESTRUCTURADOS) }} />
       <IntroSplash />
       <WovenLightHero />
       <ServicesSection />

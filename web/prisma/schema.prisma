@@ -30,6 +30,10 @@ model Lead {
   enriched     Json?
   suggestedMsg String?
   agentVersion String?
+  /// Prueba de la autorización de datos (Ley 1581): cuándo envió el formulario con el aviso, qué versión de la política y desde qué IP.
+  autorizadoEn    DateTime?
+  politicaVersion String?
+  ipAutorizacion  String?
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 }

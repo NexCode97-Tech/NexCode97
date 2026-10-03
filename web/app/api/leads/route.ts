@@ -2,6 +2,7 @@ import { NextRequest, NextResponse, after } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { analyzeLead, AGENT_VERSION } from "@/lib/agent";
 import { sendLeadNotification } from "@/lib/mailer";
+import { VERSION_DOCUMENTOS } from "@/lib/legal";
 
 export async function POST(req: NextRequest) {
   try {
@@ -16,7 +17,13 @@ export async function POST(req: NextRequest) {
     }
 
     const lead = await prisma.lead.create({
-      data: { name, email: email || null, whatsapp, company: company || null, description },
+      data: {
+        name, email: email || null, whatsapp, company: company || null, description,
+        // Enviar el formulario con el aviso de datos a la vista es la autorización (Ley 1581): queda la prueba.
+        autorizadoEn: new Date(),
+        politicaVersion: VERSION_DOCUMENTOS,
+        ipAutorizacion: (req.headers.get("x-real-ip") ?? req.headers.get("x-forwarded-for")?.split(",")[0] ?? "").trim().slice(0, 64) || null,
+      },
     });
 
     // Agente corre después de responder — after() garantiza ejecución en Vercel

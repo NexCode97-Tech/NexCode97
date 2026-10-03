@@ -12,6 +12,8 @@ export const RESPONSABLE = {
 
 /** Fecha desde la que rigen las versiones publicadas. Se cambia con cada versión nueva. */
 export const VIGENCIA = "3 de octubre de 2026";
+/** La misma versión en formato fecha: se guarda con cada autorización (formulario de contacto y registro del CRM). */
+export const VERSION_DOCUMENTOS = "2026-10-03";
 
 export const PAGINAS_LEGALES = [
   { href: "/privacidad", titulo: "Política de privacidad" },

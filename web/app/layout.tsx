@@ -27,11 +27,12 @@ export const metadata: Metadata = {
   title: "NexCode97 | Cada negocio merece su propio sistema",
   description:
     "Desarrollo de software a la medida. Apps web, móviles, sistemas de gestión y más. Sin mensualidades.",
-  metadataBase: new URL("https://nexcode97.com"),
+  metadataBase: new URL("https://www.nexcode97.com"),
+  alternates: { canonical: "/" },
   openGraph: {
     title: "NexCode97 | Cada negocio merece su propio sistema",
     description: "Desarrollo de software a la medida.",
-    url: "https://nexcode97.com",
+    url: "https://www.nexcode97.com",
     siteName: "NexCode97",
     locale: "es_CO",
     type: "website",

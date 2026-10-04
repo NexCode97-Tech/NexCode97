@@ -287,7 +287,19 @@ function MobileMenuPortal({ open, activeTab, setActiveTab, onClose }: {
           </div>
 
           {/* CTA fijo abajo */}
-          <div className="p-4 shrink-0" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+          <div className="p-4 shrink-0 flex flex-col gap-2" style={{ borderTop: '1px solid rgba(255,255,255,0.06)' }}>
+            <a
+              href="/deploys"
+              onClick={onClose}
+              className="flex items-center justify-between rounded-xl px-4 py-3 transition-colors duration-150 hover:bg-white/5"
+              style={{ background: 'rgba(255,255,255,0.03)', border: '1px solid rgba(255,255,255,0.06)' }}
+            >
+              <span className="flex items-center gap-2.5 text-sm font-semibold text-white">
+                <span className="size-1.5 rounded-full" style={{ background: '#4ade80', boxShadow: '0 0 0 3px rgba(74,222,128,0.18)' }} aria-hidden="true" />
+                Deploys
+              </span>
+              <span className="text-xs" style={{ color: 'rgba(255,255,255,0.4)' }}>Proyectos en producción →</span>
+            </a>
             <button
               onClick={() => {
                 onClose();
@@ -478,6 +490,18 @@ export function SiteHeader() {
                   className="inline-flex h-9 items-center rounded-md px-4 py-2 text-sm font-medium text-white/70 transition-colors hover:bg-white/8 hover:text-white"
                 >
                   Nosotros
+                </a>
+              </NavigationMenuLink>
+            </NavigationMenuItem>
+
+            <NavigationMenuItem>
+              <NavigationMenuLink asChild>
+                <a
+                  href="/deploys"
+                  className="inline-flex h-9 items-center gap-2 rounded-md px-4 py-2 text-sm font-medium text-white/70 transition-colors hover:bg-white/8 hover:text-white"
+                >
+                  <span className="size-1.5 rounded-full" style={{ background: '#4ade80', boxShadow: '0 0 0 3px rgba(74,222,128,0.18)' }} aria-hidden="true" />
+                  Deploys
                 </a>
               </NavigationMenuLink>
             </NavigationMenuItem>

@@ -23,7 +23,7 @@ export const DEPLOYS = [
     url: "https://www.nexcode97.com/crm/",
     dominio: "nexcode97.com/crm",
     imagen: "/deploys/crm.jpg",
-    alt: "Inicio de sesión del CRM de NexCode97 con el astronauta de la marca",
+    alt: "Bandeja del CRM de NexCode97: conversaciones, chat con el agente de IA y ficha del contacto (datos de ejemplo)",
     datos: { tipo: "SaaS multiempresa", modelo: "Suscripción, sin recargo sobre WhatsApp" },
     tecnologias: ["Node.js", "TypeScript", "Prisma", "PostgreSQL", "IA"],
     /** Página de planes, para el botón «Ver precios». */

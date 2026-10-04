@@ -20,7 +20,6 @@ const serviciosLinks = [
 
 const empresaLinks = [
   { text: "Nosotros",      href: "/#nosotros" },
-  { text: "Testimonios",   href: "/#testimonios" },
   { text: "Deploys",       href: "/deploys" },
   { text: "Precios del CRM", href: "/precios" },
   { text: "NexTechnology", href: "#" },

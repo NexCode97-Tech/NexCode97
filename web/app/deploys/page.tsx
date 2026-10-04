@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import { SiteFooter } from "@/components/site-footer";
 import { DEPLOYS } from "@/lib/deploys";
-import { EstadoVivo } from "./estado-vivo";
 import styles from "./deploys.module.css";
 
 export const metadata: Metadata = {
@@ -35,11 +34,10 @@ export default function Deploys() {
             <article key={d.id} className={`${styles.proyecto} ${i % 2 ? styles.inverso : ""}`}>
               <a className={styles.marco} href={d.url} target="_blank" rel="noopener noreferrer" aria-label={`Abrir ${d.nombre}`}>
                 <div className={styles.chrome}><i /><i /><i /><span className={styles.url}><Candado />{d.dominio}</span></div>
-                <Image src={d.imagen} alt={d.alt} width={1200} height={750} sizes="(max-width: 960px) 100vw, 640px" priority={i === 0} />
+                <Image src={d.imagen} alt={d.alt} width={1200} height={750} sizes="(max-width: 960px) 100vw, 680px" priority={i === 0} unoptimized />
               </a>
               <div className={styles.info}>
-                <EstadoVivo id={d.id} />
-                <h2>{d.nombre}</h2>
+                <h2 className={styles.nombre}>{d.nombre}</h2>
                 <p className={styles.tipo}>{d.tipo}</p>
                 <p>{d.descripcion}</p>
                 <dl className={styles.datos}>

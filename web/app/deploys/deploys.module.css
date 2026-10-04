@@ -1,4 +1,4 @@
-/* /deploys: los proyectos en producción con su estado en vivo. Misma identidad del sitio (negro tibio, amarillo, Inter).
+/* /deploys: los proyectos en producción. Misma identidad del sitio (negro tibio, amarillo, Inter).
    Cada proyecto es una vitrina grande (captura en marco de navegador + ficha), alternando el lado de la imagen. */
 .raiz{
   --fondo:oklch(0.145 0.006 95); --fondo-2:oklch(0.17 0.007 95); --superficie:oklch(0.195 0.008 95); --superficie-2:oklch(0.225 0.009 95);

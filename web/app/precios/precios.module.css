@@ -93,7 +93,8 @@
 .tablaCaja tbody tr + tr th,.tablaCaja tbody tr + tr td{border-top:1px solid var(--linea-suave)}
 .tablaCaja tbody tr.grupo th{padding:22px 20px 10px;color:var(--texto);font-weight:700;font-size:13px;letter-spacing:.02em;border-top:1px solid var(--linea)}
 .colG{background:oklch(0.94 0.2 105 / .035)}
-.tablaCaja td svg{width:18px;height:18px;vertical-align:middle}
+.tablaCaja td .si,.tablaCaja td .no{display:flex;justify-content:center}
+.tablaCaja td svg{width:18px;height:18px;display:block}
 .tablaCaja .si{color:var(--amarillo)}
 .tablaCaja .no{color:var(--texto-3)}
 

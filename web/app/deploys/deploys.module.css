@@ -46,7 +46,12 @@
 .datos dd{margin:0;font-weight:500}
 .etiquetas{display:flex;flex-wrap:wrap;gap:6px}
 .etiquetas span{font-size:12.5px;font-weight:500;padding:3px 10px;border-radius:999px;border:1px solid var(--linea);color:var(--texto-2)}
-.ver{margin-top:24px;display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 20px;border-radius:12px;background:var(--amarillo);color:var(--sobre-amarillo)!important;font-weight:700;transition:background .2s}
+.acciones{margin-top:24px;display:flex;flex-wrap:wrap;gap:10px}
+.precios{display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 20px;border-radius:12px;border:1px solid var(--linea);background:var(--superficie-2);font-weight:600;transition:border-color .2s,background .2s}
+.precios:hover{border-color:var(--texto-3);background:var(--superficie)}
+.precios svg{width:16px;height:16px;transition:transform .25s cubic-bezier(.22,1,.36,1)}
+.precios:hover svg{transform:translateX(3px)}
+.ver{display:inline-flex;align-items:center;gap:8px;height:46px;padding:0 20px;border-radius:12px;background:var(--amarillo);color:var(--sobre-amarillo)!important;font-weight:700;transition:background .2s}
 .ver:hover{background:oklch(0.86 0.18 104)}
 .ver svg{width:16px;height:16px;transition:transform .25s cubic-bezier(.22,1,.36,1)}
 .ver:hover svg{transform:translate(2px,-2px)}

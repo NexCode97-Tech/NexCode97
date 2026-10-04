@@ -48,7 +48,10 @@ export default function Deploys() {
                   <dt>Tecnología</dt>
                   <dd><span className={styles.etiquetas}>{d.tecnologias.map((t) => <span key={t}>{t}</span>)}</span></dd>
                 </dl>
-                <a className={styles.ver} href={d.url} target="_blank" rel="noopener noreferrer">Ver en vivo <Externo /></a>
+                <div className={styles.acciones}>
+                  <a className={styles.ver} href={d.url} target="_blank" rel="noopener noreferrer">Ver en vivo <Externo /></a>
+                  {d.precios && <a className={styles.precios} href={d.precios}>Ver precios <Flecha /></a>}
+                </div>
               </div>
             </article>
           ))}

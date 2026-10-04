@@ -12,6 +12,7 @@ export const DEPLOYS = [
     alt: "Página de inicio de VeloClub: Tecnología que mueve al club",
     datos: { tipo: "SaaS · App instalable (PWA)", modelo: "Suscripción mensual por club" },
     tecnologias: ["Next.js", "Express", "PostgreSQL", "Clerk", "Cloudinary"],
+    precios: null,
   },
   {
     id: "crm",
@@ -25,6 +26,8 @@ export const DEPLOYS = [
     alt: "Inicio de sesión del CRM de NexCode97 con el astronauta de la marca",
     datos: { tipo: "SaaS multiempresa", modelo: "Suscripción, sin recargo sobre WhatsApp" },
     tecnologias: ["Node.js", "TypeScript", "Prisma", "PostgreSQL", "IA"],
+    /** Página de planes, para el botón «Ver precios». */
+    precios: "/precios",
   },
 ] as const;
 

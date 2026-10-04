@@ -4,8 +4,12 @@ export type Plan = {
   nombre: string;
   para: string;
   mensual: number;
-  anualMes: number;
-  anualTotal: string;
+  /** Lo que se paga en el plan anual (mensual × 12 con 20 % de descuento), ya escrito para mostrar. */
+  anual: string;
+  /** Mensual × 12, tachado junto al precio anual. */
+  anualSinDescuento: string;
+  /** Lo que equivale el anual por mes, redondeado. */
+  equivaleMes: string;
   ahorro: string;
   cta: string;
   prueba?: boolean;
@@ -18,20 +22,20 @@ export type Plan = {
 export const PLANES: Plan[] = [
   {
     id: "starter", nombre: "Starter", para: "Para centralizar la atención de un equipo pequeño en una sola bandeja.",
-    mensual: 99, anualMes: 79, anualTotal: "USD 950 al año", ahorro: "ahorras USD 238", cta: "Empezar prueba gratis", prueba: true,
+    mensual: 99, anual: "950", anualSinDescuento: "USD 1.188", equivaleMes: "USD 79", ahorro: "ahorras USD 238", cta: "Empezar prueba gratis", prueba: true,
     ficha: [{ k: "Usuarios", v: "10" }, { k: "Conversaciones", v: "Ilimitadas" }, { k: "Líneas de WhatsApp", v: "Ilimitadas" }, { k: "Agentes de IA", v: "No incluye", tono: "no" }, { k: "Respuestas de IA", v: "No incluye", tono: "no" }],
     incluye: ["WhatsApp, Instagram, Messenger y chat web", "Bandeja compartida con etiquetas y etapas", "Equipos y subequipos", "Respuestas rápidas y notas internas", "Horario de atención y reparto básico", "Soporte por correo"],
   },
   {
     id: "growth", nombre: "Growth", para: "Para equipos que venden por varios canales y quieren automatizar con IA.",
-    mensual: 259, anualMes: 207, anualTotal: "USD 2.490 al año", ahorro: "ahorras USD 618", cta: "Elegir Growth", destacado: true,
+    mensual: 259, anual: "2.490", anualSinDescuento: "USD 3.108", equivaleMes: "USD 208", ahorro: "ahorras USD 618", cta: "Elegir Growth", destacado: true,
     ficha: [{ k: "Usuarios", v: "20" }, { k: "Conversaciones", v: "Ilimitadas" }, { k: "Líneas de WhatsApp", v: "Ilimitadas" }, { k: "Agentes de IA", v: "2 agentes", tono: "si" }, { k: "Respuestas de IA", v: "Sin límite, con tu cuenta", tono: "si" }],
     base: "Todo lo de Starter, y además:",
     incluye: ["Telegram, TikTok y correo", "Reparto automático y flujos de bienvenida", "Difusiones y embudo de ventas", "2 agentes de IA con tu base de conocimiento", "Transcripción de notas de voz", "Integraciones y API", "Soporte por WhatsApp"],
   },
   {
     id: "business", nombre: "Business", para: "Para operaciones grandes con varios equipos, más IA y control fino.",
-    mensual: 459, anualMes: 366, anualTotal: "USD 4.390 al año", ahorro: "ahorras USD 1.118", cta: "Elegir Business",
+    mensual: 459, anual: "4.390", anualSinDescuento: "USD 5.508", equivaleMes: "USD 366", ahorro: "ahorras USD 1.118", cta: "Elegir Business",
     ficha: [{ k: "Usuarios", v: "Personalizados" }, { k: "Conversaciones", v: "Ilimitadas" }, { k: "Líneas de WhatsApp", v: "Ilimitadas" }, { k: "Agentes de IA", v: "Ilimitados", tono: "si" }, { k: "Respuestas de IA", v: "Sin límite, con tu cuenta", tono: "si" }],
     base: "Todo lo de Growth, y además:",
     incluye: ["Agentes de IA ilimitados, uno por equipo", "Sugerencias y análisis del embudo con IA", "Roles, permisos y usuarios de solo lectura", "Enlaces de pauta con atribución", "Soporte prioritario y configuración guiada"],

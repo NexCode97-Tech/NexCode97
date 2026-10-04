@@ -45,7 +45,7 @@
 .insignia svg{width:17px;height:17px}
 .plan h2{margin:0;font-size:22px;font-weight:700;letter-spacing:-.02em}
 .para{margin:6px 0 0;color:var(--texto-2);font-size:14.5px;line-height:1.55;min-height:46px}
-.precio{margin-top:26px;display:flex;align-items:flex-end;gap:10px}
+.precio{margin-top:26px;display:flex;flex-wrap:wrap;align-items:flex-end;gap:4px 10px}
 .cifra{display:flex;align-items:flex-start;gap:3px;font-weight:800;letter-spacing:-.05em;line-height:.9}
 .cifra small{font-size:20px;font-weight:600;letter-spacing:0;color:var(--texto-2);margin-top:6px}
 .valor{font-size:60px}

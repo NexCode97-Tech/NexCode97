@@ -90,11 +90,11 @@ export function PreciosCrm() {
                 <h2>{p.nombre}</h2>
                 <p className={s.para}>{p.para}</p>
                 <div className={s.precio}>
-                  {anual && <span className={`${s.antes} ${s.num}`}>USD {p.mensual}</span>}
-                  <span className={`${s.cifra} ${s.num}`}><small>$</small><span className={s.valor}>{anual ? p.anualMes : p.mensual}</span></span>
-                  <span className={s.por}>USD<br />al mes</span>
+                  {anual && <span className={`${s.antes} ${s.num}`}>{p.anualSinDescuento}</span>}
+                  <span className={`${s.cifra} ${s.num}`}><small>$</small><span className={s.valor}>{anual ? p.anual : p.mensual}</span></span>
+                  <span className={s.por}>USD<br />{anual ? "al año" : "al mes"}</span>
                 </div>
-                <p className={`${s.notaPrecio} ${s.num}`}>{anual ? <>{p.anualTotal} · <b>{p.ahorro}</b></> : "Facturado cada mes"}</p>
+                <p className={`${s.notaPrecio} ${s.num}`}>{anual ? <>Equivale a {p.equivaleMes} al mes · <b>{p.ahorro}</b></> : "Facturado cada mes"}</p>
                 <a className={s.cta} href={REGISTRO}>{p.cta} <Flecha /></a>
                 {p.prueba && <p className={s.letra}>14 días gratis · sin tarjeta</p>}
                 <dl className={s.ficha}>

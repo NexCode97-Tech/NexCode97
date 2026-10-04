@@ -22,7 +22,7 @@ export const DEPLOYS = [
       "WhatsApp, Instagram, Messenger, Telegram, TikTok, correo y chat web en una sola bandeja compartida, con equipos, reparto automático, flujos y agentes de IA que responden con la información de cada empresa.",
     url: "https://www.nexcode97.com/crm/",
     dominio: "nexcode97.com/crm",
-    imagen: "/deploys/crm.jpg",
+    imagen: "/deploys/crm-bandeja.jpg",
     alt: "Bandeja del CRM de NexCode97: conversaciones, chat con el agente de IA y ficha del contacto (datos de ejemplo)",
     datos: { tipo: "SaaS multiempresa", modelo: "Suscripción, sin recargo sobre WhatsApp" },
     tecnologias: ["Node.js", "TypeScript", "Prisma", "PostgreSQL", "IA"],

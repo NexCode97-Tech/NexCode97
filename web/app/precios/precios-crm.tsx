@@ -4,7 +4,9 @@ import { useEffect, useRef, useState } from "react";
 import { COMPARATIVA, PLANES, PREGUNTAS } from "@/lib/precios-crm";
 import s from "./precios.module.css";
 
-const REGISTRO = "/crm/entrar";
+const REGISTRO = "/crm/entrar?registro=1";
+/** Growth y Business: crear la cuenta y, al entrar, el CRM lleva al pago de ese plan y periodo (crm/pantalla/js/70-plan.js). */
+const pagar = (plan: string, anual: boolean) => `${REGISTRO}&pagar=${plan}&periodo=${anual ? "anual" : "mensual"}`;
 const VENTAS = "https://wa.me/573006359008";
 
 const Ok = () => <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" /></svg>;
@@ -95,7 +97,7 @@ export function PreciosCrm() {
                   <span className={s.por}>USD<br />{anual ? "al año" : "al mes"}</span>
                 </div>
                 <p className={`${s.notaPrecio} ${s.num}`}>{anual ? <>Equivale a {p.equivaleMes} al mes · <b>{p.ahorro}</b></> : "Facturado cada mes"}</p>
-                <a className={s.cta} href={REGISTRO}>{p.cta} <Flecha /></a>
+                <a className={s.cta} href={p.prueba ? REGISTRO : pagar(p.id, anual)}>{p.cta} <Flecha /></a>
                 {p.prueba && <p className={s.letra}>14 días gratis · sin tarjeta</p>}
                 <dl className={s.ficha}>
                   {p.ficha.map((f) => <div key={f.k}><dt>{f.k}</dt><dd className={f.tono ? s[f.tono] : undefined}>{f.v}</dd></div>)}

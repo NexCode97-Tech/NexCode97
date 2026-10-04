@@ -22,7 +22,9 @@
 .inverso .marco{order:2}
 .marco{display:block;border-radius:14px;overflow:hidden;border:1px solid var(--linea);background:var(--superficie);box-shadow:0 40px 80px -48px oklch(0.94 0.2 105 / .28),0 24px 48px -24px oklch(0.05 0.01 95 / .8)}
 .chrome{height:38px;display:flex;align-items:center;gap:8px;padding:0 14px;border-bottom:1px solid var(--linea);background:var(--superficie-2)}
-.chrome i{width:10px;height:10px;border-radius:50%;background:var(--linea)}
+.chrome i{width:11px;height:11px;border-radius:50%;background:#ff5f57}
+.chrome i:nth-child(2){background:#febc2e}
+.chrome i:nth-child(3){background:#28c840}
 .url{margin-left:10px;flex:1;min-width:0;height:24px;border-radius:7px;background:var(--fondo-2);display:flex;align-items:center;gap:7px;padding:0 10px;font-size:12px;color:var(--texto-2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .url svg{width:12px;height:12px;flex:none;color:var(--verde)}
 .marco img{display:block;width:100%;height:auto;aspect-ratio:16/10;object-fit:cover;object-position:top}

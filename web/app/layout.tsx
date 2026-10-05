@@ -36,20 +36,12 @@ export const metadata: Metadata = {
     siteName: "NexCode97",
     locale: "es_CO",
     type: "website",
-    images: [
-      {
-        url: "/logo-nexcode97.png",
-        width: 1200,
-        height: 630,
-        alt: "NexCode97 - Desarrollo de software a la medida",
-      },
-    ],
+    // La imagen la pone cada página con su opengraph-image (lib/imagen-compartir.tsx).
   },
   twitter: {
-    card: "summary",
+    card: "summary_large_image",
     title: "NexCode97 | Cada negocio merece su propio sistema",
     description: "Desarrollo de software a la medida.",
-    images: ["/logo-nexcode97.png"],
   },
 };
 

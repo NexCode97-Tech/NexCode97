@@ -3,7 +3,7 @@ import { SiteFooter } from "@/components/site-footer";
 import { PLANES, PREGUNTAS } from "@/lib/precios-crm";
 import { PreciosCrm } from "./precios-crm";
 
-const TITULO = "Precios del CRM con WhatsApp | NexCode97";
+const TITULO = "Precios del CRM | NexCode97";
 const DESCRIPCION = `CRM multicanal desde USD ${Math.min(...PLANES.map((p) => p.mensual))} al mes: WhatsApp, Instagram, Messenger y correo en una bandeja. WhatsApp e IA sin recargo y 10 días gratis.`;
 
 export const metadata: Metadata = {

@@ -9,7 +9,7 @@ export const metadata: Metadata = {
   description: "Software que construimos en NexCode97 y que hoy está en producción: VeloClub y NexCode97 CRM.",
   alternates: { canonical: "/deploys" },
   openGraph: { title: "Deploys | NexCode97", description: "Software que construimos en NexCode97 y que hoy está en producción: VeloClub y NexCode97 CRM.", url: "/deploys", siteName: "NexCode97", locale: "es_CO", type: "website" },
-  twitter: { card: "summary_large_image", title: "Deploys | NexCode97", description: "Software que construimos en NexCode97 y que hoy está en producción: VeloClub y NexCode97 CRM." },
+  twitter: { card: "summary", title: "Deploys | NexCode97", description: "Software que construimos en NexCode97 y que hoy está en producción: VeloClub y NexCode97 CRM." },
 };
 
 function Externo() {

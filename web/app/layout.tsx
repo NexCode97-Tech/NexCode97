@@ -39,7 +39,7 @@ export const metadata: Metadata = {
     // La imagen la pone cada página con su opengraph-image (lib/imagen-compartir.tsx).
   },
   twitter: {
-    card: "summary_large_image",
+    card: "summary",
     title: "NexCode97 | Cada negocio merece su propio sistema",
     description: "Desarrollo de software a la medida.",
   },

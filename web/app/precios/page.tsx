@@ -11,7 +11,7 @@ export const metadata: Metadata = {
   description: DESCRIPCION,
   alternates: { canonical: "/precios" },
   openGraph: { title: TITULO, description: DESCRIPCION, url: "/precios", siteName: "NexCode97", locale: "es_CO", type: "website" },
-  twitter: { card: "summary_large_image", title: TITULO, description: DESCRIPCION },
+  twitter: { card: "summary", title: TITULO, description: DESCRIPCION },
 };
 
 /** Para Google: el CRM con un precio por plan (mensual, en dólares) y las preguntas frecuentes de la página. */

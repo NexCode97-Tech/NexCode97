@@ -13,11 +13,11 @@ export async function imagenCompartir(subtitulo: string) {
   const logo = `data:image/png;base64,${(await readFile(join(process.cwd(), "public/icon-512.png"))).toString("base64")}`;
   return new ImageResponse(
     (
-      <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "#09090e", gap: 30 }}>
+      <div style={{ width: "100%", height: "100%", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", background: "#09090e", gap: 24 }}>
         {/* eslint-disable-next-line @next/next/no-img-element -- ImageResponse dibuja <img>, no next/image */}
-        <img src={logo} width={300} height={300} alt="" />
-        <div style={{ display: "flex", fontSize: 84, fontWeight: 700, color: "#f4f4f6", letterSpacing: -1 }}>NexCode97</div>
-        <div style={{ display: "flex", fontSize: 38, color: "#FFF200" }}>{subtitulo}</div>
+        <img src={logo} width={420} height={420} alt="" />
+        <div style={{ display: "flex", fontSize: 100, fontWeight: 700, color: "#f4f4f6", letterSpacing: -1 }}>NexCode97</div>
+        <div style={{ display: "flex", fontSize: 46, color: "#FFF200" }}>{subtitulo}</div>
       </div>
     ),
     TAMANO_COMPARTIR,

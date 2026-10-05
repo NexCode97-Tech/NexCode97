@@ -28,14 +28,14 @@ export const PLANES: Plan[] = [
   },
   {
     id: "growth", nombre: "Growth", para: "Para equipos que venden por varios canales y quieren automatizar con IA.",
-    mensual: 259, anual: "2.490", anualSinDescuento: "USD 3.108", equivaleMes: "USD 208", ahorro: "ahorras USD 618", cta: "Elegir Growth", destacado: true,
+    mensual: 179, anual: "1.718", anualSinDescuento: "USD 2.148", equivaleMes: "USD 143", ahorro: "ahorras USD 430", cta: "Elegir Growth", destacado: true,
     ficha: [{ k: "Usuarios", v: "20" }, { k: "Conversaciones", v: "Ilimitadas" }, { k: "Líneas de WhatsApp", v: "Ilimitadas" }, { k: "Agentes de IA", v: "2 agentes", tono: "si" }, { k: "Respuestas de IA", v: "Sin límite, con tu cuenta", tono: "si" }],
     base: "Todo lo de Starter, y además:",
     incluye: ["Telegram, TikTok y correo", "Reparto automático y flujos de bienvenida", "Difusiones y embudo de ventas", "2 agentes de IA con tu base de conocimiento", "Transcripción de notas de voz", "Integraciones y API", "Soporte por WhatsApp"],
   },
   {
     id: "business", nombre: "Business", para: "Para operaciones grandes con varios equipos, más IA y control fino.",
-    mensual: 459, anual: "4.390", anualSinDescuento: "USD 5.508", equivaleMes: "USD 366", ahorro: "ahorras USD 1.118", cta: "Elegir Business",
+    mensual: 299, anual: "2.870", anualSinDescuento: "USD 3.588", equivaleMes: "USD 239", ahorro: "ahorras USD 718", cta: "Elegir Business",
     ficha: [{ k: "Usuarios", v: "Personalizados" }, { k: "Conversaciones", v: "Ilimitadas" }, { k: "Líneas de WhatsApp", v: "Ilimitadas" }, { k: "Agentes de IA", v: "Ilimitados", tono: "si" }, { k: "Respuestas de IA", v: "Sin límite, con tu cuenta", tono: "si" }],
     base: "Todo lo de Growth, y además:",
     incluye: ["Agentes de IA ilimitados, uno por equipo", "Sugerencias y análisis del embudo con IA", "Roles, permisos y usuarios de solo lectura", "Enlaces de pauta con atribución", "Soporte prioritario y configuración guiada"],

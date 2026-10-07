@@ -98,7 +98,7 @@ export function PreciosCrm() {
                 </div>
                 <p className={`${s.notaPrecio} ${s.num}`}>{anual ? <>Equivale a {p.equivaleMes} al mes · <b>{p.ahorro}</b></> : "Facturado cada mes"}</p>
                 <a className={s.cta} href={p.prueba ? REGISTRO : pagar(p.id, anual)}>{p.cta} <Flecha /></a>
-                {p.prueba && <p className={s.letra}>10 días gratis · sin tarjeta</p>}
+                {p.prueba && <p className={s.letra}>10 días gratis con todo · sin tarjeta</p>}
                 <dl className={s.ficha}>
                   {p.ficha.map((f) => <div key={f.k}><dt>{f.k}</dt><dd className={f.tono ? s[f.tono] : undefined}>{f.v}</dd></div>)}
                 </dl>
@@ -197,7 +197,7 @@ export function PreciosCrm() {
           <section className={s.cierre} aria-label="Empezar">
             <div>
               <h2>Atiende todos tus canales desde hoy.</h2>
-              <p>Prueba Starter 10 días gratis, sin tarjeta. Conectas tu WhatsApp en minutos.</p>
+              <p>Prueba 10 días gratis con todas las funciones, sin tarjeta. Conectas tu WhatsApp en minutos.</p>
             </div>
             <a className={s.cta} href={REGISTRO}>Probar Starter gratis <Flecha /></a>
           </section>

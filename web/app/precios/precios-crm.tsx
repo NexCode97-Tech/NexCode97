@@ -1,12 +1,32 @@
 "use client";
 
 import { useEffect, useRef, useState } from "react";
-import { COMPARATIVA, PLANES, PREGUNTAS } from "@/lib/precios-crm";
+import { COMPARATIVA, PLANES, PREGUNTAS, USUARIOS_MIN, precioPorUsuarios } from "@/lib/precios-crm";
 import s from "./precios.module.css";
 
 const REGISTRO = "/crm/entrar?registro=1";
 /** Growth y Business: crear la cuenta y, al entrar, el CRM lleva al pago de ese plan y periodo (crm/pantalla/js/70-plan.js). */
-const pagar = (plan: string, anual: boolean) => `${REGISTRO}&pagar=${plan}&periodo=${anual ? "anual" : "mensual"}`;
+const pagar = (plan: string, anual: boolean, usuarios?: number) => `${REGISTRO}&pagar=${plan}&periodo=${anual ? "anual" : "mensual"}${usuarios ? `&usuarios=${usuarios}` : ""}`;
+const USUARIOS_MAX = 20;
+const usd = (v: number) => `USD ${v.toLocaleString("es-CO")}`;
+
+/** El precio cuenta hasta el valor nuevo (ease-out-quart) en vez de saltar; sin animación si se pide menos movimiento. */
+function useContador(fin: number, lento: boolean) {
+  const [v, setV] = useState(fin);
+  const desde = useRef(fin);
+  useEffect(() => {
+    if (matchMedia("(prefers-reduced-motion: reduce)").matches) { desde.current = fin; setV(fin); return; }
+    const ini = desde.current, t0 = performance.now(), dur = lento ? 700 : 350;
+    let raf = 0;
+    const paso = (t: number) => { const k = Math.min(1, (t - t0) / dur), e = 1 - Math.pow(1 - k, 4), x = Math.round(ini + (fin - ini) * e); desde.current = x; setV(x); if (k < 1) raf = requestAnimationFrame(paso); };
+    raf = requestAnimationFrame(paso);
+    return () => cancelAnimationFrame(raf);
+  }, [fin, lento]);
+  return v;
+}
+
+/** Texto que entra deslizando cuando cambia. */
+const Desliza = ({ t, className }: { t: string; className?: string }) => <span key={t} className={`${s.desliza} ${className ?? ""}`}>{t}</span>;
 const VENTAS = "https://wa.me/573006359008";
 
 const Ok = () => <svg viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5" fill="none" stroke="currentColor" strokeWidth="2.3" strokeLinecap="round" strokeLinejoin="round" /></svg>;
@@ -60,10 +80,18 @@ function useConfeti() {
 
 export function PreciosCrm() {
   const [anual, setAnual] = useState(false);
+  const [usuarios, setUsuarios] = useState(USUARIOS_MIN);
+  const [cambioAnual, setCambioAnual] = useState(false);
   const interruptor = useRef<HTMLButtonElement>(null);
   const { lienzo, lanzar } = useConfeti();
+  const calc = precioPorUsuarios(usuarios);
+  const elegido = PLANES.find((p) => p.id === calc.plan)!;
+  const cifra = useContador(anual ? Math.round(calc.mensual * 12 * 0.8) : calc.mensual, cambioAnual);
+  const detalle = anual ? `Equivale a ${usd(Math.round(calc.mensual * 0.8))} al mes` : calc.extra ? `15 incluidos + ${calc.extra} extra a USD 20` : `${usuarios} usuarios incluidos`;
+  const pct = ((usuarios - USUARIOS_MIN) / (USUARIOS_MAX - USUARIOS_MIN)) * 100;
 
   const cambiar = (a: boolean) => {
+    setCambioAnual(a !== anual);
     setAnual(a);
     if (a && !anual && interruptor.current) lanzar(interruptor.current);
   };
@@ -76,22 +104,46 @@ export function PreciosCrm() {
           <header className={s.cab}>
             <h1>Un precio fijo por el CRM. <span>Lo demás, directo y sin recargo.</span></h1>
             <p>Pagas solo por la plataforma. WhatsApp se lo pagas a Meta y la IA a su proveedor, cada uno con tu propia cuenta y a su tarifa oficial: sin recargos, sin saldos que se agotan y sin límite de conversaciones.</p>
-            <div className={s.interruptor}>
-              <button type="button" className={`${s.lbl} ${!anual ? s.activo : ""}`} onClick={() => cambiar(false)}>Mensual</button>
-              <button type="button" role="switch" aria-checked={anual} aria-label="Pagar anual con 20 % de descuento" className={s.sw} ref={interruptor} onClick={() => cambiar(!anual)}>
-                <span className={s.perilla} />
-              </button>
-              <button type="button" className={`${s.lbl} ${anual ? s.activo : ""}`} onClick={() => cambiar(true)}>Anual <span className={s.menos}>−20 %</span></button>
-            </div>
           </header>
+
+          <section className={s.calc} aria-label="Calcula tu plan">
+            <div>
+              <h2 className={s.calcT}>¿Cuántas personas de tu equipo usarán el CRM?</h2>
+              <div className={s.cuantos}><b className={s.num}>{usuarios === USUARIOS_MAX ? `${USUARIOS_MAX}+` : usuarios}</b><span>usuarios</span></div>
+              <input className={s.rango} type="range" min={USUARIOS_MIN} max={USUARIOS_MAX} value={usuarios} aria-label="Usuarios" aria-valuetext={`${usuarios} usuarios`}
+                style={{ ["--p" as string]: `${pct}%` }} onChange={(e) => { setCambioAnual(false); setUsuarios(Number(e.target.value)); }} />
+              <div className={s.marcas}>
+                <div className={calc.plan === "starter" ? s.on : undefined}>3 a 5 · Starter</div>
+                <div className={calc.plan === "growth" ? s.on : undefined}>6 a 10 · Growth</div>
+                <div className={calc.plan === "business" && !calc.extra ? s.on : undefined}>11 a 15 · Business</div>
+                <div className={calc.extra ? s.on : undefined}>16+ · Business</div>
+              </div>
+              <div className={s.interruptor}>
+                <button type="button" className={`${s.lbl} ${!anual ? s.activo : ""}`} onClick={() => cambiar(false)}>Mensual</button>
+                <button type="button" role="switch" aria-checked={anual} aria-label="Pagar anual con 20 % de descuento" className={s.sw} ref={interruptor} onClick={() => cambiar(!anual)}>
+                  <span className={s.perilla} />
+                </button>
+                <button type="button" className={`${s.lbl} ${anual ? s.activo : ""}`} onClick={() => cambiar(true)}>Anual <span className={s.menos}>−20 %</span></button>
+              </div>
+            </div>
+            <div className={s.res}>
+              <small>Tu plan</small>
+              <Desliza t={elegido.nombre} className={s.resPlan} />
+              <div className={s.resPx}><b className={s.num}>{usd(cifra)}</b><Desliza t={anual ? "al año" : "al mes"} /></div>
+              <Desliza t={detalle} className={s.resDet} />
+              <a className={s.ctaCalc} href={elegido.prueba ? REGISTRO : pagar(elegido.id, anual, usuarios)}>{elegido.cta} <Flecha /></a>
+            </div>
+          </section>
 
           <section className={s.planes} aria-label="Planes">
             {PLANES.map((p) => (
-              <article key={p.id} className={`${s.plan} ${p.destacado ? s.estrella : ""}`}>
+              <article key={p.id} className={`${s.plan} ${p.id === calc.plan ? s.estrella : s.apagado}`}>
                 {p.destacado && <span className={s.insignia}><Estrella />Más elegido</span>}
                 <h2>{p.nombre}</h2>
                 <p className={s.para}>{p.para}</p>
+                <p className={s.rangoPlan}>{p.rango}</p>
                 <div className={s.precio}>
+                  <span className={s.por}>desde</span>
                   {anual && <span className={`${s.antes} ${s.num}`}>{p.anualSinDescuento}</span>}
                   <span className={`${s.cifra} ${s.num}`}><small>$</small><span className={s.valor}>{anual ? p.anual : p.mensual}</span></span>
                   <span className={s.por}>USD<br />{anual ? "al año" : "al mes"}</span>
@@ -124,7 +176,7 @@ export function PreciosCrm() {
             <p className={s.sub}>Todos incluyen conversaciones y líneas de WhatsApp ilimitadas. La diferencia está en el tamaño del equipo, la automatización y la IA.</p>
             <div className={s.tablaCaja}>
               <table>
-                <thead><tr><th scope="col">Función</th>{PLANES.map((p) => <th scope="col" key={p.id} className={p.destacado ? s.marcado : undefined}>{p.nombre}<small className={s.num}>USD {p.mensual}</small></th>)}</tr></thead>
+                <thead><tr><th scope="col">Función</th>{PLANES.map((p) => <th scope="col" key={p.id} className={p.destacado ? s.marcado : undefined}>{p.nombre}<small className={s.num}>desde USD {p.mensual}</small></th>)}</tr></thead>
                 <tbody>
                   {COMPARATIVA.map((g) => [
                     <tr className={s.grupo} key={g.grupo}><th colSpan={4} scope="colgroup">{g.grupo}</th></tr>,

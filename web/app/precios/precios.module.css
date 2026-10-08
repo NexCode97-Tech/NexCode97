@@ -37,6 +37,34 @@
 .sw[aria-checked="true"]{background:var(--amarillo)!important;border-color:var(--amarillo)!important}
 .sw[aria-checked="true"] .perilla{transform:translateX(26px);background:var(--sobre-amarillo)}
 
+/* Barra de usuarios (8-oct, maqueta aprobada): el plan y el precio salen de cuántas personas usan el CRM */
+.calc{background:var(--fondo-2);border:1px solid var(--linea);border-radius:20px;padding:28px;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:20px 40px;align-items:center;margin-bottom:22px}
+.calcT{margin:0;font-size:15px;font-weight:600;color:var(--texto-2)}
+.cuantos{display:flex;align-items:baseline;gap:10px;margin:4px 0 18px}
+.cuantos b{font-size:44px;font-weight:800;letter-spacing:-.04em;line-height:1}
+.cuantos span{color:var(--texto-2)}
+.rango{-webkit-appearance:none;appearance:none;width:100%;height:8px;border-radius:999px;background:linear-gradient(90deg,var(--amarillo) var(--p),var(--superficie-2) var(--p));outline:none;margin:0;cursor:pointer}
+.rango::-webkit-slider-thumb{-webkit-appearance:none;width:28px;height:28px;border-radius:50%;background:var(--texto);border:4px solid var(--amarillo);cursor:grab;box-shadow:0 4px 14px oklch(0.1 0.01 95 / .55)}
+.rango::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--texto);border:4px solid var(--amarillo);cursor:grab}
+.marcas{display:grid;grid-template-columns:3fr 5fr 5fr 5fr;margin:12px 0 18px;font-size:12.5px;color:var(--texto-3)}
+.marcas div{border-left:1px solid var(--linea);padding-left:8px;transition:color .3s}
+.marcas div.on{color:var(--texto)}
+.calc .interruptor{width:max-content}
+.res{min-width:270px;background:var(--superficie);border:1px solid var(--linea);border-radius:16px;padding:20px 22px;display:flex;flex-direction:column;align-items:flex-start}
+.res small{font-size:12.5px;color:var(--texto-3)}
+.resPlan{font-size:20px;font-weight:700;margin:2px 0 8px}
+.resPx{display:flex;align-items:flex-end;gap:6px}
+.resPx b{font-size:48px;font-weight:800;letter-spacing:-.05em;line-height:.9}
+.resPx span{color:var(--texto-3);font-size:14px;padding-bottom:4px}
+.resDet{margin:10px 0 14px;font-size:13px;color:var(--texto-2)}
+.ctaCalc{align-self:stretch;height:46px;border-radius:12px;font-weight:600;display:flex;align-items:center;justify-content:center;gap:8px;background:var(--amarillo);color:var(--sobre-amarillo)!important}
+.ctaCalc svg{width:16px;height:16px}
+.desliza{display:inline-block;animation:desliza .45s cubic-bezier(.22,1,.36,1)}
+@keyframes desliza{from{transform:translateY(-10px);opacity:0}}
+.rangoPlan{margin:10px 0 0;font-size:13px;font-weight:600;color:var(--texto-2)}
+.plan{transition:opacity .3s,border-color .3s,box-shadow .3s,background .3s}
+.plan.apagado{opacity:.55}
+
 /* Planes */
 .planes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px;padding-bottom:16px}
 .plan{position:relative;display:flex;flex-direction:column;border-radius:var(--r);background:var(--fondo-2);border:1px solid var(--linea);padding:30px 28px 28px;min-width:0}
@@ -146,6 +174,7 @@
 .legal{padding-block:28px 56px;margin:0;text-align:center;color:var(--texto-3);font-size:13px}
 
 @media (max-width:1000px){
+  .calc{grid-template-columns:1fr}.res{min-width:0}
   .cab{grid-template-columns:1fr;align-items:start}
   .interruptor{justify-self:start}
   .planes{grid-template-columns:1fr;max-width:560px}
@@ -164,4 +193,4 @@
   .confianza > div + div{border-left:0;border-top:1px solid var(--linea)}
   .valor{font-size:52px}
 }
-@media (prefers-reduced-motion:reduce){.raiz *{transition:none!important}}
+@media (prefers-reduced-motion:reduce){.raiz *{transition:none!important;animation:none!important}}

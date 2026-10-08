@@ -23,20 +23,20 @@ export const PLANES: Plan[] = [
   {
     id: "starter", nombre: "Starter", para: "Para centralizar la atención de un equipo pequeño en una sola bandeja.",
     mensual: 99, anual: "950", anualSinDescuento: "USD 1.188", equivaleMes: "USD 79", ahorro: "ahorras USD 238", cta: "Empezar prueba gratis", prueba: true,
-    ficha: [{ k: "Espacios de trabajo", v: "1" }, { k: "Usuarios", v: "10" }, { k: "Conversaciones", v: "Ilimitadas" }, { k: "Líneas de WhatsApp", v: "Ilimitadas" }, { k: "Agentes de IA", v: "No incluye", tono: "no" }, { k: "Respuestas de IA", v: "No incluye", tono: "no" }],
+    ficha: [{ k: "Espacios de trabajo", v: "1" }, { k: "Usuarios", v: "5" }, { k: "Conversaciones", v: "Ilimitadas" }, { k: "Líneas de WhatsApp", v: "Ilimitadas" }, { k: "Agentes de IA", v: "No incluye", tono: "no" }, { k: "Respuestas de IA", v: "No incluye", tono: "no" }],
     incluye: ["WhatsApp, Instagram, Messenger y chat web", "Bandeja compartida con etiquetas y etapas", "Equipos y subequipos", "Respuestas rápidas y notas internas", "Horario de atención y reparto básico", "Soporte por correo"],
   },
   {
     id: "growth", nombre: "Growth", para: "Para equipos que venden por varios canales y quieren automatizar con IA.",
     mensual: 179, anual: "1.718", anualSinDescuento: "USD 2.148", equivaleMes: "USD 143", ahorro: "ahorras USD 430", cta: "Elegir Growth", destacado: true,
-    ficha: [{ k: "Espacios de trabajo", v: "3" }, { k: "Usuarios", v: "20" }, { k: "Conversaciones", v: "Ilimitadas" }, { k: "Líneas de WhatsApp", v: "Ilimitadas" }, { k: "Agentes de IA", v: "2 agentes", tono: "si" }, { k: "Respuestas de IA", v: "Sin límite, con tu cuenta", tono: "si" }],
+    ficha: [{ k: "Espacios de trabajo", v: "3" }, { k: "Usuarios", v: "10" }, { k: "Conversaciones", v: "Ilimitadas" }, { k: "Líneas de WhatsApp", v: "Ilimitadas" }, { k: "Agentes de IA", v: "2 agentes", tono: "si" }, { k: "Respuestas de IA", v: "Sin límite, con tu cuenta", tono: "si" }],
     base: "Todo lo de Starter, y además:",
     incluye: ["Telegram, TikTok y correo", "Reparto automático y flujos de bienvenida", "Difusiones y embudo de ventas", "2 agentes de IA con tu base de conocimiento", "Transcripción de notas de voz", "Integraciones y API", "Soporte por WhatsApp"],
   },
   {
     id: "business", nombre: "Business", para: "Para operaciones grandes con varios equipos, más IA y control fino.",
     mensual: 299, anual: "2.870", anualSinDescuento: "USD 3.588", equivaleMes: "USD 239", ahorro: "ahorras USD 718", cta: "Elegir Business",
-    ficha: [{ k: "Espacios de trabajo", v: "6" }, { k: "Usuarios", v: "Personalizados" }, { k: "Conversaciones", v: "Ilimitadas" }, { k: "Líneas de WhatsApp", v: "Ilimitadas" }, { k: "Agentes de IA", v: "Ilimitados", tono: "si" }, { k: "Respuestas de IA", v: "Sin límite, con tu cuenta", tono: "si" }],
+    ficha: [{ k: "Espacios de trabajo", v: "6" }, { k: "Usuarios", v: "15 + USD 20 por extra" }, { k: "Conversaciones", v: "Ilimitadas" }, { k: "Líneas de WhatsApp", v: "Ilimitadas" }, { k: "Agentes de IA", v: "Ilimitados", tono: "si" }, { k: "Respuestas de IA", v: "Sin límite, con tu cuenta", tono: "si" }],
     base: "Todo lo de Growth, y además:",
     incluye: ["Agentes de IA ilimitados, uno por equipo", "Sugerencias y análisis del embudo con IA", "Roles, permisos y usuarios de solo lectura", "Enlaces de pauta con atribución", "Soporte prioritario y configuración guiada"],
   },
@@ -46,7 +46,8 @@ export const PLANES: Plan[] = [
 export const COMPARATIVA: { grupo: string; filas: [string, boolean | string, boolean | string, boolean | string][] }[] = [
   { grupo: "Equipo y bandeja", filas: [
     ["Espacios de trabajo (una empresa cada uno)", "1", "3", "6"],
-    ["Usuarios incluidos (entre todos los espacios)", "10", "20", "Personalizados"],
+    ["Usuarios incluidos (entre todos los espacios)", "5", "10", "15"],
+    ["Usuario adicional", false, false, "USD 20 al mes"],
     ["Conversaciones", "Ilimitadas", "Ilimitadas", "Ilimitadas"],
     ["Bandeja compartida, etiquetas y etapas", true, true, true],
     ["Equipos y subequipos", true, true, true],
@@ -79,7 +80,7 @@ export const COMPARATIVA: { grupo: string; filas: [string, boolean | string, boo
 ];
 
 export const PREGUNTAS: [string, string][] = [
-  ["¿Qué cuenta como usuario?", "Cada persona de tu equipo que entra al CRM con su propio correo. Los contactos y clientes con los que conversas no cuentan como usuarios."],
+  ["¿Qué cuenta como usuario?", "Cada persona de tu equipo que entra al CRM con su propio correo. Los contactos y clientes con los que conversas no cuentan como usuarios. Starter incluye 5, Growth 10 y Business 15; en Business, cada usuario adicional cuesta USD 20 al mes."],
   ["¿Las conversaciones de verdad son ilimitadas?", "Sí. El CRM no cobra ni limita conversaciones ni líneas. Lo único que pagas por mensaje es lo que Meta cobra por WhatsApp, directo a tu cuenta."],
   ["¿Cómo se paga la IA?", "Desde el plan Growth conectas tu propia cuenta del proveedor de IA y él te cobra directo, según lo que uses. Una respuesta del agente suele costar alrededor de un centavo de dólar. NexCode97 no cobra recargo ni vende créditos, y te ayudamos a conectarla en minutos."],
   ["¿Puedo cambiar de plan o cancelar?", "Cuando quieras, desde Ajustes. Si subes de plan se cobra solo la diferencia; si cancelas, el plan sigue activo hasta el final del periodo pagado."],

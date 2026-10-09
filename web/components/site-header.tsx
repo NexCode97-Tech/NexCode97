@@ -1,6 +1,8 @@
 'use client';
 import React from 'react';
 import { cn } from '@/lib/utils';
+import { usePathname } from 'next/navigation';
+import { Bricolage_Grotesque } from 'next/font/google';
 import { createPortal } from 'react-dom';
 import { motion, AnimatePresence, useReducedMotion } from 'framer-motion';
 import { MenuToggleIcon } from '@/components/ui/menu-toggle-icon';
@@ -29,6 +31,23 @@ import {
   SiFramer, SiReactquery, SiPnpm,
 } from 'react-icons/si';
 import type { LucideIcon } from 'lucide-react';
+
+const bricolage = Bricolage_Grotesque({ subsets: ['latin'], weight: ['800'], display: 'swap' });
+
+/** La marca del CRM (Wali) en /precios: la burbuja aprobada (8-oct) y la palabra «wali». */
+function LogoWali() {
+  return (
+    <span className="flex items-center gap-2" aria-label="Wali">
+      <svg viewBox="0 0 100 100" className="h-9 w-9" aria-hidden="true">
+        <mask id="wali-hdr"><rect width="100" height="100" fill="#fff" /><circle cx="79" cy="17" r="9.2" fill="#000" /></mask>
+        <path mask="url(#wali-hdr)" d="M31 10h38a18 18 0 0 1 18 18v30a18 18 0 0 1-18 18H45L31.5 90.2Q26 96 26 88V75.1A18 18 0 0 1 13 58V28A18 18 0 0 1 31 10z" fill="#FFD21F" />
+        <text x="50" y="60.5" textAnchor="middle" className={bricolage.className} fontWeight="800" fontSize="57" letterSpacing="-2" fill="#17140F">w</text>
+        <circle cx="79" cy="17" r="6.5" fill="#FF4D1A" />
+      </svg>
+      <span className={bricolage.className} style={{ fontWeight: 800, fontSize: 28, letterSpacing: '-0.02em', color: '#FFF8E6', lineHeight: 1 }}>wali</span>
+    </span>
+  );
+}
 import Image from 'next/image';
 
 type LinkItem = {
@@ -106,6 +125,8 @@ function MobileMenuPortal({ open, activeTab, setActiveTab, onClose }: {
   setActiveTab: (t: Tab) => void;
   onClose: () => void;
 }) {
+  const wali = (usePathname() ?? '').startsWith('/precios');
+  const amarillo = wali ? '#FFD21F' : '#FFF200';
   const prefersReduced = useReducedMotion();
 
   const iosEase = [0.32, 0.72, 0, 1] as [number, number, number, number];
@@ -306,7 +327,7 @@ function MobileMenuPortal({ open, activeTab, setActiveTab, onClose }: {
                 window.dispatchEvent(new Event('open:contact-form'));
               }}
               className="w-full rounded-full py-3.5 text-sm font-bold cursor-pointer transition-opacity hover:opacity-90 active:scale-[0.97]"
-              style={{ background: '#FFF200', color: '#09090e' }}
+              style={{ background: amarillo, color: '#09090e' }}
             >
               Comenzar proyecto
             </button>
@@ -344,6 +365,8 @@ function ListItem({ title, description, icon: Icon, href, className }: LinkItem 
 }
 
 export function SiteHeader() {
+  const wali = (usePathname() ?? '').startsWith('/precios');
+  const amarillo = wali ? '#FFD21F' : '#FFF200';
   const [open, setOpen] = React.useState(false);
   const [activeTab, setActiveTab] = React.useState<Tab>('Servicios');
   const scrolled = useScroll(10);
@@ -377,14 +400,14 @@ export function SiteHeader() {
 
         {/* Logo */}
         <a href="/" className="flex items-center rounded-lg p-1 transition-opacity hover:opacity-80">
-          <Image
+          {wali ? <LogoWali /> : <Image
             src="/logo-nuevo.png"
             alt="NexCode97"
             width={160}
             height={40}
             className="h-9 w-auto object-contain"
             priority
-          />
+          />}
         </a>
 
         {/* Nav desktop — solo se monta en pantallas md+ para evitar conflicto de foco en móvil */}
@@ -392,7 +415,7 @@ export function SiteHeader() {
           <NavigationMenuList>
             <NavigationMenuItem>
               <NavigationMenuTrigger>
-                <span style={{ color: '#FFF200' }}>
+                <span style={{ color: amarillo }}>
                   Nex
                 </span>
                 Technology
@@ -512,7 +535,7 @@ export function SiteHeader() {
         <div className="flex items-center gap-2">
           <div className="hidden md:flex items-center gap-2">
             <a href="/crm/" className="rounded-full px-4 py-2 text-sm font-semibold transition-all duration-200 hover:opacity-90 cursor-pointer"
-              style={{ background: '#FFF200', color: '#09090e' }}>
+              style={{ background: amarillo, color: '#09090e' }}>
               Ingresar
             </a>
           </div>
@@ -520,7 +543,7 @@ export function SiteHeader() {
           <a
             href="/crm/"
             className="md:hidden flex items-center justify-center w-11 h-11 rounded-xl transition-all duration-200 hover:opacity-90 cursor-pointer"
-            style={{ background: '#FFF200', color: '#09090e' }}
+            style={{ background: amarillo, color: '#09090e' }}
             aria-label="Ingresar al CRM"
           >
             <svg xmlns="http://www.w3.org/2000/svg" className="size-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

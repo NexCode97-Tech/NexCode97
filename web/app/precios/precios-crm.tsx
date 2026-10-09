@@ -37,7 +37,7 @@ const Estrella = () => <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M11.
 const Icono = ({ d }: { d: string }) => <svg viewBox="0 0 24 24" aria-hidden="true"><path d={d} fill="none" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" /></svg>;
 
 /* Confeti al activar el pago anual: estalla desde el interruptor, cae con gravedad y se desvanece. */
-const COLORES = ["#FFF200", "#FFF200", "#f4f4f6", "#4ade80", "#e6d900"];
+const COLORES = ["#FFD21F", "#FFD21F", "#f4f4f6", "#4ade80", "#E6BC12"];
 type Pieza = { x: number; y: number; vx: number; vy: number; g: number; rot: number; vr: number; w: number; h: number; c: string; vida: number; redondo: boolean };
 
 function useConfeti() {

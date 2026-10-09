@@ -10,6 +10,8 @@ export const metadata: Metadata = {
   title: TITULO,
   description: DESCRIPCION,
   alternates: { canonical: "/precios" },
+  // La página del CRM lleva la marca Wali: su favicon en vez del de NexCode97.
+  icons: { icon: [{ url: "/wali-32.png", sizes: "32x32", type: "image/png" }], apple: "/wali-180.png" },
   openGraph: { title: TITULO, description: DESCRIPCION, url: "/precios", siteName: "NexCode97", locale: "es_CO", type: "website" },
   twitter: { card: "summary", title: TITULO, description: DESCRIPCION },
 };
